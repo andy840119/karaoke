@@ -4,24 +4,23 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ManagedBass;
 using NWaves.Features;
 using osu.Framework.Audio.Callbacks;
 using osu.Framework.Audio.Track;
-using osu.Framework.Extensions;
 using osu.Game.Beatmaps;
 using osu.Game.Replays;
 using osu.Game.Rulesets.Karaoke.Beatmaps;
 using osu.Game.Rulesets.Replays;
+using System;
 
 namespace osu.Game.Rulesets.Karaoke.Replays
 {
     public class KaraokeAutoGeneratorBySinger : AutoGenerator
     {
-        private readonly CancellationTokenSource cancelSource = new();
-        private readonly Task<Dictionary<double, float?>> readTask = null!;
+        private readonly Lazy<Dictionary<double, float?>> rawPitch = null!;
+
+        public PitchShifting PitchShifting { get; set; } = new PitchShifting { Scale = 1 };
 
         /// <summary>
         /// Using audio's voice to generate replay frames
@@ -35,7 +34,7 @@ namespace osu.Game.Rulesets.Karaoke.Replays
             if (data == null)
                 return;
 
-            readTask = Task.Run(() =>
+            rawPitch = new Lazy<Dictionary<double, float?>>(() =>
             {
                 int decodeStream;
 
@@ -74,12 +73,12 @@ namespace osu.Game.Rulesets.Karaoke.Replays
                 }
 
                 return pitches;
-            }, cancelSource.Token);
+            });
         }
 
         public override Replay Generate()
         {
-            var result = readTask.GetResultSafely();
+            var result = rawPitch.Value;
             return new Replay
             {
                 Frames = getReplayFrames(result).ToList()
@@ -95,7 +94,8 @@ namespace osu.Game.Rulesets.Karaoke.Replays
                 if (pitch.Value != null)
                 {
                     float scale = Beatmap.PitchToScale(pitch.Value ?? 0);
-                    yield return new KaraokeReplayFrame(pitch.Key, scale);
+                    float shiftScaleByUser = PitchShifting.ScaleShifting(scale);
+                    yield return new KaraokeReplayFrame(pitch.Key, shiftScaleByUser);
                 }
                 else if (lastPitch.Value != null)
                     yield return new KaraokeReplayFrame(pitch.Key);
