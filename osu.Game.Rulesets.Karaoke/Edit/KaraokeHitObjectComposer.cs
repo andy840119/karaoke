@@ -20,6 +20,7 @@ using osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics;
 using osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Notes;
 using osu.Game.Rulesets.Karaoke.Edit.Components.Menus;
 using osu.Game.Rulesets.Karaoke.Edit.Export;
+using osu.Game.Rulesets.Karaoke.Edit.Saiten;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Skinning.Fonts;
 using osu.Game.Rulesets.Karaoke.UI;
@@ -74,6 +75,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit
         [Cached]
         private readonly ExportLyricManager exportLyricManager;
 
+        private readonly SaitenManager saitenManager;
+
         [Resolved]
         private Editor editor { get; set; }
 
@@ -96,6 +99,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit
             AddInternal(beatmapSingersChangeHandler = new BeatmapSingersChangeHandler());
 
             AddInternal(exportLyricManager = new ExportLyricManager());
+            AddInternal(saitenManager = new SaitenManager());
         }
 
         [BackgroundDependencyLoader]
