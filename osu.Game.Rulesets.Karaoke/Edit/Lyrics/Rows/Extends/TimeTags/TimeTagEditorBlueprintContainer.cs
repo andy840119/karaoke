@@ -29,7 +29,7 @@ using osu.Game.Screens.Edit.Compose.Components;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
 {
-    public class TimeTagEditorBlueprintContainer : ExtendBlueprintContainer<TimeTag>
+    public class TimeTagEditorBlueprintContainer : LyricPropertyBlueprintContainer<TimeTag>
     {
         [Resolved(CanBeNull = true)]
         private TimeTagEditor timeline { get; set; }
@@ -131,7 +131,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             return true;
         }
 
-        protected class TimeTagEditorSelectionHandler : ExtendSelectionHandler<TimeTag>
+        protected class TimeTagEditorSelectionHandler : LyricPropertySelectionHandler<TimeTag>
         {
             [Resolved]
             private ILyricTimeTagsChangeHandler lyricTimeTagsChangeHandler { get; set; }

@@ -9,7 +9,7 @@ using osu.Game.Screens.Edit.Compose.Components;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Components
 {
-    public abstract class ExtendSelectionHandler<T> : SelectionHandler<T>
+    public abstract class LyricPropertySelectionHandler<T> : SelectionHandler<T>
     {
         protected override void OnSelectionChanged()
         {

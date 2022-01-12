@@ -19,7 +19,7 @@ using osu.Game.Screens.Edit.Compose.Components;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
 {
-    public class TimeTagBlueprintContainer : ExtendBlueprintContainer<TimeTag>
+    public class TimeTagBlueprintContainer : LyricPropertyBlueprintContainer<TimeTag>
     {
         [Resolved]
         private ILyricCaretState lyricCaretState { get; set; }
@@ -54,7 +54,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
         protected override SelectionBlueprint<TimeTag> CreateBlueprintFor(TimeTag item)
             => new TimeTagSelectionBlueprint(item);
 
-        protected class TimeTagSelectionHandler : ExtendSelectionHandler<TimeTag>
+        protected class TimeTagSelectionHandler : LyricPropertySelectionHandler<TimeTag>
         {
             [Resolved]
             private ILyricTimeTagsChangeHandler lyricTimeTagsChangeHandler { get; set; }

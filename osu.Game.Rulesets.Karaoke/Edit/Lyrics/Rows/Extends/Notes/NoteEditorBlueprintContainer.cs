@@ -17,7 +17,7 @@ using osu.Game.Screens.Edit.Compose.Components;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
 {
-    internal class EditNoteBlueprintContainer : ExtendBlueprintContainer<Note>
+    internal class EditNoteBlueprintContainer : LyricPropertyBlueprintContainer<Note>
     {
         [UsedImplicitly]
         private readonly BindableList<Note> notes = new();
@@ -47,7 +47,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
             RegisterBindable(notes);
         }
 
-        protected class NoteEditorSelectionHandler : ExtendSelectionHandler<Note>
+        protected class NoteEditorSelectionHandler : LyricPropertySelectionHandler<Note>
         {
             [BackgroundDependencyLoader]
             private void load(IEditNoteModeState editNoteModeState)
