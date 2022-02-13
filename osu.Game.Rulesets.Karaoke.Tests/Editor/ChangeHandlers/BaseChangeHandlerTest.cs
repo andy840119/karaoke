@@ -2,11 +2,14 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Testing;
 using osu.Game.Rulesets.Karaoke.Beatmaps;
+using osu.Game.Rulesets.Objects;
 using osu.Game.Screens.Edit;
 using osu.Game.Tests.Visual;
 
@@ -21,6 +24,8 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
     {
         private TChangeHandler changeHandler = null!;
 
+        private EditorBeatmap editorBeatmap = null!;
+
         private int transactionCount;
 
         [BackgroundDependencyLoader]
@@ -33,8 +38,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
                     Ruleset = new KaraokeRuleset().RulesetInfo,
                 },
             };
-            var editorBeatmap = new EditorBeatmap(beatmap);
-            Dependencies.Cache(editorBeatmap);
+            Dependencies.Cache(editorBeatmap = new EditorBeatmap(beatmap));
             editorBeatmap.TransactionEnded += () =>
             {
                 transactionCount++;
@@ -60,6 +64,23 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
                     throw new InvalidCastException();
 
                 assert.Invoke(karaokeBeatmap);
+            });
+        }
+
+        protected void PrepareHitObject(HitObject hitObject, bool selected = true)
+            => PrepareHitObjects(new[] { hitObject }, selected);
+
+        protected void PrepareHitObjects(IEnumerable<HitObject> selectedHitObjects, bool selected = true)
+        {
+            AddStep("Prepare testing hit objects", () =>
+            {
+                var hitobjects = selectedHitObjects.ToList();
+                editorBeatmap.AddRange(hitobjects);
+
+                if (selected)
+                {
+                    editorBeatmap.SelectedHitObjects.AddRange(hitobjects);
+                }
             });
         }
 

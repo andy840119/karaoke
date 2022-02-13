@@ -33,23 +33,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
             });
         }
 
-        protected void PrepareHitObject(HitObject hitObject, bool selected = true)
-            => PrepareHitObjects(new[] { hitObject }, selected);
-
-        protected void PrepareHitObjects(IEnumerable<HitObject> selectedHitObjects, bool selected = true)
-        {
-            AddStep("Prepare testing hit objects", () =>
-            {
-                var hitobjects = selectedHitObjects.ToList();
-                editorBeatmap.AddRange(hitobjects);
-
-                if (selected)
-                {
-                    editorBeatmap.SelectedHitObjects.AddRange(hitobjects);
-                }
-            });
-        }
-
         protected void AssertHitObject(Action<THitObject> assert)
         {
             AddStep("Is result matched", () =>
