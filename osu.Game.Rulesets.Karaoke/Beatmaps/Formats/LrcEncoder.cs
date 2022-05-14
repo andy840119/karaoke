@@ -10,8 +10,8 @@ using LyricMaker.Parser;
 using osu.Framework.Graphics.Sprites;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Karaoke.Utils;
-using Lyric = osu.Game.Rulesets.Karaoke.Objects.Lyric;
 using KaraokeTimeTag = osu.Game.Rulesets.Karaoke.Objects.TimeTag;
+using Lyric = osu.Game.Rulesets.Karaoke.Objects.Lyric;
 
 namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
 {
