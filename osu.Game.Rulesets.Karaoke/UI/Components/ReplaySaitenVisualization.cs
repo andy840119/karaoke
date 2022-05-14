@@ -16,6 +16,10 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
     {
         protected override float PathRadius => 1.5f;
 
+        private bool createNew = true;
+
+        private double minAvailableTime;
+
         [Resolved]
         private INotePositionInfo notePositionInfo { get; set; }
 
@@ -24,14 +28,6 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
             var frames = replay?.Frames.OfType<KaraokeReplayFrame>();
             frames?.ForEach(Add);
         }
-
-        protected override double GetTime(KaraokeReplayFrame frame) => frame.Time;
-
-        protected override float GetPosition(KaraokeReplayFrame frame) => notePositionInfo.Calculator.YPositionAt(frame);
-
-        private bool createNew = true;
-
-        private double minAvailableTime;
 
         public void Add(KaraokeReplayFrame frame)
         {
@@ -56,9 +52,17 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
                 CreateNew(frame);
             }
             else
-            {
                 Append(frame);
-            }
+        }
+
+        protected override double GetTime(KaraokeReplayFrame frame)
+        {
+            return frame.Time;
+        }
+
+        protected override float GetPosition(KaraokeReplayFrame frame)
+        {
+            return notePositionInfo.Calculator.YPositionAt(frame);
         }
 
         [BackgroundDependencyLoader]

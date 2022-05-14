@@ -44,7 +44,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                                 new EditorMenuItemSpacer(),
                                 new EditorMenuItem("Export to .lrc", MenuItemType.Standard, () => { }),
                                 new EditorMenuItem("Export to text", MenuItemType.Standard, () => { }),
-                                new EditorMenuItem("Export to json", MenuItemType.Destructive, () => { }),
+                                new EditorMenuItem("Export to json", MenuItemType.Destructive, () => { })
                             }
                         },
                         new LyricEditorModeMenu(new Bindable<LyricEditorMode>(), "Mode"),
@@ -53,7 +53,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                             Items = new MenuItem[]
                             {
                                 new LyricEditorTextSizeMenu(lyricEditorConfig, "Text size"),
-                                new AutoFocusToEditLyricMenu(lyricEditorConfig, "Auto focus to edit lyric"),
+                                new AutoFocusToEditLyricMenu(lyricEditorConfig, "Auto focus to edit lyric")
                             }
                         },
                         new MenuItem("Config")
@@ -62,16 +62,16 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                             {
                                 new EditorMenuItem("Lyric editor"),
                                 new GeneratorConfigMenu("Auto-generator"),
-                                new LockStateMenu(lyricEditorConfig, "Lock"),
+                                new LockStateMenu(lyricEditorConfig, "Lock")
                             }
                         },
                         new MenuItem("Tools")
                         {
                             Items = new MenuItem[]
                             {
-                                new KaraokeSkinEditorMenu(null, null, "Skin editor"),
+                                new KaraokeSkinEditorMenu(null, null, "Skin editor")
                             }
-                        },
+                        }
                     }
                 }
             });

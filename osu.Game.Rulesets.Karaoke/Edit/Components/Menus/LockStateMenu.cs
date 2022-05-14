@@ -9,15 +9,16 @@ using osu.Game.Rulesets.Karaoke.Objects.Types;
 namespace osu.Game.Rulesets.Karaoke.Edit.Components.Menus
 {
     /// <summary>
-    /// If click the lock icon in <see cref="LyricEditor"/>, will apply <see cref="LockState.Partial"/> or <see cref="LockState.Full"/>
+    ///     If click the lock icon in <see cref="LyricEditor" />, will apply <see cref="LockState.Partial" /> or
+    ///     <see cref="LockState.Full" />
     /// </summary>
     public class LockStateMenu : EnumMenu<LockState>
     {
+        protected override IEnumerable<LockState> ValidEnums => new[] { LockState.Partial, LockState.Full };
+
         public LockStateMenu(KaraokeRulesetLyricEditorConfigManager config, string text)
             : base(config.GetBindable<LockState>(KaraokeRulesetLyricEditorSetting.ClickToLockLyricState), text)
         {
         }
-
-        protected override IEnumerable<LockState> ValidEnums => new[] { LockState.Partial, LockState.Full };
     }
 }

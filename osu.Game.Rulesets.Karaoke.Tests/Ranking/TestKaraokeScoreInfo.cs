@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
             {
                 Id = 1030492,
                 Username = "andy840119",
-                CoverUrl = "https://osu.ppy.sh/images/headers/profile-covers/c3.jpg",
+                CoverUrl = "https://osu.ppy.sh/images/headers/profile-covers/c3.jpg"
             };
 
             BeatmapInfo = new TestKaraokeBeatmap(ruleset).BeatmapInfo;

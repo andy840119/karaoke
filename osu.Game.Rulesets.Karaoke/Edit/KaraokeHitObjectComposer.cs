@@ -33,7 +33,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit
 {
     public class KaraokeHitObjectComposer : HitObjectComposer<KaraokeHitObject>
     {
-        private DrawableKaraokeEditorRuleset drawableRuleset;
+        public new KaraokePlayfield Playfield => drawableRuleset.Playfield;
+
+        protected override IReadOnlyList<HitObjectCompositionTool> CompositionTools => Array.Empty<HitObjectCompositionTool>();
 
         [Cached]
         private readonly KaraokeRulesetEditConfigManager editConfigManager;
@@ -65,6 +67,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit
         [Cached]
         private readonly ExportLyricManager exportLyricManager;
 
+        private DrawableKaraokeEditorRuleset drawableRuleset;
+
+        private DependencyContainer dependencies;
+
         [Resolved]
         private Editor editor { get; set; }
 
@@ -87,18 +93,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit
             AddInternal(exportLyricManager = new ExportLyricManager());
         }
 
-        [BackgroundDependencyLoader]
-        private void load()
+        public override SnapResult FindSnappedPositionAndTime(Vector2 screenSpacePosition)
         {
-            CreateMenuBar();
+            var result = base.FindSnappedPositionAndTime(screenSpacePosition);
+
+            // should not affect x position and time if dragging object in note playfield.
+            return result.Playfield is EditorNotePlayfield
+                ? new SnapResult(screenSpacePosition, null, result.Playfield)
+                : result;
         }
 
-        private DependencyContainer dependencies;
-
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
-            => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
-
-        public new KaraokePlayfield Playfield => drawableRuleset.Playfield;
+        {
+            return dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+        }
 
         protected override Playfield PlayfieldAtScreenSpacePosition(Vector2 screenSpacePosition)
         {
@@ -109,16 +117,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                 return Playfield.LyricPlayfield;
 
             return null;
-        }
-
-        public override SnapResult FindSnappedPositionAndTime(Vector2 screenSpacePosition)
-        {
-            var result = base.FindSnappedPositionAndTime(screenSpacePosition);
-
-            // should not affect x position and time if dragging object in note playfield.
-            return result.Playfield is EditorNotePlayfield
-                ? new SnapResult(screenSpacePosition, null, result.Playfield)
-                : result;
         }
 
         protected override DrawableRuleset<KaraokeHitObject> CreateDrawableRuleset(Ruleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null)
@@ -132,7 +130,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit
         }
 
         protected override ComposeBlueprintContainer CreateBlueprintContainer()
-            => new KaraokeBlueprintContainer(this);
+        {
+            return new KaraokeBlueprintContainer(this);
+        }
 
         protected void CreateMenuBar()
         {
@@ -148,7 +148,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                     {
                         Items = new MenuItem[]
                         {
-                            new NoteEditorPreviewMenu(editConfigManager, "Note editor"),
+                            new NoteEditorPreviewMenu(editConfigManager, "Note editor")
                         }
                     },
                     new("Tools")
@@ -163,15 +163,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                     {
                         Items = new MenuItem[]
                         {
-                            new EditorMenuItem("Export to json beatmap", MenuItemType.Destructive, () => exportLyricManager.ExportToJsonBeatmap()),
+                            new EditorMenuItem("Export to json beatmap", MenuItemType.Destructive, () => exportLyricManager.ExportToJsonBeatmap())
                         }
                     }
                 };
             });
         }
 
-        protected override IReadOnlyList<HitObjectCompositionTool> CompositionTools => Array.Empty<HitObjectCompositionTool>();
+        protected override IEnumerable<TernaryButton> CreateTernaryButtons()
+        {
+            return Array.Empty<TernaryButton>();
+        }
 
-        protected override IEnumerable<TernaryButton> CreateTernaryButtons() => Array.Empty<TernaryButton>();
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            CreateMenuBar();
+        }
     }
 }

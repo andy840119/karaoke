@@ -25,6 +25,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             romajiTags = lyric.RomajiTagsBindable.GetBoundCopy();
         }
 
+        protected override SelectionHandler<RomajiTag> CreateSelectionHandler()
+        {
+            return new RomajiTagSelectionHandler();
+        }
+
+        protected override SelectionBlueprint<RomajiTag> CreateBlueprintFor(RomajiTag item)
+        {
+            return new RomajiTagSelectionBlueprint(item);
+        }
+
         [BackgroundDependencyLoader]
         private void load(IEditRomajiModeState editRomajiModeState)
         {
@@ -32,31 +42,31 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             RegisterBindable(romajiTags);
         }
 
-        protected override SelectionHandler<RomajiTag> CreateSelectionHandler()
-            => new RomajiTagSelectionHandler();
-
-        protected override SelectionBlueprint<RomajiTag> CreateBlueprintFor(RomajiTag item)
-            => new RomajiTagSelectionBlueprint(item);
-
         protected class RomajiTagSelectionHandler : TextTagSelectionHandler
         {
             [Resolved]
             private ILyricRomajiTagsChangeHandler romajiTagsChangeHandler { get; set; }
+
+            protected override void DeleteItems(IEnumerable<RomajiTag> items)
+            {
+                romajiTagsChangeHandler.RemoveAll(items);
+            }
+
+            protected override void SetTextTagShifting(IEnumerable<RomajiTag> textTags, int offset)
+            {
+                romajiTagsChangeHandler.ShiftingIndex(textTags, offset);
+            }
+
+            protected override void SetTextTagIndex(RomajiTag textTag, int? startPosition, int? endPosition)
+            {
+                romajiTagsChangeHandler.SetIndex(textTag, startPosition, endPosition);
+            }
 
             [BackgroundDependencyLoader]
             private void load(IEditRomajiModeState editRomajiModeState)
             {
                 SelectedItems.BindTo(editRomajiModeState.SelectedItems);
             }
-
-            protected override void DeleteItems(IEnumerable<RomajiTag> items)
-                => romajiTagsChangeHandler.RemoveAll(items);
-
-            protected override void SetTextTagShifting(IEnumerable<RomajiTag> textTags, int offset)
-                => romajiTagsChangeHandler.ShiftingIndex(textTags, offset);
-
-            protected override void SetTextTagIndex(RomajiTag textTag, int? startPosition, int? endPosition)
-                => romajiTagsChangeHandler.SetIndex(textTag, startPosition, endPosition);
         }
     }
 }

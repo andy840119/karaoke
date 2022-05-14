@@ -14,7 +14,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
 {
     public class SettingsMicrophoneDeviceDropdown : SettingsDropdown<string>
     {
-        protected override OsuDropdown<string> CreateDropdown() => new MicrophoneDeviceDropdownControl();
+        protected override OsuDropdown<string> CreateDropdown()
+        {
+            return new MicrophoneDeviceDropdownControl();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -30,7 +33,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
         private class MicrophoneDeviceDropdownControl : DropdownControl
         {
             protected override LocalisableString GenerateItemText(string item)
-                => string.IsNullOrEmpty(item) ? CommonStrings.Default : base.GenerateItemText(item);
+            {
+                return string.IsNullOrEmpty(item) ? CommonStrings.Default : base.GenerateItemText(item);
+            }
         }
     }
 }

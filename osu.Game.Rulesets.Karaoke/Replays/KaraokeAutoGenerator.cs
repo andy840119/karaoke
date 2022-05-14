@@ -39,10 +39,7 @@ namespace osu.Game.Rulesets.Karaoke.Replays
                 yield return new KaraokeReplayFrame(i, scale);
             }
 
-            if ((next?.StartTime ?? int.MaxValue) - note.EndTime > 500)
-            {
-                yield return new KaraokeReplayFrame(endTime + 1);
-            }
+            if ((next?.StartTime ?? int.MaxValue) - note.EndTime > 500) yield return new KaraokeReplayFrame(endTime + 1);
         }
     }
 }

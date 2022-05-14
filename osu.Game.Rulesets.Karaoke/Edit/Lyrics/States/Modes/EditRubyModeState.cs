@@ -9,13 +9,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States.Modes
 {
     public class EditRubyModeState : Component, IEditRubyModeState
     {
-        private readonly Bindable<TextTagEditMode> bindableEditMode = new();
-
         public IBindable<TextTagEditMode> BindableEditMode => bindableEditMode;
 
-        public void ChangeEditMode(TextTagEditMode mode)
-            => bindableEditMode.Value = mode;
-
         public BindableList<RubyTag> SelectedItems { get; } = new();
+        private readonly Bindable<TextTagEditMode> bindableEditMode = new();
+
+        public void ChangeEditMode(TextTagEditMode mode)
+        {
+            bindableEditMode.Value = mode;
+        }
     }
 }

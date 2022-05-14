@@ -9,8 +9,8 @@ using osu.Framework.Graphics.Containers;
 namespace osu.Game.Rulesets.Karaoke.Extensions
 {
     /// <summary>
-    /// It's a tricky extension to get all non-public methods.
-    /// Should be removed eventually.
+    ///     It's a tricky extension to get all non-public methods.
+    ///     Should be removed eventually.
     /// </summary>
     public static class TrickyCompositeDrawableExtension
     {

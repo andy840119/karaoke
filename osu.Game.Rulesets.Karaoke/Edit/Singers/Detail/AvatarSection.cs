@@ -21,13 +21,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Detail
                 {
                     Label = "Avatar",
                     Description = "Select image to set avatar.",
-                    Current = singer.AvatarBindable,
+                    Current = singer.AvatarBindable
                 },
                 new LabelledHueSelector
                 {
                     Label = "Colour",
                     Description = "Select singer colour.",
-                    Current = singer.HueBindable,
+                    Current = singer.HueBindable
                 }
             };
         }

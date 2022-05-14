@@ -20,6 +20,13 @@ namespace osu.Game.Rulesets.Karaoke.Difficulty
 {
     public class KaraokeDifficultyCalculator : DifficultyCalculator
     {
+        protected override Mod[] DifficultyAdjustmentMods =>
+            new Mod[]
+            {
+                new KaraokeModDisableNote(),
+                new KaraokeModHiddenNote()
+            };
+
         private const double star_scaling_factor = 0.018;
 
         private readonly bool isForCurrentRuleset;
@@ -43,7 +50,7 @@ namespace osu.Game.Rulesets.Karaoke.Difficulty
                 Mods = mods,
                 // Todo: This int cast is temporary to achieve 1:1 results with osu!stable, and should be removed in the future
                 GreatHitWindow = (int)Math.Ceiling(getHitWindow300(mods) / clockRate),
-                MaxCombo = beatmap.HitObjects.Sum(h => h is Note ? 2 : 1),
+                MaxCombo = beatmap.HitObjects.Sum(h => h is Note ? 2 : 1)
             };
         }
 
@@ -59,19 +66,18 @@ namespace osu.Game.Rulesets.Karaoke.Difficulty
         }
 
         // Sorting is done in CreateDifficultyHitObjects, since the full list of hitobjects is required.
-        protected override IEnumerable<DifficultyHitObject> SortObjects(IEnumerable<DifficultyHitObject> input) => input;
-
-        protected override Skill[] CreateSkills(IBeatmap beatmap, Mod[] mods, double clockRate) => new Skill[]
+        protected override IEnumerable<DifficultyHitObject> SortObjects(IEnumerable<DifficultyHitObject> input)
         {
-            new Strain(mods, ((KaraokeBeatmap)beatmap).TotalColumns)
-        };
+            return input;
+        }
 
-        protected override Mod[] DifficultyAdjustmentMods =>
-            new Mod[]
+        protected override Skill[] CreateSkills(IBeatmap beatmap, Mod[] mods, double clockRate)
+        {
+            return new Skill[]
             {
-                new KaraokeModDisableNote(),
-                new KaraokeModHiddenNote(),
+                new Strain(mods, ((KaraokeBeatmap)beatmap).TotalColumns)
             };
+        }
 
         private int getHitWindow300(Mod[] mods)
         {

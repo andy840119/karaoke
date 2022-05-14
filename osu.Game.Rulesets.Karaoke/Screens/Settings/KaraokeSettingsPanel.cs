@@ -23,24 +23,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
     {
         public new const float WIDTH = 300;
 
-        private Box hoverBackground;
-
-        protected override IEnumerable<SettingsSection> CreateSections() => new SettingsSection[]
-        {
-            new ConfigSection(),
-            new StyleSection(),
-            new ScoringSection()
-        };
-
-        protected override Drawable CreateFooter() => new Container
-        {
-            Height = 130,
-        };
-
-        public KaraokeSettingsPanel()
-            : base(false)
-        {
-        }
+        public IReadOnlyList<SettingsSection> Sections => SectionsContainer.Children;
 
         // prevent click outside to hide the overlay
         protected override bool BlockPositionalInput => false;
@@ -48,12 +31,21 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
         // prevent handle back key event every time, should call onPressed() only once.
         protected override bool BlockNonPositionalInput => false;
 
-        // on press should return false to prevent handle the back key action.
-        public override bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
-            => false;
-
         // prevent let main content darker.
         protected override bool DimMainContent => false;
+
+        private Box hoverBackground;
+
+        public KaraokeSettingsPanel()
+            : base(false)
+        {
+        }
+
+        // on press should return false to prevent handle the back key action.
+        public override bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+        {
+            return false;
+        }
 
         // prevent hide the overlay.
         public override void Hide() { }
@@ -70,7 +62,23 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
             scrollContainer?.ScrollTo(scrollContainer.GetChildPosInContent(settingsSection) - (SectionsContainer.FixedHeader?.BoundingBox.Height ?? 0));
         }
 
-        public IReadOnlyList<SettingsSection> Sections => SectionsContainer.Children;
+        protected override IEnumerable<SettingsSection> CreateSections()
+        {
+            return new SettingsSection[]
+            {
+                new ConfigSection(),
+                new StyleSection(),
+                new ScoringSection()
+            };
+        }
+
+        protected override Drawable CreateFooter()
+        {
+            return new Container
+            {
+                Height = 130
+            };
+        }
 
         [BackgroundDependencyLoader]
         private void load(KaraokeSettingsColourProvider colourProvider, Bindable<SettingsSection> selectedSection, Bindable<SettingsSubsection> selectedSubsection)
@@ -125,7 +133,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                 scrollContainer.Add(hoverBackground = new Box
                 {
                     RelativeSizeAxes = Axes.X,
-                    Depth = 1,
+                    Depth = 1
                 });
 
                 // change background color if section changed.

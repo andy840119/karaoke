@@ -14,18 +14,21 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
     [TestFixture]
     public class TestSceneLyricTooltip : OsuTestScene
     {
-        private LyricTooltip toolTip;
-
         [SetUp]
-        public void SetUp() => Schedule(() =>
+        public void SetUp()
         {
-            Child = toolTip = new LyricTooltip
+            Schedule(() =>
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre
-            };
-            toolTip.Show();
-        });
+                Child = toolTip = new LyricTooltip
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre
+                };
+                toolTip.Show();
+            });
+        }
+
+        private LyricTooltip toolTip;
 
         [Test]
         public void TestDisplayToolTip()
@@ -33,10 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
             var beatmap = new TestKaraokeBeatmap(Ruleset.Value);
             var lyrics = beatmap.HitObjects.OfType<Lyric>().ToList();
 
-            foreach (var lyric in lyrics)
-            {
-                AddStep($"Test lyric: {lyric.Text}", () => { toolTip.SetContent(lyric); });
-            }
+            foreach (var lyric in lyrics) AddStep($"Test lyric: {lyric.Text}", () => { toolTip.SetContent(lyric); });
         }
     }
 }

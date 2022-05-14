@@ -19,6 +19,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
 {
     public class CaretLayer : CompositeDrawable
     {
+        private readonly IBindable<LyricEditorMode> bindableMode = new Bindable<LyricEditorMode>();
+        private readonly IBindable<ICaretPositionAlgorithm> bindableCaretPositionAlgorithm = new Bindable<ICaretPositionAlgorithm>();
+
+        private readonly Lyric lyric;
+
         [Resolved]
         private EditorKaraokeSpriteText karaokeSpriteText { get; set; }
 
@@ -27,11 +32,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
 
         [Resolved]
         private ILyricsChangeHandler lyricsChangeHandler { get; set; }
-
-        private readonly IBindable<LyricEditorMode> bindableMode = new Bindable<LyricEditorMode>();
-        private readonly IBindable<ICaretPositionAlgorithm> bindableCaretPositionAlgorithm = new Bindable<ICaretPositionAlgorithm>();
-
-        private readonly Lyric lyric;
 
         public CaretLayer(Lyric lyric)
         {
@@ -42,47 +42,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                 // initial default caret.
                 initializeCaret();
             }, true);
-        }
-
-        private void initializeCaret()
-        {
-            ClearInternal();
-
-            // create preview and real caret
-            addCaret(false);
-            addCaret(true);
-
-            void addCaret(bool isPreview)
-            {
-                var caret = createCaret(bindableCaretPositionAlgorithm.Value, isPreview);
-                if (caret == null)
-                    return;
-
-                caret.Hide();
-
-                AddInternal(caret);
-            }
-
-            static DrawableCaret createCaret(ICaretPositionAlgorithm caretPositionAlgorithm, bool isPreview) =>
-                caretPositionAlgorithm switch
-                {
-                    // cutting lyric
-                    CuttingCaretPositionAlgorithm => new DrawableLyricSplitterCaret(isPreview),
-                    // typing
-                    TypingCaretPositionAlgorithm => new DrawableLyricInputCaret(isPreview),
-                    // creat time-tag
-                    TimeTagIndexCaretPositionAlgorithm => new DrawableTimeTagEditCaret(isPreview),
-                    // record time-tag
-                    TimeTagCaretPositionAlgorithm => new DrawableTimeTagRecordCaret(isPreview),
-                    _ => null
-                };
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(ILyricEditorState state)
-        {
-            bindableMode.BindTo(state.BindableMode);
-            bindableCaretPositionAlgorithm.BindTo(lyricCaretState.BindableCaretPositionAlgorithm);
         }
 
         protected override bool OnMouseMove(MouseMoveEvent e)
@@ -162,6 +121,47 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                 default:
                     return false;
             }
+        }
+
+        private void initializeCaret()
+        {
+            ClearInternal();
+
+            // create preview and real caret
+            addCaret(false);
+            addCaret(true);
+
+            void addCaret(bool isPreview)
+            {
+                var caret = createCaret(bindableCaretPositionAlgorithm.Value, isPreview);
+                if (caret == null)
+                    return;
+
+                caret.Hide();
+
+                AddInternal(caret);
+            }
+
+            static DrawableCaret createCaret(ICaretPositionAlgorithm caretPositionAlgorithm, bool isPreview) =>
+                caretPositionAlgorithm switch
+                {
+                    // cutting lyric
+                    CuttingCaretPositionAlgorithm => new DrawableLyricSplitterCaret(isPreview),
+                    // typing
+                    TypingCaretPositionAlgorithm => new DrawableLyricInputCaret(isPreview),
+                    // creat time-tag
+                    TimeTagIndexCaretPositionAlgorithm => new DrawableTimeTagEditCaret(isPreview),
+                    // record time-tag
+                    TimeTagCaretPositionAlgorithm => new DrawableTimeTagRecordCaret(isPreview),
+                    _ => null
+                };
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(ILyricEditorState state)
+        {
+            bindableMode.BindTo(state.BindableMode);
+            bindableCaretPositionAlgorithm.BindTo(lyricCaretState.BindableCaretPositionAlgorithm);
         }
     }
 }

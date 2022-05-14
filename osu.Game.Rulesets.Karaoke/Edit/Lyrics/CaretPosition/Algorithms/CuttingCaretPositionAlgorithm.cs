@@ -12,8 +12,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
         {
         }
 
-        protected override int GetMinIndex(string text) => 1;
+        protected override int GetMinIndex(string text)
+        {
+            return 1;
+        }
 
-        protected override int GetMaxIndex(string text) => (text?.Length ?? 0) - 1;
+        protected override int GetMaxIndex(string text)
+        {
+            return (text?.Length ?? 0) - 1;
+        }
     }
 }

@@ -20,7 +20,7 @@ using osu.Game.Skinning;
 namespace osu.Game.Rulesets.Karaoke.Skinning
 {
     /// <summary>
-    /// It's the skin for karaoke beatmap.
+    ///     It's the skin for karaoke beatmap.
     /// </summary>
     public class KaraokeBeatmapSkin : KaraokeSkin
     {

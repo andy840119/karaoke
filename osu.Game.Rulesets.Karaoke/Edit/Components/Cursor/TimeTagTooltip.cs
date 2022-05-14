@@ -16,14 +16,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
 {
     public class TimeTagTooltip : BackgroundToolTip<TimeTag>
     {
+        protected override float ContentPadding => 5;
         private const int time_display_height = 25;
-
-        private Box background;
         private readonly OsuSpriteText trackTimer;
         private readonly OsuSpriteText index;
         private readonly OsuSpriteText indexState;
 
-        protected override float ContentPadding => 5;
+        private Box background;
+
+        private TimeTag lastTimeTag;
 
         public TimeTagTooltip()
         {
@@ -73,17 +74,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
             };
         }
 
-        protected override Drawable SetBackground()
-        {
-            return background = new Box
-            {
-                RelativeSizeAxes = Axes.X,
-                Height = time_display_height + BORDER
-            };
-        }
-
-        private TimeTag lastTimeTag;
-
         public override void SetContent(TimeTag timeTag)
         {
             if (timeTag == lastTimeTag)
@@ -94,6 +84,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
             trackTimer.Text = TimeTagUtils.FormattedString(timeTag);
             index.Text = $"Position: {timeTag.Index.Index}";
             indexState.Text = TextIndexUtils.GetValueByState(timeTag.Index, "start", "end");
+        }
+
+        protected override Drawable SetBackground()
+        {
+            return background = new Box
+            {
+                RelativeSizeAxes = Axes.X,
+                Height = time_display_height + BORDER
+            };
         }
 
         [BackgroundDependencyLoader]

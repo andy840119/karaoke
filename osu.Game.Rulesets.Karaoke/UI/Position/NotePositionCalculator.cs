@@ -9,11 +9,18 @@ namespace osu.Game.Rulesets.Karaoke.UI.Position
 {
     public class NotePositionCalculator
     {
+        public float ColumnHeight { get; }
+
+        public Tone MaxTone =>
+            new()
+            {
+                Scale = columns / 2
+            };
+
+        public Tone MinTone => -MaxTone;
         private readonly int columns;
         private readonly float columnSpacing;
         private readonly Tone offset;
-
-        public float ColumnHeight { get; }
 
         public NotePositionCalculator(int columns, float columnHeight, float columnSpacing, Tone offset = new())
         {
@@ -25,25 +32,34 @@ namespace osu.Game.Rulesets.Karaoke.UI.Position
             this.offset = offset;
         }
 
-        public float YPositionAt(Note note) => YPositionAt(note.Tone);
+        public float YPositionAt(Note note)
+        {
+            return YPositionAt(note.Tone);
+        }
 
-        public float YPositionAt(Tone tone) => YPositionAt(toFloat(tone));
+        public float YPositionAt(Tone tone)
+        {
+            return YPositionAt(toFloat(tone));
+        }
 
-        public float YPositionAt(KaraokeSaitenAction action) => YPositionAt(action.Scale);
+        public float YPositionAt(KaraokeSaitenAction action)
+        {
+            return YPositionAt(action.Scale);
+        }
 
-        public float YPositionAt(KaraokeReplayFrame frame) => YPositionAt(frame.Scale);
+        public float YPositionAt(KaraokeReplayFrame frame)
+        {
+            return YPositionAt(frame.Scale);
+        }
 
-        public float YPositionAt(float scale) => -(columnSpacing + ColumnHeight) * Math.Clamp(scale, toFloat(MinTone), toFloat(MaxTone));
-
-        public Tone MaxTone =>
-            new()
-            {
-                Scale = columns / 2
-            };
-
-        public Tone MinTone => -MaxTone;
+        public float YPositionAt(float scale)
+        {
+            return -(columnSpacing + ColumnHeight) * Math.Clamp(scale, toFloat(MinTone), toFloat(MaxTone));
+        }
 
         private float toFloat(Tone tone)
-            => tone.Scale + (tone.Half ? 0.5f : 0);
+        {
+            return tone.Scale + (tone.Half ? 0.5f : 0);
+        }
     }
 }

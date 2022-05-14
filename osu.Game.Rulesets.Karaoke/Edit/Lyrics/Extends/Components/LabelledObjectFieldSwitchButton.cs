@@ -57,62 +57,33 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
             base.OnFocus(e);
         }
 
-        protected override SwitchButton CreateComponent() => new ObjectFieldSwitchButton
+        protected override SwitchButton CreateComponent()
         {
-            Selected = selected =>
+            return new ObjectFieldSwitchButton
             {
-                if (selected)
+                Selected = selected =>
                 {
-                    // not trigger again if already focus.
-                    if (SelectedItems.Contains(item) && SelectedItems.Count == 1)
-                        return;
+                    if (selected)
+                    {
+                        // not trigger again if already focus.
+                        if (SelectedItems.Contains(item) && SelectedItems.Count == 1)
+                            return;
 
-                    // trigger selected.
-                    SelectedItems.Clear();
-                    SelectedItems.Add(item);
+                        // trigger selected.
+                        SelectedItems.Clear();
+                        SelectedItems.Add(item);
+                    }
+                    else
+                        SelectedItems.Remove(item);
                 }
-                else
-                {
-                    SelectedItems.Remove(item);
-                }
-            }
-        };
+            };
+        }
 
         protected class ObjectFieldSwitchButton : SwitchButton
         {
             public Action<bool> Selected;
 
             public Action<SwitchButton, bool> OnCommit;
-
-            protected override bool OnHover(HoverEvent e)
-            {
-                Selected?.Invoke(true);
-                return base.OnHover(e);
-            }
-
-            protected override void OnHoverLost(HoverLostEvent e)
-            {
-                Selected?.Invoke(false);
-                base.OnHoverLost(e);
-            }
-
-            protected override void OnUserChange(bool value)
-            {
-                base.OnUserChange(value);
-                OnCommit?.Invoke(this, value);
-            }
-
-            private Color4 highLightColour;
-            private Color4 enabledColour;
-
-            [BackgroundDependencyLoader(true)]
-            private void load(OverlayColourProvider colourProvider, OsuColour colours)
-            {
-                highLightColour = colours.Yellow;
-
-                // copied from SwitchButton
-                enabledColour = colourProvider?.Highlight1 ?? colours.BlueDark;
-            }
 
             public bool Value
             {
@@ -133,6 +104,36 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                     // only change dot colour because border colour should consider off case.
                     switchContainer.Colour = value ? highLightColour : enabledColour;
                 }
+            }
+
+            private Color4 highLightColour;
+            private Color4 enabledColour;
+
+            protected override bool OnHover(HoverEvent e)
+            {
+                Selected?.Invoke(true);
+                return base.OnHover(e);
+            }
+
+            protected override void OnHoverLost(HoverLostEvent e)
+            {
+                Selected?.Invoke(false);
+                base.OnHoverLost(e);
+            }
+
+            protected override void OnUserChange(bool value)
+            {
+                base.OnUserChange(value);
+                OnCommit?.Invoke(this, value);
+            }
+
+            [BackgroundDependencyLoader(true)]
+            private void load(OverlayColourProvider colourProvider, OsuColour colours)
+            {
+                highLightColour = colours.Yellow;
+
+                // copied from SwitchButton
+                enabledColour = colourProvider?.Highlight1 ?? colours.BlueDark;
             }
         }
     }

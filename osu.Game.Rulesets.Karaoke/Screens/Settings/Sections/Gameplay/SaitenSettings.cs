@@ -49,7 +49,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Gameplay
                 {
                     LabelText = "Saiten pitch",
                     Current = Config.GetBindable<int>(KaraokeRulesetSetting.SaitenPitch)
-                },
+                }
             };
         }
 

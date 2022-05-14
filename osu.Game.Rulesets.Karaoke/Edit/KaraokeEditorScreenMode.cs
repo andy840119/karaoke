@@ -14,6 +14,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit
         Singer,
 
         [Description("Translate")]
-        Translate,
+        Translate
     }
 }

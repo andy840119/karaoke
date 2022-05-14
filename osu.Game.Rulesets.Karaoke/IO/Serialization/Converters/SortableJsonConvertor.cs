@@ -25,10 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
 
             writer.WriteStartArray();
 
-            foreach (var timeTag in sortedTimeTags)
-            {
-                serializer.Serialize(writer, timeTag);
-            }
+            foreach (var timeTag in sortedTimeTags) serializer.Serialize(writer, timeTag);
 
             writer.WriteEndArray();
         }

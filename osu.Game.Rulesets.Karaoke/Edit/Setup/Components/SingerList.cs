@@ -20,13 +20,11 @@ using osuTK;
 namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
 {
     /// <summary>
-    /// A component which displays a collection of singers in individual <see cref="SingerDisplay"/>s.
+    ///     A component which displays a collection of singers in individual <see cref="SingerDisplay" />s.
     /// </summary>
     public class SingerList : CompositeDrawable
     {
         public BindableList<Singer> Singers { get; } = new();
-
-        private string singerNamePrefix = "Singer";
 
         public string SingerNamePrefix
         {
@@ -43,9 +41,25 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
             }
         }
 
+        private IEnumerable<SingerDisplay> singerDisplays => singers.OfType<SingerDisplay>();
+
+        private const int fade_duration = 200;
+
+        private string singerNamePrefix = "Singer";
+
         private FillFlowContainer singers;
 
-        private IEnumerable<SingerDisplay> singerDisplays => singers.OfType<SingerDisplay>();
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            Singers.BindCollectionChanged((_, args) =>
+            {
+                if (args.Action != NotifyCollectionChangedAction.Replace)
+                    updateSingers();
+            }, true);
+            FinishTransforms(true);
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -63,20 +77,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
                 Direction = FillDirection.Full
             };
         }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            Singers.BindCollectionChanged((_, args) =>
-            {
-                if (args.Action != NotifyCollectionChangedAction.Replace)
-                    updateSingers();
-            }, true);
-            FinishTransforms(true);
-        }
-
-        private const int fade_duration = 200;
 
         private void updateSingers()
         {
@@ -111,17 +111,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
         }
 
         // todo : might have dialog to ask should delete singer or not if contains lyric.
-        private void singerDeletionRequested(SingerDisplay display) => Singers.RemoveAt(singers.IndexOf(display));
+        private void singerDeletionRequested(SingerDisplay display)
+        {
+            Singers.RemoveAt(singers.IndexOf(display));
+        }
 
         private void reindexItems()
         {
             int index = 1;
 
             foreach (var singerDisplay in singerDisplays)
-            {
                 // todo : might call singer manager to update singer id?
                 index += 1;
-            }
         }
 
         internal class AddSingerButton : CompositeDrawable

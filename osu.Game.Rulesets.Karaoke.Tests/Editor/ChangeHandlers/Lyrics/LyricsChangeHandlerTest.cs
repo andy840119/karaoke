@@ -11,33 +11,39 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
     public class LyricsChangeHandlerTest : BaseHitObjectChangeHandlerTest<LyricsChangeHandler, Lyric>
     {
         [Test]
-        public void TestSplit()
+        public void TestChangeOrder()
         {
             PrepareHitObject(new Lyric
             {
-                Text = "カラオケ"
+                Text = "カラオケ",
+                ID = 1,
+                Order = 1
             });
 
-            TriggerHandlerChanged(c => c.Split(2));
-
-            AssertHitObjects(objects =>
+            PrepareHitObject(new Lyric
             {
-                var lyrics = objects.ToArray();
-                var firstLyric = lyrics.FirstOrDefault();
-                var secondLyric = lyrics.LastOrDefault();
+                Text = "karaoke",
+                ID = 2,
+                Order = 2
+            }, false);
 
+            // move the "カラオケ" lyric next of the "karaoke" lyric.
+            TriggerHandlerChanged(c => c.ChangeOrder(1));
+
+            AssertHitObjects(hitObjects =>
+            {
+                var lyrics = hitObjects.ToArray();
+                Assert.AreEqual(2, lyrics.Length);
+
+                var firstLyric = lyrics.FirstOrDefault(x => x.Text == "karaoke");
                 Assert.IsNotNull(firstLyric);
-                Assert.IsNotNull(secondLyric);
-
-                // test property in the first lyric.
-                Assert.AreEqual("カラ", firstLyric.Text);
                 Assert.AreEqual(2, firstLyric.ID);
-                Assert.AreEqual(0, firstLyric.Order);
+                Assert.AreEqual(1, firstLyric.Order);
 
-                // test property in the second lyric.
-                Assert.AreEqual("オケ", secondLyric.Text);
+                var secondLyric = lyrics.FirstOrDefault(x => x.Text == "カラオケ");
+                Assert.IsNotNull(secondLyric);
                 Assert.AreEqual(1, secondLyric.ID);
-                Assert.AreEqual(1, secondLyric.Order);
+                Assert.AreEqual(2, secondLyric.Order);
             });
         }
 
@@ -48,21 +54,21 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             {
                 Text = "カラ",
                 ID = 0,
-                Order = 1,
+                Order = 1
             }, false);
 
             PrepareHitObject(new Lyric
             {
                 Text = "オケ",
                 ID = 1,
-                Order = 2,
+                Order = 2
             });
 
             PrepareHitObject(new Lyric
             {
                 Text = "karaoke",
                 ID = 2,
-                Order = 3,
+                Order = 3
             }, false);
 
             TriggerHandlerChanged(c => c.Combine());
@@ -86,61 +92,20 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestCreateAtPosition()
-        {
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                ID = 1,
-                Order = 1,
-            });
-
-            PrepareHitObject(new Lyric
-            {
-                Text = "karaoke",
-                ID = 2,
-                Order = 2,
-            }, false);
-
-            TriggerHandlerChanged(c => c.CreateAtPosition());
-
-            AssertHitObjects(hitObjects =>
-            {
-                var lyrics = hitObjects.ToArray();
-                Assert.AreEqual(3, lyrics.Length);
-
-                var firstLyric = lyrics.FirstOrDefault(x => x.Text == "カラオケ");
-                Assert.IsNotNull(firstLyric);
-                Assert.AreEqual(1, firstLyric.ID);
-                Assert.AreEqual(1, firstLyric.Order);
-
-                var secondLyric = lyrics.FirstOrDefault(x => x.Text == "New lyric");
-                Assert.IsNotNull(secondLyric);
-                Assert.AreEqual(3, secondLyric.ID);
-                Assert.AreEqual(2, secondLyric.Order);
-
-                var thirdLyric = lyrics.FirstOrDefault(x => x.Text == "karaoke");
-                Assert.IsNotNull(thirdLyric);
-                Assert.AreEqual(2, thirdLyric.ID);
-                Assert.AreEqual(3, thirdLyric.Order);
-            });
-        }
-
-        [Test]
         public void TestCreateAtLast()
         {
             PrepareHitObject(new Lyric
             {
                 Text = "カラオケ",
                 ID = 1,
-                Order = 1,
+                Order = 1
             });
 
             PrepareHitObject(new Lyric
             {
                 Text = "karaoke",
                 ID = 2,
-                Order = 2,
+                Order = 2
             }, false);
 
             TriggerHandlerChanged(c => c.CreateAtLast());
@@ -185,20 +150,61 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestRemove()
+        public void TestCreateAtPosition()
         {
             PrepareHitObject(new Lyric
             {
                 Text = "カラオケ",
                 ID = 1,
-                Order = 1,
+                Order = 1
             });
 
             PrepareHitObject(new Lyric
             {
                 Text = "karaoke",
                 ID = 2,
-                Order = 2,
+                Order = 2
+            }, false);
+
+            TriggerHandlerChanged(c => c.CreateAtPosition());
+
+            AssertHitObjects(hitObjects =>
+            {
+                var lyrics = hitObjects.ToArray();
+                Assert.AreEqual(3, lyrics.Length);
+
+                var firstLyric = lyrics.FirstOrDefault(x => x.Text == "カラオケ");
+                Assert.IsNotNull(firstLyric);
+                Assert.AreEqual(1, firstLyric.ID);
+                Assert.AreEqual(1, firstLyric.Order);
+
+                var secondLyric = lyrics.FirstOrDefault(x => x.Text == "New lyric");
+                Assert.IsNotNull(secondLyric);
+                Assert.AreEqual(3, secondLyric.ID);
+                Assert.AreEqual(2, secondLyric.Order);
+
+                var thirdLyric = lyrics.FirstOrDefault(x => x.Text == "karaoke");
+                Assert.IsNotNull(thirdLyric);
+                Assert.AreEqual(2, thirdLyric.ID);
+                Assert.AreEqual(3, thirdLyric.Order);
+            });
+        }
+
+        [Test]
+        public void TestRemove()
+        {
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                ID = 1,
+                Order = 1
+            });
+
+            PrepareHitObject(new Lyric
+            {
+                Text = "karaoke",
+                ID = 2,
+                Order = 2
             }, false);
 
             TriggerHandlerChanged(c => c.Remove());
@@ -216,39 +222,33 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestChangeOrder()
+        public void TestSplit()
         {
             PrepareHitObject(new Lyric
             {
-                Text = "カラオケ",
-                ID = 1,
-                Order = 1,
+                Text = "カラオケ"
             });
 
-            PrepareHitObject(new Lyric
+            TriggerHandlerChanged(c => c.Split(2));
+
+            AssertHitObjects(objects =>
             {
-                Text = "karaoke",
-                ID = 2,
-                Order = 2,
-            }, false);
+                var lyrics = objects.ToArray();
+                var firstLyric = lyrics.FirstOrDefault();
+                var secondLyric = lyrics.LastOrDefault();
 
-            // move the "カラオケ" lyric next of the "karaoke" lyric.
-            TriggerHandlerChanged(c => c.ChangeOrder(1));
-
-            AssertHitObjects(hitObjects =>
-            {
-                var lyrics = hitObjects.ToArray();
-                Assert.AreEqual(2, lyrics.Length);
-
-                var firstLyric = lyrics.FirstOrDefault(x => x.Text == "karaoke");
                 Assert.IsNotNull(firstLyric);
-                Assert.AreEqual(2, firstLyric.ID);
-                Assert.AreEqual(1, firstLyric.Order);
-
-                var secondLyric = lyrics.FirstOrDefault(x => x.Text == "カラオケ");
                 Assert.IsNotNull(secondLyric);
+
+                // test property in the first lyric.
+                Assert.AreEqual("カラ", firstLyric.Text);
+                Assert.AreEqual(2, firstLyric.ID);
+                Assert.AreEqual(0, firstLyric.Order);
+
+                // test property in the second lyric.
+                Assert.AreEqual("オケ", secondLyric.Text);
                 Assert.AreEqual(1, secondLyric.ID);
-                Assert.AreEqual(2, secondLyric.Order);
+                Assert.AreEqual(1, secondLyric.Order);
             });
         }
     }

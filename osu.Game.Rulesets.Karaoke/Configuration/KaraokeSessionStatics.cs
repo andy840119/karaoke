@@ -58,7 +58,10 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
             SetDefault(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.NotInitialized);
         }
 
-        private T getValue<T>(KaraokeRulesetSetting setting) => rulesetConfigManager.Get<T>(setting);
+        private T getValue<T>(KaraokeRulesetSetting setting)
+        {
+            return rulesetConfigManager.Get<T>(setting);
+        }
     }
 
     public enum KaraokeRulesetSession
@@ -83,6 +86,6 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
         SingingLyrics,
 
         // Saiten status
-        SaitenStatus,
+        SaitenStatus
     }
 }

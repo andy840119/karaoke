@@ -12,12 +12,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
         protected override string SwitchActionTitle => "Special actions";
         protected override string SwitchActionDescription => "Auto-generate or batch change the language by hands.";
 
-        [BackgroundDependencyLoader]
-        private void load(ILanguageModeState editNoteModeState)
-        {
-            BindTo(editNoteModeState);
-        }
-
         protected override void UpdateActionArea(LanguageEditModeSpecialAction action)
         {
             RemoveAll(x => x is LanguageAutoGenerateSubsection or AssignLanguageSubsection);
@@ -35,6 +29,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
                 default:
                     return;
             }
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(ILanguageModeState editNoteModeState)
+        {
+            BindTo(editNoteModeState);
         }
     }
 }

@@ -35,13 +35,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.States
             {
                 BeatmapInfo =
                 {
-                    Ruleset = new KaraokeRuleset().RulesetInfo,
+                    Ruleset = new KaraokeRuleset().RulesetInfo
                 },
                 HitObjects = new List<KaraokeHitObject>
                 {
                     new Lyric
                     {
-                        Text = "First lyric",
+                        Text = "First lyric"
                     },
                     new Lyric
                     {
@@ -50,7 +50,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.States
                     new Lyric
                     {
                         Text = "Third lyric"
-                    },
+                    }
                 }
             };
         }
@@ -64,7 +64,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.States
             Dependencies.CacheAs<ITimeTagModeState>(new TimeTagModeState());
             Dependencies.Cache(new KaraokeRulesetLyricEditorConfigManager());
 
-            LyricsProvider lyricsProvider = new LyricsProvider();
+            var lyricsProvider = new LyricsProvider();
             Dependencies.CacheAs<ILyricsProvider>(lyricsProvider);
 
             Children = new Drawable[]
@@ -73,191 +73,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.States
                 lyricCaretState = new LyricCaretState()
             };
         }
-
-        #region Changing mode
-
-        [Test]
-        public void TestChangeFromViewModeToEditMode()
-        {
-            // change from view mode to another mode that contains algorithm.
-            changeMode(LyricEditorMode.View);
-            changeMode(LyricEditorMode.Manage);
-
-            // get the action
-            assertCaretPosition(Assert.IsNotNull);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        [Test]
-        public void TestChangeFromEditModeToViewMode()
-        {
-            // change from edit mode to view mode for checking that caret position should be clear.
-            changeMode(LyricEditorMode.Manage);
-            changeMode(LyricEditorMode.View);
-
-            // get the action
-            assertCaretPosition(Assert.IsNull);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        [Test]
-        public void TestChangeFromEditModeToEditMode()
-        {
-            // change from edit mode to view mode for checking that caret position should be clear.
-            changeMode(LyricEditorMode.Manage);
-            changeMode(LyricEditorMode.EditRuby);
-
-            // get the action
-            assertCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        #endregion
-
-        #region Moving caret with action
-
-        [Test]
-        public void MovingCaretWithViewMode()
-        {
-            changeMode(LyricEditorMode.View);
-            movingCaret(MovingCaretAction.First);
-
-            // get the action
-            assertCaretPosition(Assert.IsNull);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        [Test]
-        public void MovingCaretWithEditMode()
-        {
-            changeMode(LyricEditorMode.Manage);
-            movingCaret(MovingCaretAction.First);
-
-            // get the action
-            assertCaretPosition(Assert.IsInstanceOf<TextCaretPosition>);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        #endregion
-
-        #region Moving caret by lyric
-
-        [Test]
-        public void MovingCaretByLyricWithViewMode()
-        {
-            changeMode(LyricEditorMode.View);
-
-            var targetLyric = getLyricFromBeatmap(1);
-            movingCaretByLyric(targetLyric);
-
-            // get the action
-            assertCaretPosition(Assert.IsNull);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        [Test]
-        public void MovingCaretByLyricWithEditMode()
-        {
-            changeMode(LyricEditorMode.Manage);
-
-            var targetLyric = getLyricFromBeatmap(1);
-            movingCaretByLyric(targetLyric);
-
-            // get the action
-            assertCaretPosition(Assert.IsInstanceOf<TextCaretPosition>);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        #endregion
-
-        #region Moving caret by caret position
-
-        [Test]
-        public void MovingCaretByCaretPositionWithViewMode()
-        {
-            changeMode(LyricEditorMode.View);
-
-            var targetLyric = getLyricFromBeatmap(1);
-            movingCaretByLyric(new NavigateCaretPosition(targetLyric));
-
-            // should not change the caret position if algorithm is null.
-            assertCaretPosition(Assert.IsNull);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        [Test]
-        public void MovingCaretByCaretPositionWithEditMode()
-        {
-            changeMode(LyricEditorMode.Singer);
-
-            var targetLyric = getLyricFromBeatmap(1);
-            movingCaretByLyric(new NavigateCaretPosition(targetLyric));
-
-            // yes, should change the position if contains algorithm.
-            assertCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        [Test]
-        public void MovingCaretByCaretPositionWithWrongCaretPosition()
-        {
-            changeMode(LyricEditorMode.Manage);
-
-            var targetLyric = getLyricFromBeatmap(1);
-
-            // should throw the exception if caret position type not match.
-            movingCaretByLyric(new NavigateCaretPosition(targetLyric), false);
-        }
-
-        #endregion
-
-        #region Moving hover caret by caret position
-
-        [Test]
-        public void MovingHoverCaretByCaretPositionWithViewMode()
-        {
-            changeMode(LyricEditorMode.View);
-
-            var targetLyric = getLyricFromBeatmap(1);
-            movingHoverCaretByLyric(new NavigateCaretPosition(targetLyric));
-
-            // should not change the caret position if algorithm is null.
-            assertCaretPosition(Assert.IsNull);
-            assertHoverCaretPosition(Assert.IsNull);
-        }
-
-        [Test]
-        public void MovingHoverCaretByCaretPositionWithEditMode()
-        {
-            changeMode(LyricEditorMode.Singer);
-
-            var firstLyric = getLyricFromBeatmap(0);
-            var targetLyric = getLyricFromBeatmap(1);
-            movingHoverCaretByLyric(new NavigateCaretPosition(targetLyric));
-
-            // because switch to the singer lyric, so current caret position will at the first lyric.
-            assertCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
-            assertCaretPosition(x => Assert.AreEqual(firstLyric, x.Lyric));
-
-            // yes, should change the position if contains algorithm.
-            assertHoverCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
-            assertHoverCaretPosition(x => Assert.AreEqual(targetLyric, x.Lyric));
-        }
-
-        [Test]
-        public void MovingHoverCaretByCaretPositionWithWrongCaretPosition()
-        {
-            changeMode(LyricEditorMode.Manage);
-
-            var targetLyric = getLyricFromBeatmap(1);
-
-            // should throw the exception if caret position type not match.
-            movingHoverCaretByLyric(new NavigateCaretPosition(targetLyric), false);
-        }
-
-        #endregion
-
-        #region Test utility
 
         private void changeMode(LyricEditorMode mode)
         {
@@ -316,7 +131,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.States
         }
 
         private Lyric getLyricFromBeatmap(int index)
-            => beatmap.HitObjects[index] as Lyric;
+        {
+            return beatmap.HitObjects[index] as Lyric;
+        }
 
         private void assertCaretPosition(Action<ICaretPosition> caretPosition)
         {
@@ -334,21 +151,185 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.States
             });
         }
 
-        #endregion
-
         private class TestLyricEditorState : ILyricEditorState
         {
-            private readonly Bindable<LyricEditorMode> bindableMode = new();
-
             public IBindable<LyricEditorMode> BindableMode => bindableMode;
 
             public LyricEditorMode Mode => bindableMode.Value;
+            private readonly Bindable<LyricEditorMode> bindableMode = new();
 
             public void SwitchMode(LyricEditorMode mode)
-                => bindableMode.Value = mode;
+            {
+                bindableMode.Value = mode;
+            }
 
             public void NavigateToFix(LyricEditorMode mode)
-                => throw new NotImplementedException();
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        [Test]
+        public void MovingCaretByCaretPositionWithEditMode()
+        {
+            changeMode(LyricEditorMode.Singer);
+
+            var targetLyric = getLyricFromBeatmap(1);
+            movingCaretByLyric(new NavigateCaretPosition(targetLyric));
+
+            // yes, should change the position if contains algorithm.
+            assertCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void MovingCaretByCaretPositionWithViewMode()
+        {
+            changeMode(LyricEditorMode.View);
+
+            var targetLyric = getLyricFromBeatmap(1);
+            movingCaretByLyric(new NavigateCaretPosition(targetLyric));
+
+            // should not change the caret position if algorithm is null.
+            assertCaretPosition(Assert.IsNull);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void MovingCaretByCaretPositionWithWrongCaretPosition()
+        {
+            changeMode(LyricEditorMode.Manage);
+
+            var targetLyric = getLyricFromBeatmap(1);
+
+            // should throw the exception if caret position type not match.
+            movingCaretByLyric(new NavigateCaretPosition(targetLyric), false);
+        }
+
+        [Test]
+        public void MovingCaretByLyricWithEditMode()
+        {
+            changeMode(LyricEditorMode.Manage);
+
+            var targetLyric = getLyricFromBeatmap(1);
+            movingCaretByLyric(targetLyric);
+
+            // get the action
+            assertCaretPosition(Assert.IsInstanceOf<TextCaretPosition>);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void MovingCaretByLyricWithViewMode()
+        {
+            changeMode(LyricEditorMode.View);
+
+            var targetLyric = getLyricFromBeatmap(1);
+            movingCaretByLyric(targetLyric);
+
+            // get the action
+            assertCaretPosition(Assert.IsNull);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void MovingCaretWithEditMode()
+        {
+            changeMode(LyricEditorMode.Manage);
+            movingCaret(MovingCaretAction.First);
+
+            // get the action
+            assertCaretPosition(Assert.IsInstanceOf<TextCaretPosition>);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void MovingCaretWithViewMode()
+        {
+            changeMode(LyricEditorMode.View);
+            movingCaret(MovingCaretAction.First);
+
+            // get the action
+            assertCaretPosition(Assert.IsNull);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void MovingHoverCaretByCaretPositionWithEditMode()
+        {
+            changeMode(LyricEditorMode.Singer);
+
+            var firstLyric = getLyricFromBeatmap(0);
+            var targetLyric = getLyricFromBeatmap(1);
+            movingHoverCaretByLyric(new NavigateCaretPosition(targetLyric));
+
+            // because switch to the singer lyric, so current caret position will at the first lyric.
+            assertCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
+            assertCaretPosition(x => Assert.AreEqual(firstLyric, x.Lyric));
+
+            // yes, should change the position if contains algorithm.
+            assertHoverCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
+            assertHoverCaretPosition(x => Assert.AreEqual(targetLyric, x.Lyric));
+        }
+
+        [Test]
+        public void MovingHoverCaretByCaretPositionWithViewMode()
+        {
+            changeMode(LyricEditorMode.View);
+
+            var targetLyric = getLyricFromBeatmap(1);
+            movingHoverCaretByLyric(new NavigateCaretPosition(targetLyric));
+
+            // should not change the caret position if algorithm is null.
+            assertCaretPosition(Assert.IsNull);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void MovingHoverCaretByCaretPositionWithWrongCaretPosition()
+        {
+            changeMode(LyricEditorMode.Manage);
+
+            var targetLyric = getLyricFromBeatmap(1);
+
+            // should throw the exception if caret position type not match.
+            movingHoverCaretByLyric(new NavigateCaretPosition(targetLyric), false);
+        }
+
+        [Test]
+        public void TestChangeFromEditModeToEditMode()
+        {
+            // change from edit mode to view mode for checking that caret position should be clear.
+            changeMode(LyricEditorMode.Manage);
+            changeMode(LyricEditorMode.EditRuby);
+
+            // get the action
+            assertCaretPosition(Assert.IsInstanceOf<NavigateCaretPosition>);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void TestChangeFromEditModeToViewMode()
+        {
+            // change from edit mode to view mode for checking that caret position should be clear.
+            changeMode(LyricEditorMode.Manage);
+            changeMode(LyricEditorMode.View);
+
+            // get the action
+            assertCaretPosition(Assert.IsNull);
+            assertHoverCaretPosition(Assert.IsNull);
+        }
+
+        [Test]
+        public void TestChangeFromViewModeToEditMode()
+        {
+            // change from view mode to another mode that contains algorithm.
+            changeMode(LyricEditorMode.View);
+            changeMode(LyricEditorMode.Manage);
+
+            // get the action
+            assertCaretPosition(Assert.IsNotNull);
+            assertHoverCaretPosition(Assert.IsNull);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
         {
             Children = new[]
             {
-                table = new RubyTagIssueTable(),
+                table = new RubyTagIssueTable()
             };
 
             bindableReports = lyricCheckerManager.BindableReports.GetBoundCopy();
@@ -48,21 +48,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
 
                 foreach (var (invalidReason, rubyTags) in rubyTagIssue.InvalidRubyTags)
                 {
-                    foreach (var rubyTag in rubyTags)
-                    {
-                        yield return new Tuple<RubyTag, RubyTagInvalid>(rubyTag, invalidReason);
-                    }
+                    foreach (var rubyTag in rubyTags) yield return new Tuple<RubyTag, RubyTagInvalid>(rubyTag, invalidReason);
                 }
             }
 
-            protected override string GetInvalidMessage(RubyTagInvalid invalid) =>
-                invalid switch
+            protected override string GetInvalidMessage(RubyTagInvalid invalid)
+            {
+                return invalid switch
                 {
                     RubyTagInvalid.OutOfRange => "This ruby is not in the lyric.",
                     RubyTagInvalid.Overlapping => "This ruby overlapping to other ruby.",
                     RubyTagInvalid.EmptyText => "This ruby is empty.",
                     _ => throw new ArgumentOutOfRangeException(nameof(invalid))
                 };
+            }
         }
     }
 }

@@ -22,10 +22,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Singers
 {
     public class SingerEditSection : Section
     {
+        protected override string Title => "Singer";
         private readonly IBindable<ICaretPosition> bindableCaretPosition = new Bindable<ICaretPosition>();
         private readonly IBindableList<Singer> bindableSingers = new BindableList<Singer>();
         private readonly IBindableList<int> singerIndexes = new BindableList<int>();
-        protected override string Title => "Singer";
 
         [Resolved]
         private ISingersChangeHandler singersChangeHandler { get; set; }
@@ -74,13 +74,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Singers
                 switchButton.Current.BindValueChanged(e =>
                 {
                     if (e.NewValue)
-                    {
                         lyricSingerChangeHandler.Add(x);
-                    }
                     else
-                    {
                         lyricSingerChangeHandler.Remove(x);
-                    }
                 });
 
                 return switchButton;
@@ -97,6 +93,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Singers
 
         public class LabelledSingerSwitchButton : LabelledSwitchButton, IHasCustomTooltip<Singer>
         {
+            public Singer TooltipContent { get; }
             private const float avatar_size = 40f;
 
             public LabelledSingerSwitchButton(Singer singer)
@@ -113,7 +110,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Singers
                         {
                             Horizontal = CONTENT_PADDING_HORIZONTAL,
                             Vertical = CONTENT_PADDING_VERTICAL,
-                            Left = CONTENT_PADDING_HORIZONTAL + 40 + CONTENT_PADDING_HORIZONTAL,
+                            Left = CONTENT_PADDING_HORIZONTAL + 40 + CONTENT_PADDING_HORIZONTAL
                         };
                 }
 
@@ -125,14 +122,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Singers
                     Origin = Anchor.CentreLeft,
                     Margin = new MarginPadding
                     {
-                        Left = CONTENT_PADDING_HORIZONTAL,
+                        Left = CONTENT_PADDING_HORIZONTAL
                     }
                 });
             }
 
-            public ITooltip<Singer> GetCustomTooltip() => new SingerToolTip();
-
-            public Singer TooltipContent { get; }
+            public ITooltip<Singer> GetCustomTooltip()
+            {
+                return new SingerToolTip();
+            }
         }
     }
 }

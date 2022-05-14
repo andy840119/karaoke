@@ -34,10 +34,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
         [Cached(typeof(IBindable<CultureInfo>))]
         private readonly IBindable<CultureInfo> currentLanguage = new Bindable<CultureInfo>();
 
+        private readonly IBindableList<Lyric> bindableLyrics = new BindableList<Lyric>();
+
         [Resolved]
         private ILanguagesChangeHandler languagesChangeHandler { get; set; }
-
-        private readonly IBindableList<Lyric> bindableLyrics = new BindableList<Lyric>();
 
         public TranslateEditSection()
         {
@@ -87,11 +87,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                                         new Dimension(GridSizeMode.Absolute, column_spacing),
                                         new Dimension(GridSizeMode.Absolute, 50),
                                         new Dimension(GridSizeMode.Absolute, column_spacing),
-                                        new Dimension(GridSizeMode.Absolute, 50),
+                                        new Dimension(GridSizeMode.Absolute, 50)
                                     },
                                     RowDimensions = new[]
                                     {
-                                        new Dimension(GridSizeMode.AutoSize),
+                                        new Dimension(GridSizeMode.AutoSize)
                                     },
                                     Content = new[]
                                     {
@@ -99,22 +99,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                                         {
                                             languageDropdown = new LanguageDropdown
                                             {
-                                                RelativeSizeAxes = Axes.X,
+                                                RelativeSizeAxes = Axes.X
                                             },
                                             null,
                                             new CreateNewLanguageButton
                                             {
-                                                Y = 5,
+                                                Y = 5
                                             },
                                             null,
                                             new RemoveLanguageButton
                                             {
-                                                Y = 5,
-                                            },
+                                                Y = 5
+                                            }
                                         }
                                     }
                                 }
-                            },
+                            }
                         }
                     },
                     new Container
@@ -138,12 +138,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                                     {
                                         new CornerBackground
                                         {
-                                            Alpha = 0,
+                                            Alpha = 0
                                         },
                                         null,
                                         null,
                                         null,
-                                        null,
+                                        null
                                     },
                                     new[]
                                     {
@@ -157,8 +157,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                                             RelativeSizeAxes = Axes.Both
                                         },
                                         null,
-                                        null,
-                                    },
+                                        null
+                                    }
                                 }
                             },
                             translateGrid = new GridContainer
@@ -166,11 +166,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                                 Name = "Translates",
                                 ColumnDimensions = columnDimensions,
                                 RelativeSizeAxes = Axes.X,
-                                AutoSizeAxes = Axes.Y,
+                                AutoSizeAxes = Axes.Y
                             }
                         }
                     }
-                },
+                }
             };
 
             currentLanguage.BindTo(languageDropdown.Current);
@@ -180,6 +180,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                 translateGrid.RowDimensions = bindableLyrics.Select(_ => new Dimension(GridSizeMode.Absolute, row_height)).ToArray();
                 translateGrid.Content = createContent();
             });
+        }
+
+        public string GetLyricTranslate(Lyric lyric, CultureInfo cultureInfo)
+        {
+            if (cultureInfo == null)
+                throw new ArgumentNullException(nameof(cultureInfo));
+
+            return lyric.Translates.TryGetValue(cultureInfo, out string translate) ? translate : null;
         }
 
         [BackgroundDependencyLoader]
@@ -203,7 +211,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                     null,
                     createPreviewSpriteText(x),
                     null,
-                    createTranslateTextBox(x),
+                    createTranslateTextBox(x)
                 };
             }).ToArray();
         }
@@ -221,8 +229,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
             };
         }
 
-        private Drawable createPreviewSpriteText(Lyric lyric) =>
-            new TranslateLyricSpriteText(lyric)
+        private Drawable createPreviewSpriteText(Lyric lyric)
+        {
+            return new TranslateLyricSpriteText(lyric)
             {
                 Anchor = Anchor.CentreLeft,
                 Origin = Anchor.CentreLeft,
@@ -232,25 +241,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                 Padding = new MarginPadding { Left = row_inner_spacing },
                 Font = new FontUsage(size: 25),
                 RubyFont = new FontUsage(size: 10),
-                RomajiFont = new FontUsage(size: 10),
+                RomajiFont = new FontUsage(size: 10)
             };
+        }
 
-        private Drawable createTranslateTextBox(Lyric lyric) =>
-            new LyricTranslateTextBox(lyric)
+        private Drawable createTranslateTextBox(Lyric lyric)
+        {
+            return new LyricTranslateTextBox(lyric)
             {
                 Anchor = Anchor.CentreLeft,
                 Origin = Anchor.CentreLeft,
                 RelativeSizeAxes = Axes.X,
                 TabbableContentContainer = this,
-                CommitOnFocusLost = true,
+                CommitOnFocusLost = true
             };
-
-        public string GetLyricTranslate(Lyric lyric, CultureInfo cultureInfo)
-        {
-            if (cultureInfo == null)
-                throw new ArgumentNullException(nameof(cultureInfo));
-
-            return lyric.Translates.TryGetValue(cultureInfo, out string translate) ? translate : null;
         }
     }
 }

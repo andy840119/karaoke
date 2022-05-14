@@ -28,7 +28,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends
                 background = new CornerBackground
                 {
                     Depth = float.MaxValue,
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 },
                 new OsuScrollContainer
                 {
@@ -36,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends
                     Child = content = new FillFlowContainer
                     {
                         RelativeSizeAxes = Axes.X,
-                        AutoSizeAxes = Axes.Y,
+                        AutoSizeAxes = Axes.Y
                     }
                 }
             };

@@ -15,12 +15,12 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
     {
         protected const int BORDER = 5;
 
-        private readonly Box background;
-        private readonly Container content;
-
         protected override Container<Drawable> Content => content;
 
         protected virtual float ContentPadding => 10;
+
+        private readonly Box background;
+        private readonly Container content;
 
         protected BackgroundToolTip()
         {
@@ -45,20 +45,32 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
             };
         }
 
+        public abstract void SetContent(T content);
+
+        public void Move(Vector2 pos)
+        {
+            Position = pos;
+        }
+
+        protected virtual Drawable SetBackground()
+        {
+            return new Box();
+        }
+
+        protected override void PopIn()
+        {
+            this.FadeIn(200, Easing.OutQuint);
+        }
+
+        protected override void PopOut()
+        {
+            this.FadeOut(200, Easing.OutQuint);
+        }
+
         [BackgroundDependencyLoader]
         private void load(OsuColour colours)
         {
             background.Colour = colours.Gray3;
         }
-
-        public abstract void SetContent(T content);
-
-        protected virtual Drawable SetBackground() => new Box();
-
-        public void Move(Vector2 pos) => Position = pos;
-
-        protected override void PopIn() => this.FadeIn(200, Easing.OutQuint);
-
-        protected override void PopOut() => this.FadeOut(200, Easing.OutQuint);
     }
 }

@@ -9,19 +9,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
     [TestFixture]
     public class EnumUtilsTest
     {
-        [Test]
-        public void TestGetValues()
-        {
-            var expected = new[]
-            {
-                TestEnum.Enum1,
-                TestEnum.Enum2,
-                TestEnum.Enum3
-            };
-            var actual = EnumUtils.GetValues<TestEnum>();
-            Assert.AreEqual(expected, actual);
-        }
-
         [TestCase(TestEnum.Enum1, TestEnum.Enum3)]
         [TestCase(TestEnum.Enum2, TestEnum.Enum1)]
         [TestCase(TestEnum.Enum3, TestEnum.Enum2)]
@@ -46,7 +33,20 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
 
             Enum2,
 
-            Enum3,
+            Enum3
+        }
+
+        [Test]
+        public void TestGetValues()
+        {
+            var expected = new[]
+            {
+                TestEnum.Enum1,
+                TestEnum.Enum2,
+                TestEnum.Enum3
+            };
+            var actual = EnumUtils.GetValues<TestEnum>();
+            Assert.AreEqual(expected, actual);
         }
     }
 }

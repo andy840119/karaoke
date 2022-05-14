@@ -24,6 +24,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
 
         public IBindable<ICaretPositionAlgorithm> BindableCaretPositionAlgorithm => bindableCaretPositionAlgorithm;
 
+        public bool CaretEnabled => algorithm != null;
+
         private readonly Bindable<ICaretPosition> bindableHoverCaretPosition = new();
         private readonly Bindable<ICaretPosition> bindableCaretPosition = new();
         private readonly Bindable<ICaretPositionAlgorithm> bindableCaretPositionAlgorithm = new();
@@ -92,6 +94,96 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
 
             // should move the caret to first.
             MoveCaret(MovingCaretAction.First);
+        }
+
+        public bool MoveCaret(MovingCaretAction action)
+        {
+            if (algorithm == null)
+                return false;
+
+            var currentPosition = bindableCaretPosition.Value;
+
+            var position = action switch
+            {
+                MovingCaretAction.Up => algorithm.MoveUp(currentPosition),
+                MovingCaretAction.Down => algorithm.MoveDown(currentPosition),
+                MovingCaretAction.Left => algorithm.MoveLeft(currentPosition),
+                MovingCaretAction.Right => algorithm.MoveRight(currentPosition),
+                MovingCaretAction.First => algorithm.MoveToFirst(),
+                MovingCaretAction.Last => algorithm.MoveToLast(),
+                _ => throw new InvalidEnumArgumentException(nameof(action))
+            };
+
+            if (position == null)
+                return false;
+
+            MoveCaretToTargetPosition(position);
+            return true;
+        }
+
+        public void MoveCaretToTargetPosition(Lyric lyric)
+        {
+            if (lyric == null)
+                throw new ArgumentNullException(nameof(lyric));
+
+            var caretPosition = algorithm?.MoveToTarget(lyric);
+            if (caretPosition == null)
+                return;
+
+            MoveCaretToTargetPosition(caretPosition);
+        }
+
+        public void MoveCaretToTargetPosition(ICaretPosition position)
+        {
+            if (position == null)
+                throw new ArgumentNullException(nameof(position));
+
+            if (position.Lyric == null)
+                return;
+
+            bool movable = CaretPositionMovable(position);
+
+            // stop moving the caret if forbidden by algorithm calculation.
+            if (!movable)
+                return;
+
+            bindableHoverCaretPosition.Value = null;
+            bindableCaretPosition.Value = position;
+
+            postProcess();
+        }
+
+        public void MoveHoverCaretToTargetPosition(ICaretPosition position)
+        {
+            if (position == null)
+                throw new ArgumentNullException(nameof(position));
+
+            if (position.Lyric == null)
+                return;
+
+            if (!CaretPositionMovable(position))
+                return;
+
+            bindableHoverCaretPosition.Value = position;
+        }
+
+        public void ClearHoverCaretPosition()
+        {
+            bindableHoverCaretPosition.Value = null;
+        }
+
+        public bool CaretPositionMovable(ICaretPosition position)
+        {
+            return algorithm?.PositionMovable(position) ?? false;
+        }
+
+        public void SyncSelectedHitObjectWithCaret()
+        {
+            selectedHitObjects.Clear();
+
+            var lyric = bindableCaretPosition.Value?.Lyric;
+            if (lyric != null)
+                selectedHitObjects.Add(lyric);
         }
 
         private void refreshAlgorithmAndCaretPosition()
@@ -175,96 +267,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
             lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagMovingCaretMode, bindableRecordingMovingCaretMode);
             lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingChangeTimeWhileMovingTheCaret, bindableRecordingChangeTimeWhileMovingTheCaret);
         }
-
-        public bool MoveCaret(MovingCaretAction action)
-        {
-            if (algorithm == null)
-                return false;
-
-            var currentPosition = bindableCaretPosition.Value;
-
-            var position = action switch
-            {
-                MovingCaretAction.Up => algorithm.MoveUp(currentPosition),
-                MovingCaretAction.Down => algorithm.MoveDown(currentPosition),
-                MovingCaretAction.Left => algorithm.MoveLeft(currentPosition),
-                MovingCaretAction.Right => algorithm.MoveRight(currentPosition),
-                MovingCaretAction.First => algorithm.MoveToFirst(),
-                MovingCaretAction.Last => algorithm.MoveToLast(),
-                _ => throw new InvalidEnumArgumentException(nameof(action))
-            };
-
-            if (position == null)
-                return false;
-
-            MoveCaretToTargetPosition(position);
-            return true;
-        }
-
-        public void MoveCaretToTargetPosition(Lyric lyric)
-        {
-            if (lyric == null)
-                throw new ArgumentNullException(nameof(lyric));
-
-            var caretPosition = algorithm?.MoveToTarget(lyric);
-            if (caretPosition == null)
-                return;
-
-            MoveCaretToTargetPosition(caretPosition);
-        }
-
-        public void MoveCaretToTargetPosition(ICaretPosition position)
-        {
-            if (position == null)
-                throw new ArgumentNullException(nameof(position));
-
-            if (position.Lyric == null)
-                return;
-
-            bool movable = CaretPositionMovable(position);
-
-            // stop moving the caret if forbidden by algorithm calculation.
-            if (!movable)
-                return;
-
-            bindableHoverCaretPosition.Value = null;
-            bindableCaretPosition.Value = position;
-
-            postProcess();
-        }
-
-        public void MoveHoverCaretToTargetPosition(ICaretPosition position)
-        {
-            if (position == null)
-                throw new ArgumentNullException(nameof(position));
-
-            if (position.Lyric == null)
-                return;
-
-            if (!CaretPositionMovable(position))
-                return;
-
-            bindableHoverCaretPosition.Value = position;
-        }
-
-        public void ClearHoverCaretPosition()
-        {
-            bindableHoverCaretPosition.Value = null;
-        }
-
-        public bool CaretPositionMovable(ICaretPosition position)
-            => algorithm?.PositionMovable(position) ?? false;
-
-        public void SyncSelectedHitObjectWithCaret()
-        {
-            selectedHitObjects.Clear();
-
-            var lyric = bindableCaretPosition.Value?.Lyric;
-            if (lyric != null)
-                selectedHitObjects.Add(lyric);
-        }
-
-        public bool CaretEnabled => algorithm != null;
 
         private void postProcess()
         {

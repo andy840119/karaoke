@@ -17,7 +17,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
         {
             new IssueTemplateNotFillLanguage(this),
             new IssueTemplateNoText(this),
-            new IssueTemplateNoSinger(this),
+            new IssueTemplateNoSinger(this)
         };
 
         public IEnumerable<Issue> Run(BeatmapVerifierContext context)
@@ -47,7 +47,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Lyric lyric)
-                => new(lyric, this);
+            {
+                return new(lyric, this);
+            }
         }
 
         public class IssueTemplateNoText : IssueTemplate
@@ -58,7 +60,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Lyric lyric)
-                => new(lyric, this);
+            {
+                return new(lyric, this);
+            }
         }
 
         public class IssueTemplateNoSinger : IssueTemplate
@@ -69,7 +73,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Lyric lyric)
-                => new(lyric, this);
+            {
+                return new(lyric, this);
+            }
         }
     }
 }

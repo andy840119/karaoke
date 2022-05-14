@@ -22,6 +22,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
 {
     public class KaraokeSettings : OsuScreen
     {
+        private readonly KaraokeConfigWaveContainer waves;
+        private readonly Box background;
+        private readonly KaraokeSettingsPanel settingsPanel;
+        private readonly Header header;
+        private readonly Container previewArea;
+
         [Cached]
         private KaraokeSettingsColourProvider colourProvider = new();
 
@@ -30,12 +36,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
 
         [Cached]
         private Bindable<SettingsSubsection> selectedSubsection = new();
-
-        private readonly KaraokeConfigWaveContainer waves;
-        private readonly Box background;
-        private readonly KaraokeSettingsPanel settingsPanel;
-        private readonly Header header;
-        private readonly Container previewArea;
 
         public KaraokeSettings()
         {
@@ -52,12 +52,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                         background = new Box
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Colour = backgroundColour,
+                            Colour = backgroundColour
                         },
                         settingsPanel = new KaraokeSettingsPanel(),
                         header = new Header
                         {
-                            Padding = new MarginPadding { Left = KaraokeSettingsPanel.WIDTH },
+                            Padding = new MarginPadding { Left = KaraokeSettingsPanel.WIDTH }
                         },
                         previewArea = new Container
                         {
@@ -105,6 +105,18 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
             return new OsuScreenDependencies(false, new DrawableRulesetDependencies(baseDependencies.GetRuleset(), baseDependencies));
         }
 
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            waves.Show();
+        }
+
+        protected override bool OnScroll(ScrollEvent e)
+        {
+            // Prevent scroll event cause volume control appear.
+            return true;
+        }
+
         [BackgroundDependencyLoader]
         private void load(GameHost host)
         {
@@ -116,18 +128,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
             var manager = new FontManager();
             AddInternal(manager);
             host.Dependencies.Cache(manager);
-        }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            waves.Show();
-        }
-
-        protected override bool OnScroll(ScrollEvent e)
-        {
-            // Prevent scroll event cause volume control appear.
-            return true;
         }
 
         private class KaraokeConfigWaveContainer : WaveContainer

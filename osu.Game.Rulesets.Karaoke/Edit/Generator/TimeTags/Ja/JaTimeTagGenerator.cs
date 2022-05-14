@@ -17,8 +17,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.TimeTags.Ja
         }
 
         /// <summary>
-        /// Thanks for RhythmKaTTE's author writing this logic into C#
-        /// http://juna-idler.blogspot.com/2016/05/rhythmkatte-version-01.html
+        ///     Thanks for RhythmKaTTE's author writing this logic into C#
+        ///     http://juna-idler.blogspot.com/2016/05/rhythmkatte-version-01.html
         /// </summary>
         protected override void TimeTagLogic(Lyric lyric, List<TimeTag> timeTags)
         {
@@ -74,21 +74,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.TimeTags.Ja
                             timeTags.Add(timeTag);
                     }
                     else
-                    {
                         timeTags.Add(timeTag);
-                    }
                 }
                 else if (CharUtils.IsLatin(c) || char.IsNumber(c) || CharUtils.IsAsciiSymbol(c))
                 {
-                    if (char.IsWhiteSpace(pc) || !CharUtils.IsLatin(pc) && !char.IsNumber(pc) && !CharUtils.IsAsciiSymbol(pc))
-                    {
-                        timeTags.Add(timeTag);
-                    }
+                    if (char.IsWhiteSpace(pc) || !CharUtils.IsLatin(pc) && !char.IsNumber(pc) && !CharUtils.IsAsciiSymbol(pc)) timeTags.Add(timeTag);
                 }
                 else if (char.IsWhiteSpace(pc))
-                {
                     timeTags.Add(timeTag);
-                }
                 else
                 {
                     switch (c)
@@ -114,18 +107,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.TimeTags.Ja
                             break;
 
                         case 'ん':
-                            if (Config.Checkん)
-                            {
-                                timeTags.Add(timeTag);
-                            }
+                            if (Config.Checkん) timeTags.Add(timeTag);
 
                             break;
 
                         case 'っ':
-                            if (Config.Checkっ)
-                            {
-                                timeTags.Add(timeTag);
-                            }
+                            if (Config.Checkっ) timeTags.Add(timeTag);
 
                             break;
 

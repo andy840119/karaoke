@@ -13,7 +13,9 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class SingerUtils
     {
         public static int GetShiftingStyleIndex(IEnumerable<int> singerIds)
-            => singerIds?.Sum(x => (int)Math.Pow(2, x - 1)) ?? 0;
+        {
+            return singerIds?.Sum(x => (int)Math.Pow(2, x - 1)) ?? 0;
+        }
 
         public static int[] GetSingersIndex(int styleIndex)
         {
@@ -27,9 +29,13 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         public static Color4 GetContentColour(ISinger singer)
-            => Colour4.FromHSL(singer.Hue, 0.4f, 0.6f);
+        {
+            return Colour4.FromHSL(singer.Hue, 0.4f, 0.6f);
+        }
 
         public static Color4 GetBackgroundColour(ISinger singer)
-            => Colour4.FromHSL(singer.Hue, 0.1f, 0.4f);
+        {
+            return Colour4.FromHSL(singer.Hue, 0.1f, 0.4f);
+        }
     }
 }

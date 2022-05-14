@@ -26,20 +26,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
 {
     public class FontSelector : CompositeDrawable
     {
-        private readonly SpriteText previewText;
-        private readonly FontFamilyPropertyList familyProperty;
-        private readonly FontPropertyList<string> weightProperty;
-        private readonly FontPropertyList<float> fontSizeProperty;
-        private readonly OsuCheckbox fixedWidthCheckbox;
-
-        private readonly BindableWithCurrent<FontUsage> current = new();
-        private readonly BindableList<FontInfo> fonts = new();
-
-        [Resolved]
-        private FontStore fontStore { get; set; }
-
-        private KaraokeLocalFontStore localFontStore;
-
         public Bindable<FontUsage> Current
         {
             get => current.Current;
@@ -51,15 +37,25 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                 fontSizeProperty.Items.Clear();
 
                 if (value is BindableFontUsage bindableFontUsage)
-                {
                     fontSizeProperty.Items.AddRange(FontUtils.DefaultFontSize(bindableFontUsage.MinFontSize, bindableFontUsage.MaxFontSize));
-                }
                 else
-                {
                     fontSizeProperty.Items.AddRange(FontUtils.DefaultFontSize());
-                }
             }
         }
+
+        private readonly SpriteText previewText;
+        private readonly FontFamilyPropertyList familyProperty;
+        private readonly FontPropertyList<string> weightProperty;
+        private readonly FontPropertyList<float> fontSizeProperty;
+        private readonly OsuCheckbox fixedWidthCheckbox;
+
+        private readonly BindableWithCurrent<FontUsage> current = new();
+        private readonly BindableList<FontInfo> fonts = new();
+
+        private KaraokeLocalFontStore localFontStore;
+
+        [Resolved]
+        private FontStore fontStore { get; set; }
 
         public FontSelector()
         {
@@ -95,7 +91,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                                 {
                                     new Dimension(GridSizeMode.Relative, 0.5f),
                                     new Dimension(GridSizeMode.Relative, 0.3f),
-                                    new Dimension(GridSizeMode.Relative, 0.2f),
+                                    new Dimension(GridSizeMode.Relative, 0.2f)
                                 },
                                 Content = new[]
                                 {
@@ -117,7 +113,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                                             RowDimensions = new[]
                                             {
                                                 new Dimension(),
-                                                new Dimension(GridSizeMode.Absolute, 48),
+                                                new Dimension(GridSizeMode.Absolute, 48)
                                             },
                                             Content = new[]
                                             {
@@ -126,8 +122,8 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                                                     fontSizeProperty = new FontPropertyList<float>
                                                     {
                                                         Name = "Font size selection area",
-                                                        RelativeSizeAxes = Axes.Both,
-                                                    },
+                                                        RelativeSizeAxes = Axes.Both
+                                                    }
                                                 },
                                                 new Drawable[]
                                                 {
@@ -136,12 +132,12 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                                                         Name = "Font fixed width selection area",
                                                         RelativeSizeAxes = Axes.X,
                                                         Padding = new MarginPadding(10),
-                                                        LabelText = "FixedWidth",
-                                                    },
+                                                        LabelText = "FixedWidth"
+                                                    }
                                                 }
                                             }
                                         }
-                                    },
+                                    }
                                 }
                             }
                         }
@@ -157,24 +153,15 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                     string[] oldFamilies = b.OldItems?.OfType<FontInfo>().Select(x => x.Family).Distinct().ToArray();
                     string[] newFamilies = b.NewItems?.OfType<FontInfo>().Select(x => x.Family).Distinct().ToArray();
 
-                    if (oldFamilies != null)
-                    {
-                        familyProperty.Items.RemoveAll(x => oldFamilies.Contains(x));
-                    }
+                    if (oldFamilies != null) familyProperty.Items.RemoveAll(x => oldFamilies.Contains(x));
 
-                    if (newFamilies != null)
-                    {
-                        familyProperty.Items.AddRange(newFamilies);
-                    }
+                    if (newFamilies != null) familyProperty.Items.AddRange(newFamilies);
 
                     // should reset family selection if user select the font that will be removed or added.
                     string currentFamily = familyProperty.Current.Value;
                     bool resetFamily = oldFamilies?.Contains(currentFamily) ?? false;
 
-                    if (resetFamily)
-                    {
-                        familyProperty.Current.Value = familyProperty.Items.FirstOrDefault();
-                    }
+                    if (resetFamily) familyProperty.Current.Value = familyProperty.Items.FirstOrDefault();
                 });
             });
 
@@ -194,6 +181,17 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
             fontSizeProperty.Current.BindValueChanged(_ => performChange());
             fixedWidthCheckbox.Current.BindValueChanged(_ => performChange());
         }
+
+        #region Disposal
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            fontStore?.RemoveStore(localFontStore);
+        }
+
+        #endregion
 
         [BackgroundDependencyLoader]
         private void load(FontManager fontManager)
@@ -237,22 +235,19 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
             return new FontUsage(family, size, weight, false, fixedWidth);
         }
 
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-
-            fontStore?.RemoveStore(localFontStore);
-        }
-
         internal class FontFamilyPropertyList : FontPropertyList<string>
         {
             protected override RearrangeableTextFlowListContainer<string> CreateRearrangeableListContainer()
-                => new RearrangeableFontFamilyListContainer();
+            {
+                return new RearrangeableFontFamilyListContainer();
+            }
 
             private class RearrangeableFontFamilyListContainer : RearrangeableTextFlowListContainer<string>
             {
                 protected override DrawableTextListItem CreateDrawable(string item)
-                    => new DrawableFontFamilyListItem(item);
+                {
+                    return new DrawableFontFamilyListItem(item);
+                }
 
                 private class DrawableFontFamilyListItem : DrawableTextListItem
                 {
@@ -312,7 +307,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                             {
                                 Vertical = 1,
                                 Horizontal = 3
-                            },
+                            }
                         }
                     };
                 }
@@ -336,11 +331,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
 
         internal class FontPropertyList<T> : CompositeDrawable
         {
-            private readonly CornerBackground background;
-            private readonly TextPropertySearchTextBox filter;
-            private readonly RearrangeableTextFlowListContainer<T> propertyFlowList;
-
-            private readonly BindableWithCurrent<T> current = new();
+            public BindableList<T> Items => propertyFlowList.Items;
 
             public Bindable<T> Current
             {
@@ -348,7 +339,11 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                 set => current.Current = value;
             }
 
-            public BindableList<T> Items => propertyFlowList.Items;
+            private readonly CornerBackground background;
+            private readonly TextPropertySearchTextBox filter;
+            private readonly RearrangeableTextFlowListContainer<T> propertyFlowList;
+
+            private readonly BindableWithCurrent<T> current = new();
 
             public FontPropertyList()
             {
@@ -376,7 +371,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                                 {
                                     filter = new TextPropertySearchTextBox
                                     {
-                                        RelativeSizeAxes = Axes.X,
+                                        RelativeSizeAxes = Axes.X
                                     }
                                 },
                                 new Drawable[]
@@ -400,7 +395,9 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
             }
 
             protected virtual RearrangeableTextFlowListContainer<T> CreateRearrangeableListContainer()
-                => new();
+            {
+                return new();
+            }
 
             [BackgroundDependencyLoader]
             private void load(OsuColour colours)

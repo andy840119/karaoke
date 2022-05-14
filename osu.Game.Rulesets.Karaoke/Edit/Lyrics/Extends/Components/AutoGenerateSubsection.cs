@@ -32,6 +32,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
             AutoSizeAxes = Axes.Y;
         }
 
+        protected abstract Dictionary<Lyric, string> GetDisableSelectingLyrics(IEnumerable<Lyric> lyrics);
+
+        protected abstract void Apply();
+
+        protected abstract InvalidLyricAlertTextContainer CreateInvalidLyricAlertTextContainer();
+
+        protected abstract ConfigButton CreateConfigButton();
+
         [BackgroundDependencyLoader]
         private void load(EditorBeatmap beatmap, ILyricSelectionState lyricSelectionState, OsuColour colours)
         {
@@ -72,7 +80,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                                     x.Size = new Vector2(36);
                                 })
                             }
-                        },
+                        }
                     },
                     CreateInvalidLyricAlertTextContainer().With(t =>
                     {
@@ -93,14 +101,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                 Apply();
             };
         }
-
-        protected abstract Dictionary<Lyric, string> GetDisableSelectingLyrics(IEnumerable<Lyric> lyrics);
-
-        protected abstract void Apply();
-
-        protected abstract InvalidLyricAlertTextContainer CreateInvalidLyricAlertTextContainer();
-
-        protected abstract ConfigButton CreateConfigButton();
 
         private class AutoGenerateButton : SelectLyricButton
         {
@@ -125,6 +125,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
 
         protected abstract class MultiConfigButton : ConfigButton
         {
+            protected abstract IEnumerable<KaraokeRulesetEditGeneratorSetting> AvailableSettings { get; }
             private KaraokeRulesetEditGeneratorSetting? selectedSetting;
 
             protected MultiConfigButton()
@@ -140,14 +141,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                 return GetPopoverBySettingType(selectedSetting.Value);
             }
 
-            protected abstract IEnumerable<KaraokeRulesetEditGeneratorSetting> AvailableSettings { get; }
-
             protected abstract string GetDisplayName(KaraokeRulesetEditGeneratorSetting setting);
 
             protected abstract Popover GetPopoverBySettingType(KaraokeRulesetEditGeneratorSetting setting);
 
             private Popover createSelectionPopover()
-                => new OsuPopover
+            {
+                return new OsuPopover
                 {
                     Child = new FillFlowContainer<OsuButton>
                     {
@@ -168,11 +168,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
 
                                     // after show config pop-over, should make the state back for able to show this dialog next time.
                                     selectedSetting = null;
-                                },
+                                }
                             };
                         }).ToList()
                     }
                 };
+            }
         }
 
         protected abstract class InvalidLyricAlertTextContainer : CustomizableTextContainer
@@ -185,12 +186,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                 AddIconFactory(name, () => new ClickableSpriteText
                 {
                     Text = text,
-                    Action = () => state.NavigateToFix(targetMode),
+                    Action = () => state.NavigateToFix(targetMode)
                 });
             }
 
             protected override SpriteText CreateSpriteText()
-                => base.CreateSpriteText().With(x => x.Font = x.Font.With(size: 16));
+            {
+                return base.CreateSpriteText().With(x => x.Font = x.Font.With(size: 16));
+            }
 
             internal class ClickableSpriteText : OsuSpriteText
             {

@@ -13,56 +13,18 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Replays
 {
     public class TestSceneAutoGeneration : OsuTestScene
     {
-        [Test]
-        public void TestSingleShortNote()
+        private static bool checkMatching(ReplayFrame frame, Tone? tone)
         {
-            // |     |
-            // |  -  |
-            // |     |
+            if (frame is not KaraokeReplayFrame karaokeReplayFrame)
+                throw new InvalidCastException($"{nameof(frame)} is not karaoke replay frame.");
 
-            var beatmap = new KaraokeBeatmap();
-            beatmap.HitObjects.Add(new Note
-            {
-                Display = true,
-                StartTime = 1000,
-                Duration = 50,
-                Text = "karaoke!",
-                Tone = new Tone(0, true)
-            });
+            if (!karaokeReplayFrame.Sound)
+                return !tone.HasValue;
 
-            var generated = new KaraokeAutoGenerator(beatmap).Generate();
+            if (tone == null)
+                throw new ArgumentNullException(nameof(tone));
 
-            Assert.IsTrue(generated.Frames.Count == 2, "Replay must have 2 frames, start and end.");
-            Assert.AreEqual(1000, generated.Frames[0].Time, "Incorrect time");
-            Assert.AreEqual(1051, generated.Frames[1].Time, "Incorrect time");
-            Assert.IsTrue(checkMatching(generated.Frames[0], new Tone(0, true)), "Frame1 should sing.");
-            Assert.IsTrue(checkMatching(generated.Frames[1], null), "Frame2 should release sing.");
-        }
-
-        [Test]
-        public void TestSingleNoteWithLongTime()
-        {
-            // |     |
-            // | *** |
-            // |     |
-
-            var beatmap = new KaraokeBeatmap();
-            beatmap.HitObjects.Add(new Note
-            {
-                Display = true,
-                StartTime = 1000,
-                Duration = 1000,
-                Text = "karaoke!",
-                Tone = new Tone(0, true)
-            });
-
-            var generated = new KaraokeAutoGenerator(beatmap).Generate();
-
-            Assert.AreEqual(11, generated.Frames.Count, "Replay must have 11 frames,Start, duration(9 frames) and end.");
-            Assert.AreEqual(1000, generated.Frames[0].Time, "Incorrect hit time");
-            Assert.AreEqual(2001, generated.Frames[10].Time, "Incorrect time");
-            Assert.IsTrue(checkMatching(generated.Frames[0], new Tone(0, true)), "Fist frame should sing.");
-            Assert.IsTrue(checkMatching(generated.Frames[10], null), "Last frame should not sing.");
+            return karaokeReplayFrame.Scale == tone.Value.Scale + (tone.Value.Half ? 0.5f : 0);
         }
 
         [Test]
@@ -101,18 +63,56 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Replays
             Assert.IsTrue(checkMatching(generated.Frames[2], null), "Frame3 should release sing.");
         }
 
-        private static bool checkMatching(ReplayFrame frame, Tone? tone)
+        [Test]
+        public void TestSingleNoteWithLongTime()
         {
-            if (frame is not KaraokeReplayFrame karaokeReplayFrame)
-                throw new InvalidCastException($"{nameof(frame)} is not karaoke replay frame.");
+            // |     |
+            // | *** |
+            // |     |
 
-            if (!karaokeReplayFrame.Sound)
-                return !tone.HasValue;
+            var beatmap = new KaraokeBeatmap();
+            beatmap.HitObjects.Add(new Note
+            {
+                Display = true,
+                StartTime = 1000,
+                Duration = 1000,
+                Text = "karaoke!",
+                Tone = new Tone(0, true)
+            });
 
-            if (tone == null)
-                throw new ArgumentNullException(nameof(tone));
+            var generated = new KaraokeAutoGenerator(beatmap).Generate();
 
-            return karaokeReplayFrame.Scale == tone.Value.Scale + (tone.Value.Half ? 0.5f : 0);
+            Assert.AreEqual(11, generated.Frames.Count, "Replay must have 11 frames,Start, duration(9 frames) and end.");
+            Assert.AreEqual(1000, generated.Frames[0].Time, "Incorrect hit time");
+            Assert.AreEqual(2001, generated.Frames[10].Time, "Incorrect time");
+            Assert.IsTrue(checkMatching(generated.Frames[0], new Tone(0, true)), "Fist frame should sing.");
+            Assert.IsTrue(checkMatching(generated.Frames[10], null), "Last frame should not sing.");
+        }
+
+        [Test]
+        public void TestSingleShortNote()
+        {
+            // |     |
+            // |  -  |
+            // |     |
+
+            var beatmap = new KaraokeBeatmap();
+            beatmap.HitObjects.Add(new Note
+            {
+                Display = true,
+                StartTime = 1000,
+                Duration = 50,
+                Text = "karaoke!",
+                Tone = new Tone(0, true)
+            });
+
+            var generated = new KaraokeAutoGenerator(beatmap).Generate();
+
+            Assert.IsTrue(generated.Frames.Count == 2, "Replay must have 2 frames, start and end.");
+            Assert.AreEqual(1000, generated.Frames[0].Time, "Incorrect time");
+            Assert.AreEqual(1051, generated.Frames[1].Time, "Incorrect time");
+            Assert.IsTrue(checkMatching(generated.Frames[0], new Tone(0, true)), "Frame1 should sing.");
+            Assert.IsTrue(checkMatching(generated.Frames[1], null), "Frame2 should release sing.");
         }
     }
 }

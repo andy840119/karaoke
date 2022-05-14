@@ -11,16 +11,21 @@ namespace osu.Game.Rulesets.Karaoke.Scoring
 
         private static readonly DifficultyRange[] lyric_ranges =
         {
-            new(DEFAULT_HIT_RESULT, 40, 20, 10),
+            new(DEFAULT_HIT_RESULT, 40, 20, 10)
         };
 
-        public override bool IsHitResultAllowed(HitResult result) =>
-            result switch
+        public override bool IsHitResultAllowed(HitResult result)
+        {
+            return result switch
             {
                 DEFAULT_HIT_RESULT => true,
                 _ => false
             };
+        }
 
-        protected override DifficultyRange[] GetRanges() => lyric_ranges;
+        protected override DifficultyRange[] GetRanges()
+        {
+            return lyric_ranges;
+        }
     }
 }

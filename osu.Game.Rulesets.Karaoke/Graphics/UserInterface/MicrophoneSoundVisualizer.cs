@@ -19,70 +19,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
 {
     public class MicrophoneSoundVisualizer : CompositeDrawable
     {
-        private const float max_decibel = 100;
-        private const float max_pitch = 60;
-
-        private readonly Box background;
-        private readonly MicrophoneInfo microphoneInfo;
-        private readonly DecibelVisualizer decibelVisualizer;
-        private readonly PitchVisualizer pitchVisualizer;
-
-        public MicrophoneSoundVisualizer()
-        {
-            Width = 310;
-            Height = 100;
-            Masking = true;
-            CornerRadius = 5f;
-            InternalChildren = new Drawable[]
-            {
-                background = new Box
-                {
-                    RelativeSizeAxes = Axes.Both,
-                },
-                new GridContainer
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    RowDimensions = new[]
-                    {
-                        new Dimension(GridSizeMode.Relative, 0.6f),
-                        new Dimension(GridSizeMode.Relative, 0.2f),
-                        new Dimension(GridSizeMode.Relative, 0.2f),
-                    },
-                    Content = new[]
-                    {
-                        new Drawable[]
-                        {
-                            microphoneInfo = new MicrophoneInfo
-                            {
-                                RelativeSizeAxes = Axes.Both,
-                            },
-                        },
-                        new Drawable[]
-                        {
-                            decibelVisualizer = new DecibelVisualizer
-                            {
-                                Anchor = Anchor.Centre,
-                                Origin = Anchor.Centre,
-                                Y = 2,
-                            },
-                        },
-                        new Drawable[]
-                        {
-                            pitchVisualizer = new PitchVisualizer
-                            {
-                                Anchor = Anchor.Centre,
-                                Origin = Anchor.Centre,
-                            },
-                        }
-                    }
-                }
-            };
-
-            updateDeviceInfo();
-        }
-
-        private string deviceName;
-
         public string DeviceName
         {
             get => deviceName;
@@ -95,8 +31,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 updateDeviceInfo();
             }
         }
-
-        private bool hasDevice;
 
         public bool HasDevice
         {
@@ -111,10 +45,70 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
             }
         }
 
-        private void updateDeviceInfo()
+        private const float max_decibel = 100;
+        private const float max_pitch = 60;
+
+        private readonly Box background;
+        private readonly MicrophoneInfo microphoneInfo;
+        private readonly DecibelVisualizer decibelVisualizer;
+        private readonly PitchVisualizer pitchVisualizer;
+
+        private string deviceName;
+
+        private bool hasDevice;
+
+        public MicrophoneSoundVisualizer()
         {
-            microphoneInfo.DeviceName = HasDevice ? DeviceName : "Seems no microphone device.";
-            microphoneInfo.HasDevice = HasDevice;
+            Width = 310;
+            Height = 100;
+            Masking = true;
+            CornerRadius = 5f;
+            InternalChildren = new Drawable[]
+            {
+                background = new Box
+                {
+                    RelativeSizeAxes = Axes.Both
+                },
+                new GridContainer
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    RowDimensions = new[]
+                    {
+                        new Dimension(GridSizeMode.Relative, 0.6f),
+                        new Dimension(GridSizeMode.Relative, 0.2f),
+                        new Dimension(GridSizeMode.Relative, 0.2f)
+                    },
+                    Content = new[]
+                    {
+                        new Drawable[]
+                        {
+                            microphoneInfo = new MicrophoneInfo
+                            {
+                                RelativeSizeAxes = Axes.Both
+                            }
+                        },
+                        new Drawable[]
+                        {
+                            decibelVisualizer = new DecibelVisualizer
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                Y = 2
+                            }
+                        },
+                        new Drawable[]
+                        {
+                            pitchVisualizer = new PitchVisualizer
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre
+                            }
+                        }
+                    }
+                }
+            };
+
+            updateDeviceInfo();
         }
 
         protected override bool Handle(UIEvent e)
@@ -126,12 +120,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 MicrophonePitchingEvent microphonePitching => OnMicrophoneSinging(microphonePitching),
                 _ => base.Handle(e)
             };
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(OsuColour colours)
-        {
-            background.Colour = colours.Gray2;
         }
 
         protected virtual bool OnMicrophoneStartSinging(MicrophoneStartPitchingEvent e)
@@ -160,8 +148,34 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
             return false;
         }
 
+        private void updateDeviceInfo()
+        {
+            microphoneInfo.DeviceName = HasDevice ? DeviceName : "Seems no microphone device.";
+            microphoneInfo.HasDevice = HasDevice;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(OsuColour colours)
+        {
+            background.Colour = colours.Gray2;
+        }
+
         internal class MicrophoneInfo : CompositeDrawable
         {
+            public string DeviceName
+            {
+                set => deviceName.Text = value;
+            }
+
+            public bool HasDevice
+            {
+                set =>
+                    Schedule(() =>
+                    {
+                        microphoneIcon.Colour = value ? colours.GrayF : colours.RedLight;
+                    });
+            }
+
             private readonly Box background;
             private readonly SpriteIcon microphoneIcon;
             private readonly OsuSpriteText deviceName;
@@ -175,7 +189,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 {
                     background = new Box
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     new FillFlowContainer
                     {
@@ -199,25 +213,11 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                                 Width = 250,
                                 Font = OsuFont.Default.With(size: 20),
                                 Text = "Microphone name",
-                                Truncate = true,
+                                Truncate = true
                             }
                         }
                     }
                 };
-            }
-
-            public string DeviceName
-            {
-                set => deviceName.Text = value;
-            }
-
-            public bool HasDevice
-            {
-                set =>
-                    Schedule(() =>
-                    {
-                        microphoneIcon.Colour = value ? colours.GrayF : colours.RedLight;
-                    });
             }
 
             [BackgroundDependencyLoader]
@@ -229,43 +229,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
 
         internal class DecibelVisualizer : CompositeDrawable
         {
-            private const float var_width = 294;
-
-            private readonly Box background;
-            private readonly Box decibelMarker;
-            private readonly Box decibelRippleMarker;
-            private readonly Box maxDecibelMarker;
-
-            public DecibelVisualizer()
-            {
-                Width = var_width;
-                Height = 8;
-                InternalChildren = new Drawable[]
-                {
-                    background = new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                    },
-                    decibelMarker = new Box
-                    {
-                        RelativeSizeAxes = Axes.Y,
-                    },
-                    decibelRippleMarker = new Box
-                    {
-                        RelativeSizeAxes = Axes.Y,
-                    },
-                    maxDecibelMarker = new Box
-                    {
-                        RelativeSizeAxes = Axes.Y,
-                        Width = 5,
-                    },
-                };
-            }
-
-            private float decibel;
-
-            private float maxDecibel;
-
             public float Decibel
             {
                 get => decibel;
@@ -286,7 +249,44 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 }
             }
 
+            private const float var_width = 294;
+
+            private readonly Box background;
+            private readonly Box decibelMarker;
+            private readonly Box decibelRippleMarker;
+            private readonly Box maxDecibelMarker;
+
+            private float decibel;
+
+            private float maxDecibel;
+
             private float rippleDecibel;
+
+            public DecibelVisualizer()
+            {
+                Width = var_width;
+                Height = 8;
+                InternalChildren = new Drawable[]
+                {
+                    background = new Box
+                    {
+                        RelativeSizeAxes = Axes.Both
+                    },
+                    decibelMarker = new Box
+                    {
+                        RelativeSizeAxes = Axes.Y
+                    },
+                    decibelRippleMarker = new Box
+                    {
+                        RelativeSizeAxes = Axes.Y
+                    },
+                    maxDecibelMarker = new Box
+                    {
+                        RelativeSizeAxes = Axes.Y,
+                        Width = 5
+                    }
+                };
+            }
 
             protected override void Update()
             {
@@ -315,45 +315,13 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
             }
 
             private float calculatePosition(float decibel)
-                => decibel / max_decibel * var_width;
+            {
+                return decibel / max_decibel * var_width;
+            }
         }
 
         internal class PitchVisualizer : CompositeDrawable
         {
-            private const int dot_width = 5;
-            private const int dot_height = 10;
-            private const int dot_amount = 30;
-            private const float spacing = 5;
-
-            private readonly PitchDot currentDot;
-
-            public PitchVisualizer()
-            {
-                AutoSizeAxes = Axes.Both;
-
-                // todo : draw that stupid shapes with progressive background color.
-                InternalChildren = new Drawable[]
-                {
-                    new FillFlowContainer
-                    {
-                        AutoSizeAxes = Axes.Both,
-                        Spacing = new Vector2(spacing),
-                        Children = Enumerable.Range(0, dot_amount).Select(i => new PitchDot
-                        {
-                            Colour = calculateDotColour(i, 0.8f)
-                        }).ToArray()
-                    },
-                    currentDot = new PitchDot
-                    {
-                        Alpha = 0,
-                    },
-                };
-            }
-
-            private float pitch;
-
-            private bool showPitch;
-
             public float Pitch
             {
                 get => pitch;
@@ -375,14 +343,44 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                     showPitch = show;
 
                     if (show)
-                    {
                         currentDot.FadeIn(200);
-                    }
                     else
-                    {
                         currentDot.FadeOut(200);
-                    }
                 }
+            }
+
+            private const int dot_width = 5;
+            private const int dot_height = 10;
+            private const int dot_amount = 30;
+            private const float spacing = 5;
+
+            private readonly PitchDot currentDot;
+
+            private float pitch;
+
+            private bool showPitch;
+
+            public PitchVisualizer()
+            {
+                AutoSizeAxes = Axes.Both;
+
+                // todo : draw that stupid shapes with progressive background color.
+                InternalChildren = new Drawable[]
+                {
+                    new FillFlowContainer
+                    {
+                        AutoSizeAxes = Axes.Both,
+                        Spacing = new Vector2(spacing),
+                        Children = Enumerable.Range(0, dot_amount).Select(i => new PitchDot
+                        {
+                            Colour = calculateDotColour(i, 0.8f)
+                        }).ToArray()
+                    },
+                    currentDot = new PitchDot
+                    {
+                        Alpha = 0
+                    }
+                };
             }
 
             private Color4 calculateDotColour(int index, float s)
@@ -394,7 +392,9 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
             }
 
             private float calculateDotPosition(int index)
-                => (dot_width + spacing) * index;
+            {
+                return (dot_width + spacing) * index;
+            }
 
             public class PitchDot : Container
             {
@@ -418,9 +418,9 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                                 new Box
                                 {
                                     Colour = Color4.White,
-                                    RelativeSizeAxes = Axes.Both,
+                                    RelativeSizeAxes = Axes.Both
                                 }
-                            },
+                            }
                         }
                     };
                 }

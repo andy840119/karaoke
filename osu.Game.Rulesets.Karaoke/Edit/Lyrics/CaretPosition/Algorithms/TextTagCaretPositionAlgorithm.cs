@@ -62,14 +62,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
             return null;
         }
 
-        protected bool IsTextTagTypeValid(T position) =>
-            EditArea switch
+        protected bool IsTextTagTypeValid(T position)
+        {
+            return EditArea switch
             {
                 EditArea.Ruby => position.TextTag is RubyTag,
                 EditArea.Romaji => position.TextTag is RomajiTag,
                 EditArea.Both => true,
                 _ => throw new InvalidEnumArgumentException(nameof(EditArea))
             };
+        }
     }
 
     public enum EditArea
@@ -78,6 +80,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
 
         Romaji,
 
-        Both,
+        Both
     }
 }

@@ -22,9 +22,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
 {
     public class EditorKaraokeSpriteText : DrawableKaraokeSpriteText<EditorKaraokeSpriteText.EditorLyricSpriteText>
     {
-        private const int time_tag_spacing = 8;
+        public float LineBaseHeight
+        {
+            get
+            {
+                var spriteText = getSpriteText();
+                if (spriteText == null)
+                    throw new ArgumentNullException(nameof(spriteText));
+
+                return spriteText.LineBaseHeight;
+            }
+        }
 
         public Lyric HitObject;
+
+        public override bool RemoveCompletedTransforms => false;
+        private const int time_tag_spacing = 8;
 
         public EditorKaraokeSpriteText(Lyric lyric)
             : base(lyric)
@@ -72,18 +85,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             }
         }
 
-        public float LineBaseHeight
-        {
-            get
-            {
-                var spriteText = getSpriteText();
-                if (spriteText == null)
-                    throw new ArgumentNullException(nameof(spriteText));
-
-                return spriteText.LineBaseHeight;
-            }
-        }
-
         public RectangleF GetTextTagPosition(ITextTag textTag)
         {
             var spriteText = getSpriteText();
@@ -124,7 +125,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
         }
 
         private EditorLyricSpriteText getSpriteText()
-            => (InternalChildren.FirstOrDefault() as MaskingContainer<EditorLyricSpriteText>)?.Child;
+        {
+            return (InternalChildren.FirstOrDefault() as MaskingContainer<EditorLyricSpriteText>)?.Child;
+        }
 
         [BackgroundDependencyLoader(true)]
         private void load(ISkinSource skin, ShaderManager shaderManager)
@@ -159,15 +162,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             }, true);
         }
 
-        public override bool RemoveCompletedTransforms => false;
-
         public class EditorLyricSpriteText : LyricSpriteText
         {
             public RectangleF GetRubyTagPosition(RubyTag rubyTag)
-                => GetRubyTagPosition(TextTagUtils.ToPositionText(rubyTag));
+            {
+                return GetRubyTagPosition(TextTagUtils.ToPositionText(rubyTag));
+            }
 
             public RectangleF GetRomajiTagPosition(RomajiTag romajiTag)
-                => GetRomajiTagPosition(TextTagUtils.ToPositionText(romajiTag));
+            {
+                return GetRomajiTagPosition(TextTagUtils.ToPositionText(romajiTag));
+            }
 
             public Vector2 GetTimeTagPosition(TextIndex index)
             {

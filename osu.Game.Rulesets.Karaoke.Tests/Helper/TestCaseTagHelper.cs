@@ -17,13 +17,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
     public static class TestCaseTagHelper
     {
         /// <summary>
-        /// Process test case ruby string format into <see cref="RubyTag"/>
+        ///     Process test case ruby string format into <see cref="RubyTag" />
         /// </summary>
         /// <example>
-        /// [0,3]:ruby
+        ///     [0,3]:ruby
         /// </example>
         /// <param name="str">Ruby tag string format</param>
-        /// <returns><see cref="RubyTag"/>Ruby tag object</returns>
+        /// <returns><see cref="RubyTag" />Ruby tag object</returns>
         public static RubyTag ParseRubyTag(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -43,13 +43,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
         }
 
         /// <summary>
-        /// Process test case romaji string format into <see cref="RomajiTag"/>
+        ///     Process test case romaji string format into <see cref="RomajiTag" />
         /// </summary>
         /// <example>
-        /// [0,3]:romaji
+        ///     [0,3]:romaji
         /// </example>
         /// <param name="str">Romaji tag string format</param>
-        /// <returns><see cref="RomajiTag"/>Romaji tag object</returns>
+        /// <returns><see cref="RomajiTag" />Romaji tag object</returns>
         public static RomajiTag ParseRomajiTag(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -69,13 +69,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
         }
 
         /// <summary>
-        /// Process test case time tag string format into <see cref="TimeTag"/>
+        ///     Process test case time tag string format into <see cref="TimeTag" />
         /// </summary>
         /// <example>
-        /// [0,start]:1000
+        ///     [0,start]:1000
         /// </example>
         /// <param name="str">Time tag string format</param>
-        /// <returns><see cref="TimeTag"/>Time tag object</returns>
+        /// <returns><see cref="TimeTag" />Time tag object</returns>
         public static TimeTag ParseTimeTag(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -94,13 +94,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
         }
 
         /// <summary>
-        /// Process test case text index string format into <see cref="TextIndex"/>
+        ///     Process test case text index string format into <see cref="TextIndex" />
         /// </summary>
         /// <example>
-        /// [0,start]
+        ///     [0,start]
         /// </example>
         /// <param name="str">Text tag string format</param>
-        /// <returns><see cref="TimeTag"/>Text tag object</returns>
+        /// <returns><see cref="TimeTag" />Text tag object</returns>
         public static TextIndex ParseTextIndex(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -118,13 +118,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
         }
 
         /// <summary>
-        /// Process test case lyric string format into <see cref="Lyric"/>
+        ///     Process test case lyric string format into <see cref="Lyric" />
         /// </summary>
         /// <example>
-        /// [1000,3000]:karaoke
+        ///     [1000,3000]:karaoke
         /// </example>
         /// <param name="str">Lyric string format</param>
-        /// <returns><see cref="Lyric"/>Lyric object</returns>
+        /// <returns><see cref="Lyric" />Lyric object</returns>
         public static Lyric ParseLyric(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -153,13 +153,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
         }
 
         /// <summary>
-        /// Process test case lyric string format into <see cref="Lyric"/>
+        ///     Process test case lyric string format into <see cref="Lyric" />
         /// </summary>
         /// <example>
-        /// "[00:01.00]か[00:02.00]ら[00:03.00]お[00:04.00]け[00:05.00]"
+        ///     "[00:01.00]か[00:02.00]ら[00:03.00]お[00:04.00]け[00:05.00]"
         /// </example>
         /// <param name="str">Lyric string format</param>
-        /// <returns><see cref="Lyric"/>Lyric object</returns>
+        /// <returns><see cref="Lyric" />Lyric object</returns>
         public static Lyric ParseLyricWithTimeTag(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -181,15 +181,15 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
         }
 
         /// <summary>
-        /// Process test case singer string format into <see cref="Singer"/>
+        ///     Process test case singer string format into <see cref="Singer" />
         /// </summary>
         /// <example>
-        /// [0]name:singer001
-        /// [0]romaji:singer001
-        /// [0]eg:singer001
+        ///     [0]name:singer001
+        ///     [0]romaji:singer001
+        ///     [0]eg:singer001
         /// </example>
         /// <param name="str">Singer string format</param>
-        /// <returns><see cref="Singer"/>sSinger object</returns>
+        /// <returns><see cref="Singer" />sSinger object</returns>
         public static Singer ParseSinger(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -207,18 +207,28 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Helper
         }
 
         public static RubyTag[] ParseRubyTags(IEnumerable<string> strings)
-            => strings?.Select(ParseRubyTag).ToArray();
+        {
+            return strings?.Select(ParseRubyTag).ToArray();
+        }
 
         public static RomajiTag[] ParseRomajiTags(IEnumerable<string> strings)
-            => strings?.Select(ParseRomajiTag).ToArray();
+        {
+            return strings?.Select(ParseRomajiTag).ToArray();
+        }
 
         public static TimeTag[] ParseTimeTags(IEnumerable<string> strings)
-            => strings?.Select(ParseTimeTag).ToArray();
+        {
+            return strings?.Select(ParseTimeTag).ToArray();
+        }
 
         public static Lyric[] ParseLyrics(IEnumerable<string> strings)
-            => strings?.Select(ParseLyric).ToArray();
+        {
+            return strings?.Select(ParseLyric).ToArray();
+        }
 
         public static Singer[] ParseSingers(IEnumerable<string> strings)
-            => strings?.Select(ParseSinger).ToArray();
+        {
+            return strings?.Select(ParseSinger).ToArray();
+        }
     }
 }

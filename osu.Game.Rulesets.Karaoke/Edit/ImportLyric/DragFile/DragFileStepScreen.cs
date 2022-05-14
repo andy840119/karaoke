@@ -159,43 +159,53 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.DragFile
         }
 
         private PopupDialog createFileNotFoundDialog()
-            => new OkPopupDialog
+        {
+            return new OkPopupDialog
             {
                 Icon = FontAwesome.Regular.QuestionCircle,
                 HeaderText = "Seems file is not exist",
-                BodyText = "Drag the file then drop again.",
+                BodyText = "Drag the file then drop again."
             };
+        }
 
         private PopupDialog createFormatNotMatchDialog()
-            => new OkPopupDialog
+        {
+            return new OkPopupDialog
             {
                 Icon = FontAwesome.Solid.ExclamationTriangle,
                 HeaderText = "This type of file is not supported",
-                BodyText = "May sure this type of file is supported.",
+                BodyText = "May sure this type of file is supported."
             };
+        }
 
         private PopupDialog createLoadExceptionDialog(FileLoadException loadException)
-            => new OkPopupDialog
+        {
+            return new OkPopupDialog
             {
                 Icon = FontAwesome.Solid.Bug,
                 HeaderText = @"File loading error",
-                BodyText = loadException.Message,
+                BodyText = loadException.Message
             };
+        }
 
         private PopupDialog createUnknownExceptionDialog()
-            => new OkPopupDialog
+        {
+            return new OkPopupDialog
             {
                 Icon = FontAwesome.Solid.Bug,
                 HeaderText = @"Unknown error",
                 BodyText = @"Unknown error QAQa."
             };
+        }
 
         private PopupDialog createCompleteDialog()
-            => new OkPopupDialog(_ => { Complete(); })
+        {
+            return new OkPopupDialog(_ => { Complete(); })
             {
                 Icon = FontAwesome.Regular.CheckCircle,
                 HeaderText = @"Import success",
                 BodyText = "Lyrics has been imported."
             };
+        }
     }
 }

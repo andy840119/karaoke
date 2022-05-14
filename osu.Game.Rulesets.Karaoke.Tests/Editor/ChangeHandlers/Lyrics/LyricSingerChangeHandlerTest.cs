@@ -16,7 +16,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         {
             var singer = new Singer(1)
             {
-                Name = "Singer1",
+                Name = "Singer1"
             };
             PrepareHitObject(new Lyric());
 
@@ -31,22 +31,45 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
+        public void TestClear()
+        {
+            var singer = new Singer(1)
+            {
+                Name = "Singer1"
+            };
+            PrepareHitObject(new Lyric
+            {
+                Singers = new[]
+                {
+                    singer.ID
+                }
+            });
+
+            TriggerHandlerChanged(c => c.Clear());
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.IsEmpty(h.Singers);
+            });
+        }
+
+        [Test]
         public void TestRemove()
         {
             var singer = new Singer(1)
             {
-                Name = "Singer1",
+                Name = "Singer1"
             };
             var anotherSinger = new Singer(2)
             {
-                Name = "Another singer",
+                Name = "Another singer"
             };
             PrepareHitObject(new Lyric
             {
                 Singers = new[]
                 {
                     singer.ID,
-                    anotherSinger.ID,
+                    anotherSinger.ID
                 }
             });
 
@@ -62,29 +85,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 // should only contain remain singer.
                 Assert.AreEqual(1, singers.Count);
                 Assert.IsTrue(singers.Contains(anotherSinger.ID));
-            });
-        }
-
-        [Test]
-        public void TestClear()
-        {
-            var singer = new Singer(1)
-            {
-                Name = "Singer1",
-            };
-            PrepareHitObject(new Lyric
-            {
-                Singers = new[]
-                {
-                    singer.ID,
-                }
-            });
-
-            TriggerHandlerChanged(c => c.Clear());
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.IsEmpty(h.Singers);
             });
         }
     }

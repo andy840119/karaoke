@@ -64,26 +64,26 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
             var pageSize = new
             {
                 Width = originCommon.ScaleWidth,
-                Height = originCommon.ScaleHeight,
+                Height = originCommon.ScaleHeight
             };
             var padding = new
             {
                 Top = originInfo.PaddingUp,
                 Bottom = originInfo.PaddingDown,
                 Left = originInfo.PaddingLeft,
-                Right = originInfo.PaddingRight,
+                Right = originInfo.PaddingRight
             };
             var spacing = new
             {
                 X = originInfo.SpacingHorizontal,
-                Y = originInfo.SpacingVertical,
+                Y = originInfo.SpacingVertical
             };
 
             int page = 0;
             var currentTopLeftPosition = new
             {
                 X = padding.Left,
-                Y = padding.Top,
+                Y = padding.Top
             };
 
             foreach (var (_, character) in processingCharacters)
@@ -95,7 +95,7 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
                     currentTopLeftPosition = new
                     {
                         X = padding.Left,
-                        Y = padding.Top,
+                        Y = padding.Top
                     };
                 }
                 else if (currentTopLeftPosition.X + character.Width > pageSize.Height - padding.Right)
@@ -104,7 +104,7 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
                     currentTopLeftPosition = new
                     {
                         X = padding.Left,
-                        Y = currentTopLeftPosition.Y + spacing.Y,
+                        Y = currentTopLeftPosition.Y + spacing.Y
                     };
                 }
 
@@ -120,7 +120,7 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
                 // assign next position for drawing.
                 currentTopLeftPosition = new
                 {
-                    X = currentTopLeftPosition.X + character.Width + spacing.X, currentTopLeftPosition.Y,
+                    X = currentTopLeftPosition.X + character.Width + spacing.X, currentTopLeftPosition.Y
                 };
             }
 

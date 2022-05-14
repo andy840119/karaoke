@@ -23,11 +23,7 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
 {
     public class DrawableLyric : DrawableKaraokeHitObject
     {
-        private Container<DefaultLyricPiece> lyricPieces;
-        private OsuSpriteText translateText;
-
-        [Resolved(canBeNull: true)]
-        private KaraokeRulesetConfigManager config { get; set; }
+        public new Lyric HitObject => (Lyric)base.HitObject;
 
         private readonly BindableBool useTranslateBindable = new();
         private readonly Bindable<CultureInfo> preferLanguageBindable = new();
@@ -43,11 +39,11 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
 
         private readonly IBindableList<int> singersBindable = new BindableList<int>();
         private readonly BindableDictionary<CultureInfo, string> translateTextBindable = new();
+        private Container<DefaultLyricPiece> lyricPieces;
+        private OsuSpriteText translateText;
 
-        public event Action<DrawableLyric> OnLyricStart;
-        public event Action<DrawableLyric> OnLyricEnd;
-
-        public new Lyric HitObject => (Lyric)base.HitObject;
+        [Resolved(canBeNull: true)]
+        private KaraokeRulesetConfigManager config { get; set; }
 
         public DrawableLyric()
             : this(null)
@@ -61,6 +57,80 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             Padding = new MarginPadding(30);
         }
 
+        public void ApplyToLyricPieces(Action<DefaultLyricPiece> action)
+        {
+            foreach (var lyricPiece in lyricPieces)
+                action?.Invoke(lyricPiece);
+        }
+
+        public void ApplyToTranslateText(Action<OsuSpriteText> action)
+        {
+            action?.Invoke(translateText);
+        }
+
+        protected override void OnApply()
+        {
+            base.OnApply();
+
+            lyricPieces.Clear();
+            lyricPieces.Add(new DefaultLyricPiece(HitObject));
+            ApplySkin(CurrentSkin, false);
+
+            singersBindable.BindTo(HitObject.SingersBindable);
+            translateTextBindable.BindTo(HitObject.TranslateTextBindable);
+        }
+
+        protected override void OnFree()
+        {
+            base.OnFree();
+
+            singersBindable.UnbindFrom(HitObject.SingersBindable);
+            translateTextBindable.UnbindFrom(HitObject.TranslateTextBindable);
+        }
+
+        protected override void ApplySkin(ISkinSource skin, bool allowFallback)
+        {
+            base.ApplySkin(skin, allowFallback);
+
+            updateFontStyle();
+            updateLyricConfig();
+            updateLayout();
+        }
+
+        protected override void CheckForResult(bool userTriggered, double timeOffset)
+        {
+            if (timeOffset + HitObject.LyricDuration >= 0 && HitObject.HitWindows.CanBeHit(timeOffset + HitObject.LyricDuration))
+            {
+                // note: CheckForResult will not being triggered when roll-back the time.
+                // so there's no need to consider the case while roll-back.
+                OnLyricStart?.Invoke(this);
+                return;
+            }
+
+            if (timeOffset >= 0 && HitObject.HitWindows.CanBeHit(timeOffset))
+            {
+                OnLyricEnd?.Invoke(this);
+
+                // Apply end hit result
+                ApplyResult(r => { r.Type = KaraokeLyricHitWindows.DEFAULT_HIT_RESULT; });
+            }
+        }
+
+        protected override void UpdateInitialTransforms()
+        {
+            base.UpdateInitialTransforms();
+
+            lyricPieces.ForEach(x => x.RefreshStateTransforms());
+        }
+
+        protected override void UpdateHitStateTransforms(ArmedState state)
+        {
+            base.UpdateHitStateTransforms(state);
+
+            const float fade_out_time = 500;
+            this.FadeOut(fade_out_time);
+        }
+
         [BackgroundDependencyLoader(true)]
         private void load([CanBeNull] KaraokeSessionStatics session)
         {
@@ -69,12 +139,12 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
 
             AddInternal(lyricPieces = new Container<DefaultLyricPiece>
             {
-                AutoSizeAxes = Axes.Both,
+                AutoSizeAxes = Axes.Both
             });
             AddInternal(translateText = new OsuSpriteText
             {
                 Anchor = Anchor.BottomLeft,
-                Origin = Anchor.TopLeft,
+                Origin = Anchor.TopLeft
             });
 
             if (session != null)
@@ -121,35 +191,6 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             translateTextBindable.BindCollectionChanged((_, _) => { applyTranslate(); });
         }
 
-        protected override void OnApply()
-        {
-            base.OnApply();
-
-            lyricPieces.Clear();
-            lyricPieces.Add(new DefaultLyricPiece(HitObject));
-            ApplySkin(CurrentSkin, false);
-
-            singersBindable.BindTo(HitObject.SingersBindable);
-            translateTextBindable.BindTo(HitObject.TranslateTextBindable);
-        }
-
-        protected override void OnFree()
-        {
-            base.OnFree();
-
-            singersBindable.UnbindFrom(HitObject.SingersBindable);
-            translateTextBindable.UnbindFrom(HitObject.TranslateTextBindable);
-        }
-
-        protected override void ApplySkin(ISkinSource skin, bool allowFallback)
-        {
-            base.ApplySkin(skin, allowFallback);
-
-            updateFontStyle();
-            updateLyricConfig();
-            updateLayout();
-        }
-
         private void updateFontStyle()
         {
             if (CurrentSkin == null)
@@ -192,9 +233,7 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             bool needTranslate = useTranslateBindable.Value;
 
             if (!needTranslate || language == null)
-            {
                 translateText.Text = (string)null;
-            }
             else
             {
                 if (translateTextBindable.TryGetValue(language, out string translate))
@@ -202,49 +241,7 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             }
         }
 
-        protected override void CheckForResult(bool userTriggered, double timeOffset)
-        {
-            if (timeOffset + HitObject.LyricDuration >= 0 && HitObject.HitWindows.CanBeHit(timeOffset + HitObject.LyricDuration))
-            {
-                // note: CheckForResult will not being triggered when roll-back the time.
-                // so there's no need to consider the case while roll-back.
-                OnLyricStart?.Invoke(this);
-                return;
-            }
-
-            if (timeOffset >= 0 && HitObject.HitWindows.CanBeHit(timeOffset))
-            {
-                OnLyricEnd?.Invoke(this);
-
-                // Apply end hit result
-                ApplyResult(r => { r.Type = KaraokeLyricHitWindows.DEFAULT_HIT_RESULT; });
-            }
-        }
-
-        protected override void UpdateInitialTransforms()
-        {
-            base.UpdateInitialTransforms();
-
-            lyricPieces.ForEach(x => x.RefreshStateTransforms());
-        }
-
-        protected override void UpdateHitStateTransforms(ArmedState state)
-        {
-            base.UpdateHitStateTransforms(state);
-
-            const float fade_out_time = 500;
-            this.FadeOut(fade_out_time);
-        }
-
-        public void ApplyToLyricPieces(Action<DefaultLyricPiece> action)
-        {
-            foreach (var lyricPiece in lyricPieces)
-                action?.Invoke(lyricPiece);
-        }
-
-        public void ApplyToTranslateText(Action<OsuSpriteText> action)
-        {
-            action?.Invoke(translateText);
-        }
+        public event Action<DrawableLyric> OnLyricStart;
+        public event Action<DrawableLyric> OnLyricEnd;
     }
 }

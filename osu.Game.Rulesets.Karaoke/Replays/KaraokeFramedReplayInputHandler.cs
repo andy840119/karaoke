@@ -15,7 +15,10 @@ namespace osu.Game.Rulesets.Karaoke.Replays
         {
         }
 
-        protected override bool IsImportant(KaraokeReplayFrame frame) => frame.Sound;
+        protected override bool IsImportant(KaraokeReplayFrame frame)
+        {
+            return frame.Sound;
+        }
 
         protected override void CollectReplayInputs(List<IInput> inputs)
         {

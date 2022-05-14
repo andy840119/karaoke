@@ -14,7 +14,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Gameplay
     {
         protected override LocalisableString Header => "General";
 
-        public override SettingsSubsectionPreview CreatePreview() => new ShowCursorPreview();
+        public override SettingsSubsectionPreview CreatePreview()
+        {
+            return new ShowCursorPreview();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -25,7 +28,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Gameplay
                 {
                     LabelText = "Show cursor while playing",
                     Current = Config.GetBindable<bool>(KaraokeRulesetSetting.ShowCursor)
-                },
+                }
             };
         }
     }

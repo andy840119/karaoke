@@ -72,15 +72,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
         }
 
         private TValue getConfigValue<TValue>(TConfig config, string propertyName)
-            => (TValue)config.GetType().GetProperty(propertyName)?.GetValue(config);
+        {
+            return (TValue)config.GetType().GetProperty(propertyName)?.GetValue(config);
+        }
 
         private void setConfigValue(string propertyName, object value)
-            => current.Value.GetType().GetProperty(propertyName)?.SetValue(current.Value, value);
+        {
+            current.Value.GetType().GetProperty(propertyName)?.SetValue(current.Value, value);
+        }
     }
 
     public abstract class GeneratorConfigSection : Container
     {
-        private readonly FillFlowContainer flow;
+        protected override Container<Drawable> Content => flow;
+
+        protected abstract string Title { get; }
 
         [Resolved]
         protected OsuColour Colours { get; private set; }
@@ -88,9 +94,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
         [Resolved]
         protected IBindable<WorkingBeatmap> Beatmap { get; private set; }
 
-        protected override Container<Drawable> Content => flow;
-
-        protected abstract string Title { get; }
+        private readonly FillFlowContainer flow;
 
         protected GeneratorConfigSection()
         {
@@ -104,7 +108,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
                 new OsuSpriteText
                 {
                     Font = OsuFont.GetFont(weight: FontWeight.Bold, size: 18),
-                    Text = Title,
+                    Text = Title
                 },
                 flow = new FillFlowContainer
                 {

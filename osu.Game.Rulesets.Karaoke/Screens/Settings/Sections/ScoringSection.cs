@@ -13,17 +13,20 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections
     {
         public override LocalisableString Header => "Scoring";
 
-        public override Drawable CreateIcon() => new SpriteIcon
-        {
-            Icon = FontAwesome.Solid.Gamepad
-        };
-
         public ScoringSection()
         {
             Children = new Drawable[]
             {
                 new MicrophoneSettings(),
-                new SaitenSettings(),
+                new SaitenSettings()
+            };
+        }
+
+        public override Drawable CreateIcon()
+        {
+            return new SpriteIcon
+            {
+                Icon = FontAwesome.Solid.Gamepad
             };
         }
     }

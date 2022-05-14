@@ -13,18 +13,31 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
     [TestFixture]
     public class TestSceneSingerToolTip : OsuTestScene
     {
+        [SetUp]
+        public void SetUp()
+        {
+            Schedule(() =>
+            {
+                Child = toolTip = new SingerToolTip
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre
+                };
+                toolTip.Show();
+            });
+        }
+
         private SingerToolTip toolTip;
 
-        [SetUp]
-        public void SetUp() => Schedule(() =>
+        private void setTooltip(string testName, Action<Singer> callBack)
         {
-            Child = toolTip = new SingerToolTip
+            AddStep(testName, () =>
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre
-            };
-            toolTip.Show();
-        });
+                var singer = new Singer(1);
+                callBack?.Invoke(singer);
+                toolTip.SetContent(singer);
+            });
+        }
 
         [Test]
         public void TestDisplayToolTip()
@@ -63,16 +76,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
                 singer.EnglishName = "Hatsune Miku large large large large large large large large large";
                 singer.Description =
                     "International superstar vocaloid Hatsune Miku on Sept 9 assumed her new position as Coronavirus Countermeasure Supporter in the Office for Novel Coronavirus Disease Control of the Japanese government’s Cabinet Secretariat.";
-            });
-        }
-
-        private void setTooltip(string testName, Action<Singer> callBack)
-        {
-            AddStep(testName, () =>
-            {
-                var singer = new Singer(1);
-                callBack?.Invoke(singer);
-                toolTip.SetContent(singer);
             });
         }
     }

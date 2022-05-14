@@ -12,18 +12,21 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Mods
     public class TestSceneKaraokeModFlashlight : KaraokeModTestScene
     {
         [Test]
-        public void TestFlashlightExist() => CreateModTest(new ModTestData
+        public void TestFlashlightExist()
         {
-            Mod = new KaraokeModFlashlight(),
-            Autoplay = true,
-            Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
-            PassCondition = () =>
+            CreateModTest(new ModTestData
             {
-                var drawableRuleset = Player.GetDrawableRuleset();
+                Mod = new KaraokeModFlashlight(),
+                Autoplay = true,
+                Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
+                PassCondition = () =>
+                {
+                    var drawableRuleset = Player.GetDrawableRuleset();
 
-                // Should has at least one flashlight
-                return drawableRuleset.KeyBindingInputManager.Children.OfType<KaraokeModFlashlight.KaraokeFlashlight>().Any();
-            }
-        });
+                    // Should has at least one flashlight
+                    return drawableRuleset.KeyBindingInputManager.Children.OfType<KaraokeModFlashlight.KaraokeFlashlight>().Any();
+                }
+            });
+        }
     }
 }

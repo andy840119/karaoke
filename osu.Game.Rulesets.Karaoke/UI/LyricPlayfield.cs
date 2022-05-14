@@ -29,6 +29,11 @@ namespace osu.Game.Rulesets.Karaoke.UI
             base.OnNewDrawableHitObject(drawableHitObject);
         }
 
+        protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject)
+        {
+            return new LyricHitObjectLifetimeEntry(hitObject);
+        }
+
         private void onLyricStart(DrawableLyric drawableLyric)
         {
             var lyrics = singingLyrics.Value ?? Array.Empty<Lyric>();
@@ -60,10 +65,12 @@ namespace osu.Game.Rulesets.Karaoke.UI
             RegisterPool<Lyric, DrawableLyric>(50);
         }
 
-        protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new LyricHitObjectLifetimeEntry(hitObject);
-
         private class LyricHitObjectLifetimeEntry : HitObjectLifetimeEntry
         {
+            protected Lyric Lyric => (Lyric)HitObject;
+
+            protected override double InitialLifetimeOffset => Lyric.TimePreempt;
+
             public LyricHitObjectLifetimeEntry(HitObject hitObject)
                 : base(hitObject)
             {
@@ -71,10 +78,6 @@ namespace osu.Game.Rulesets.Karaoke.UI
                 LifetimeEnd = Lyric.EndTime;
                 LifetimeStart = HitObject.StartTime - Lyric.TimePreempt;
             }
-
-            protected Lyric Lyric => (Lyric)HitObject;
-
-            protected override double InitialLifetimeOffset => Lyric.TimePreempt;
         }
     }
 }

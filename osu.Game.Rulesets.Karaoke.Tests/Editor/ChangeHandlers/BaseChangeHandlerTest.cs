@@ -13,8 +13,8 @@ using osu.Game.Tests.Visual;
 namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
 {
     /// <summary>
-    /// it's a base class for testing all change handler.
-    /// Should inherit <see cref="OsuTestScene"/> because all change handler need the injecting to get the value.
+    ///     it's a base class for testing all change handler.
+    ///     Should inherit <see cref="OsuTestScene" /> because all change handler need the injecting to get the value.
     /// </summary>
     [HeadlessTest]
     public abstract class BaseChangeHandlerTest<TChangeHandler> : OsuTestScene where TChangeHandler : Component, new()
@@ -30,8 +30,8 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
             {
                 BeatmapInfo =
                 {
-                    Ruleset = new KaraokeRuleset().RulesetInfo,
-                },
+                    Ruleset = new KaraokeRuleset().RulesetInfo
+                }
             };
             var editorBeatmap = new EditorBeatmap(beatmap);
             Dependencies.Cache(editorBeatmap);

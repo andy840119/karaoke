@@ -11,15 +11,31 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews
 {
     public abstract class SettingsSubsectionPreview : Container
     {
+        protected override Container<Drawable> Content => content;
+
+        protected virtual Color4 ThemeColor => getColourFor(GetType());
+
+        protected bool ShowBackground
+        {
+            get => showBackground;
+            set
+            {
+                showBackground = value;
+
+                if (showBackground)
+                    background.Show();
+                else
+                    background.Hide();
+            }
+        }
+
         private const double transition_time = 1000;
 
         private readonly Container boxContainer;
         private readonly Box background;
         private readonly Container content;
 
-        protected override Container<Drawable> Content => content;
-
-        protected virtual Color4 ThemeColor => getColourFor(GetType());
+        private bool showBackground;
 
         protected SettingsSubsectionPreview()
         {
@@ -44,14 +60,14 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews
 
                             Colour = ThemeColor,
                             Alpha = 0.2f,
-                            Blending = BlendingParameters.Additive,
+                            Blending = BlendingParameters.Additive
                         },
                         content = new Container
                         {
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         }
                     }
-                },
+                }
             };
         }
 
@@ -68,26 +84,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews
                 boxContainer.ScaleTo(1, transition_time, Easing.OutElastic);
                 boxContainer.RotateTo(0, transition_time / 2, Easing.OutQuint);
                 boxContainer.FadeIn(transition_time, Easing.OutExpo);
-            }
-        }
-
-        private bool showBackground;
-
-        protected bool ShowBackground
-        {
-            get => showBackground;
-            set
-            {
-                showBackground = value;
-
-                if (showBackground)
-                {
-                    background.Show();
-                }
-                else
-                {
-                    background.Hide();
-                }
             }
         }
 

@@ -18,41 +18,26 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
 {
     public class TestSceneHitEventTimingDistributionGraph : OsuTestScene
     {
-        [Test]
-        public void TestManyDistributedEvents()
+        private void createTest(IReadOnlyList<HitEvent> events)
         {
-            createTest(CreateDistributedHitEvents());
-        }
-
-        [Test]
-        public void TestZeroTimeOffset()
-        {
-            createTest(Enumerable.Range(0, 100).Select(_ => new HitEvent(0, HitResult.Perfect, new Note(), new Note(), null)).ToList());
-        }
-
-        [Test]
-        public void TestNoEvents()
-        {
-            createTest(new List<HitEvent>());
-        }
-
-        private void createTest(IReadOnlyList<HitEvent> events) => AddStep("create test", () =>
-        {
-            Children = new Drawable[]
+            AddStep("create test", () =>
             {
-                new Box
+                Children = new Drawable[]
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Color4Extensions.FromHex("#333")
-                },
-                new HitEventTimingDistributionGraph(events)
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(600, 130)
-                }
-            };
-        });
+                    new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = Color4Extensions.FromHex("#333")
+                    },
+                    new HitEventTimingDistributionGraph(events)
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(600, 130)
+                    }
+                };
+            });
+        }
 
         public static List<HitEvent> CreateDistributedHitEvents()
         {
@@ -67,6 +52,24 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
             }
 
             return hitEvents;
+        }
+
+        [Test]
+        public void TestManyDistributedEvents()
+        {
+            createTest(CreateDistributedHitEvents());
+        }
+
+        [Test]
+        public void TestNoEvents()
+        {
+            createTest(new List<HitEvent>());
+        }
+
+        [Test]
+        public void TestZeroTimeOffset()
+        {
+            createTest(Enumerable.Range(0, 100).Select(_ => new HitEvent(0, HitResult.Perfect, new Note(), new Note(), null)).ToList());
         }
     }
 }

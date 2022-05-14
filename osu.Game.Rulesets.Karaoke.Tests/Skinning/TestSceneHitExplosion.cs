@@ -36,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                         _ => new DefaultHitExplosion(colour, runCount % 6 != 0)
                         {
                             Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
+                            Origin = Anchor.Centre
                         }));
                 });
             }, 100);
@@ -51,7 +51,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                 Origin = Anchor.Centre,
                 RelativePositionAxes = Axes.Y,
                 Y = -0.25f,
-                Size = new Vector2(DefaultHitExplosion.EXPLOSION_SIZE, DefaultColumnBackground.COLUMN_HEIGHT),
+                Size = new Vector2(DefaultHitExplosion.EXPLOSION_SIZE, DefaultColumnBackground.COLUMN_HEIGHT)
             });
         }
     }

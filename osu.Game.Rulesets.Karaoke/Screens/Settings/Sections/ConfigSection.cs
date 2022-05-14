@@ -12,11 +12,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections
     {
         public override LocalisableString Header => "Config";
 
-        public override Drawable CreateIcon() => new SpriteIcon
-        {
-            Icon = FontAwesome.Solid.Cog
-        };
-
         public ConfigSection()
         {
             Children = new Drawable[]
@@ -24,7 +19,15 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections
                 new GeneralSettings(),
                 new NoteSettings(),
                 new LyricSettings(),
-                new TranslateSettings(),
+                new TranslateSettings()
+            };
+        }
+
+        public override Drawable CreateIcon()
+        {
+            return new SpriteIcon
+            {
+                Icon = FontAwesome.Solid.Cog
             };
         }
     }

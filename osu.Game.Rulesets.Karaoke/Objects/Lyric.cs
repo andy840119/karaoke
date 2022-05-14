@@ -23,22 +23,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
 {
     public class Lyric : KaraokeHitObject, IHasDuration, IHasSingers, IHasOrder, IHasLock, IHasPrimaryKey
     {
-        /// <summary>
-        /// Primary key.
-        /// </summary>
-        public int ID { get; set; }
-
         [JsonIgnore]
         public readonly Bindable<string> TextBindable = new();
-
-        /// <summary>
-        /// Text of the lyric
-        /// </summary>
-        public string Text
-        {
-            get => TextBindable.Value;
-            set => TextBindable.Value = value;
-        }
 
         [JsonIgnore]
         public readonly Bindable<int> TimeTagsVersion = new();
@@ -46,8 +32,57 @@ namespace osu.Game.Rulesets.Karaoke.Objects
         [JsonIgnore]
         public readonly BindableList<TimeTag> TimeTagsBindable = new();
 
+        [JsonIgnore]
+        public double LyricDuration => LyricEndTime - LyricStartTime;
+
+        [JsonIgnore]
+        public readonly Bindable<int> RubyTagsVersion = new();
+
+        [JsonIgnore]
+        public readonly BindableList<RubyTag> RubyTagsBindable = new();
+
+        [JsonIgnore]
+        public readonly Bindable<int> RomajiTagsVersion = new();
+
+        [JsonIgnore]
+        public readonly BindableList<RomajiTag> RomajiTagsBindable = new();
+
         /// <summary>
-        /// Time tags
+        ///     The time at which the HitObject end.
+        /// </summary>
+        public double EndTime => StartTime + Duration;
+
+        [JsonIgnore]
+        public readonly BindableList<int> SingersBindable = new();
+
+        [JsonIgnore]
+        public readonly BindableDictionary<CultureInfo, string> TranslateTextBindable = new();
+
+        [JsonIgnore]
+        public readonly Bindable<CultureInfo> LanguageBindable = new();
+
+        [JsonIgnore]
+        public readonly Bindable<int> OrderBindable = new();
+
+        [JsonIgnore]
+        public readonly Bindable<LockState> LockBindable = new();
+
+        /// <summary>
+        ///     Primary key.
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
+        ///     Text of the lyric
+        /// </summary>
+        public string Text
+        {
+            get => TextBindable.Value;
+            set => TextBindable.Value = value;
+        }
+
+        /// <summary>
+        ///     Time tags
         /// </summary>
         public IList<TimeTag> TimeTags
         {
@@ -69,17 +104,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
         [JsonIgnore]
         public double LyricEndTime { get; private set; }
 
-        [JsonIgnore]
-        public double LyricDuration => LyricEndTime - LyricStartTime;
-
-        [JsonIgnore]
-        public readonly Bindable<int> RubyTagsVersion = new();
-
-        [JsonIgnore]
-        public readonly BindableList<RubyTag> RubyTagsBindable = new();
-
         /// <summary>
-        /// List of ruby tags
+        ///     List of ruby tags
         /// </summary>
         public IList<RubyTag> RubyTags
         {
@@ -91,14 +117,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             }
         }
 
-        [JsonIgnore]
-        public readonly Bindable<int> RomajiTagsVersion = new();
-
-        [JsonIgnore]
-        public readonly BindableList<RomajiTag> RomajiTagsBindable = new();
-
         /// <summary>
-        /// List of ruby tags
+        ///     List of ruby tags
         /// </summary>
         public IList<RomajiTag> RomajiTags
         {
@@ -111,7 +131,7 @@ namespace osu.Game.Rulesets.Karaoke.Objects
         }
 
         /// <summary>
-        /// Lyric's start time is created from <see cref="KaraokeBeatmapProcessor"/> and should not be saved.
+        ///     Lyric's start time is created from <see cref="KaraokeBeatmapProcessor" /> and should not be saved.
         /// </summary>
         public override double StartTime
         {
@@ -120,20 +140,12 @@ namespace osu.Game.Rulesets.Karaoke.Objects
         }
 
         /// <summary>
-        /// Lyric's duration is created from <see cref="KaraokeBeatmapProcessor"/> and should not be saved.
+        ///     Lyric's duration is created from <see cref="KaraokeBeatmapProcessor" /> and should not be saved.
         /// </summary>
         public double Duration { get; set; }
 
         /// <summary>
-        /// The time at which the HitObject end.
-        /// </summary>
-        public double EndTime => StartTime + Duration;
-
-        [JsonIgnore]
-        public readonly BindableList<int> SingersBindable = new();
-
-        /// <summary>
-        /// Singers
+        ///     Singers
         /// </summary>
         public IList<int> Singers
         {
@@ -145,11 +157,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             }
         }
 
-        [JsonIgnore]
-        public readonly BindableDictionary<CultureInfo, string> TranslateTextBindable = new();
-
         /// <summary>
-        /// Translates
+        ///     Translates
         /// </summary>
         public IDictionary<CultureInfo, string> Translates
         {
@@ -161,11 +170,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             }
         }
 
-        [JsonIgnore]
-        public readonly Bindable<CultureInfo> LanguageBindable = new();
-
         /// <summary>
-        /// Language
+        ///     Language
         /// </summary>
         public CultureInfo Language
         {
@@ -173,11 +179,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             set => LanguageBindable.Value = value;
         }
 
-        [JsonIgnore]
-        public readonly Bindable<int> OrderBindable = new();
-
         /// <summary>
-        /// Order
+        ///     Order
         /// </summary>
         public int Order
         {
@@ -185,11 +188,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             set => OrderBindable.Value = value;
         }
 
-        [JsonIgnore]
-        public readonly Bindable<LockState> LockBindable = new();
-
         /// <summary>
-        /// Lock
+        ///     Lock
         /// </summary>
         public LockState Lock
         {
@@ -257,7 +257,16 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             };
         }
 
-        public override Judgement CreateJudgement() => new KaraokeLyricJudgement();
+        public override Judgement CreateJudgement()
+        {
+            return new KaraokeLyricJudgement();
+        }
+
+        public void InitialWorkingTime()
+        {
+            StartTime = LyricStartTime;
+            Duration = LyricDuration;
+        }
 
         protected override void ApplyDefaultsToSelf(ControlPointInfo controlPointInfo, IBeatmapDifficultyInfo difficulty)
         {
@@ -270,12 +279,9 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             InitialWorkingTime();
         }
 
-        public void InitialWorkingTime()
+        protected override HitWindows CreateHitWindows()
         {
-            StartTime = LyricStartTime;
-            Duration = LyricDuration;
+            return new KaraokeLyricHitWindows();
         }
-
-        protected override HitWindows CreateHitWindows() => new KaraokeLyricHitWindows();
     }
 }

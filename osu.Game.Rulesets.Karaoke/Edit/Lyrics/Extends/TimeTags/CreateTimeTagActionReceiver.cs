@@ -33,6 +33,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
             };
         }
 
+        public void OnReleased(KeyBindingReleaseEvent<KaraokeEditAction> e)
+        {
+        }
+
         private bool processCreateTimeTagAction(TimeTagIndexCaretPosition timeTagIndexCaretPosition, KaraokeEditAction action)
         {
             var index = timeTagIndexCaretPosition.Index;
@@ -93,10 +97,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                     KaraokeEditAction.ShiftTheTimeTagStateRight => new Tuple<ShiftingDirection, ShiftingType>(ShiftingDirection.Right, ShiftingType.State),
                     _ => null
                 };
-        }
-
-        public void OnReleased(KeyBindingReleaseEvent<KaraokeEditAction> e)
-        {
         }
     }
 }

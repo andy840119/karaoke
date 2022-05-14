@@ -66,7 +66,10 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
             });
         }
 
-        private ClickableLyric createLyricContainer(Lyric lyric) => new(lyric);
+        private ClickableLyric createLyricContainer(Lyric lyric)
+        {
+            return new(lyric);
+        }
 
         private void triggerLyric(Lyric lyric)
         {
@@ -87,52 +90,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
 
         private class ClickableLyric : ClickableContainer
         {
-            private const float fade_duration = 100;
-
-            private Color4 hoverTextColour;
-            private Color4 idolTextColour;
-
-            private readonly Box background;
-            private readonly Drawable icon;
-            private readonly DrawableLyricSpriteText drawableLyric;
-
             public readonly Lyric Lyric;
-
-            public ClickableLyric(Lyric lyric)
-            {
-                Lyric = lyric;
-
-                AutoSizeAxes = Axes.Y;
-                RelativeSizeAxes = Axes.X;
-                Masking = true;
-                CornerRadius = 5;
-                Children = new[]
-                {
-                    background = new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Alpha = 0,
-                    },
-                    icon = new SpriteIcon
-                    {
-                        Anchor = Anchor.CentreLeft,
-                        Origin = Anchor.CentreLeft,
-                        Size = new Vector2(15),
-                        Icon = FontAwesome.Solid.Play,
-                        Margin = new MarginPadding { Left = 5 },
-                        Alpha = 0,
-                    },
-                    drawableLyric = new DrawableLyricSpriteText(lyric)
-                    {
-                        Font = new FontUsage(size: 25),
-                        RubyFont = new FontUsage(size: 10),
-                        RomajiFont = new FontUsage(size: 10),
-                        Margin = new MarginPadding { Left = 25 }
-                    },
-                };
-            }
-
-            private bool selected;
 
             public bool Selected
             {
@@ -147,6 +105,51 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
                     icon.FadeTo(Selected ? 1 : 0, fade_duration);
                     drawableLyric.FadeColour(Selected ? hoverTextColour : idolTextColour, fade_duration);
                 }
+            }
+
+            private const float fade_duration = 100;
+
+            private readonly Box background;
+            private readonly Drawable icon;
+            private readonly DrawableLyricSpriteText drawableLyric;
+
+            private Color4 hoverTextColour;
+            private Color4 idolTextColour;
+
+            private bool selected;
+
+            public ClickableLyric(Lyric lyric)
+            {
+                Lyric = lyric;
+
+                AutoSizeAxes = Axes.Y;
+                RelativeSizeAxes = Axes.X;
+                Masking = true;
+                CornerRadius = 5;
+                Children = new[]
+                {
+                    background = new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Alpha = 0
+                    },
+                    icon = new SpriteIcon
+                    {
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        Size = new Vector2(15),
+                        Icon = FontAwesome.Solid.Play,
+                        Margin = new MarginPadding { Left = 5 },
+                        Alpha = 0
+                    },
+                    drawableLyric = new DrawableLyricSpriteText(lyric)
+                    {
+                        Font = new FontUsage(size: 25),
+                        RubyFont = new FontUsage(size: 10),
+                        RomajiFont = new FontUsage(size: 10),
+                        Margin = new MarginPadding { Left = 25 }
+                    }
+                };
             }
 
             [BackgroundDependencyLoader]

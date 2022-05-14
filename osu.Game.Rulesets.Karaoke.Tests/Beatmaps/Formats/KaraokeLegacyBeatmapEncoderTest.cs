@@ -37,7 +37,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Beatmaps.Formats
                             new(new TextIndex(1), start_time + 600),
                             new(new TextIndex(2), start_time + 1000),
                             new(new TextIndex(3), start_time + 1500),
-                            new(new TextIndex(4), start_time + 2000),
+                            new(new TextIndex(4), start_time + 2000)
                         },
                         RubyTags = new[]
                         {
@@ -68,7 +68,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Beatmaps.Formats
                                 EndIndex = 4,
                                 Text = "ke"
                             }
-                        },
+                        }
                     }
                 }
             };

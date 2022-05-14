@@ -14,7 +14,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit
     public class LyricsProvider : Component, ILyricsProvider
     {
         /// <summary>
-        /// Get the bindable lyrics with sorted order.
+        ///     Get the bindable lyrics with sorted order.
         /// </summary>
         public BindableList<Lyric> BindableLyrics { get; } = new();
 

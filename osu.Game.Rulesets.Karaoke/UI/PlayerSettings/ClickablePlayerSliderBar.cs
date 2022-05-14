@@ -19,29 +19,40 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
 
         private ClickableSliderBar bar => (ClickableSliderBar)Control;
 
-        protected override Drawable CreateControl() => new ClickableSliderBar
-        {
-            Margin = new MarginPadding { Top = 5, Bottom = 5 },
-            RelativeSizeAxes = Axes.X
-        };
-
         public ClickablePlayerSliderBar()
         {
             Padding = new MarginPadding { Left = BUTTON_SPACING * 2, Right = BUTTON_SPACING * 2 };
         }
 
-        public void ResetToDefaultValue() => bar.ResetToDefaultValue();
+        public void ResetToDefaultValue()
+        {
+            bar.ResetToDefaultValue();
+        }
 
-        public void TriggerDecrease() => bar.TriggerDecrease();
+        public void TriggerDecrease()
+        {
+            bar.TriggerDecrease();
+        }
 
-        public void TriggerIncrease() => bar.TriggerIncrease();
+        public void TriggerIncrease()
+        {
+            bar.TriggerIncrease();
+        }
+
+        protected override Drawable CreateControl()
+        {
+            return new ClickableSliderBar
+            {
+                Margin = new MarginPadding { Top = 5, Bottom = 5 },
+                RelativeSizeAxes = Axes.X
+            };
+        }
 
         private class ClickableSliderBar : OsuSliderBar<int>
         {
+            public override LocalisableString TooltipText => (Current.Value >= 0 ? "+" : "") + Current.Value.ToString("N0");
             private readonly ToolTipButton decreaseButton;
             private readonly ToolTipButton increaseButton;
-
-            public override LocalisableString TooltipText => (Current.Value >= 0 ? "+" : "") + Current.Value.ToString("N0");
 
             public ClickableSliderBar()
             {
@@ -72,6 +83,21 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
                 });
             }
 
+            public void ResetToDefaultValue()
+            {
+                Current.SetDefault();
+            }
+
+            public void TriggerDecrease()
+            {
+                decreaseButton.Action?.Invoke();
+            }
+
+            public void TriggerIncrease()
+            {
+                increaseButton.Action?.Invoke();
+            }
+
             [BackgroundDependencyLoader]
             private void load(OsuColour colours)
             {
@@ -80,12 +106,6 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
                 Nub.GlowingAccentColour = colours.YellowLighter;
                 Nub.GlowColour = colours.YellowDarker;
             }
-
-            public void ResetToDefaultValue() => Current.SetDefault();
-
-            public void TriggerDecrease() => decreaseButton.Action?.Invoke();
-
-            public void TriggerIncrease() => increaseButton.Action?.Invoke();
         }
 
         private class ToolTipButton : OsuButton, IHasTooltip

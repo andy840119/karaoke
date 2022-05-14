@@ -23,7 +23,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var note = new Note
             {
                 StartTime = time[0],
-                Duration = time[1],
+                Duration = time[1]
             };
 
             try
@@ -48,7 +48,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             const double percentage = 0.3;
             var lyric = new Lyric
             {
-                Singers = new[] { 0 },
+                Singers = new[] { 0 }
             };
 
             var note = new Note
@@ -105,7 +105,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
                 EndIndex = end_index,
                 ParentLyric = lyric,
                 StartTime = firstTime[0],
-                Duration = firstTime[1],
+                Duration = firstTime[1]
             };
 
             var secondNote = new Note
@@ -114,7 +114,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
                 EndIndex = end_index,
                 ParentLyric = lyric,
                 StartTime = secondTime[0],
-                Duration = secondTime[1],
+                Duration = secondTime[1]
             };
 
             var combineNote = NotesUtils.CombineNote(firstNote, secondNote);

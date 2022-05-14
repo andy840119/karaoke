@@ -22,6 +22,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
 {
     public abstract class LabelledTextTagTextBox<T> : LabelledObjectFieldTextBox<T> where T : class, ITextTag
     {
+        public new CompositeDrawable TabbableContentContainer
+        {
+            set
+            {
+                base.TabbableContentContainer = value;
+                indexShiftingPart.TabbableContentContainer = value;
+            }
+        }
+
         protected const float DELETE_BUTTON_SIZE = 20f;
 
         private readonly IndexShiftingPart indexShiftingPart;
@@ -37,7 +46,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
             {
                 Horizontal = CONTENT_PADDING_HORIZONTAL,
                 Vertical = CONTENT_PADDING_VERTICAL,
-                Right = CONTENT_PADDING_HORIZONTAL + DELETE_BUTTON_SIZE + CONTENT_PADDING_HORIZONTAL,
+                Right = CONTENT_PADDING_HORIZONTAL + DELETE_BUTTON_SIZE + CONTENT_PADDING_HORIZONTAL
             };
 
             // add delete button.
@@ -48,7 +57,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
                 Padding = new MarginPadding
                 {
                     Top = CONTENT_PADDING_VERTICAL + 10,
-                    Right = CONTENT_PADDING_HORIZONTAL,
+                    Right = CONTENT_PADDING_HORIZONTAL
                 },
                 Child = new DeleteIconButton
                 {
@@ -83,7 +92,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
                 Padding = new MarginPadding
                 {
                     Top = CONTENT_PADDING_VERTICAL + 45,
-                    Right = CONTENT_PADDING_HORIZONTAL + DELETE_BUTTON_SIZE + CONTENT_PADDING_HORIZONTAL,
+                    Right = CONTENT_PADDING_HORIZONTAL + DELETE_BUTTON_SIZE + CONTENT_PADDING_HORIZONTAL
                 },
                 Child = indexShiftingPart = new IndexShiftingPart
                 {
@@ -103,9 +112,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
                             SelectedItems.Add(Item);
                         }
                         else
-                        {
                             SelectedItems.Remove(Item);
-                        }
                     },
                     Action = (indexType, action) =>
                     {
@@ -145,13 +152,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
                                 AdjustAction.Increase => index + 1,
                                 _ => throw new InvalidOperationException()
                             };
-                    },
+                    }
                 }
             });
         }
 
         protected sealed override string GetFieldValue(T item)
-            => item.Text;
+        {
+            return item.Text;
+        }
 
         protected abstract void SetIndex(T item, int? startIndex, int? endIndex);
 
@@ -167,31 +176,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
             base.OnFocus(e);
         }
 
-        public new CompositeDrawable TabbableContentContainer
-        {
-            set
-            {
-                base.TabbableContentContainer = value;
-                indexShiftingPart.TabbableContentContainer = value;
-            }
-        }
-
         private class IndexShiftingPart : TabbableContainer, IKeyBindingHandler<KaraokeEditAction>
         {
-            private const int button_size = 20;
-            private const int button_spacing = 5;
-
             public override bool AcceptsFocus => true;
 
             public Action<AdjustIndex, AdjustAction> Action;
+
+            public Action<bool> Selected;
+            private const int button_size = 20;
+            private const int button_spacing = 5;
 
             private readonly Box background;
             private readonly IconButton reduceStartIndexButton;
             private readonly IconButton increaseStartIndexButton;
             private readonly IconButton reduceEndIndexButton;
             private readonly IconButton increaseEndIndexButton;
-
-            public Action<bool> Selected;
 
             public IndexShiftingPart()
             {
@@ -204,7 +203,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
                     background = new Box
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Alpha = 0,
+                        Alpha = 0
                     },
                     new Container
                     {
@@ -246,30 +245,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
                                 Origin = Anchor.CentreRight,
                                 Icon = FontAwesome.Regular.CaretSquareRight,
                                 Action = () => Action?.Invoke(AdjustIndex.End, AdjustAction.Increase)
-                            },
+                            }
                         }
                     }
                 };
-            }
-
-            [BackgroundDependencyLoader]
-            private void load(OsuColour colour)
-            {
-                background.Colour = colour.Yellow;
-            }
-
-            protected override void OnFocus(FocusEvent e)
-            {
-                background.FadeTo(0.6f, 100);
-                Selected?.Invoke(true);
-                base.OnFocus(e);
-            }
-
-            protected override void OnFocusLost(FocusLostEvent e)
-            {
-                background.FadeOut(100);
-                Selected?.Invoke(false);
-                base.OnFocusLost(e);
             }
 
             public bool OnPressed(KeyBindingPressEvent<KaraokeEditAction> e)
@@ -302,6 +281,26 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
 
             public void OnReleased(KeyBindingReleaseEvent<KaraokeEditAction> e)
             {
+            }
+
+            protected override void OnFocus(FocusEvent e)
+            {
+                background.FadeTo(0.6f, 100);
+                Selected?.Invoke(true);
+                base.OnFocus(e);
+            }
+
+            protected override void OnFocusLost(FocusLostEvent e)
+            {
+                background.FadeOut(100);
+                Selected?.Invoke(false);
+                base.OnFocusLost(e);
+            }
+
+            [BackgroundDependencyLoader]
+            private void load(OsuColour colour)
+            {
+                background.Colour = colour.Yellow;
             }
         }
 

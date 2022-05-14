@@ -27,7 +27,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
 
         protected override Container<Drawable> Content { get; } = new Container { RelativeSizeAxes = Axes.Both };
 
-        protected override KaraokeEditor CreateScreen() => new();
+        protected override KaraokeEditor CreateScreen()
+        {
+            return new();
+        }
 
         private DialogOverlay dialogOverlay;
         private LyricCheckerManager lyricCheckerManager;

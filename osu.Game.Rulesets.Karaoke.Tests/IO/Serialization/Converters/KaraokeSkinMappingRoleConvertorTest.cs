@@ -19,7 +19,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                 Name = "Singer 1 and 2",
                 ElementType = ElementType.LyricLayout,
                 ElementId = 1,
-                GroupId = 2,
+                GroupId = 2
             };
 
             const string expected = "{\"$type\":\"DefaultMappingRole\",\"group_id\":2,\"name\":\"Singer 1 and 2\",\"element_type\":1,\"element_id\":1}";
@@ -37,7 +37,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                 Name = "Singer 1 and 2",
                 ElementType = ElementType.LyricLayout,
                 ElementId = 1,
-                GroupId = 2,
+                GroupId = 2
             };
             var actual = JsonConvert.DeserializeObject<IMappingRole>(json, CreateSettings()) as DefaultMappingRole;
             Assert.IsNotNull(actual);

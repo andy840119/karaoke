@@ -78,10 +78,7 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
                 var pixelRowMemory = page.DangerousGetPixelRowMemory(startFromY + y);
                 int readOffset = y * character.Width;
 
-                for (int x = 0; x < characterWidth; x++)
-                {
-                    pixelRowMemory.Span[startFromX + x] = rowData[readOffset + x];
-                }
+                for (int x = 0; x < characterWidth; x++) pixelRowMemory.Span[startFromX + x] = rowData[readOffset + x];
             }
         }
     }

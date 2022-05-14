@@ -9,14 +9,13 @@ using osu.Framework.Graphics.Cursor;
 namespace osu.Game.Rulesets.Karaoke.Screens.Edit
 {
     /// <summary>
-    /// TODO: eventually make this inherit Screen and add a local screen stack inside the Editor.
+    ///     TODO: eventually make this inherit Screen and add a local screen stack inside the Editor.
     /// </summary>
     public abstract class GenericEditorScreen<TType> : VisibilityContainer
     {
+        public readonly TType Type;
         protected override Container<Drawable> Content => content;
         private readonly Container content;
-
-        public readonly TType Type;
 
         protected GenericEditorScreen(TType type)
         {
@@ -46,7 +45,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
         public BindableBool CanCut { get; } = new();
 
         /// <summary>
-        /// Performs a "cut to clipboard" operation appropriate for the given screen.
+        ///     Performs a "cut to clipboard" operation appropriate for the given screen.
         /// </summary>
         protected virtual void PerformCut()
         {
@@ -61,7 +60,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
         public BindableBool CanCopy { get; } = new();
 
         /// <summary>
-        /// Performs a "copy to clipboard" operation appropriate for the given screen.
+        ///     Performs a "copy to clipboard" operation appropriate for the given screen.
         /// </summary>
         protected virtual void PerformCopy()
         {
@@ -76,7 +75,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
         public BindableBool CanPaste { get; } = new();
 
         /// <summary>
-        /// Performs a "paste from clipboard" operation appropriate for the given screen.
+        ///     Performs a "paste from clipboard" operation appropriate for the given screen.
         /// </summary>
         protected virtual void PerformPaste()
         {

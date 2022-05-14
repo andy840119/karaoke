@@ -18,13 +18,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Checks
     [TestFixture]
     public class CheckInvalidPropertyNotesTest
     {
-        private CheckInvalidPropertyNotes check;
-
         [SetUp]
         public void Setup()
         {
             check = new CheckInvalidPropertyNotes();
         }
+
+        private CheckInvalidPropertyNotes check;
 
         [TestCase(0, false)]
         [TestCase(1, true)]

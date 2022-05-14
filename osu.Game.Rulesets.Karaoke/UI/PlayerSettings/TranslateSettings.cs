@@ -35,8 +35,8 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
                 },
                 translateDropDown = new OsuDropdown<CultureInfo>
                 {
-                    RelativeSizeAxes = Axes.X,
-                },
+                    RelativeSizeAxes = Axes.X
+                }
             };
         }
 

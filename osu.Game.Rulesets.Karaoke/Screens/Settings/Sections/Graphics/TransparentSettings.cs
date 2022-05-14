@@ -31,7 +31,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Graphics
                     Current = Config.GetBindable<double>(KaraokeRulesetSetting.NoteAlpha),
                     KeyboardStep = 0.01f,
                     DisplayAsPercentage = true
-                },
+                }
             };
         }
     }

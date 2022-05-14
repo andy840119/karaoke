@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
             base.Content.AddRange(new Drawable[]
             {
                 Content,
-                fontManager = new FontManager(),
+                fontManager = new FontManager()
             });
 
             Dependencies.Cache(fontManager);

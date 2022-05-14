@@ -18,6 +18,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
     [Cached]
     public class NoteEditor : Container
     {
+        public EditorNotePlayfield Playfield { get; }
         private const int columns = 9;
 
         [Cached(typeof(INotePositionInfo))]
@@ -25,7 +26,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
 
         private readonly Lyric lyric;
 
-        public EditorNotePlayfield Playfield { get; }
+        [Resolved]
+        private EditorBeatmap beatmap { get; set; }
 
         public NoteEditor(Lyric lyric)
         {
@@ -47,14 +49,26 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
                     new EditNoteBlueprintContainer(lyric)
                     {
                         Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                    },
+                        Origin = Anchor.Centre
+                    }
                 }
             };
         }
 
-        [Resolved]
-        private EditorBeatmap beatmap { get; set; }
+        #region Disposal
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            if (beatmap == null)
+                return;
+
+            beatmap.HitObjectAdded -= addHitObject;
+            beatmap.HitObjectRemoved -= removeHitObject;
+        }
+
+        #endregion
 
         [BackgroundDependencyLoader]
         private void load()
@@ -65,10 +79,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
             // add all matched notes into playfield
             var notes = beatmap.HitObjects.OfType<Note>().Where(x => x.ParentLyric == lyric).ToList();
 
-            foreach (var note in notes)
-            {
-                Playfield.Add(note);
-            }
+            foreach (var note in notes) Playfield.Add(note);
         }
 
         private void addHitObject(HitObject hitObject)
@@ -91,17 +102,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
                 return;
 
             Playfield.Remove(note);
-        }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-
-            if (beatmap == null)
-                return;
-
-            beatmap.HitObjectAdded -= addHitObject;
-            beatmap.HitObjectRemoved -= removeHitObject;
         }
 
         private class PreviewNotePositionInfo : INotePositionInfo

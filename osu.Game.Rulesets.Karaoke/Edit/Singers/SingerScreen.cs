@@ -19,6 +19,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
     [Cached(typeof(ISingerScreenScrollingInfoProvider))]
     public class SingerScreen : KaraokeEditorRoundedScreen, ISingerScreenScrollingInfoProvider
     {
+        public BindableFloat BindableZoom { get; } = new();
+
+        public BindableFloat BindableCurrent { get; } = new();
+
         [Cached(typeof(ISingersChangeHandler))]
         private readonly SingersChangeHandler singersChangeHandler;
 
@@ -28,15 +32,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
         [Cached]
         private readonly BindableList<Lyric> selectedLyrics = new();
 
-        public BindableFloat BindableZoom { get; } = new();
-
-        public BindableFloat BindableCurrent { get; } = new();
-
         public SingerScreen()
             : base(KaraokeEditorScreenMode.Singer)
         {
             AddInternal(singersChangeHandler = new SingersChangeHandler());
             AddInternal(lyricSingerChangeHandler = new LyricSingerChangeHandler());
+        }
+
+        protected override void PopOut()
+        {
+            base.PopOut();
+
+            // should clear the selected lyrics because other place might not support multi select.
+            selectedLyrics.Clear();
         }
 
         [BackgroundDependencyLoader]
@@ -57,30 +65,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
                 {
                     new SingerEditSection
                     {
-                        RelativeSizeAxes = Axes.Both,
-                    },
+                        RelativeSizeAxes = Axes.Both
+                    }
                 }
             });
         }
 
-        protected override void PopOut()
-        {
-            base.PopOut();
-
-            // should clear the selected lyrics because other place might not support multi select.
-            selectedLyrics.Clear();
-        }
-
         private class FixedSectionsContainer<T> : SectionsContainer<T> where T : Drawable
         {
-            private readonly Container<T> content;
-
             // todo: check what this shit doing.
-            protected override Container<T> Content => content;
+            protected override Container<T> Content { get; }
 
             public FixedSectionsContainer()
             {
-                AddInternal(content = new Container<T>
+                AddInternal(Content = new Container<T>
                 {
                     Masking = true,
                     RelativeSizeAxes = Axes.Both,
@@ -91,7 +89,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
 
         private class SingerScreenHeader : OverlayHeader
         {
-            protected override OverlayTitle CreateTitle() => new SingerScreenTitle();
+            protected override OverlayTitle CreateTitle()
+            {
+                return new SingerScreenTitle();
+            }
 
             private class SingerScreenTitle : OverlayTitle
             {

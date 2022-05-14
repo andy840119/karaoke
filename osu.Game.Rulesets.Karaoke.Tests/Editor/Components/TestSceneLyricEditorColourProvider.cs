@@ -23,6 +23,49 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Components
 {
     public class TestSceneLyricEditorColourProvider : OsuTestScene
     {
+        private class TitleTableColumn : TableColumn
+        {
+            public TitleTableColumn(string title)
+                : base(title, Anchor.Centre, new Dimension(GridSizeMode.Absolute, 120))
+            {
+            }
+        }
+
+        private class PreviewColourDrawable : CompositeDrawable
+        {
+            private readonly Color4 color;
+
+            [Resolved]
+            private GameHost host { get; set; }
+
+            public PreviewColourDrawable(Color4 color)
+            {
+                this.color = color;
+
+                RelativeSizeAxes = Axes.Both;
+                InternalChildren = new Drawable[]
+                {
+                    new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = color
+                    },
+                    new OsuSpriteText
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Text = color.ToHex()
+                    }
+                };
+            }
+
+            protected override bool OnClick(ClickEvent e)
+            {
+                host.GetClipboard()?.SetText(color.ToHex());
+                return base.OnClick(e);
+            }
+        }
+
         [Test]
         public void ShowWithNoFetch()
         {
@@ -54,7 +97,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Components
                 "Background3",
                 "Background4",
                 "Background5",
-                "Background6",
+                "Background6"
             };
 
             Schedule(() =>
@@ -99,7 +142,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Components
                             RelativeSizeAxes = Axes.Y,
                             Width = edit_mode_name_width,
                             Columns = editMOdeColumns,
-                            Content = editModeContent,
+                            Content = editModeContent
                         },
                         new TableContainer
                         {
@@ -115,49 +158,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Components
                     }
                 };
             });
-        }
-
-        private class TitleTableColumn : TableColumn
-        {
-            public TitleTableColumn(string title)
-                : base(title, Anchor.Centre, new Dimension(GridSizeMode.Absolute, 120))
-            {
-            }
-        }
-
-        private class PreviewColourDrawable : CompositeDrawable
-        {
-            [Resolved]
-            private GameHost host { get; set; }
-
-            private readonly Color4 color;
-
-            public PreviewColourDrawable(Color4 color)
-            {
-                this.color = color;
-
-                RelativeSizeAxes = Axes.Both;
-                InternalChildren = new Drawable[]
-                {
-                    new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Colour = color,
-                    },
-                    new OsuSpriteText
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Text = color.ToHex(),
-                    }
-                };
-            }
-
-            protected override bool OnClick(ClickEvent e)
-            {
-                host.GetClipboard()?.SetText(color.ToHex());
-                return base.OnClick(e);
-            }
         }
     }
 }

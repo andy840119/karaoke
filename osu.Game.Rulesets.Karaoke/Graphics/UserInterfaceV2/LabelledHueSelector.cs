@@ -21,24 +21,26 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
         }
 
         protected override OsuHueSelector CreateComponent()
-            => new();
-
-        private static EdgeEffectParameters createShadowParameters() => new()
         {
-            Type = EdgeEffectType.Shadow,
-            Offset = new Vector2(0, 1),
-            Radius = 3,
-            Colour = Colour4.Black.Opacity(0.3f)
-        };
+            return new();
+        }
+
+        private static EdgeEffectParameters createShadowParameters()
+        {
+            return new()
+            {
+                Type = EdgeEffectType.Shadow,
+                Offset = new Vector2(0, 1),
+                Radius = 3,
+                Colour = Colour4.Black.Opacity(0.3f)
+            };
+        }
 
         /// <summary>
-        /// Copied from <see cref="OsuHSVColourPicker"/>
+        ///     Copied from <see cref="OsuHSVColourPicker" />
         /// </summary>
         public class OsuHueSelector : HSVColourPicker.HueSelector, IHasCurrentValue<float>
         {
-            private const float corner_radius = 10;
-            private const float control_border_thickness = 3;
-
             public Bindable<float> Current
             {
                 get => Hue;
@@ -52,13 +54,19 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                 }
             }
 
+            private const float corner_radius = 10;
+            private const float control_border_thickness = 3;
+
             public OsuHueSelector()
             {
                 SliderBar.CornerRadius = corner_radius;
                 SliderBar.Masking = true;
             }
 
-            protected override Drawable CreateSliderNub() => new SliderNub(this);
+            protected override Drawable CreateSliderNub()
+            {
+                return new SliderNub(this);
+            }
 
             private class SliderNub : CompositeDrawable
             {

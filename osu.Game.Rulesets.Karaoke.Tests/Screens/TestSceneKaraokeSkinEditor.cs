@@ -19,8 +19,8 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Screens
         {
             BeatmapInfo =
             {
-                Ruleset = new KaraokeRuleset().RulesetInfo,
-            },
+                Ruleset = new KaraokeRuleset().RulesetInfo
+            }
         });
 
         private KaraokeSkin karaokeSkin;
@@ -33,6 +33,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Screens
             karaokeSkin = skinManager.CurrentSkin.Value as KaraokeSkin;
         }
 
-        protected override KaraokeSkinEditor CreateScreen() => new(karaokeSkin);
+        protected override KaraokeSkinEditor CreateScreen()
+        {
+            return new(karaokeSkin);
+        }
     }
 }

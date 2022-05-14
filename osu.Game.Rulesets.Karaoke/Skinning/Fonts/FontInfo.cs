@@ -43,6 +43,6 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
 
         Fnt,
 
-        Ttf,
+        Ttf
     }
 }

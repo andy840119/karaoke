@@ -16,11 +16,41 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Sprites
 {
     public class DrawableLayoutPreview : CompositeDrawable
     {
+        public LyricLayout Layout
+        {
+            get => layout;
+            set
+            {
+                if (layout == value)
+                    return;
+
+                layout = value;
+                updateLayout();
+            }
+        }
+
+        public Lyric Lyric
+        {
+            get => lyric;
+            set
+            {
+                if (lyric == value)
+                    return;
+
+                lyric = value;
+                updateLayout();
+            }
+        }
+
         private const float scale = 0.4f;
 
         private readonly Box background;
         private readonly Box previewLyric;
         private readonly OsuSpriteText notSupportText;
+
+        private LyricLayout layout;
+
+        private Lyric lyric;
 
         [Resolved(canBeNull: true)]
         private ISkinSource skinSource { get; set; }
@@ -40,42 +70,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Sprites
                 notSupportText = new OsuSpriteText
                 {
                     Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
+                    Origin = Anchor.Centre
                 }
             };
 
             previewLyric.Hide();
             notSupportText.Hide();
-        }
-
-        private LyricLayout layout;
-
-        public LyricLayout Layout
-        {
-            get => layout;
-            set
-            {
-                if (layout == value)
-                    return;
-
-                layout = value;
-                updateLayout();
-            }
-        }
-
-        private Lyric lyric;
-
-        public Lyric Lyric
-        {
-            get => lyric;
-            set
-            {
-                if (lyric == value)
-                    return;
-
-                lyric = value;
-                updateLayout();
-            }
         }
 
         private void updateLayout()

@@ -9,11 +9,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Menus
 {
     public class LyricEditorModeMenu : EnumMenu<LyricEditorMode>
     {
-        public LyricEditorModeMenu(Bindable<LyricEditorMode> config, string text)
-            : base(config, text)
-        {
-        }
-
         protected override IEnumerable<LyricEditorMode> ValidEnums => new[]
         {
             LyricEditorMode.View,
@@ -24,7 +19,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Menus
             LyricEditorMode.EditRomaji,
             LyricEditorMode.EditTimeTag,
             LyricEditorMode.EditNote,
-            LyricEditorMode.Singer,
+            LyricEditorMode.Singer
         };
+
+        public LyricEditorModeMenu(Bindable<LyricEditorMode> config, string text)
+            : base(config, text)
+        {
+        }
     }
 }

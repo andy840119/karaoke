@@ -11,8 +11,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.UI
     [TestFixture]
     public class TestSceneKaraokePlayer : PlayerTestScene
     {
-        protected override IBeatmap CreateBeatmap(RulesetInfo ruleset) => new TestKaraokeBeatmap(ruleset);
+        protected override IBeatmap CreateBeatmap(RulesetInfo ruleset)
+        {
+            return new TestKaraokeBeatmap(ruleset);
+        }
 
-        protected override Ruleset CreatePlayerRuleset() => new KaraokeRuleset();
+        protected override Ruleset CreatePlayerRuleset()
+        {
+            return new KaraokeRuleset();
+        }
     }
 }

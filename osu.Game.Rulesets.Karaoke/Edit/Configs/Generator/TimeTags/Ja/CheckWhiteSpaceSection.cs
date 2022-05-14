@@ -10,13 +10,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.TimeTags.Ja
 {
     internal class CheckWhiteSpaceSection : GeneratorConfigSection<JaTimeTagGeneratorConfig>
     {
+        protected override string Title => "White space checking";
         private readonly LabelledSwitchButton checkWhiteSpaceSwitchButton;
         private readonly LabelledSwitchButton checkWhiteSpaceKeyUpSwitchButton;
         private readonly LabelledSwitchButton checkWhiteSpaceAlphabetSwitchButton;
         private readonly LabelledSwitchButton checkWhiteSpaceDigitSwitchButton;
         private readonly LabelledSwitchButton checkWhiteSpaceAsciiSymbolSwitchButton;
-
-        protected override string Title => "White space checking";
 
         public CheckWhiteSpaceSection(Bindable<JaTimeTagGeneratorConfig> config)
             : base(config)
@@ -26,28 +25,28 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.TimeTags.Ja
                 checkWhiteSpaceSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Check white space",
-                    Description = "Check white space",
+                    Description = "Check white space"
                 },
                 checkWhiteSpaceKeyUpSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Use key-up",
-                    Description = "Use key-up",
+                    Description = "Use key-up"
                 },
                 checkWhiteSpaceAlphabetSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Check white space alphabet",
-                    Description = "Check white space alphabet.",
+                    Description = "Check white space alphabet."
                 },
                 checkWhiteSpaceDigitSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Check white space digit",
-                    Description = "Check white space digit.",
+                    Description = "Check white space digit."
                 },
                 checkWhiteSpaceAsciiSymbolSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Check white space ascii symbol",
-                    Description = "Check white space ascii symbol.",
-                },
+                    Description = "Check white space ascii symbol."
+                }
             };
 
             RegisterConfig(checkWhiteSpaceSwitchButton.Current, nameof(JaTimeTagGeneratorConfig.CheckWhiteSpace));

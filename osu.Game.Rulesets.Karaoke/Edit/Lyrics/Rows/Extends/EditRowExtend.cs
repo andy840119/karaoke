@@ -13,54 +13,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends
 {
     public abstract class EditRowExtend : VisibilityContainer
     {
+        public abstract float ContentHeight { get; }
         private const int info_part_spacing = 210;
         private const float transition_duration = 600;
-
-        public abstract float ContentHeight { get; }
 
         private readonly Lyric lyric;
 
         protected EditRowExtend(Lyric lyric)
         {
             this.lyric = lyric;
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(OsuColour colours)
-        {
-            InternalChildren = new Drawable[]
-            {
-                new Box
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = colours.Gray2,
-                },
-                new GridContainer
-                {
-                    RelativeSizeAxes = Axes.X,
-                    AutoSizeAxes = Axes.Y,
-                    ColumnDimensions = new[]
-                    {
-                        new Dimension(GridSizeMode.Absolute, info_part_spacing),
-                        new Dimension()
-                    },
-                    RowDimensions = new[] { new Dimension(GridSizeMode.Relative) },
-                    Content = new[]
-                    {
-                        new[]
-                        {
-                            CreateInfo(lyric),
-                            new Container
-                            {
-                                Masking = true,
-                                RelativeSizeAxes = Axes.X,
-                                AutoSizeAxes = Axes.Y,
-                                Child = CreateContent(lyric),
-                            }
-                        }
-                    }
-                }
-            };
         }
 
         protected abstract Drawable CreateInfo(Lyric lyric);
@@ -83,6 +44,44 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends
         {
             // prevent scroll container drag event.
             return true;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(OsuColour colours)
+        {
+            InternalChildren = new Drawable[]
+            {
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = colours.Gray2
+                },
+                new GridContainer
+                {
+                    RelativeSizeAxes = Axes.X,
+                    AutoSizeAxes = Axes.Y,
+                    ColumnDimensions = new[]
+                    {
+                        new Dimension(GridSizeMode.Absolute, info_part_spacing),
+                        new Dimension()
+                    },
+                    RowDimensions = new[] { new Dimension(GridSizeMode.Relative) },
+                    Content = new[]
+                    {
+                        new[]
+                        {
+                            CreateInfo(lyric),
+                            new Container
+                            {
+                                Masking = true,
+                                RelativeSizeAxes = Axes.X,
+                                AutoSizeAxes = Axes.Y,
+                                Child = CreateContent(lyric)
+                            }
+                        }
+                    }
+                }
+            };
         }
     }
 }

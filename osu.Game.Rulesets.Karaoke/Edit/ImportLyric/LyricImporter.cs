@@ -24,10 +24,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
     [Cached(typeof(IImportStateResolver))]
     public class LyricImporter : ScreenWithBeatmapBackground, IImportStateResolver, IKeyBindingHandler<GlobalAction>
     {
-        private readonly LyricImporterWaveContainer waves;
+        // Hide the back button because we cannot show it only in the first step.
+        public override bool AllowBackButton => false;
 
         [Cached]
         protected LyricImporterSubScreenStack ScreenStack { get; private set; }
+
+        private readonly LyricImporterWaveContainer waves;
 
         private readonly BindableBeatDivisor beatDivisor = new();
 
@@ -40,14 +43,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
         private LyricCheckerManager lyricCheckerManager;
 
         private DependencyContainer dependencies;
-
-        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
-            => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
-
-        // Hide the back button because we cannot show it only in the first step.
-        public override bool AllowBackButton => false;
-
-        public event Action<IBeatmap> OnImportFinished;
 
         public LyricImporter()
         {
@@ -64,7 +59,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                         new Box
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Colour = backgroundColour,
+                            Colour = backgroundColour
                         },
                         new KaraokeEditInputManager(new KaraokeRuleset().RulesetInfo)
                         {
@@ -72,48 +67,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                             Padding = new MarginPadding { Top = Header.HEIGHT },
                             Child = ScreenStack = new LyricImporterSubScreenStack { RelativeSizeAxes = Axes.Both }
                         },
-                        new Header(ScreenStack),
+                        new Header(ScreenStack)
                     }
                 }
             };
 
             ScreenStack.Push(LyricImporterStep.ImportLyric);
-        }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            waves.Show();
-        }
-
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-            // todo: remove caching of this and consume via editorBeatmap?
-            // follow how editor.cs do.
-            dependencies.Cache(beatDivisor);
-
-            // inject local editor beatmap handler because should not affect global beatmap data.
-            var playableBeatmap = new KaraokeBeatmap
-            {
-                BeatmapInfo =
-                {
-                    Ruleset = new KaraokeRuleset().RulesetInfo,
-                },
-            };
-            AddInternal(editorBeatmap = new EditorBeatmap(playableBeatmap));
-            dependencies.CacheAs(editorBeatmap);
-
-            AddInternal(importManager = new ImportLyricManager());
-            dependencies.Cache(importManager);
-
-            AddInternal(lyricsProvider = new LyricsProvider());
-            dependencies.CacheAs<ILyricsProvider>(lyricsProvider);
-
-            AddInternal(lyricCheckerManager = new LyricCheckerManager());
-            dependencies.Cache(lyricCheckerManager);
-
-            dependencies.Cache(new KaraokeRulesetEditGeneratorConfigManager());
         }
 
         public void Cancel()
@@ -161,6 +120,49 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
         public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
         {
         }
+
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
+        {
+            return dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            waves.Show();
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            // todo: remove caching of this and consume via editorBeatmap?
+            // follow how editor.cs do.
+            dependencies.Cache(beatDivisor);
+
+            // inject local editor beatmap handler because should not affect global beatmap data.
+            var playableBeatmap = new KaraokeBeatmap
+            {
+                BeatmapInfo =
+                {
+                    Ruleset = new KaraokeRuleset().RulesetInfo
+                }
+            };
+            AddInternal(editorBeatmap = new EditorBeatmap(playableBeatmap));
+            dependencies.CacheAs(editorBeatmap);
+
+            AddInternal(importManager = new ImportLyricManager());
+            dependencies.Cache(importManager);
+
+            AddInternal(lyricsProvider = new LyricsProvider());
+            dependencies.CacheAs<ILyricsProvider>(lyricsProvider);
+
+            AddInternal(lyricCheckerManager = new LyricCheckerManager());
+            dependencies.Cache(lyricCheckerManager);
+
+            dependencies.Cache(new KaraokeRulesetEditGeneratorConfigManager());
+        }
+
+        public event Action<IBeatmap> OnImportFinished;
 
         private class LyricImporterWaveContainer : WaveContainer
         {

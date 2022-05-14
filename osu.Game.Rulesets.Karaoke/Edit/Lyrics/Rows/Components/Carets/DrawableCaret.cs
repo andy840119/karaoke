@@ -19,6 +19,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
         {
         }
 
+        protected abstract void Apply(TCaret caret);
+
         [BackgroundDependencyLoader]
         private void load(ILyricCaretState lyricCaretState, EditorKaraokeSpriteText karaokeSpriteText)
         {
@@ -43,8 +45,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
                 Apply(tCaret);
             });
         }
-
-        protected abstract void Apply(TCaret caret);
     }
 
     public abstract class DrawableCaret : CompositeDrawable

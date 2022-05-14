@@ -38,15 +38,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate
                     new TranslateEditSection
                     {
                         RelativeSizeAxes = Axes.X,
-                        AutoSizeAxes = Axes.Y,
-                    },
+                        AutoSizeAxes = Axes.Y
+                    }
                 }
             });
         }
 
         internal class TranslateScreenHeader : OverlayHeader
         {
-            protected override OverlayTitle CreateTitle() => new TranslateScreenTitle();
+            protected override OverlayTitle CreateTitle()
+            {
+                return new TranslateScreenTitle();
+            }
 
             private class TranslateScreenTitle : OverlayTitle
             {

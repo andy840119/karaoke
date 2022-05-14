@@ -26,39 +26,17 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
     [TestFixture]
     public class TestSceneResultsScreen : OsuManualInputManagerTestScene
     {
-        protected override IBeatmap CreateBeatmap(RulesetInfo ruleset) => new TestKaraokeBeatmap(ruleset);
-
-        private static TestResultsScreen createResultsScreen() => new(new TestKaraokeScoreInfo
+        protected override IBeatmap CreateBeatmap(RulesetInfo ruleset)
         {
-            HitEvents = TestSceneHitEventTimingDistributionGraph.CreateDistributedHitEvents()
-        });
+            return new TestKaraokeBeatmap(ruleset);
+        }
 
-        [Test]
-        public void TestShowStatisticsAndClickOtherPanel()
+        private static TestResultsScreen createResultsScreen()
         {
-            TestResultsScreen screen = null;
-
-            AddStep("load results", () => Child = new TestResultsContainer(screen = createResultsScreen()));
-            AddUntilStep("wait for loaded", () => screen.IsLoaded);
-
-            ScorePanel expandedPanel = null;
-            ScorePanel contractedPanel = null;
-
-            AddStep("click expanded panel then contracted panel", () =>
+            return new(new TestKaraokeScoreInfo
             {
-                expandedPanel = this.ChildrenOfType<ScorePanel>().Single(p => p.State == PanelState.Expanded);
-                InputManager.MoveMouseTo(expandedPanel);
-                InputManager.Click(MouseButton.Left);
-
-                contractedPanel = this.ChildrenOfType<ScorePanel>().First(p => p.State == PanelState.Contracted && p.ScreenSpaceDrawQuad.TopLeft.X > screen.ScreenSpaceDrawQuad.TopLeft.X);
-                InputManager.MoveMouseTo(contractedPanel);
-                InputManager.Click(MouseButton.Left);
+                HitEvents = TestSceneHitEventTimingDistributionGraph.CreateDistributedHitEvents()
             });
-
-            AddAssert("statistics shown", () => this.ChildrenOfType<StatisticsPanel>().Single().State.Value == Visibility.Visible);
-
-            AddAssert("contracted panel still contracted", () => contractedPanel.State == PanelState.Contracted);
-            AddAssert("expanded panel still expanded", () => expandedPanel.State == PanelState.Expanded);
         }
 
         private class TestResultsContainer : Container
@@ -73,7 +51,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
 
                 InternalChild = stack = new OsuScreenStack
                 {
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 };
 
                 stack.Push(screen);
@@ -102,6 +80,34 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
 
                 return null;
             }
+        }
+
+        [Test]
+        public void TestShowStatisticsAndClickOtherPanel()
+        {
+            TestResultsScreen screen = null;
+
+            AddStep("load results", () => Child = new TestResultsContainer(screen = createResultsScreen()));
+            AddUntilStep("wait for loaded", () => screen.IsLoaded);
+
+            ScorePanel expandedPanel = null;
+            ScorePanel contractedPanel = null;
+
+            AddStep("click expanded panel then contracted panel", () =>
+            {
+                expandedPanel = this.ChildrenOfType<ScorePanel>().Single(p => p.State == PanelState.Expanded);
+                InputManager.MoveMouseTo(expandedPanel);
+                InputManager.Click(MouseButton.Left);
+
+                contractedPanel = this.ChildrenOfType<ScorePanel>().First(p => p.State == PanelState.Contracted && p.ScreenSpaceDrawQuad.TopLeft.X > screen.ScreenSpaceDrawQuad.TopLeft.X);
+                InputManager.MoveMouseTo(contractedPanel);
+                InputManager.Click(MouseButton.Left);
+            });
+
+            AddAssert("statistics shown", () => this.ChildrenOfType<StatisticsPanel>().Single().State.Value == Visibility.Visible);
+
+            AddAssert("contracted panel still contracted", () => contractedPanel.State == PanelState.Contracted);
+            AddAssert("expanded panel still expanded", () => expandedPanel.State == PanelState.Expanded);
         }
     }
 }

@@ -20,9 +20,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
         }
 
         public static Color4 GetEditTimeTagCaretColour(this OsuColour colours)
-            => colours.Blue;
+        {
+            return colours.Blue;
+        }
 
         public static Color4 GetRecordingTimeTagCaretColour(this OsuColour colours, TimeTag timeTag)
-            => timeTag.Time.HasValue ? colours.Red : colours.Gray3;
+        {
+            return timeTag.Time.HasValue ? colours.Red : colours.Gray3;
+        }
     }
 }

@@ -48,8 +48,36 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
 
         private DependencyContainer dependencies;
 
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+        {
+            if (e.Repeat)
+                return false;
+
+            switch (e.Action)
+            {
+                case GlobalAction.Back:
+                    // as we don't want to display the back button, manual handling of exit action is required.
+                    // follow how editor.cs does.
+                    this.Exit();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
+        {
+        }
+
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
-            => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+        {
+            return dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+        }
+
+        protected abstract GenericEditorScreen<TScreenMode> GenerateScreen(TScreenMode screenMode);
+
+        protected abstract MenuItem[] GenerateMenuItems(TScreenMode screenMode);
 
         [BackgroundDependencyLoader(true)]
         private void load(OsuColour colours, EditorBeatmap editorBeatmap, BindableBeatDivisor beatDivisor)
@@ -90,16 +118,16 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
                             {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,
-                                RelativeSizeAxes = Axes.Both,
+                                RelativeSizeAxes = Axes.Both
                             },
                             new GenericScreenSelectionTabControl<TScreenMode>
                             {
                                 Anchor = Anchor.BottomRight,
                                 Origin = Anchor.BottomRight,
                                 X = -15,
-                                Current = Mode,
-                            },
-                        },
+                                Current = Mode
+                            }
+                        }
                     },
                     new Container
                     {
@@ -126,7 +154,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
                                     {
                                         new Dimension(GridSizeMode.Absolute, 220),
                                         new Dimension(),
-                                        new Dimension(GridSizeMode.Absolute, 220),
+                                        new Dimension(GridSizeMode.Absolute, 220)
                                     },
                                     Content = new[]
                                     {
@@ -136,24 +164,24 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
                                             {
                                                 RelativeSizeAxes = Axes.Both,
                                                 Padding = new MarginPadding { Right = 10 },
-                                                Child = new TimeInfoContainer { RelativeSizeAxes = Axes.Both },
+                                                Child = new TimeInfoContainer { RelativeSizeAxes = Axes.Both }
                                             },
                                             new SummaryTimeline
                                             {
-                                                RelativeSizeAxes = Axes.Both,
+                                                RelativeSizeAxes = Axes.Both
                                             },
                                             new Container
                                             {
                                                 RelativeSizeAxes = Axes.Both,
                                                 Padding = new MarginPadding { Left = 10 },
-                                                Child = new PlaybackControl { RelativeSizeAxes = Axes.Both },
-                                            },
-                                        },
+                                                Child = new PlaybackControl { RelativeSizeAxes = Axes.Both }
+                                            }
+                                        }
                                     }
-                                },
+                                }
                             }
                         }
-                    },
+                    }
                 }
             });
 
@@ -201,45 +229,16 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit
                     Items = new[]
                     {
                         new EditorMenuItem("Save"),
-                        new EditorMenuItem("Back", MenuItemType.Standard, this.Exit),
+                        new EditorMenuItem("Back", MenuItemType.Standard, this.Exit)
                     }
-                },
+                }
             };
 
             var extraItems = GenerateMenuItems(screenMode);
 
-            if (extraItems != null)
-            {
-                menuItems.AddRange(extraItems);
-            }
+            if (extraItems != null) menuItems.AddRange(extraItems);
 
             menuBar.Items = menuItems;
-        }
-
-        protected abstract GenericEditorScreen<TScreenMode> GenerateScreen(TScreenMode screenMode);
-
-        protected abstract MenuItem[] GenerateMenuItems(TScreenMode screenMode);
-
-        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
-        {
-            if (e.Repeat)
-                return false;
-
-            switch (e.Action)
-            {
-                case GlobalAction.Back:
-                    // as we don't want to display the back button, manual handling of exit action is required.
-                    // follow how editor.cs does.
-                    this.Exit();
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
-        {
         }
     }
 }

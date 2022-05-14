@@ -15,6 +15,26 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Replays
 {
     public class TestSceneAutoGenerationBySinger : OsuTestScene
     {
+        private static IList<TestKaraokeReplayFrame> getCompareResultFromName(string name)
+        {
+            var data = TestResources.OpenResource($"Testing/Track/{name}.json");
+
+            using (var reader = new StreamReader(data))
+            {
+                string str = reader.ReadToEnd();
+                return JsonConvert.DeserializeObject<List<TestKaraokeReplayFrame>>(str);
+            }
+        }
+
+        private class TestKaraokeReplayFrame
+        {
+            public double Time { get; set; }
+
+            public float Pitch { get; set; }
+
+            public bool Sound { get; set; }
+        }
+
         [Test]
         public void TestSingDemoSong()
         {
@@ -42,26 +62,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Replays
                 float convertedScale = beatmap.PitchToScale(expected[i].Pitch);
                 Assert.AreEqual(convertedScale, actual[i].Scale);
             }
-        }
-
-        private static IList<TestKaraokeReplayFrame> getCompareResultFromName(string name)
-        {
-            var data = TestResources.OpenResource($"Testing/Track/{name}.json");
-
-            using (var reader = new StreamReader(data))
-            {
-                string str = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<List<TestKaraokeReplayFrame>>(str);
-            }
-        }
-
-        private class TestKaraokeReplayFrame
-        {
-            public double Time { get; set; }
-
-            public float Pitch { get; set; }
-
-            public bool Sound { get; set; }
         }
     }
 }

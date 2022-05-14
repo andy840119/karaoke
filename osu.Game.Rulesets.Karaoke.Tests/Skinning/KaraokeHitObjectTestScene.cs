@@ -13,7 +13,7 @@ using osuTK.Graphics;
 namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
 {
     /// <summary>
-    /// A test scene for a karaoke hitObject.
+    ///     A test scene for a karaoke hitObject.
     /// </summary>
     public abstract class KaraokeHitObjectTestScene : KaraokeSkinnableColumnTestScene
     {
@@ -40,7 +40,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                         Height = DefaultColumnBackground.COLUMN_HEIGHT,
                         Child = new ScrollingHitObjectContainer
                         {
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         }.With(c =>
                         {
                             c.Add(CreateHitObject().With(h =>
@@ -53,7 +53,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                                 h.AccentColour.Value = Color4.Orange;
                             }));
                         })
-                    },
+                    }
                 }
             });
         }

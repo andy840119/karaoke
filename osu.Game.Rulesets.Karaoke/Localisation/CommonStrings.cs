@@ -7,13 +7,16 @@ namespace osu.Game.Rulesets.Karaoke.Localisation
 {
     public static class CommonStrings
     {
-        private const string prefix = @"osu.Game.Rulesets.Karaoke.Localisation.Common";
-
         /// <summary>
-        /// "karaoke!"
+        ///     "karaoke!"
         /// </summary>
         public static LocalisableString RulesetName => new TranslatableString(getKey(@"karaoke"), @"karaoke!");
 
-        private static string getKey(string key) => $@"{prefix}:{key}";
+        private const string prefix = @"osu.Game.Rulesets.Karaoke.Localisation.Common";
+
+        private static string getKey(string key)
+        {
+            return $@"{prefix}:{key}";
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class CharUtils
     {
         /// <summary>
-        /// Check this char is kana
+        ///     Check this char is kana
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Check this character is english
+        ///     Check this character is english
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
@@ -34,7 +34,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Check this char is symbol
+        ///     Check this char is symbol
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
@@ -47,7 +47,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Check this char is chinese character
+        ///     Check this char is chinese character
         /// </summary>
         /// <param name="character"></param>
         /// <returns></returns>

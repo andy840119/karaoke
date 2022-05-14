@@ -19,7 +19,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
     {
         protected override Container<Drawable> Content { get; } = new Container { RelativeSizeAxes = Axes.Both };
 
-        protected override TranslateScreen CreateEditorScreen() => new();
+        protected override TranslateScreen CreateEditorScreen()
+        {
+            return new();
+        }
 
         protected override KaraokeBeatmap CreateBeatmap()
         {

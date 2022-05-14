@@ -13,21 +13,24 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Mods
     public class TestSceneKaraokeModPractice : KaraokeModTestScene
     {
         [Test]
-        public void TestAllPanelExist() => CreateModTest(new ModTestData
+        public void TestAllPanelExist()
         {
-            Mod = new KaraokeModPractice(),
-            Autoplay = false,
-            Beatmap = new TestKaraokeBeatmap(new RulesetInfo()),
-            PassCondition = () =>
+            CreateModTest(new ModTestData
             {
-                // just need to check has setting button display area.
-                var skinnableTargetContainers = Player.HUDOverlay.OfType<SkinnableTargetContainer>().FirstOrDefault();
+                Mod = new KaraokeModPractice(),
+                Autoplay = false,
+                Beatmap = new TestKaraokeBeatmap(new RulesetInfo()),
+                PassCondition = () =>
+                {
+                    // just need to check has setting button display area.
+                    var skinnableTargetContainers = Player.HUDOverlay.OfType<SkinnableTargetContainer>().FirstOrDefault();
 
-                // todo: because setting buttons display created from skin transform , so might not able to get from here.
-                var hud = skinnableTargetContainers?.Components.OfType<SettingButtonsDisplay>().FirstOrDefault();
-                return true;
-                //return hud != null;
-            }
-        });
+                    // todo: because setting buttons display created from skin transform , so might not able to get from here.
+                    var hud = skinnableTargetContainers?.Components.OfType<SettingButtonsDisplay>().FirstOrDefault();
+                    return true;
+                    //return hud != null;
+                }
+            });
+        }
     }
 }

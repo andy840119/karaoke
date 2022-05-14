@@ -27,8 +27,8 @@ using osu.Game.Skinning;
 namespace osu.Game.Rulesets.Karaoke.Skinning
 {
     /// <summary>
-    /// It's the skin for karaoke ruleset.
-    /// todo: should inherit ruleset skin if have.
+    ///     It's the skin for karaoke ruleset.
+    ///     todo: should inherit ruleset skin if have.
     /// </summary>
     public class KaraokeSkin : Skin
     {
@@ -36,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Skinning
         {
             { ElementType.LyricConfig, LyricConfig.CreateDefault() },
             { ElementType.LyricStyle, LyricStyle.CreateDefault() },
-            { ElementType.NoteStyle, NoteStyle.CreateDefault() },
+            { ElementType.NoteStyle, NoteStyle.CreateDefault() }
         };
 
         private readonly Bindable<float> bindableColumnHeight = new(DefaultColumnBackground.COLUMN_HEIGHT);
@@ -76,48 +76,15 @@ namespace osu.Game.Rulesets.Karaoke.Skinning
             });
         }
 
-        protected JsonSerializerSettings CreateJsonSerializerSettings(params JsonConverter[] converters)
-        {
-            var globalSetting = JsonSerializableExtensions.CreateGlobalSettings();
-            globalSetting.ContractResolver = new SnakeCaseKeyContractResolver();
-            globalSetting.Converters.AddRange(converters);
-            return globalSetting;
-        }
-
-        protected string GetElementStringContentFromSkinInfo(SkinInfo skinInfo, string filename)
-        {
-            // should get by file name if files is namespace resource store.
-            var files = resources?.Files;
-            if (files == null)
-                return null;
-
-            byte[] bytes = files is NamespacedResourceStore<byte[]> ? getFileFromNamespaceStore(files, filename) : getFileFromSkinInfo(files, skinInfo, filename);
-
-            if (bytes == null)
-                return null;
-
-            return Encoding.UTF8.GetString(bytes);
-
-            static byte[] getFileFromNamespaceStore(IResourceStore<byte[]> files, string filename)
-                => files.Get(filename);
-
-            static byte[] getFileFromSkinInfo(IResourceStore<byte[]> files, SkinInfo skinInfo, string filename)
-            {
-                // skin element files may be null for default skin.
-                var fileInfo = skinInfo.Files.FirstOrDefault(f => f.Filename == filename);
-
-                if (fileInfo == null)
-                    return null;
-
-                return files.Get(fileInfo.File.GetStoragePath());
-            }
-        }
-
         public override ISample GetSample(ISampleInfo sampleInfo)
-            => sampleInfo.LookupNames.Select(lookup => resources.AudioManager.Samples.Get(lookup)).FirstOrDefault(sample => sample != null);
+        {
+            return sampleInfo.LookupNames.Select(lookup => resources.AudioManager.Samples.Get(lookup)).FirstOrDefault(sample => sample != null);
+        }
 
         public override Texture GetTexture(string componentName, WrapMode wrapModeS, WrapMode wrapModeT)
-            => null;
+        {
+            return null;
+        }
 
         public override IBindable<TValue> GetConfig<TLookup, TValue>(TLookup lookup)
         {
@@ -155,12 +122,49 @@ namespace osu.Game.Rulesets.Karaoke.Skinning
                         // not have note playfield judgement spacing in lyric editor.
                         LegacyKaraokeSkinConfigurationLookups.ColumnSpacing => SkinUtils.As<TValue>(bindableColumnSpacing),
 
-                        _ => null,
+                        _ => null
                     };
                 }
 
                 default:
                     return null;
+            }
+        }
+
+        protected JsonSerializerSettings CreateJsonSerializerSettings(params JsonConverter[] converters)
+        {
+            var globalSetting = JsonSerializableExtensions.CreateGlobalSettings();
+            globalSetting.ContractResolver = new SnakeCaseKeyContractResolver();
+            globalSetting.Converters.AddRange(converters);
+            return globalSetting;
+        }
+
+        protected string GetElementStringContentFromSkinInfo(SkinInfo skinInfo, string filename)
+        {
+            // should get by file name if files is namespace resource store.
+            var files = resources?.Files;
+            if (files == null)
+                return null;
+
+            byte[] bytes = files is NamespacedResourceStore<byte[]> ? getFileFromNamespaceStore(files, filename) : getFileFromSkinInfo(files, skinInfo, filename);
+
+            if (bytes == null)
+                return null;
+
+            return Encoding.UTF8.GetString(bytes);
+
+            static byte[] getFileFromNamespaceStore(IResourceStore<byte[]> files, string filename)
+                => files.Get(filename);
+
+            static byte[] getFileFromSkinInfo(IResourceStore<byte[]> files, SkinInfo skinInfo, string filename)
+            {
+                // skin element files may be null for default skin.
+                var fileInfo = skinInfo.Files.FirstOrDefault(f => f.Filename == filename);
+
+                if (fileInfo == null)
+                    return null;
+
+                return files.Get(fileInfo.File.GetStoragePath());
             }
         }
 
@@ -171,12 +175,14 @@ namespace osu.Game.Rulesets.Karaoke.Skinning
         }
 
         private IKaraokeSkinElement toElement(ElementType type)
-            => type switch
+        {
+            return type switch
             {
                 ElementType.LyricStyle or ElementType.LyricConfig or ElementType.NoteStyle => DefaultElement[type],
                 ElementType.LyricLayout => null,
                 _ => throw new InvalidEnumArgumentException(nameof(type))
             };
+        }
 
         private class DefaultSkinFormat
         {

@@ -15,6 +15,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
 {
     public abstract class GeneratorConfigPopover<TConfig> : OsuPopover where TConfig : IHasConfig<TConfig>, new()
     {
+        protected abstract KaraokeRulesetEditGeneratorSetting Config { get; }
         private readonly Bindable<TConfig> bindableConfig = new();
 
         protected GeneratorConfigPopover()
@@ -32,8 +33,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
                 }
             };
         }
-
-        protected abstract KaraokeRulesetEditGeneratorSetting Config { get; }
 
         protected abstract GeneratorConfigSection[] CreateConfigSection(Bindable<TConfig> current);
 

@@ -50,22 +50,11 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
             base.Content.AddRange(new Drawable[]
             {
                 Content,
-                dialogOverlay = new DialogOverlay(),
+                dialogOverlay = new DialogOverlay()
             });
 
             Dependencies.CacheAs<IDialogOverlay>(dialogOverlay);
             Dependencies.Cache(new EditorClock());
-        }
-
-        [Test]
-        public void TestGoToStep()
-        {
-            var steps = EnumUtils.GetValues<LyricImporterStep>();
-
-            foreach (var step in steps)
-            {
-                AddStep($"go to step {Enum.GetName(typeof(LyricImporterStep), step)}", () => { Screen.GoToStep(step); });
-            }
         }
 
         public class TestLyricImporter : LyricImporter
@@ -91,11 +80,16 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
 
                 var totalSteps = EnumUtils.GetValues<LyricImporterStep>().Where(x => x > lyricSubScreen.Step && x <= step);
 
-                foreach (var gotoStep in totalSteps)
-                {
-                    ScreenStack.Push(gotoStep);
-                }
+                foreach (var gotoStep in totalSteps) ScreenStack.Push(gotoStep);
             }
+        }
+
+        [Test]
+        public void TestGoToStep()
+        {
+            var steps = EnumUtils.GetValues<LyricImporterStep>();
+
+            foreach (var step in steps) AddStep($"go to step {Enum.GetName(typeof(LyricImporterStep), step)}", () => { Screen.GoToStep(step); });
         }
     }
 }

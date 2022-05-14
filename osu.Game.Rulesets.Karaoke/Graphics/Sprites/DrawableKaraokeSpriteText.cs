@@ -12,6 +12,32 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites
 {
     public class DrawableKaraokeSpriteText<TSpriteText> : KaraokeSpriteText<TSpriteText> where TSpriteText : LyricSpriteText, new()
     {
+        public bool DisplayRuby
+        {
+            get => displayRuby;
+            set
+            {
+                if (displayRuby == value)
+                    return;
+
+                displayRuby = value;
+                Schedule(updateRubies);
+            }
+        }
+
+        public bool DisplayRomaji
+        {
+            get => displayRomaji;
+            set
+            {
+                if (displayRomaji == value)
+                    return;
+
+                displayRomaji = value;
+                Schedule(updateRomajies);
+            }
+        }
+
         private const int whole_chunk_index = -1;
 
         private readonly IBindable<string> textBindable = new Bindable<string>();
@@ -23,6 +49,10 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites
         private readonly IBindableList<RomajiTag> romajiTagsBindable = new BindableList<RomajiTag>();
 
         private readonly int chunkIndex;
+
+        private bool displayRuby = true;
+
+        private bool displayRomaji = true;
 
         protected DrawableKaraokeSpriteText(Lyric lyric, int chunkIndex = whole_chunk_index)
         {
@@ -48,79 +78,33 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites
         private void updateText()
         {
             if (chunkIndex == whole_chunk_index)
-            {
                 Text = textBindable.Value;
-            }
             else
-            {
                 throw new NotImplementedException("Chunk lyric will be available until V2");
-            }
         }
 
         private void updateTimeTags()
         {
             if (chunkIndex == whole_chunk_index)
-            {
                 TimeTags = TimeTagsUtils.ToTimeBasedDictionary(timeTagsBindable.ToList());
-            }
             else
-            {
                 throw new NotImplementedException("Chunk lyric will be available until V2");
-            }
         }
 
         private void updateRubies()
         {
             if (chunkIndex == whole_chunk_index)
-            {
                 Rubies = DisplayRuby ? rubyTagsBindable?.Select(TextTagUtils.ToPositionText).ToArray() : null;
-            }
             else
-            {
                 throw new NotImplementedException("Chunk lyric will be available until V2");
-            }
         }
 
         private void updateRomajies()
         {
             if (chunkIndex == whole_chunk_index)
-            {
                 Romajies = DisplayRomaji ? romajiTagsBindable?.Select(TextTagUtils.ToPositionText).ToArray() : null;
-            }
             else
-            {
                 throw new NotImplementedException("Chunk lyric will be available until V2");
-            }
-        }
-
-        private bool displayRuby = true;
-
-        public bool DisplayRuby
-        {
-            get => displayRuby;
-            set
-            {
-                if (displayRuby == value)
-                    return;
-
-                displayRuby = value;
-                Schedule(updateRubies);
-            }
-        }
-
-        private bool displayRomaji = true;
-
-        public bool DisplayRomaji
-        {
-            get => displayRomaji;
-            set
-            {
-                if (displayRomaji == value)
-                    return;
-
-                displayRomaji = value;
-                Schedule(updateRomajies);
-            }
         }
     }
 }

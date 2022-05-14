@@ -15,58 +15,61 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Elements
 {
     public class LyricStyle : IKaraokeSkinElement
     {
-        public static LyricStyle CreateDefault() => new()
-        {
-            Name = "Default",
-            LeftLyricTextShaders = new ICustomizedShader[]
-            {
-                new StepShader
-                {
-                    Name = "Step shader",
-                    StepShaders = new ICustomizedShader[]
-                    {
-                        new OutlineShader
-                        {
-                            Radius = 3,
-                            OutlineColour = Color4Extensions.FromHex("#CCA532")
-                        },
-                        new ShadowShader
-                        {
-                            ShadowColour = Color4Extensions.FromHex("#6B5B2D"),
-                            ShadowOffset = new Vector2(3)
-                        }
-                    }
-                }
-            },
-            RightLyricTextShaders = new ICustomizedShader[]
-            {
-                new StepShader
-                {
-                    Name = "Step shader",
-                    StepShaders = new ICustomizedShader[]
-                    {
-                        new OutlineShader
-                        {
-                            Radius = 3,
-                            OutlineColour = Color4Extensions.FromHex("#5932CC")
-                        },
-                        new ShadowShader
-                        {
-                            ShadowColour = Color4Extensions.FromHex("#3D2D6B"),
-                            ShadowOffset = new Vector2(3)
-                        }
-                    }
-                }
-            }
-        };
+        public IReadOnlyList<ICustomizedShader> LeftLyricTextShaders = Array.Empty<ICustomizedShader>();
+
+        public IReadOnlyList<ICustomizedShader> RightLyricTextShaders = Array.Empty<ICustomizedShader>();
 
         public int ID { get; set; }
 
         public string Name { get; set; }
 
-        public IReadOnlyList<ICustomizedShader> LeftLyricTextShaders = Array.Empty<ICustomizedShader>();
-
-        public IReadOnlyList<ICustomizedShader> RightLyricTextShaders = Array.Empty<ICustomizedShader>();
+        public static LyricStyle CreateDefault()
+        {
+            return new()
+            {
+                Name = "Default",
+                LeftLyricTextShaders = new ICustomizedShader[]
+                {
+                    new StepShader
+                    {
+                        Name = "Step shader",
+                        StepShaders = new ICustomizedShader[]
+                        {
+                            new OutlineShader
+                            {
+                                Radius = 3,
+                                OutlineColour = Color4Extensions.FromHex("#CCA532")
+                            },
+                            new ShadowShader
+                            {
+                                ShadowColour = Color4Extensions.FromHex("#6B5B2D"),
+                                ShadowOffset = new Vector2(3)
+                            }
+                        }
+                    }
+                },
+                RightLyricTextShaders = new ICustomizedShader[]
+                {
+                    new StepShader
+                    {
+                        Name = "Step shader",
+                        StepShaders = new ICustomizedShader[]
+                        {
+                            new OutlineShader
+                            {
+                                Radius = 3,
+                                OutlineColour = Color4Extensions.FromHex("#5932CC")
+                            },
+                            new ShadowShader
+                            {
+                                ShadowColour = Color4Extensions.FromHex("#3D2D6B"),
+                                ShadowOffset = new Vector2(3)
+                            }
+                        }
+                    }
+                }
+            };
+        }
 
         public void ApplyTo(Drawable d)
         {

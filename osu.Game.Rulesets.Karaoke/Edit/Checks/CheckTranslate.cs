@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
         public IEnumerable<IssueTemplate> PossibleTemplates => new IssueTemplate[]
         {
             new IssueTemplateMissingTranslate(this),
-            new IssueTemplateMissingPartialTranslate(this),
+            new IssueTemplateMissingPartialTranslate(this)
         };
 
         public IEnumerable<Issue> Run(BeatmapVerifierContext context)
@@ -38,13 +38,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
                 var notTranslateLyrics = lyrics.Where(x => !x.Translates.ContainsKey(language) || string.IsNullOrWhiteSpace(x.Translates[language])).ToArray();
 
                 if (notTranslateLyrics.Length == lyrics.Count)
-                {
                     yield return new IssueTemplateMissingTranslate(this).Create(notTranslateLyrics, language);
-                }
-                else if (notTranslateLyrics.Any())
-                {
-                    yield return new IssueTemplateMissingPartialTranslate(this).Create(notTranslateLyrics, language);
-                }
+                else if (notTranslateLyrics.Any()) yield return new IssueTemplateMissingPartialTranslate(this).Create(notTranslateLyrics, language);
             }
 
             // should check is lyric contains translate that is not listed in beatmap.
@@ -79,7 +74,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(IEnumerable<HitObject> hitObjects, CultureInfo cultureInfo)
-                => new(hitObjects, this, cultureInfo);
+            {
+                return new(hitObjects, this, cultureInfo);
+            }
         }
 
         public class IssueTemplateMissingPartialTranslate : IssueTemplate
@@ -90,7 +87,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(IEnumerable<HitObject> hitObjects, CultureInfo cultureInfo)
-                => new(hitObjects, this, cultureInfo);
+            {
+                return new(hitObjects, this, cultureInfo);
+            }
         }
 
         public class IssueTemplateContainsNotListedLanguage : IssueTemplate
@@ -101,7 +100,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(IEnumerable<HitObject> hitObjects, CultureInfo cultureInfo)
-                => new(hitObjects, this, cultureInfo);
+            {
+                return new(hitObjects, this, cultureInfo);
+            }
         }
     }
 }

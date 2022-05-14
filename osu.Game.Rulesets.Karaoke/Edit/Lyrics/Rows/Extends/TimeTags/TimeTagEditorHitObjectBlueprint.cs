@@ -25,6 +25,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
 {
     public class TimeTagEditorHitObjectBlueprint : SelectionBlueprint<TimeTag>, IHasCustomTooltip<TimeTag>
     {
+        public override Quad SelectionQuad =>
+            hasTime() ? timeTagPiece.ScreenSpaceDrawQuad : timeTagWithNoTimePiece.ScreenSpaceDrawQuad;
+
+        public override Vector2 ScreenSpaceSelectionPoint => ScreenSpaceDrawQuad.TopLeft;
+
+        public TimeTag TooltipContent => Item;
+
         [UsedImplicitly]
         private readonly Bindable<double?> startTime;
 
@@ -48,17 +55,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             {
                 timeTagPiece = new TimeTagPiece(item)
                 {
-                    Anchor = Anchor.CentreLeft,
+                    Anchor = Anchor.CentreLeft
                 },
                 timeTagWithNoTimePiece = new TimeTagWithNoTimePiece(item)
                 {
-                    Anchor = Anchor.BottomLeft,
+                    Anchor = Anchor.BottomLeft
                 },
                 timeTagText = new OsuSpriteText
                 {
                     Text = "Demo",
                     Anchor = Anchor.BottomLeft,
-                    Y = 10,
+                    Y = 10
                 }
             });
 
@@ -79,6 +86,26 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
                 default:
                     throw new ArgumentOutOfRangeException(nameof(item.Index.State));
             }
+        }
+
+        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos)
+        {
+            return hasTime() ? timeTagPiece.ReceivePositionalInputAt(screenSpacePos) : timeTagWithNoTimePiece.ReceivePositionalInputAt(screenSpacePos);
+        }
+
+        public ITooltip<TimeTag> GetCustomTooltip()
+        {
+            return new TimeTagTooltip();
+        }
+
+        protected override void OnSelected()
+        {
+            // base logic hides selected blueprints when not selected, but timeline doesn't do that.
+        }
+
+        protected override void OnDeselected()
+        {
+            // base logic hides selected blueprints when not selected, but timeline doesn't do that.
         }
 
         [BackgroundDependencyLoader]
@@ -129,32 +156,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             }, true);
         }
 
-        protected override void OnSelected()
+        private bool hasTime()
         {
-            // base logic hides selected blueprints when not selected, but timeline doesn't do that.
+            return startTime.Value.HasValue;
         }
-
-        protected override void OnDeselected()
-        {
-            // base logic hides selected blueprints when not selected, but timeline doesn't do that.
-        }
-
-        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) =>
-            hasTime() ? timeTagPiece.ReceivePositionalInputAt(screenSpacePos) : timeTagWithNoTimePiece.ReceivePositionalInputAt(screenSpacePos);
-
-        public override Quad SelectionQuad =>
-            hasTime() ? timeTagPiece.ScreenSpaceDrawQuad : timeTagWithNoTimePiece.ScreenSpaceDrawQuad;
-
-        public override Vector2 ScreenSpaceSelectionPoint => ScreenSpaceDrawQuad.TopLeft;
-
-        public ITooltip<TimeTag> GetCustomTooltip() => new TimeTagTooltip();
-
-        public TimeTag TooltipContent => Item;
-
-        private bool hasTime() => startTime.Value.HasValue;
 
         public class TimeTagPiece : CompositeDrawable
         {
+            public override bool RemoveCompletedTransforms => false;
+
             public TimeTagPiece(TimeTag timeTag)
             {
                 RelativeSizeAxes = Axes.Y;
@@ -168,7 +178,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
                         RelativeSizeAxes = Axes.Y,
                         Width = 1.5f,
                         Anchor = TextIndexUtils.GetValueByState(textIndex, Anchor.CentreLeft, Anchor.CentreRight),
-                        Origin = TextIndexUtils.GetValueByState(textIndex, Anchor.CentreLeft, Anchor.CentreRight),
+                        Origin = TextIndexUtils.GetValueByState(textIndex, Anchor.CentreLeft, Anchor.CentreRight)
                     },
                     new DrawableTextIndex
                     {
@@ -179,8 +189,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
                     }
                 };
             }
-
-            public override bool RemoveCompletedTransforms => false;
         }
 
         public class TimeTagWithNoTimePiece : CompositeDrawable

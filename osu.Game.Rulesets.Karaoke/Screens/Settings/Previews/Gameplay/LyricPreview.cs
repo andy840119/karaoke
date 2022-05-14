@@ -27,12 +27,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
         private readonly Bindable<FontUsage> translateFont = new();
         private readonly Bindable<CultureInfo> preferLanguage = new();
 
-        [Resolved]
-        private FontStore fontStore { get; set; }
+        private readonly DrawableLyric drawableLyric;
 
         private KaraokeLocalFontStore localFontStore;
 
-        private readonly DrawableLyric drawableLyric;
+        [Resolved]
+        private FontStore fontStore { get; set; }
 
         public LyricPreview()
         {
@@ -43,7 +43,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
-                Clock = new StopClock(0),
+                Clock = new StopClock(0)
             };
 
             mainFont.BindValueChanged(e =>
@@ -71,6 +71,17 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
                 => localFontStore.AddFont(fontUsage);
         }
 
+        #region Disposal
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            fontStore?.RemoveStore(localFontStore);
+        }
+
+        #endregion
+
         [BackgroundDependencyLoader]
         private void load(FontManager fontManager, KaraokeRulesetConfigManager config)
         {
@@ -86,15 +97,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
             config.BindWith(KaraokeRulesetSetting.PreferLanguage, preferLanguage);
         }
 
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-
-            fontStore?.RemoveStore(localFontStore);
-        }
-
         private Lyric createPreviewLyric()
-            => new()
+        {
+            return new()
             {
                 Text = "カラオケ",
                 RubyTags = new[]
@@ -119,10 +124,11 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
                         StartIndex = 0,
                         EndIndex = 4,
                         Text = "karaoke"
-                    },
+                    }
                 },
-                HitWindows = new KaraokeLyricHitWindows(),
+                HitWindows = new KaraokeLyricHitWindows()
             };
+        }
 
         private IDictionary<CultureInfo, string> createPreviewTranslate(CultureInfo cultureInfo)
         {
@@ -135,7 +141,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
 
             return new Dictionary<CultureInfo, string>
             {
-                { cultureInfo, translate },
+                { cultureInfo, translate }
             };
         }
     }

@@ -27,7 +27,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
             return new RecordingTimeTagEditor(lyric)
             {
                 RelativeSizeAxes = Axes.X,
-                Height = 60,
+                Height = 60
             };
         }
     }

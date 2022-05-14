@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.RubyTags
             var lyric = new Lyric
             {
                 Language = new CultureInfo(lcid),
-                Text = text,
+                Text = text
             };
 
             var expected = TestCaseTagHelper.ParseRubyTags(expectedRubies);

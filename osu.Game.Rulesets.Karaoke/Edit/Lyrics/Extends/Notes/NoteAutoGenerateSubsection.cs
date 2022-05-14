@@ -16,9 +16,9 @@ using osu.Game.Rulesets.Karaoke.Objects;
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
 {
     /// <summary>
-    /// In <see cref="NoteEditMode.Generate"/> mode, able to let user generate notes by <see cref="TimeTag"/>
-    /// But need to make sure that lyric should not have any <see cref="TimeTagIssue"/>
-    /// If found any issue, will navigate to target lyric.
+    ///     In <see cref="NoteEditMode.Generate" /> mode, able to let user generate notes by <see cref="TimeTag" />
+    ///     But need to make sure that lyric should not have any <see cref="TimeTagIssue" />
+    ///     If found any issue, will navigate to target lyric.
     /// </summary>
     public class NoteAutoGenerateSubsection : AutoGenerateSubsection
     {
@@ -29,17 +29,25 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
         private LyricCheckerManager lyricCheckerManager { get; set; }
 
         protected override Dictionary<Lyric, string> GetDisableSelectingLyrics(IEnumerable<Lyric> lyrics)
-            => lyricCheckerManager.BindableReports.Where(x => x.Value.OfType<TimeTagIssue>().Any())
-                                  .ToDictionary(k => k.Key, _ => "Before generate time-tag, need to assign language first.");
+        {
+            return lyricCheckerManager.BindableReports.Where(x => x.Value.OfType<TimeTagIssue>().Any())
+                                      .ToDictionary(k => k.Key, _ => "Before generate time-tag, need to assign language first.");
+        }
 
         protected override void Apply()
-            => notesChangeHandler.AutoGenerate();
+        {
+            notesChangeHandler.AutoGenerate();
+        }
 
         protected override InvalidLyricAlertTextContainer CreateInvalidLyricAlertTextContainer()
-            => new InvalidLyricTimeTagAlertTextContainer();
+        {
+            return new InvalidLyricTimeTagAlertTextContainer();
+        }
 
         protected override ConfigButton CreateConfigButton()
-            => new NoteAutoGenerateConfigButton();
+        {
+            return new NoteAutoGenerateConfigButton();
+        }
 
         protected class InvalidLyricTimeTagAlertTextContainer : InvalidLyricAlertTextContainer
         {
@@ -55,7 +63,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
         protected class NoteAutoGenerateConfigButton : ConfigButton
         {
             public override Popover GetPopover()
-                => new NoteGeneratorConfigPopover();
+            {
+                return new NoteGeneratorConfigPopover();
+            }
         }
     }
 }

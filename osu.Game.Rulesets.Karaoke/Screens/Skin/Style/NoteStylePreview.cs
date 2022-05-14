@@ -48,7 +48,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = colourProvider.Background1,
+                    Colour = colourProvider.Background1
                 },
                 new PreviewDrawableNoteArea
                 {
@@ -79,16 +79,24 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 protected const double START_TIME = 1000000000;
 
                 public double GetDisplayStartTime(double originTime, float offset, double timeRange, float scrollLength)
-                    => double.MinValue;
+                {
+                    return double.MinValue;
+                }
 
                 public float GetLength(double startTime, double endTime, double timeRange, float scrollLength)
-                    => scrollLength;
+                {
+                    return scrollLength;
+                }
 
                 public float PositionAt(double time, double currentTime, double timeRange, float scrollLength)
-                    => (float)((time - START_TIME) / timeRange) * scrollLength;
+                {
+                    return (float)((time - START_TIME) / timeRange) * scrollLength;
+                }
 
                 public double TimeAt(float position, double currentTime, double timeRange, float scrollLength)
-                    => 0;
+                {
+                    return 0;
+                }
 
                 public void Reset()
                 {

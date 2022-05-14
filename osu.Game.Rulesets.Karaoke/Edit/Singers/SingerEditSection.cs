@@ -31,7 +31,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
                         new DefaultLyricPlacementColumn
                         {
                             Name = "Default",
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         }
                     },
                     new Drawable[]
@@ -40,7 +40,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
                         {
                             Name = "List of singer",
                             RelativeSizeAxes = Axes.Both,
-                            DisplayBottomDrawable = true,
+                            DisplayBottomDrawable = true
                         }
                     }
                 }

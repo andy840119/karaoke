@@ -11,17 +11,30 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
 {
     public class KaraokeSettingsColourProvider
     {
-        public Color4 GetContentColour(SettingsSection section) => getColour(section, 0.4f, 0.6f);
+        public Color4 GetContentColour(SettingsSection section)
+        {
+            return getColour(section, 0.4f, 0.6f);
+        }
 
-        public Color4 GetContent2Colour(SettingsSection section) => getColour(section, 0.4f, 0.9f);
+        public Color4 GetContent2Colour(SettingsSection section)
+        {
+            return getColour(section, 0.4f, 0.9f);
+        }
 
-        public Color4 GetBackgroundColour(SettingsSection section) => getColour(section, 0.1f, 0.4f);
+        public Color4 GetBackgroundColour(SettingsSection section)
+        {
+            return getColour(section, 0.1f, 0.4f);
+        }
 
-        public Color4 GetBackground2Colour(SettingsSection section) => getColour(section, 0.1f, 0.2f);
+        public Color4 GetBackground2Colour(SettingsSection section)
+        {
+            return getColour(section, 0.1f, 0.2f);
+        }
 
-        public Color4 GetBackground3Colour(SettingsSection section) => getColour(section, 0.1f, 0.15f);
-
-        private Color4 getColour(SettingsSection section, float saturation, float lightness) => Color4.FromHsl(new Vector4(getBaseHue(section), saturation, lightness, 1));
+        public Color4 GetBackground3Colour(SettingsSection section)
+        {
+            return getColour(section, 0.1f, 0.15f);
+        }
 
         private static float getBaseHue(SettingsSection section)
         {
@@ -33,6 +46,11 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                 null => 320 / 360f, // Plum
                 _ => throw new ArgumentException($@"{section} colour scheme does not provide a hue value in {nameof(getBaseHue)}.")
             };
+        }
+
+        private Color4 getColour(SettingsSection section, float saturation, float lightness)
+        {
+            return Color4.FromHsl(new Vector4(getBaseHue(section), saturation, lightness, 1));
         }
     }
 }

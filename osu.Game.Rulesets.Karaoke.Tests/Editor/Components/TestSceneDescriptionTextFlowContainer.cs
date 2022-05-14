@@ -16,25 +16,28 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Components
     [TestFixture]
     public class TestSceneDescriptionTextFlowContainer : OsuTestScene
     {
+        [SetUp]
+        public void SetUp()
+        {
+            Schedule(() =>
+            {
+                Child = new PopoverContainer
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Child = descriptionTextFlowContainer = new DescriptionTextFlowContainer
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(100)
+                    }
+                };
+            });
+        }
+
         [Cached]
         private readonly OverlayColourProvider overlayColourProvider = new(OverlayColourScheme.Blue);
 
         private DescriptionTextFlowContainer descriptionTextFlowContainer;
-
-        [SetUp]
-        public void SetUp() => Schedule(() =>
-        {
-            Child = new PopoverContainer
-            {
-                RelativeSizeAxes = Axes.Both,
-                Child = descriptionTextFlowContainer = new DescriptionTextFlowContainer
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(100)
-                }
-            };
-        });
 
         [Test]
         public void TestDisplayDescription()

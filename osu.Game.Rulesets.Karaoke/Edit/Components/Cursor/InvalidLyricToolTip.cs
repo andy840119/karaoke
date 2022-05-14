@@ -21,6 +21,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
     {
         private readonly MessageContainer invalidMessage;
 
+        private Issue[] lastIssues;
+
         public InvalidLyricToolTip()
         {
             Child = invalidMessage = new MessageContainer(s => s.Font = s.Font.With(size: 14))
@@ -29,11 +31,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
                 AutoSizeAxes = Axes.Y,
                 Colour = Color4.White.Opacity(0.75f),
                 Spacing = new Vector2(0, 5),
-                Name = "Invalid message",
+                Name = "Invalid message"
             };
         }
-
-        private Issue[] lastIssues;
 
         public override void SetContent(Issue[] issues)
         {
@@ -191,17 +191,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
                     action?.Invoke(tags[i]);
 
                     if (i == tags.Length - 2 && tags.Length > 1)
-                    {
                         invalidMessage.AddText(" and ");
-                    }
                     else if (i >= 0 && tags.Length > 1)
-                    {
                         invalidMessage.AddText(", ");
-                    }
                     else
-                    {
                         invalidMessage.AddText(".");
-                    }
                 }
             }
         }

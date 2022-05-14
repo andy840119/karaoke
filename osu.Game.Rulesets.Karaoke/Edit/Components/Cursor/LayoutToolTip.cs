@@ -17,6 +17,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
 
         private readonly DrawableLayoutPreview preview;
 
+        private Lyric lastLyric;
+
         [Resolved(canBeNull: true)]
         private ISkinSource skinSource { get; set; }
 
@@ -24,11 +26,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Cursor
         {
             Child = preview = new DrawableLayoutPreview
             {
-                Size = new Vector2(512 * scale, 384 * scale),
+                Size = new Vector2(512 * scale, 384 * scale)
             };
         }
-
-        private Lyric lastLyric;
 
         public override void SetContent(Lyric lyric)
         {

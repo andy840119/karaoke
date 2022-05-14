@@ -31,14 +31,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                     Label = "Waveform",
                     Description = "Show/hide or change the opacity of the waveform.",
                     Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.AdjustTimeTagShowWaveform),
-                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.AdjustTimeTagWaveformOpacity),
+                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.AdjustTimeTagWaveformOpacity)
                 },
                 new LabelledOpacityAdjustment
                 {
                     Label = "Ticks",
                     Description = "Show/hide or change the opacity of the ticks.",
                     Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.AdjustTimeTagShowTick),
-                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.AdjustTimeTagTickOpacity),
+                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.AdjustTimeTagTickOpacity)
                 }
             };
         }

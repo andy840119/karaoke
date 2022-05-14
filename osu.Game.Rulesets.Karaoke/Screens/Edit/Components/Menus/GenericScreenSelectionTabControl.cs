@@ -15,7 +15,7 @@ using osuTK.Graphics;
 namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Components.Menus
 {
     /// <summary>
-    /// Copied from <see cref="ScreenSelectionTabControl"/>
+    ///     Copied from <see cref="ScreenSelectionTabControl" />
     /// </summary>
     /// <typeparam name="TScreenMode"></typeparam>
     public class GenericScreenSelectionTabControl<TScreenMode> : OsuTabControl<TScreenMode>
@@ -35,8 +35,18 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Components.Menus
                 Origin = Anchor.BottomLeft,
                 RelativeSizeAxes = Axes.X,
                 Height = 1,
-                Colour = Color4.White.Opacity(0.2f),
+                Colour = Color4.White.Opacity(0.2f)
             });
+        }
+
+        protected override Dropdown<TScreenMode> CreateDropdown()
+        {
+            return null;
+        }
+
+        protected override TabItem<TScreenMode> CreateTabItem(TScreenMode value)
+        {
+            return new TabItem(value);
         }
 
         [BackgroundDependencyLoader]
@@ -44,10 +54,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Components.Menus
         {
             AccentColour = colours.Yellow;
         }
-
-        protected override Dropdown<TScreenMode> CreateDropdown() => null;
-
-        protected override TabItem<TScreenMode> CreateTabItem(TScreenMode value) => new TabItem(value);
 
         private class TabItem : OsuTabItem
         {

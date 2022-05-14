@@ -11,12 +11,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
 {
     public class RomajiTagsConverterTest : BaseSingleConverterTest<RomajiTagsConverter>
     {
-        protected override JsonConverter[] CreateExtraConverts()
-            => new JsonConverter[]
-            {
-                new RomajiTagConverter(),
-            };
-
         [Test]
         public void TestSerialize()
         {
@@ -33,7 +27,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                     StartIndex = 1,
                     EndIndex = 2,
                     Text = "roma"
-                },
+                }
             };
 
             const string expected = "[\"[1,2]:roma\",\"[2,3]:ji\"]";
@@ -59,10 +53,18 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                     StartIndex = 2,
                     EndIndex = 3,
                     Text = "ji"
-                },
+                }
             };
             var actual = JsonConvert.DeserializeObject<RomajiTag[]>(json, CreateSettings());
             TextTagAssert.ArePropertyEqual(expected, actual);
+        }
+
+        protected override JsonConverter[] CreateExtraConverts()
+        {
+            return new JsonConverter[]
+            {
+                new RomajiTagConverter()
+            };
         }
     }
 }

@@ -18,7 +18,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
         [Resolved]
         private Bindable<SettingsSubsection> selectedSubsection { get; set; }
 
-        public virtual SettingsSubsectionPreview CreatePreview() => new UnderConstructionPreview();
+        public virtual SettingsSubsectionPreview CreatePreview()
+        {
+            return new UnderConstructionPreview();
+        }
 
         protected override bool OnHover(HoverEvent e)
         {

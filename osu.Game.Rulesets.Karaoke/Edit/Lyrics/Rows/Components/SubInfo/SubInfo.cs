@@ -16,10 +16,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.SubInfo
 {
     public abstract class SubInfo : Container
     {
+        protected Lyric Lyric { get; }
+
+        protected LocalisableString BadgeText
+        {
+            get => badgeText.Text;
+            set => badgeText.Text = value;
+        }
+
+        protected ColourInfo BadgeColour
+        {
+            get => box.Colour;
+            set => box.Colour = value;
+        }
+
         private readonly Box box;
         private readonly OsuSpriteText badgeText;
-
-        protected Lyric Lyric { get; }
 
         [Resolved]
         private ILyricCaretState lyricCaretState { get; set; }
@@ -47,18 +59,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.SubInfo
                     Text = "Badge"
                 }
             };
-        }
-
-        protected LocalisableString BadgeText
-        {
-            get => badgeText.Text;
-            set => badgeText.Text = value;
-        }
-
-        protected ColourInfo BadgeColour
-        {
-            get => box.Colour;
-            set => box.Colour = value;
         }
 
         protected override bool OnClick(ClickEvent e)

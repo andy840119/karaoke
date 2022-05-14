@@ -7,11 +7,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition
 {
     public class NavigateCaretPosition : ICaretPosition
     {
+        public Lyric Lyric { get; }
+
         public NavigateCaretPosition(Lyric lyric)
         {
             Lyric = lyric;
         }
-
-        public Lyric Lyric { get; }
     }
 }

@@ -14,7 +14,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Input
     {
         protected override LocalisableString Header => "Microphone";
 
-        public override SettingsSubsectionPreview CreatePreview() => new MicrophoneDevicePreview();
+        public override SettingsSubsectionPreview CreatePreview()
+        {
+            return new MicrophoneDevicePreview();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -25,7 +28,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Input
                 {
                     LabelText = "Microphone devices",
                     Current = Config.GetBindable<string>(KaraokeRulesetSetting.MicrophoneDevice)
-                },
+                }
             };
         }
     }

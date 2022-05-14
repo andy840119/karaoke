@@ -32,7 +32,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = colourProvider.Background1,
+                    Colour = colourProvider.Background1
                 },
                 previewContainer = new Container
                 {
@@ -49,9 +49,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                             RelativeSizeAxes = Axes.Both,
                             Child = new LyricPreviewArea
                             {
-                                RelativeSizeAxes = Axes.Both,
-                            },
-                        },
+                                RelativeSizeAxes = Axes.Both
+                            }
+                        }
                     }
                 }
             };
@@ -105,13 +105,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
 
         internal class LayoutPreviewArea : Container
         {
+            protected override Container<Drawable> Content => content;
             private readonly OsuSpriteText widthRatioText;
             private readonly OsuSpriteText heightRatioText;
 
             private readonly Box background;
             private readonly Container content;
-
-            protected override Container<Drawable> Content => content;
 
             public LayoutPreviewArea()
             {
@@ -119,7 +118,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                 {
                     background = new Box
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     content = new Container
                     {

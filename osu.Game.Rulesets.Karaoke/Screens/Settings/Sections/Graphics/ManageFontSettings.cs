@@ -16,7 +16,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Graphics
     {
         protected override LocalisableString Header => "Font Management";
 
-        public override SettingsSubsectionPreview CreatePreview() => new ManageFontPreview();
+        public override SettingsSubsectionPreview CreatePreview()
+        {
+            return new ManageFontPreview();
+        }
 
         [BackgroundDependencyLoader]
         private void load(Storage storage)
@@ -27,7 +30,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Graphics
                 {
                     Text = "Open import text folder",
                     TooltipText = "After open the folder, you can drag the font file to the folder you wants to import",
-                    Action = () => storage.GetStorageForDirectory(FontManager.FONT_BASE_PATH).PresentExternally(),
+                    Action = () => storage.GetStorageForDirectory(FontManager.FONT_BASE_PATH).PresentExternally()
                 },
                 new SettingsButton
                 {

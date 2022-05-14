@@ -25,10 +25,12 @@ namespace osu.Game.Rulesets.Karaoke.UI
 {
     public class DrawableKaraokeRuleset : DrawableScrollingRuleset<KaraokeHitObject>
     {
-        public KaraokeSessionStatics Session { get; private set; }
         public new KaraokePlayfield Playfield => (KaraokePlayfield)base.Playfield;
 
         public new KaraokeRulesetConfigManager Config => (KaraokeRulesetConfigManager)base.Config;
+        public KaraokeSessionStatics Session { get; private set; }
+
+        protected virtual bool DisplayNotePlayfield => Beatmap.IsScorable();
 
         private readonly Bindable<KaraokeScrollingDirection> configDirection = new();
 
@@ -38,8 +40,6 @@ namespace osu.Game.Rulesets.Karaoke.UI
         [Cached]
         private readonly FontManager fontManager;
 
-        protected virtual bool DisplayNotePlayfield => Beatmap.IsScorable();
-
         public DrawableKaraokeRuleset(Ruleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods)
             : base(ruleset, beatmap, mods)
         {
@@ -47,16 +47,42 @@ namespace osu.Game.Rulesets.Karaoke.UI
             AddInternal(fontManager = new FontManager());
         }
 
-        protected override Playfield CreatePlayfield() => new KaraokePlayfield();
+        public override DrawableHitObject<KaraokeHitObject> CreateDrawableRepresentation(KaraokeHitObject h)
+        {
+            return null;
+        }
 
-        protected override PassThroughInputManager CreateInputManager() =>
-            new KaraokeInputManager(Ruleset.RulesetInfo);
+        // todo : for now get the fonts in here, might move to better place.
+        public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer()
+        {
+            return new KaraokePlayfieldAdjustmentContainer();
+        }
+
+        protected override Playfield CreatePlayfield()
+        {
+            return new KaraokePlayfield();
+        }
+
+        protected override PassThroughInputManager CreateInputManager()
+        {
+            return new KaraokeInputManager(Ruleset.RulesetInfo);
+        }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
         {
             var dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
             dependencies.Cache(Session = new KaraokeSessionStatics(Config, Beatmap));
             return dependencies;
+        }
+
+        protected override ReplayInputHandler CreateReplayInputHandler(Replay replay)
+        {
+            return new KaraokeFramedReplayInputHandler(replay);
+        }
+
+        protected override ReplayRecorder CreateReplayRecorder(Score score)
+        {
+            return new KaraokeReplayRecorder(score);
         }
 
         [BackgroundDependencyLoader]
@@ -74,14 +100,5 @@ namespace osu.Game.Rulesets.Karaoke.UI
             if (!DisplayNotePlayfield)
                 Playfield.NotePlayfield.Hide();
         }
-
-        public override DrawableHitObject<KaraokeHitObject> CreateDrawableRepresentation(KaraokeHitObject h) => null;
-
-        protected override ReplayInputHandler CreateReplayInputHandler(Replay replay) => new KaraokeFramedReplayInputHandler(replay);
-
-        protected override ReplayRecorder CreateReplayRecorder(Score score) => new KaraokeReplayRecorder(score);
-
-        // todo : for now get the fonts in here, might move to better place.
-        public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer() => new KaraokePlayfieldAdjustmentContainer();
     }
 }

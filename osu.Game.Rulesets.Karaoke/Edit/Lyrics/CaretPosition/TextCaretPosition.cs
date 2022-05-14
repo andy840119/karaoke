@@ -7,14 +7,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition
 {
     public class TextCaretPosition : ICaretPosition
     {
+        public Lyric Lyric { get; }
+
+        public int Index { get; }
+
         public TextCaretPosition(Lyric lyric, int index)
         {
             Lyric = lyric;
             Index = index;
         }
-
-        public Lyric Lyric { get; }
-
-        public int Index { get; }
     }
 }

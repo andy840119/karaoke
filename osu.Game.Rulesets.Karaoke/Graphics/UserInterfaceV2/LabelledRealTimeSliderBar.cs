@@ -12,6 +12,8 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
         where TNumber : struct, IEquatable<TNumber>, IComparable<TNumber>, IConvertible
     {
         protected override SettingsSlider<TNumber> CreateComponent()
-            => base.CreateComponent().With(x => x.TransferValueOnCommit = false);
+        {
+            return base.CreateComponent().With(x => x.TransferValueOnCommit = false);
+        }
     }
 }

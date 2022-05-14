@@ -14,10 +14,26 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
     public class TimeTagsConverterTest : BaseSingleConverterTest<TimeTagsConverter>
     {
         protected override JsonConverter[] CreateExtraConverts()
-            => new JsonConverter[]
+        {
+            return new JsonConverter[]
             {
-                new TimeTagConverter(),
+                new TimeTagConverter()
             };
+        }
+
+        [Test]
+        public void TestDeserialize()
+        {
+            const string json = "[\"[0,end]:1000\",\"[0,start]:0\"]";
+
+            var expected = new[]
+            {
+                new TimeTag(new TextIndex(0), 0),
+                new TimeTag(new TextIndex(0, TextIndex.IndexState.End), 1000)
+            };
+            var actual = JsonConvert.DeserializeObject<TimeTag[]>(json, CreateSettings());
+            TimeTagAssert.ArePropertyEqual(expected, actual);
+        }
 
         [Test]
         public void TestSerialize()
@@ -31,20 +47,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
             const string expected = "[\"[0,start]:0\",\"[0,end]:1000\"]";
             string actual = JsonConvert.SerializeObject(timeTags, CreateSettings());
             Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void TestDeserialize()
-        {
-            const string json = "[\"[0,end]:1000\",\"[0,start]:0\"]";
-
-            var expected = new[]
-            {
-                new TimeTag(new TextIndex(0), 0),
-                new TimeTag(new TextIndex(0, TextIndex.IndexState.End), 1000),
-            };
-            var actual = JsonConvert.DeserializeObject<TimeTag[]>(json, CreateSettings());
-            TimeTagAssert.ArePropertyEqual(expected, actual);
         }
     }
 }

@@ -9,8 +9,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
 {
     public abstract class KaraokeSkinnableTestScene : SkinnableTestScene
     {
-        protected override Ruleset CreateRulesetForSkinProvider() => new KaraokeRuleset();
+        protected override Ruleset CreateRulesetForSkinProvider()
+        {
+            return new KaraokeRuleset();
+        }
 
-        protected override IBeatmap CreateBeatmapForSkinProvider() => new KaraokeBeatmap();
+        protected override IBeatmap CreateBeatmapForSkinProvider()
+        {
+            return new KaraokeBeatmap();
+        }
     }
 }

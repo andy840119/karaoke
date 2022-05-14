@@ -31,19 +31,23 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.EditLyric
             AddInternal(lyricTextChangeHandler = new LyricTextChangeHandler());
         }
 
+        public override void Complete()
+        {
+            ScreenStack.Push(LyricImporterStep.AssignLanguage);
+        }
+
         protected override TopNavigation CreateNavigation()
-            => new EditLyricNavigation(this);
+        {
+            return new EditLyricNavigation(this);
+        }
 
         protected override Drawable CreateContent()
-            => base.CreateContent().With(_ =>
+        {
+            return base.CreateContent().With(_ =>
             {
                 // todo : will cause text update because has ScheduleAfterChildren in lyric editor.
                 SwitchLyricEditorMode(LyricEditorMode.Manage);
             });
-
-        public override void Complete()
-        {
-            ScreenStack.Push(LyricImporterStep.AssignLanguage);
         }
     }
 }

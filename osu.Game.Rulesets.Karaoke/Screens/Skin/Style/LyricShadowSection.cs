@@ -12,11 +12,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
 {
     internal class LyricShadowSection : StyleSection
     {
+        protected override string Title => "Shadow";
         private LabelledSwitchButton displayShaderSwitchButton;
         private LabelledRealTimeSliderBar<float> shadowXSliderBar;
         private LabelledRealTimeSliderBar<float> shadowYSliderBar;
-
-        protected override string Title => "Shadow";
 
         [BackgroundDependencyLoader]
         private void load(SkinManager manager)
@@ -26,7 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 displayShaderSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Shadow",
-                    Description = "Display shadow or not.",
+                    Description = "Display shadow or not."
                 },
                 shadowXSliderBar = new LabelledRealTimeSliderBar<float>
                 {

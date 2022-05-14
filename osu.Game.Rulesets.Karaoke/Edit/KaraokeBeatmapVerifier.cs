@@ -18,9 +18,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit
             new CheckInvalidRubyRomajiLyrics(new LyricCheckerConfig().CreateDefaultConfig()), // todo : implement config apply.
             new CheckInvalidTimeLyrics(new LyricCheckerConfig().CreateDefaultConfig()), // todo : implement config apply.
             new CheckInvalidPropertyNotes(),
-            new CheckTranslate(),
+            new CheckTranslate()
         };
 
-        public IEnumerable<Issue> Run(BeatmapVerifierContext context) => checks.SelectMany(check => check.Run(context));
+        public IEnumerable<Issue> Run(BeatmapVerifierContext context)
+        {
+            return checks.SelectMany(check => check.Run(context));
+        }
     }
 }

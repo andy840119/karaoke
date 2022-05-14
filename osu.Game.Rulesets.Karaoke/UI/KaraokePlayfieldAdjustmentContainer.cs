@@ -13,15 +13,26 @@ using osu.Game.Rulesets.UI;
 namespace osu.Game.Rulesets.Karaoke.UI
 {
     /// <summary>
-    /// Having a place to get all user customize font.
-    /// todo : need to check will have better place or not.
+    ///     Having a place to get all user customize font.
+    ///     todo : need to check will have better place or not.
     /// </summary>
     public class KaraokePlayfieldAdjustmentContainer : PlayfieldAdjustmentContainer
     {
+        private KaraokeLocalFontStore localFontStore;
+
         [Resolved]
         private FontStore fontStore { get; set; }
 
-        private KaraokeLocalFontStore localFontStore;
+        #region Disposal
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            fontStore?.RemoveStore(localFontStore);
+        }
+
+        #endregion
 
         [BackgroundDependencyLoader]
         private void load(FontManager fontManager, KaraokeRulesetConfigManager manager)
@@ -33,7 +44,7 @@ namespace osu.Game.Rulesets.Karaoke.UI
                 manager.Get<FontUsage>(KaraokeRulesetSetting.RubyFont),
                 manager.Get<FontUsage>(KaraokeRulesetSetting.RomajiFont),
                 manager.Get<FontUsage>(KaraokeRulesetSetting.TranslateFont),
-                manager.Get<FontUsage>(KaraokeRulesetSetting.NoteFont),
+                manager.Get<FontUsage>(KaraokeRulesetSetting.NoteFont)
             };
 
             var fontInfos = targetImportFonts
@@ -47,17 +58,7 @@ namespace osu.Game.Rulesets.Karaoke.UI
             localFontStore = new KaraokeLocalFontStore(fontManager);
             fontStore.AddStore(localFontStore);
 
-            foreach (var fontInfo in fontInfos)
-            {
-                localFontStore.AddFont(fontInfo);
-            }
-        }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-
-            fontStore?.RemoveStore(localFontStore);
+            foreach (var fontInfo in fontInfos) localFontStore.AddFont(fontInfo);
         }
     }
 }

@@ -23,16 +23,24 @@ using osuTK;
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
 {
     /// <summary>
-    /// Copy from <see cref="NoteSelectionBlueprint"/>
+    ///     Copy from <see cref="NoteSelectionBlueprint" />
     /// </summary>
     public class NoteEditorHitObjectBlueprint : SelectionBlueprint<Note>, IHasPopover
     {
+        public override MenuItem[] ContextMenuItems => new MenuItem[]
+        {
+            new OsuMenuItem(Item.Display ? "Hide" : "Show", Item.Display ? MenuItemType.Destructive : MenuItemType.Standard, () => notesChangeHandler.ChangeDisplayState(!Item.Display)),
+            new OsuMenuItem("Split", MenuItemType.Destructive, () => notesChangeHandler.Split())
+        };
+
         private readonly IBindable<double> timeRange = new BindableDouble();
         private readonly IBindable<ScrollingDirection> direction = new Bindable<ScrollingDirection>();
 
         private float scrollLength => Parent.DrawWidth;
 
         private bool axisInverted => direction.Value == ScrollingDirection.Right;
+
+        private readonly Lyric lyric;
 
         [Resolved]
         private INotesChangeHandler notesChangeHandler { get; set; }
@@ -46,8 +54,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
         [Resolved]
         private IEditNoteModeState editNoteModeState { get; set; }
 
-        private readonly Lyric lyric;
-
         public NoteEditorHitObjectBlueprint(Lyric lyric, Note note)
             : base(note)
         {
@@ -60,11 +66,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
             });
         }
 
-        [BackgroundDependencyLoader]
-        private void load()
+        public Popover GetPopover()
         {
-            direction.BindTo(scrollingInfo.Direction);
-            timeRange.BindTo(scrollingInfo.TimeRange);
+            return new NoteEditPopover(Item);
         }
 
         protected override void Update()
@@ -79,6 +83,23 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
 
             Width = lengthAtTime(Item.StartTime, Item.EndTime);
             Height = notePositionInfo.Calculator.ColumnHeight;
+        }
+
+        protected override bool OnClick(ClickEvent e)
+        {
+            // should only select current note before open the popover because note change handler will change property in all selected notes.
+            editNoteModeState.SelectedItems.Clear();
+            editNoteModeState.SelectedItems.Add(Item);
+
+            this.ShowPopover();
+            return base.OnClick(e);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            direction.BindTo(scrollingInfo.Direction);
+            timeRange.BindTo(scrollingInfo.TimeRange);
         }
 
         private Vector2 screenSpacePositionAtTime(double time)
@@ -97,24 +118,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
         private float lengthAtTime(double startTime, double endTime)
         {
             return scrollingInfo.Algorithm.GetLength(startTime, endTime, timeRange.Value, scrollLength);
-        }
-
-        public override MenuItem[] ContextMenuItems => new MenuItem[]
-        {
-            new OsuMenuItem(Item.Display ? "Hide" : "Show", Item.Display ? MenuItemType.Destructive : MenuItemType.Standard, () => notesChangeHandler.ChangeDisplayState(!Item.Display)),
-            new OsuMenuItem("Split", MenuItemType.Destructive, () => notesChangeHandler.Split()),
-        };
-
-        public Popover GetPopover() => new NoteEditPopover(Item);
-
-        protected override bool OnClick(ClickEvent e)
-        {
-            // should only select current note before open the popover because note change handler will change property in all selected notes.
-            editNoteModeState.SelectedItems.Clear();
-            editNoteModeState.SelectedItems.Add(Item);
-
-            this.ShowPopover();
-            return base.OnClick(e);
         }
     }
 }

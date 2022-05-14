@@ -19,8 +19,9 @@ namespace osu.Game.Rulesets.Karaoke.Utils
             return CopyByTime(note, startTime, duration);
         }
 
-        public static Note CopyByTime(Note originNote, double startTime, double duration) =>
-            new()
+        public static Note CopyByTime(Note originNote, double startTime, double duration)
+        {
+            return new()
             {
                 StartTime = startTime,
                 Duration = duration,
@@ -31,9 +32,10 @@ namespace osu.Game.Rulesets.Karaoke.Utils
                 Tone = originNote.Tone,
                 ParentLyric = originNote.ParentLyric
             };
+        }
 
         /// <summary>
-        /// Get the display text while gameplay or in editor.
+        ///     Get the display text while gameplay or in editor.
         /// </summary>
         /// <param name="note">Note</param>
         /// <param name="useRubyTextIfHave">Should use ruby text first if have.</param>

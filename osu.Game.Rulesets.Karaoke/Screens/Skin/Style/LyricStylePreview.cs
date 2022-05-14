@@ -27,7 +27,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = colourProvider.Background1,
+                    Colour = colourProvider.Background1
                 },
                 new PreviewDrawableLyricLine(createDefaultLyricLine())
             };
@@ -49,7 +49,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                     new(new TextIndex(1), startTime + 600),
                     new(new TextIndex(2), startTime + 1000),
                     new(new TextIndex(3), startTime + 1500),
-                    new(new TextIndex(4), startTime + 2000),
+                    new(new TextIndex(4), startTime + 2000)
                 },
                 RubyTags = new[]
                 {

@@ -47,10 +47,7 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
             var type = objectType != typeof(ICustomizedShader) ? objectType : getTypeByProperties(properties);
             var shader = localSerializer.Deserialize(newReader, type) as ICustomizedShader;
 
-            if (shader is StepShader stepShader && childShaders != null)
-            {
-                stepShader.StepShaders = childShaders;
-            }
+            if (shader is StepShader stepShader && childShaders != null) stepShader.StepShaders = childShaders;
 
             return shader;
 
@@ -106,6 +103,8 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
         }
 
         private static string getNameByType(MemberInfo type)
-            => type.Name;
+        {
+            return type.Name;
+        }
     }
 }

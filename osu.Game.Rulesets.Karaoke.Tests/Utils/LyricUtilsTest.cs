@@ -12,6 +12,24 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
 {
     public class LyricUtilsTest
     {
+        #region Ruby/romaji tag
+
+        [TestCase("からおけ", 0, true)]
+        [TestCase("からおけ", 4, true)]
+        [TestCase("からおけ", -1, false)]
+        [TestCase("からおけ", 5, false)]
+        [TestCase("", 0, true)]
+        [TestCase(null, 0, true)]
+        public void TestAbleToInsertTextTagAtIndex(string text, int index, bool expected)
+        {
+            var lyric = TestCaseTagHelper.ParseLyricWithTimeTag(text);
+
+            bool actual = LyricUtils.AbleToInsertTextTagAtIndex(lyric, index);
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
         #region progessing
 
         [TestCase("karaoke", 2, 2, "kaoke")]
@@ -46,7 +64,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                RubyTags = TestCaseTagHelper.ParseRubyTags(rubies),
+                RubyTags = TestCaseTagHelper.ParseRubyTags(rubies)
             };
             LyricUtils.RemoveText(lyric, position, count);
 
@@ -62,7 +80,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                RomajiTags = TestCaseTagHelper.ParseRomajiTags(romajies),
+                RomajiTags = TestCaseTagHelper.ParseRomajiTags(romajies)
             };
             LyricUtils.RemoveText(lyric, position, count);
 
@@ -79,7 +97,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags),
+                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
             };
             LyricUtils.RemoveText(lyric, position, count);
 
@@ -112,7 +130,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                RubyTags = TestCaseTagHelper.ParseRubyTags(rubies),
+                RubyTags = TestCaseTagHelper.ParseRubyTags(rubies)
             };
             LyricUtils.AddText(lyric, position, addedText);
 
@@ -129,7 +147,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                RomajiTags = TestCaseTagHelper.ParseRomajiTags(romajies),
+                RomajiTags = TestCaseTagHelper.ParseRomajiTags(romajies)
             };
             LyricUtils.AddText(lyric, position, addedText);
 
@@ -149,7 +167,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags),
+                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
             };
             LyricUtils.AddText(lyric, position, addedText);
 
@@ -169,7 +187,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags),
+                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
             };
 
             bool actual = LyricUtils.HasTimedTimeTags(lyric);
@@ -242,35 +260,17 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
                     "[2,start]:3000",
                     "[2,start]:3000",
                     "[3,start]:4000",
-                    "[3,end]:5000",
+                    "[3,end]:5000"
                 }),
                 RubyTags = TestCaseTagHelper.ParseRubyTags(new[]
                 {
                     "[0,1]:か",
-                    "[2,4]:おけ",
+                    "[2,4]:おけ"
                 })
             };
             var timeTag = lyric.TimeTags[indexOfTimeTag];
 
             string actual = LyricUtils.GetTimeTagDisplayRubyText(lyric, timeTag);
-            Assert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Ruby/romaji tag
-
-        [TestCase("からおけ", 0, true)]
-        [TestCase("からおけ", 4, true)]
-        [TestCase("からおけ", -1, false)]
-        [TestCase("からおけ", 5, false)]
-        [TestCase("", 0, true)]
-        [TestCase(null, 0, true)]
-        public void TestAbleToInsertTextTagAtIndex(string text, int index, bool expected)
-        {
-            var lyric = TestCaseTagHelper.ParseLyricWithTimeTag(text);
-
-            bool actual = LyricUtils.AbleToInsertTextTagAtIndex(lyric, index);
             Assert.AreEqual(expected, actual);
         }
 
@@ -304,7 +304,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
         {
             var lyric = new Lyric
             {
-                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags),
+                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
             };
 
             string actual = LyricUtils.TimeTagTimeFormattedString(lyric);

@@ -29,7 +29,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Detail
                     Children = new EditSingerSection[]
                     {
                         new AvatarSection(singer),
-                        new MetadataSection(singer),
+                        new MetadataSection(singer)
                     }
                 }
             };

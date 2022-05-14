@@ -19,13 +19,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
         private ILyricRubyTagsChangeHandler rubyTagsChangeHandler { get; set; }
 
         protected override IBindableList<RubyTag> GetBindableTextTags(Lyric lyric)
-            => lyric.RubyTagsBindable;
+        {
+            return lyric.RubyTagsBindable;
+        }
 
         protected override LabelledTextTagTextBox<RubyTag> CreateLabelledTextTagTextBox(RubyTag textTag)
-            => new LabelledRubyTagTextBox(Lyric, textTag);
+        {
+            return new LabelledRubyTagTextBox(Lyric, textTag);
+        }
 
         protected override void AddTextTag(RubyTag textTag)
-            => rubyTagsChangeHandler.Add(textTag);
+        {
+            rubyTagsChangeHandler.Add(textTag);
+        }
 
         protected class LabelledRubyTagTextBox : LabelledTextTagTextBox<RubyTag>
         {
@@ -39,13 +45,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
             }
 
             protected override void ApplyValue(RubyTag item, string value)
-                => rubyTagsChangeHandler.SetText(item, value);
+            {
+                rubyTagsChangeHandler.SetText(item, value);
+            }
 
             protected override void SetIndex(RubyTag item, int? startIndex, int? endIndex)
-                => rubyTagsChangeHandler.SetIndex(item, startIndex, endIndex);
+            {
+                rubyTagsChangeHandler.SetIndex(item, startIndex, endIndex);
+            }
 
             protected override void RemoveTextTag(RubyTag textTag)
-                => rubyTagsChangeHandler.Remove(textTag);
+            {
+                rubyTagsChangeHandler.Remove(textTag);
+            }
 
             [BackgroundDependencyLoader]
             private void load(IEditRubyModeState editRubyModeState)

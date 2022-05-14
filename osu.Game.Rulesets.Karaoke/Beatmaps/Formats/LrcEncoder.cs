@@ -21,22 +21,14 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
         {
             var lyric = new LyricMaker.Model.Lyric
             {
-                Lines = output.HitObjects.OfType<Lyric>().Select(encodeLyric).ToArray(),
+                Lines = output.HitObjects.OfType<Lyric>().Select(encodeLyric).ToArray()
             };
             string encodeResult = new LrcParser().Encode(lyric);
             return encodeResult;
         }
 
-        private LyricLine encodeLyric(Lyric lyric) =>
-            new()
-            {
-                Text = lyric.Text,
-                // Note : save to lyric will lost some tags with no value.
-                TimeTags = convertTimeTag(lyric.Text, ToDictionary(lyric.TimeTags)).ToArray(),
-            };
-
         /// <summary>
-        /// Convert list of time tag to dictionary.
+        ///     Convert list of time tag to dictionary.
         /// </summary>
         /// <param name="timeTags">Time tags</param>
         /// <param name="applyFix">Should auto-fix or not</param>
@@ -58,6 +50,16 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
                                  .ToDictionary(
                                      k => k?.Index ?? throw new ArgumentNullException(nameof(k)),
                                      v => v?.Time ?? throw new ArgumentNullException(nameof(v)));
+        }
+
+        private LyricLine encodeLyric(Lyric lyric)
+        {
+            return new()
+            {
+                Text = lyric.Text,
+                // Note : save to lyric will lost some tags with no value.
+                TimeTags = convertTimeTag(lyric.Text, ToDictionary(lyric.TimeTags)).ToArray()
+            };
         }
 
         private IEnumerable<TimeTag> convertTimeTag(string text, IReadOnlyDictionary<TextIndex, double> tags)

@@ -14,15 +14,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
 {
     public class CheckInvalidRubyRomajiLyrics : ICheck
     {
-        private readonly LyricCheckerConfig config;
-
         public CheckMetadata Metadata => new(CheckCategory.HitObjects, "Lyrics with invalid ruby/romaji.");
 
         public IEnumerable<IssueTemplate> PossibleTemplates => new IssueTemplate[]
         {
             new IssueTemplateInvalidRuby(this),
-            new IssueTemplateInvalidRomaji(this),
+            new IssueTemplateInvalidRomaji(this)
         };
+
+        private readonly LyricCheckerConfig config;
 
         public CheckInvalidRubyRomajiLyrics(LyricCheckerConfig config)
         {
@@ -97,7 +97,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Lyric lyric, Dictionary<RubyTagInvalid, RubyTag[]> invalidRubyTags)
-                => new RubyTagIssue(lyric, this, invalidRubyTags);
+            {
+                return new RubyTagIssue(lyric, this, invalidRubyTags);
+            }
         }
 
         public class IssueTemplateInvalidRomaji : IssueTemplate
@@ -108,7 +110,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Lyric lyric, Dictionary<RomajiTagInvalid, RomajiTag[]> invalidRomajiTags)
-                => new RomajiTagIssue(lyric, this, invalidRomajiTags);
+            {
+                return new RomajiTagIssue(lyric, this, invalidRomajiTags);
+            }
         }
     }
 }

@@ -20,14 +20,16 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
     {
         public const string FONT_BASE_PATH = @"fonts";
 
-        [Resolved]
-        private GameHost host { get; set; }
+        public readonly BindableList<FontInfo> Fonts = new();
 
         private Storage storage => host.Storage.GetStorageForDirectory(FONT_BASE_PATH);
 
         private readonly FontFormat[] supportedFormat = { FontFormat.Fnt, FontFormat.Ttf };
 
-        public readonly BindableList<FontInfo> Fonts = new();
+        private FileSystemWatcher watcher;
+
+        [Resolved]
+        private GameHost host { get; set; }
 
         public FontManager()
         {
@@ -70,11 +72,75 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
                 new FontInfo("Venera-Bold", FontFormat.Internal),
                 new FontInfo("Venera-Black", FontFormat.Internal),
 
-                new FontInfo("Compatibility", FontFormat.Internal),
+                new FontInfo("Compatibility", FontFormat.Internal)
             });
         }
 
-        private FileSystemWatcher watcher;
+        #region Disposal
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            watcher?.Dispose();
+        }
+
+        #endregion
+
+        public FontFormat? CheckFontFormat(FontUsage fontUsage)
+        {
+            string fontName = fontUsage.FontName;
+            if (Fonts.All(x => x.FontName != fontName))
+                return null;
+
+            return Fonts.FirstOrDefault(x => x.FontName == fontName).FontFormat;
+        }
+
+        public IResourceStore<TextureUpload> GetGlyphStore(FontInfo fontInfo)
+        {
+            // do not import if this font is system font.
+            var fontFormat = fontInfo.FontFormat;
+            if (fontFormat == FontFormat.Internal)
+                return null;
+
+            string fontName = fontInfo.FontName;
+            return fontFormat switch
+            {
+                FontFormat.Fnt => getFntGlyphStore(fontName),
+                FontFormat.Ttf => getTtfGlyphStore(fontName),
+                FontFormat.Internal or _ => throw new ArgumentOutOfRangeException(nameof(fontFormat))
+            };
+        }
+
+        private static string getPathByFontType(FontFormat type)
+        {
+            return type switch
+            {
+                FontFormat.Fnt => "fnt",
+                FontFormat.Ttf => "ttf",
+                FontFormat.Internal or _ => throw new ArgumentOutOfRangeException(nameof(type))
+            };
+        }
+
+        private static string getExtensionByFontType(FontFormat type)
+        {
+            return type switch
+            {
+                FontFormat.Fnt => "zipfnt",
+                FontFormat.Ttf => "ttf",
+                FontFormat.Internal or _ => throw new ArgumentOutOfRangeException(nameof(type))
+            };
+        }
+
+        private static FontFormat getFontTypeByExtension(string extension)
+        {
+            return extension switch
+            {
+                ".zipfnt" => FontFormat.Fnt,
+                ".ttf" => FontFormat.Ttf,
+                _ => throw new FormatException(nameof(extension))
+            };
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -88,17 +154,14 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
                 var fontFiles = storage.GetStorageForDirectory(path)
                                        .GetFiles("", $"*.{extension}").ToList();
 
-                foreach (string fontFile in fontFiles)
-                {
-                    addFontToList(fontFile, fontFormat);
-                }
+                foreach (string fontFile in fontFiles) addFontToList(fontFile, fontFormat);
             }
 
             watcher = new FileSystemWatcher(storage.GetFullPath(""))
             {
                 EnableRaisingEvents = true,
                 IncludeSubdirectories = true,
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName,
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName
             };
 
             watcher.Renamed += onChange;
@@ -166,31 +229,6 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
             Fonts.Remove(matchedFont);
         }
 
-        public FontFormat? CheckFontFormat(FontUsage fontUsage)
-        {
-            string fontName = fontUsage.FontName;
-            if (Fonts.All(x => x.FontName != fontName))
-                return null;
-
-            return Fonts.FirstOrDefault(x => x.FontName == fontName).FontFormat;
-        }
-
-        public IResourceStore<TextureUpload> GetGlyphStore(FontInfo fontInfo)
-        {
-            // do not import if this font is system font.
-            var fontFormat = fontInfo.FontFormat;
-            if (fontFormat == FontFormat.Internal)
-                return null;
-
-            string fontName = fontInfo.FontName;
-            return fontFormat switch
-            {
-                FontFormat.Fnt => getFntGlyphStore(fontName),
-                FontFormat.Ttf => getTtfGlyphStore(fontName),
-                FontFormat.Internal or _ => throw new ArgumentOutOfRangeException(nameof(fontFormat))
-            };
-        }
-
         private FntGlyphStore getFntGlyphStore(string fontName)
         {
             string path = Path.Combine(getPathByFontType(FontFormat.Fnt), fontName);
@@ -213,37 +251,6 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Fonts
 
             var resources = new StorageBackedResourceStore(storage.GetStorageForDirectory(getPathByFontType(FontFormat.Ttf)));
             return new TtfGlyphStore(new ResourceStore<byte[]>(resources), $"{fontName}");
-        }
-
-        private static string getPathByFontType(FontFormat type) =>
-            type switch
-            {
-                FontFormat.Fnt => "fnt",
-                FontFormat.Ttf => "ttf",
-                FontFormat.Internal or _ => throw new ArgumentOutOfRangeException(nameof(type))
-            };
-
-        private static string getExtensionByFontType(FontFormat type) =>
-            type switch
-            {
-                FontFormat.Fnt => "zipfnt",
-                FontFormat.Ttf => "ttf",
-                FontFormat.Internal or _ => throw new ArgumentOutOfRangeException(nameof(type))
-            };
-
-        private static FontFormat getFontTypeByExtension(string extension) =>
-            extension switch
-            {
-                ".zipfnt" => FontFormat.Fnt,
-                ".ttf" => FontFormat.Ttf,
-                _ => throw new FormatException(nameof(extension)),
-            };
-
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-
-            watcher?.Dispose();
         }
     }
 }

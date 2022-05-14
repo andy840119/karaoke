@@ -25,7 +25,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Beatmaps
 
         [Ignore("Fix this test case after.")]
         [TestCase("karaoke-file-samples")]
-        public void Test(string name) => base.Test(name);
+        public void Test(string name)
+        {
+            base.Test(name);
+        }
 
         protected override IEnumerable<ConvertValue> CreateConvertValue(HitObject hitObject)
         {
@@ -45,13 +48,16 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Beatmaps
             };
         }
 
-        protected override Ruleset CreateRuleset() => new KaraokeRuleset();
+        protected override Ruleset CreateRuleset()
+        {
+            return new KaraokeRuleset();
+        }
     }
 
     public struct ConvertValue : IEquatable<ConvertValue>
     {
         /// <summary>
-        /// A sane value to account for osu!stable using <see cref="int"/>s everywhere.
+        ///     A sane value to account for osu!stable using <see cref="int" />s everywhere.
         /// </summary>
         private const double conversion_lenience = 2;
 
@@ -60,8 +66,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Beatmaps
         public string Lyric;
 
         public bool Equals(ConvertValue other)
-            => Precision.AlmostEquals(StartTime, other.StartTime, conversion_lenience)
-               && Precision.AlmostEquals(EndTime, other.EndTime, conversion_lenience)
-               && Lyric == other.Lyric;
+        {
+            return Precision.AlmostEquals(StartTime, other.StartTime, conversion_lenience)
+                   && Precision.AlmostEquals(EndTime, other.EndTime, conversion_lenience)
+                   && Lyric == other.Lyric;
+        }
     }
 }

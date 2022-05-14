@@ -11,9 +11,22 @@ namespace osu.Game.Rulesets.Karaoke.Objects
     public class TimeTag
     {
         /// <summary>
-        /// Invoked when any property of this <see cref="RubyTag"/> is changed.
+        ///     Time tag's index.
+        ///     Notice that this index means index of characters.
         /// </summary>
-        public event Action Changed;
+        public TextIndex Index { get; }
+
+        [JsonIgnore]
+        public readonly Bindable<double?> TimeBindable = new();
+
+        /// <summary>
+        ///     Time
+        /// </summary>
+        public double? Time
+        {
+            get => TimeBindable.Value;
+            set => TimeBindable.Value = value;
+        }
 
         public TimeTag(TextIndex index, double? time = null)
         {
@@ -24,21 +37,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects
         }
 
         /// <summary>
-        /// Time tag's index.
-        /// Notice that this index means index of characters.
+        ///     Invoked when any property of this <see cref="RubyTag" /> is changed.
         /// </summary>
-        public TextIndex Index { get; }
-
-        [JsonIgnore]
-        public readonly Bindable<double?> TimeBindable = new();
-
-        /// <summary>
-        /// Time
-        /// </summary>
-        public double? Time
-        {
-            get => TimeBindable.Value;
-            set => TimeBindable.Value = value;
-        }
+        public event Action Changed;
     }
 }

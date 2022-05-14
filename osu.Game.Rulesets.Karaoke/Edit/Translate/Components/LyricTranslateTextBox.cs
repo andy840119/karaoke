@@ -14,6 +14,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
 {
     public class LyricTranslateTextBox : OsuTextBox
     {
+        private readonly IBindable<CultureInfo> currentLanguage = new Bindable<CultureInfo>();
+
+        private readonly Lyric lyric;
+
         [Resolved]
         private EditorBeatmap beatmap { get; set; }
 
@@ -22,10 +26,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
 
         [Resolved]
         private ITranslateInfoProvider translateInfoProvider { get; set; }
-
-        private readonly IBindable<CultureInfo> currentLanguage = new Bindable<CultureInfo>();
-
-        private readonly Lyric lyric;
 
         public LyricTranslateTextBox(Lyric lyric)
         {
@@ -55,12 +55,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
             };
         }
 
-        [BackgroundDependencyLoader]
-        private void load(IBindable<CultureInfo> currentLanguage)
-        {
-            this.currentLanguage.BindTo(currentLanguage);
-        }
-
         protected override void OnFocus(FocusEvent e)
         {
             base.OnFocus(e);
@@ -75,6 +69,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
                 // should remove lyric until commit finished.
                 beatmap.SelectedHitObjects.Remove(lyric);
             });
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(IBindable<CultureInfo> currentLanguage)
+        {
+            this.currentLanguage.BindTo(currentLanguage);
         }
     }
 }

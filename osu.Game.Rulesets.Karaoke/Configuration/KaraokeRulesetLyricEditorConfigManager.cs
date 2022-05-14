@@ -11,6 +11,14 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
 {
     public class KaraokeRulesetLyricEditorConfigManager : InMemoryConfigManager<KaraokeRulesetLyricEditorSetting>
     {
+        /// <summary>
+        ///     Binds a local bindable with a configuration-backed bindable.
+        /// </summary>
+        public void BindWith<TValue>(KaraokeRulesetLyricEditorSetting lookup, IBindable<TValue> bindable)
+        {
+            bindable.BindTo(GetOriginalBindable<TValue>(lookup));
+        }
+
         protected override void InitialiseDefaults()
         {
             base.InitialiseDefaults();
@@ -40,11 +48,6 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
             SetDefault(KaraokeRulesetLyricEditorSetting.AdjustTimeTagShowTick, true);
             SetDefault(KaraokeRulesetLyricEditorSetting.AdjustTimeTagTickOpacity, 0.5f, 0, 1, 0.01f);
         }
-
-        /// <summary>
-        /// Binds a local bindable with a configuration-backed bindable.
-        /// </summary>
-        public void BindWith<TValue>(KaraokeRulesetLyricEditorSetting lookup, IBindable<TValue> bindable) => bindable.BindTo(GetOriginalBindable<TValue>(lookup));
     }
 
     public enum KaraokeRulesetLyricEditorSetting
@@ -72,6 +75,6 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
         AdjustTimeTagShowWaveform,
         AdjustTimeTagWaveformOpacity,
         AdjustTimeTagShowTick,
-        AdjustTimeTagTickOpacity,
+        AdjustTimeTagTickOpacity
     }
 }

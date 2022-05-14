@@ -61,8 +61,8 @@ namespace osu.Game.Rulesets.Karaoke.UI
                         Type = EdgeEffectType.Glow,
                         Colour = Interpolation.ValueAt(0.1f, objectColour, Color4.White, 0, 1).Opacity(0.3f),
                         Roundness = 160,
-                        Radius = 200,
-                    },
+                        Radius = 200
+                    }
                 },
                 mainGlow1 = new CircularContainer
                 {
@@ -76,8 +76,8 @@ namespace osu.Game.Rulesets.Karaoke.UI
                         Type = EdgeEffectType.Glow,
                         Colour = Interpolation.ValueAt(0.6f, objectColour, Color4.White, 0, 1),
                         Roundness = 20,
-                        Radius = 50,
-                    },
+                        Radius = 50
+                    }
                 },
                 new CircularContainer
                 {
@@ -93,8 +93,8 @@ namespace osu.Game.Rulesets.Karaoke.UI
                         Type = EdgeEffectType.Glow,
                         Colour = colour,
                         Roundness = roundness,
-                        Radius = 40,
-                    },
+                        Radius = 40
+                    }
                 },
                 new CircularContainer
                 {
@@ -110,17 +110,10 @@ namespace osu.Game.Rulesets.Karaoke.UI
                         Type = EdgeEffectType.Glow,
                         Colour = colour,
                         Roundness = roundness,
-                        Radius = 40,
-                    },
+                        Radius = 40
+                    }
                 }
             };
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(IScrollingInfo scrollingInfo)
-        {
-            direction.BindTo(scrollingInfo.Direction);
-            direction.BindValueChanged(onDirectionChanged, true);
         }
 
         protected override void LoadComplete()
@@ -136,6 +129,13 @@ namespace osu.Game.Rulesets.Karaoke.UI
             mainGlow1.ScaleTo(1.4f, duration, Easing.OutQuint);
 
             this.FadeOut(duration, Easing.Out);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(IScrollingInfo scrollingInfo)
+        {
+            direction.BindTo(scrollingInfo.Direction);
+            direction.BindValueChanged(onDirectionChanged, true);
         }
 
         private void onDirectionChanged(ValueChangedEvent<ScrollingDirection> direction)

@@ -22,12 +22,24 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
     {
         public const float HEIGHT = 75;
 
-        [Resolved]
-        private KaraokeSettingsColourProvider colourProvider { get; set; }
+        public IReadOnlyList<SettingsSection> TabItems
+        {
+            get => tabs.Items;
+            set => tabs.Items = value;
+        }
+
+        public Bindable<SettingsSection> SelectedSection
+        {
+            get => tabs.Current;
+            set => tabs.Current = value;
+        }
 
         private readonly Box background;
         private readonly KaraokeConfigHeaderTitle title;
         private readonly KaraokeConfigPageTabControl tabs;
+
+        [Resolved]
+        private KaraokeSettingsColourProvider colourProvider { get; set; }
 
         public Header()
         {
@@ -39,7 +51,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                 background = new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Color4Extensions.FromHex(@"#1f1921"),
+                    Colour = Color4Extensions.FromHex(@"#1f1921")
                 },
                 new Container
                 {
@@ -52,7 +64,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                         title = new KaraokeConfigHeaderTitle
                         {
                             Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.BottomLeft,
+                            Origin = Anchor.BottomLeft
                         },
                         tabs = new KaraokeConfigPageTabControl
                         {
@@ -60,9 +72,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                             Origin = Anchor.BottomLeft,
                             RelativeSizeAxes = Axes.X,
                             Scale = new Vector2(1.5f)
-                        },
-                    },
-                },
+                        }
+                    }
+                }
             };
 
             tabs.Current.BindValueChanged(x =>
@@ -72,18 +84,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                 tabs.Colour = colourProvider.GetContent2Colour(x.NewValue);
                 tabs.StripColour = colourProvider.GetContentColour(x.NewValue);
             });
-        }
-
-        public IReadOnlyList<SettingsSection> TabItems
-        {
-            get => tabs.Items;
-            set => tabs.Items = value;
-        }
-
-        public Bindable<SettingsSection> SelectedSection
-        {
-            get => tabs.Current;
-            set => tabs.Current = value;
         }
 
         private class KaraokeConfigHeaderTitle : CompositeDrawable
@@ -124,10 +124,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                             {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,
-                                Font = OsuFont.GetFont(size: 24),
+                                Font = OsuFont.GetFont(size: 24)
                             }
                         }
-                    },
+                    }
                 };
             }
 
@@ -147,7 +147,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
         private class KaraokeConfigPageTabControl : PageTabControl<SettingsSection>
         {
             protected override TabItem<SettingsSection> CreateTabItem(SettingsSection value)
-                => new KaraokeConfigPageTabItem(value);
+            {
+                return new KaraokeConfigPageTabItem(value);
+            }
 
             internal class KaraokeConfigPageTabItem : PageTabItem
             {
@@ -156,7 +158,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                 {
                 }
 
-                protected override LocalisableString CreateText() => Value.Header;
+                protected override LocalisableString CreateText()
+                {
+                    return Value.Header;
+                }
             }
         }
     }

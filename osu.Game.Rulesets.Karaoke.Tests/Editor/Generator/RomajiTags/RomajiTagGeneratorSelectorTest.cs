@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.RomajiTags
             var lyric = new Lyric
             {
                 Language = new CultureInfo(lcid),
-                Text = text,
+                Text = text
             };
 
             var expected = TestCaseTagHelper.ParseRomajiTags(expectedRomajies);

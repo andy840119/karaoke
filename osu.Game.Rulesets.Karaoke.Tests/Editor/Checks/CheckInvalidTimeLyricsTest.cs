@@ -21,14 +21,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Checks
     [TestFixture]
     public class CheckInvalidTimeLyricsTest
     {
-        private CheckInvalidTimeLyrics check;
-
         [SetUp]
         public void Setup()
         {
             var config = new LyricCheckerConfig().CreateDefaultConfig();
             check = new CheckInvalidTimeLyrics(config);
         }
+
+        private CheckInvalidTimeLyrics check;
 
         [TestCase("[1000,3000]:カラオケ", new[] { "[0,start]:1000", "[3,end]:3000" }, new TimeInvalid[] { })]
         [TestCase("[3000,1000]:カラオケ", new string[] { }, new[] { TimeInvalid.Overlapping })]

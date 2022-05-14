@@ -33,33 +33,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
         [Resolved]
         private ISkinSource source { get; set; }
 
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-            var layoutLookups = source.GetConfig<KaraokeIndexLookup, IDictionary<int, string>>(KaraokeIndexLookup.Layout)?.Value;
-
-            foreach (var layoutLookup in layoutLookups)
-            {
-                var lookup = new KaraokeSkinLookup(ElementType.LyricLayout, layoutLookup.Key);
-                var layout = source.GetConfig<KaraokeSkinLookup, LyricLayout>(lookup)?.Value;
-                if (layout != null)
-                    Layouts.Add(layout);
-            }
-
-            LoadedLayout.Value = Layouts.FirstOrDefault();
-            EditLayout.Value = Layouts.FirstOrDefault();
-
-            var skinLookups = source.GetConfig<KaraokeIndexLookup, IDictionary<int, string>>(KaraokeIndexLookup.Style)?.Value;
-
-            if (skinLookups == null)
-                return;
-
-            foreach ((int key, string value) in skinLookups)
-            {
-                PreviewFontSelections.Add(key, value);
-            }
-        }
-
         public void ApplyCurrentLayoutChange(Action<LyricLayout> action)
         {
             action?.Invoke(EditLayout.Value);
@@ -97,6 +70,30 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
         {
             throw new NotImplementedException();
         }
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            var layoutLookups = source.GetConfig<KaraokeIndexLookup, IDictionary<int, string>>(KaraokeIndexLookup.Layout)?.Value;
+
+            foreach (var layoutLookup in layoutLookups)
+            {
+                var lookup = new KaraokeSkinLookup(ElementType.LyricLayout, layoutLookup.Key);
+                var layout = source.GetConfig<KaraokeSkinLookup, LyricLayout>(lookup)?.Value;
+                if (layout != null)
+                    Layouts.Add(layout);
+            }
+
+            LoadedLayout.Value = Layouts.FirstOrDefault();
+            EditLayout.Value = Layouts.FirstOrDefault();
+
+            var skinLookups = source.GetConfig<KaraokeIndexLookup, IDictionary<int, string>>(KaraokeIndexLookup.Style)?.Value;
+
+            if (skinLookups == null)
+                return;
+
+            foreach ((int key, string value) in skinLookups) PreviewFontSelections.Add(key, value);
+        }
     }
 
     public struct DisplayRatio
@@ -106,6 +103,8 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
         public float Height { get; set; }
 
         public bool IsValid()
-            => Width > 0 && Height > 0;
+        {
+            return Width > 0 && Height > 0;
+        }
     }
 }

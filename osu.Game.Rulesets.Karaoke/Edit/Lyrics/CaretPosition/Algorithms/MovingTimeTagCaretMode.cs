@@ -6,18 +6,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
     public enum MovingTimeTagCaretMode
     {
         /// <summary>
-        /// Move to any tag
+        ///     Move to any tag
         /// </summary>
         None,
 
         /// <summary>
-        /// Only move to next start tag.
+        ///     Only move to next start tag.
         /// </summary>
         OnlyStartTag,
 
         /// <summary>
-        /// Only move to next end tag.
+        ///     Only move to next end tag.
         /// </summary>
-        OnlyEndTag,
+        OnlyEndTag
     }
 }

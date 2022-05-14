@@ -8,6 +8,11 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
 {
     public class KaraokeRulesetEditCheckerConfigManager : InMemoryConfigManager<KaraokeRulesetEditCheckerSetting>
     {
+        protected static T CreateDefaultConfig<T>() where T : IHasConfig<T>, new()
+        {
+            return new T().CreateDefaultConfig();
+        }
+
         protected override void InitialiseDefaults()
         {
             base.InitialiseDefaults();
@@ -15,9 +20,6 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
             // Lyric
             SetDefault(KaraokeRulesetEditCheckerSetting.Lyric, CreateDefaultConfig<LyricCheckerConfig>());
         }
-
-        protected static T CreateDefaultConfig<T>() where T : IHasConfig<T>, new()
-            => new T().CreateDefaultConfig();
     }
 
     public enum KaraokeRulesetEditCheckerSetting

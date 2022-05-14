@@ -18,10 +18,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
         {
             AddToggleStep("toggle hitting", v =>
             {
-                foreach (var holdNote in CreatedDrawables.SelectMany(d => d.ChildrenOfType<DrawableNote>()))
-                {
-                    ((Bindable<bool>)holdNote.IsHitting).Value = v;
-                }
+                foreach (var holdNote in CreatedDrawables.SelectMany(d => d.ChildrenOfType<DrawableNote>())) ((Bindable<bool>)holdNote.IsHitting).Value = v;
             });
         }
 

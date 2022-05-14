@@ -22,21 +22,21 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
 {
     public class DrawableLayoutListItem : OsuRearrangeableListItem<LyricLayout>
     {
-        private const float item_height = 35;
-        private const float button_width = item_height * 0.75f;
-
         /// <summary>
-        /// Whether the <see cref="LyricLayout"/> currently exists inside the <see cref="LayoutManager"/>.
+        ///     Whether the <see cref="LyricLayout" /> currently exists inside the <see cref="LayoutManager" />.
         /// </summary>
         public IBindable<bool> IsCreated => isCreated;
+
+        private const float item_height = 35;
+        private const float button_width = item_height * 0.75f;
 
         private readonly Bindable<bool> isCreated = new();
 
         /// <summary>
-        /// Creates a new <see cref="LyricLayout"/>.
+        ///     Creates a new <see cref="LyricLayout" />.
         /// </summary>
-        /// <param name="item">The <see cref="LyricLayout"/>.</param>
-        /// <param name="isCreated">Whether <paramref name="item"/> currently exists inside the <see cref="LayoutManager"/>.</param>
+        /// <param name="item">The <see cref="LyricLayout" />.</param>
+        /// <param name="isCreated">Whether <paramref name="item" /> currently exists inside the <see cref="LayoutManager" />.</param>
         public DrawableLayoutListItem(LyricLayout item, bool isCreated)
             : base(item)
         {
@@ -45,13 +45,16 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
             ShowDragHandle.BindTo(this.isCreated);
         }
 
-        protected override Drawable CreateContent() => new ItemContent(Model)
+        protected override Drawable CreateContent()
         {
-            IsCreated = { BindTarget = isCreated }
-        };
+            return new ItemContent(Model)
+            {
+                IsCreated = { BindTarget = isCreated }
+            };
+        }
 
         /// <summary>
-        /// The main content of the <see cref="DrawableLayoutListItem"/>.
+        ///     The main content of the <see cref="DrawableLayoutListItem" />.
         /// </summary>
         private class ItemContent : CircularContainer
         {
@@ -59,11 +62,11 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
 
             private readonly LyricLayout layout;
 
-            [Resolved(CanBeNull = true)]
-            private LayoutManager layoutManager { get; set; }
-
             private Container textBoxPaddingContainer;
             private ItemTextBox textBox;
+
+            [Resolved(CanBeNull = true)]
+            private LayoutManager layoutManager { get; set; }
 
             public ItemContent(LyricLayout layout)
             {
@@ -72,6 +75,22 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
                 RelativeSizeAxes = Axes.X;
                 Height = item_height;
                 Masking = true;
+            }
+
+            protected override void LoadComplete()
+            {
+                base.LoadComplete();
+
+                textBox.Current.Value = layout.Name;
+                textBox.Current.BindValueChanged(x =>
+                {
+                    // Update name
+                    layoutManager.UpdateLayoutName(layout, x.NewValue);
+
+                    // Create new layout
+                    createNewLayout();
+                }, true);
+                IsCreated.BindValueChanged(created => textBoxPaddingContainer.Padding = new MarginPadding { Right = created.NewValue ? button_width : 0 }, true);
             }
 
             [BackgroundDependencyLoader]
@@ -98,26 +117,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
                                 Size = Vector2.One,
                                 CornerRadius = item_height / 2,
                                 PlaceholderText = IsCreated.Value ? string.Empty : "Create a new layout"
-                            },
+                            }
                         }
-                    },
+                    }
                 };
-            }
-
-            protected override void LoadComplete()
-            {
-                base.LoadComplete();
-
-                textBox.Current.Value = layout.Name;
-                textBox.Current.BindValueChanged(x =>
-                {
-                    // Update name
-                    layoutManager.UpdateLayoutName(layout, x.NewValue);
-
-                    // Create new layout
-                    createNewLayout();
-                }, true);
-                IsCreated.BindValueChanged(created => textBoxPaddingContainer.Padding = new MarginPadding { Right = created.NewValue ? button_width : 0 }, true);
             }
 
             private void createNewLayout()
@@ -156,16 +159,16 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
 
                 public Func<Vector2, bool> IsTextBoxHovered;
 
+                private readonly LyricLayout layout;
+
+                private Drawable fadeContainer;
+                private Drawable background;
+
                 [Resolved(CanBeNull = true)]
                 private IDialogOverlay dialogOverlay { get; set; }
 
                 [Resolved(CanBeNull = true)]
                 private LayoutManager layoutManager { get; set; }
-
-                private readonly LyricLayout layout;
-
-                private Drawable fadeContainer;
-                private Drawable background;
 
                 public DeleteButton(LyricLayout layout)
                 {
@@ -173,6 +176,40 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
                     RelativeSizeAxes = Axes.Y;
 
                     Width = button_width + item_height / 2; // add corner radius to cover with fill
+                }
+
+                public override bool ReceivePositionalInputAt(Vector2 screenSpacePos)
+                {
+                    return base.ReceivePositionalInputAt(screenSpacePos) && !IsTextBoxHovered(screenSpacePos);
+                }
+
+                protected override void LoadComplete()
+                {
+                    base.LoadComplete();
+                    IsCreated.BindValueChanged(created => Alpha = created.NewValue ? 1 : 0, true);
+                }
+
+                protected override bool OnHover(HoverEvent e)
+                {
+                    fadeContainer.FadeTo(1f, 100, Easing.Out);
+                    return false;
+                }
+
+                protected override void OnHoverLost(HoverLostEvent e)
+                {
+                    fadeContainer.FadeTo(0.1f, 100);
+                }
+
+                protected override bool OnClick(ClickEvent e)
+                {
+                    background.FlashColour(Color4.White, 150);
+
+                    if (!layoutManager?.IsLayoutModified(layout) ?? false)
+                        deleteLayout();
+                    else
+                        dialogOverlay?.Push(new DeleteLayoutDialog(layout, deleteLayout));
+
+                    return true;
                 }
 
                 [BackgroundDependencyLoader]
@@ -201,38 +238,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
                     };
                 }
 
-                protected override void LoadComplete()
+                private void deleteLayout()
                 {
-                    base.LoadComplete();
-                    IsCreated.BindValueChanged(created => Alpha = created.NewValue ? 1 : 0, true);
+                    layoutManager?.RemoveLayout(layout);
                 }
-
-                public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) => base.ReceivePositionalInputAt(screenSpacePos) && !IsTextBoxHovered(screenSpacePos);
-
-                protected override bool OnHover(HoverEvent e)
-                {
-                    fadeContainer.FadeTo(1f, 100, Easing.Out);
-                    return false;
-                }
-
-                protected override void OnHoverLost(HoverLostEvent e)
-                {
-                    fadeContainer.FadeTo(0.1f, 100);
-                }
-
-                protected override bool OnClick(ClickEvent e)
-                {
-                    background.FlashColour(Color4.White, 150);
-
-                    if (!layoutManager?.IsLayoutModified(layout) ?? false)
-                        deleteLayout();
-                    else
-                        dialogOverlay?.Push(new DeleteLayoutDialog(layout, deleteLayout));
-
-                    return true;
-                }
-
-                private void deleteLayout() => layoutManager?.RemoveLayout(layout);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Menus
             {
                 createToggleMenu("Display ruby", KaraokeRulesetEditSetting.DisplayRuby),
                 createToggleMenu("Display romaji", KaraokeRulesetEditSetting.DisplayRomaji),
-                createToggleMenu("Display translate", KaraokeRulesetEditSetting.DisplayTranslate),
+                createToggleMenu("Display translate", KaraokeRulesetEditSetting.DisplayTranslate)
             };
         }
 

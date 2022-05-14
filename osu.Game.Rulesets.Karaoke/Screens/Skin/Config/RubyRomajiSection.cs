@@ -12,12 +12,11 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
 {
     internal class RubyRomajiSection : LyricConfigSection
     {
+        protected override string Title => "Ruby/Romaji";
         private LabelledEnumDropdown<LyricTextAlignment> rubyAlignmentDropdown;
         private LabelledEnumDropdown<LyricTextAlignment> romajiAlignmentDropdown;
         private LabelledRealTimeSliderBar<int> rubyMarginSliderBar;
         private LabelledRealTimeSliderBar<int> romajiMarginSliderBar;
-
-        protected override string Title => "Ruby/Romaji";
 
         [BackgroundDependencyLoader]
         private void load(LyricConfigManager manager)
@@ -27,12 +26,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
                 rubyAlignmentDropdown = new LabelledEnumDropdown<LyricTextAlignment>
                 {
                     Label = "Ruby alignment",
-                    Description = "Ruby alignment section",
+                    Description = "Ruby alignment section"
                 },
                 romajiAlignmentDropdown = new LabelledEnumDropdown<LyricTextAlignment>
                 {
                     Label = "Romaji alignment",
-                    Description = "Romaji alignment section",
+                    Description = "Romaji alignment section"
                 },
                 rubyMarginSliderBar = new LabelledRealTimeSliderBar<int>
                 {

@@ -15,14 +15,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
     public abstract class BaseHitObjectChangeHandlerTest<TChangeHandler, THitObject> : BaseChangeHandlerTest<TChangeHandler>
         where TChangeHandler : HitObjectChangeHandler<THitObject>, new() where THitObject : HitObject
     {
-        private EditorBeatmap editorBeatmap;
-
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-            editorBeatmap = Dependencies.Get<EditorBeatmap>();
-        }
-
         [SetUp]
         public virtual void SetUp()
         {
@@ -33,8 +25,18 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
             });
         }
 
+        private EditorBeatmap editorBeatmap;
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            editorBeatmap = Dependencies.Get<EditorBeatmap>();
+        }
+
         protected void PrepareHitObject(HitObject hitObject, bool selected = true)
-            => PrepareHitObjects(new[] { hitObject }, selected);
+        {
+            PrepareHitObjects(new[] { hitObject }, selected);
+        }
 
         protected void PrepareHitObjects(IEnumerable<HitObject> selectedHitObjects, bool selected = true)
         {
@@ -43,10 +45,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
                 var hitobjects = selectedHitObjects.ToList();
                 editorBeatmap.AddRange(hitobjects);
 
-                if (selected)
-                {
-                    editorBeatmap.SelectedHitObjects.AddRange(hitobjects);
-                }
+                if (selected) editorBeatmap.SelectedHitObjects.AddRange(hitobjects);
             });
         }
 
@@ -54,10 +53,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
         {
             AddStep("Is result matched", () =>
             {
-                foreach (var hitObject in editorBeatmap.HitObjects.OfType<THitObject>())
-                {
-                    assert(hitObject);
-                }
+                foreach (var hitObject in editorBeatmap.HitObjects.OfType<THitObject>()) assert(hitObject);
             });
 
             // even if there's no property changed in the lyric editor, should still trigger the change handler.
@@ -83,10 +79,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers
         {
             AddStep("Is result matched", () =>
             {
-                foreach (var hitObject in editorBeatmap.SelectedHitObjects.OfType<THitObject>())
-                {
-                    assert(hitObject);
-                }
+                foreach (var hitObject in editorBeatmap.SelectedHitObjects.OfType<THitObject>()) assert(hitObject);
             });
 
             // even if there's no property changed in the lyric editor, should still trigger the change handler.

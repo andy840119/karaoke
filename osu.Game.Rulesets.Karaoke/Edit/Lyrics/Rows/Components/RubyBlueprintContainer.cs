@@ -25,6 +25,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             rubyTags = lyric.RubyTagsBindable.GetBoundCopy();
         }
 
+        protected override SelectionHandler<RubyTag> CreateSelectionHandler()
+        {
+            return new RubyTagSelectionHandler();
+        }
+
+        protected override SelectionBlueprint<RubyTag> CreateBlueprintFor(RubyTag item)
+        {
+            return new RubyTagSelectionBlueprint(item);
+        }
+
         [BackgroundDependencyLoader]
         private void load(IEditRubyModeState editRubyModeState)
         {
@@ -32,31 +42,31 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             RegisterBindable(rubyTags);
         }
 
-        protected override SelectionHandler<RubyTag> CreateSelectionHandler()
-            => new RubyTagSelectionHandler();
-
-        protected override SelectionBlueprint<RubyTag> CreateBlueprintFor(RubyTag item)
-            => new RubyTagSelectionBlueprint(item);
-
         protected class RubyTagSelectionHandler : TextTagSelectionHandler
         {
             [Resolved]
             private ILyricRubyTagsChangeHandler rubyTagsChangeHandler { get; set; }
+
+            protected override void DeleteItems(IEnumerable<RubyTag> items)
+            {
+                rubyTagsChangeHandler.RemoveAll(items);
+            }
+
+            protected override void SetTextTagShifting(IEnumerable<RubyTag> textTags, int offset)
+            {
+                rubyTagsChangeHandler.ShiftingIndex(textTags, offset);
+            }
+
+            protected override void SetTextTagIndex(RubyTag textTag, int? startPosition, int? endPosition)
+            {
+                rubyTagsChangeHandler.SetIndex(textTag, startPosition, endPosition);
+            }
 
             [BackgroundDependencyLoader]
             private void load(IEditRubyModeState editRubyModeState)
             {
                 SelectedItems.BindTo(editRubyModeState.SelectedItems);
             }
-
-            protected override void DeleteItems(IEnumerable<RubyTag> items)
-                => rubyTagsChangeHandler.RemoveAll(items);
-
-            protected override void SetTextTagShifting(IEnumerable<RubyTag> textTags, int offset)
-                => rubyTagsChangeHandler.ShiftingIndex(textTags, offset);
-
-            protected override void SetTextTagIndex(RubyTag textTag, int? startPosition, int? endPosition)
-                => rubyTagsChangeHandler.SetIndex(textTag, startPosition, endPosition);
         }
     }
 }

@@ -29,13 +29,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
             {
                 BeatmapInfo =
                 {
-                    Ruleset = new KaraokeRuleset().RulesetInfo,
-                },
+                    Ruleset = new KaraokeRuleset().RulesetInfo
+                }
             });
         }
-
-        [Test]
-        public void TestKaraoke() => runForRuleset(new KaraokeRuleset().RulesetInfo);
 
         private void runForRuleset(RulesetInfo rulesetInfo)
         {
@@ -47,9 +44,15 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
 
                 Child = new SetupScreen
                 {
-                    State = { Value = Visibility.Visible },
+                    State = { Value = Visibility.Visible }
                 };
             });
+        }
+
+        [Test]
+        public void TestKaraoke()
+        {
+            runForRuleset(new KaraokeRuleset().RulesetInfo);
         }
     }
 }

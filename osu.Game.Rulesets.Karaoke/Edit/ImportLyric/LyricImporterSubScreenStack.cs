@@ -78,10 +78,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
             screen.MakeCurrent();
 
             // pop to target stack.
-            while (stack.Peek().Step != step)
-            {
-                stack.Pop();
-            }
+            while (stack.Peek().Step != step) stack.Pop();
         }
     }
 }

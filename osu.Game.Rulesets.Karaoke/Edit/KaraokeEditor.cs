@@ -73,14 +73,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit
             AddInternal(beatmapChangeHandler = new BeatmapChangeHandler());
         }
 
-        protected override GenericEditorScreen<KaraokeEditorScreenMode> GenerateScreen(KaraokeEditorScreenMode screenMode) =>
-            screenMode switch
+        protected override GenericEditorScreen<KaraokeEditorScreenMode> GenerateScreen(KaraokeEditorScreenMode screenMode)
+        {
+            return screenMode switch
             {
                 KaraokeEditorScreenMode.Lyric => new LyricEditorScreen(),
                 KaraokeEditorScreenMode.Singer => new SingerScreen(),
                 KaraokeEditorScreenMode.Translate => new TranslateScreen(),
                 _ => throw new InvalidOperationException("Editor menu bar switched to an unsupported mode")
             };
+        }
 
         protected override MenuItem[] GenerateMenuItems(KaraokeEditorScreenMode screenMode)
         {
@@ -98,7 +100,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                             new EditorMenuItem("Export to .lrc", MenuItemType.Standard, () => exportLyricManager.ExportToLrc()),
                             new EditorMenuItem("Export to text", MenuItemType.Standard, () => exportLyricManager.ExportToText()),
                             new EditorMenuItem("Export to json", MenuItemType.Destructive, () => exportLyricManager.ExportToJson()),
-                            new EditorMenuItem("Export to json beatmap", MenuItemType.Destructive, () => exportLyricManager.ExportToJsonBeatmap()),
+                            new EditorMenuItem("Export to json beatmap", MenuItemType.Destructive, () => exportLyricManager.ExportToJsonBeatmap())
                         }
                     },
                     new LyricEditorModeMenu(bindableLyricEditorMode, "Mode"),
@@ -106,14 +108,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                     {
                         Items = new MenuItem[]
                         {
-                            new LyricEditorTextSizeMenu(lyricEditorConfigManager, "Text size"), new AutoFocusToEditLyricMenu(lyricEditorConfigManager, "Auto focus to edit lyric"),
+                            new LyricEditorTextSizeMenu(lyricEditorConfigManager, "Text size"), new AutoFocusToEditLyricMenu(lyricEditorConfigManager, "Auto focus to edit lyric")
                         }
                     },
                     new("Config")
                     {
                         Items = new MenuItem[] { new EditorMenuItem("Lyric editor"), new GeneratorConfigMenu("Auto-generator"), new LockStateMenu(lyricEditorConfigManager, "Lock") }
                     },
-                    new("Tools") { Items = new MenuItem[] { new KaraokeSkinEditorMenu(this, null, "Skin editor") } },
+                    new("Tools") { Items = new MenuItem[] { new KaraokeSkinEditorMenu(this, null, "Skin editor") } }
                 },
                 _ => null
             };

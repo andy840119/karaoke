@@ -12,24 +12,24 @@ namespace osu.Game.Rulesets.Karaoke.Bindables
 {
     public class BindableFontUsage : Bindable<FontUsage>
     {
-        public BindableFontUsage(FontUsage value = default)
-            : base(value)
-        {
-            MinFontSize = DefaultMinFontSize;
-            MaxFontSize = DefaultMaxFontSize;
-        }
-
         public float MinFontSize { get; set; }
         public float MaxFontSize { get; set; }
-
-        protected float DefaultMinFontSize => 0;
-
-        protected float DefaultMaxFontSize => 200;
 
         public override FontUsage Value
         {
             get => base.Value;
             set => base.Value = value.With(size: Math.Clamp(value.Size, MinFontSize, MaxFontSize));
+        }
+
+        protected float DefaultMinFontSize => 0;
+
+        protected float DefaultMaxFontSize => 200;
+
+        public BindableFontUsage(FontUsage value = default)
+            : base(value)
+        {
+            MinFontSize = DefaultMinFontSize;
+            MaxFontSize = DefaultMaxFontSize;
         }
 
         public override void BindTo(Bindable<FontUsage> them)
@@ -77,9 +77,15 @@ namespace osu.Game.Rulesets.Karaoke.Bindables
             }
         }
 
-        protected override Bindable<FontUsage> CreateInstance() => new BindableFontUsage();
-
         // IDK why not being called in here while saving.
-        public override string ToString() => $"family={Value.Family} weight={Value.Weight} size={Value.Size} italics={Value.Italics} fixedWidth={Value.FixedWidth}";
+        public override string ToString()
+        {
+            return $"family={Value.Family} weight={Value.Weight} size={Value.Size} italics={Value.Italics} fixedWidth={Value.FixedWidth}";
+        }
+
+        protected override Bindable<FontUsage> CreateInstance()
+        {
+            return new BindableFontUsage();
+        }
     }
 }

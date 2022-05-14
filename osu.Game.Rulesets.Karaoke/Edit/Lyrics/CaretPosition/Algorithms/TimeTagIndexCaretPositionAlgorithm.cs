@@ -115,18 +115,24 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
         }
 
         private bool textIndexMovable(TextIndex textIndex)
-            => suitableState(textIndex) == textIndex.State;
+        {
+            return suitableState(textIndex) == textIndex.State;
+        }
 
         private TextIndex.IndexState suitableState(TextIndex textIndex)
-            => suitableState(textIndex.State);
+        {
+            return suitableState(textIndex.State);
+        }
 
-        private TextIndex.IndexState suitableState(TextIndex.IndexState state) =>
-            Mode switch
+        private TextIndex.IndexState suitableState(TextIndex.IndexState state)
+        {
+            return Mode switch
             {
                 MovingTimeTagCaretMode.None => state,
                 MovingTimeTagCaretMode.OnlyStartTag => TextIndex.IndexState.Start,
                 MovingTimeTagCaretMode.OnlyEndTag => TextIndex.IndexState.End,
                 _ => throw new InvalidOperationException(nameof(MovingTimeTagCaretMode))
             };
+        }
     }
 }

@@ -34,17 +34,25 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
             private ILyricTimeTagsChangeHandler lyricTimeTagsChangeHandler { get; set; }
 
             protected override Dictionary<Lyric, string> GetDisableSelectingLyrics(IEnumerable<Lyric> lyrics)
-                => lyrics.Where(x => x.Language == null)
-                         .ToDictionary(k => k, _ => "Before generate time-tag, need to assign language first.");
+            {
+                return lyrics.Where(x => x.Language == null)
+                             .ToDictionary(k => k, _ => "Before generate time-tag, need to assign language first.");
+            }
 
             protected override void Apply()
-                => lyricTimeTagsChangeHandler.AutoGenerate();
+            {
+                lyricTimeTagsChangeHandler.AutoGenerate();
+            }
 
             protected override InvalidLyricAlertTextContainer CreateInvalidLyricAlertTextContainer()
-                => new InvalidLyricLanguageAlertTextContainer();
+            {
+                return new InvalidLyricLanguageAlertTextContainer();
+            }
 
             protected override ConfigButton CreateConfigButton()
-                => new TimeTagAutoGenerateConfigButton();
+            {
+                return new TimeTagAutoGenerateConfigButton();
+            }
 
             protected class InvalidLyricLanguageAlertTextContainer : InvalidLyricAlertTextContainer
             {
@@ -62,24 +70,28 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                 protected override IEnumerable<KaraokeRulesetEditGeneratorSetting> AvailableSettings => new[]
                 {
                     KaraokeRulesetEditGeneratorSetting.JaTimeTagGeneratorConfig,
-                    KaraokeRulesetEditGeneratorSetting.ZhTimeTagGeneratorConfig,
+                    KaraokeRulesetEditGeneratorSetting.ZhTimeTagGeneratorConfig
                 };
 
-                protected override string GetDisplayName(KaraokeRulesetEditGeneratorSetting setting) =>
-                    setting switch
+                protected override string GetDisplayName(KaraokeRulesetEditGeneratorSetting setting)
+                {
+                    return setting switch
                     {
                         KaraokeRulesetEditGeneratorSetting.JaTimeTagGeneratorConfig => "Japanese",
                         KaraokeRulesetEditGeneratorSetting.ZhTimeTagGeneratorConfig => "Chinese",
                         _ => throw new ArgumentOutOfRangeException(nameof(setting))
                     };
+                }
 
-                protected override Popover GetPopoverBySettingType(KaraokeRulesetEditGeneratorSetting setting) =>
-                    setting switch
+                protected override Popover GetPopoverBySettingType(KaraokeRulesetEditGeneratorSetting setting)
+                {
+                    return setting switch
                     {
                         KaraokeRulesetEditGeneratorSetting.JaTimeTagGeneratorConfig => new JaTimeTagGeneratorConfigPopover(),
                         KaraokeRulesetEditGeneratorSetting.ZhTimeTagGeneratorConfig => new ZhTimeTagGeneratorConfigPopover(),
                         _ => throw new ArgumentOutOfRangeException(nameof(setting))
                     };
+                }
             }
         }
     }

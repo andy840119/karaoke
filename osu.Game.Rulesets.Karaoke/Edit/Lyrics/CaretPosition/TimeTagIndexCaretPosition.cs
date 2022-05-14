@@ -8,14 +8,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition
 {
     public class TimeTagIndexCaretPosition : ICaretPosition
     {
+        public Lyric Lyric { get; }
+
+        public TextIndex Index { get; }
+
         public TimeTagIndexCaretPosition(Lyric lyric, TextIndex index)
         {
             Lyric = lyric;
             Index = index;
         }
-
-        public Lyric Lyric { get; }
-
-        public TextIndex Index { get; }
     }
 }

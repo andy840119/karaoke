@@ -16,7 +16,7 @@ using osu.Game.Rulesets.Karaoke.Online.API.Requests.Responses;
 namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
 {
     /// <summary>
-    /// Display <see cref="APIChangelogBuild"/> detail
+    ///     Display <see cref="APIChangelogBuild" /> detail
     /// </summary>
     public class ChangelogSingleBuild : ChangelogContent
     {
@@ -42,8 +42,8 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
                         RelativeSizeAxes = Axes.X,
                         Height = 2,
                         Colour = colourProvider.Background6,
-                        Margin = new MarginPadding { Top = 30 },
-                    },
+                        Margin = new MarginPadding { Top = 30 }
+                    }
                 };
             }
         }

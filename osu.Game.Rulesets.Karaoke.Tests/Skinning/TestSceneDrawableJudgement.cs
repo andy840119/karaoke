@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                     new DrawableNoteJudgement(new JudgementResult(new HitObject(), new Judgement()) { Type = result }, null)
                     {
                         Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
+                        Origin = Anchor.Centre
                     }));
             }
         }

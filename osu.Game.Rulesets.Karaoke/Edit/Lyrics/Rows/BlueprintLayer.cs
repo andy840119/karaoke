@@ -35,13 +35,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
             });
         }
 
-        [BackgroundDependencyLoader]
-        private void load(ILyricEditorState state, ITimeTagModeState timeTagModeState)
-        {
-            bindableMode.BindTo(state.BindableMode);
-            bindableTimeTagEditMode.BindTo(timeTagModeState.BindableEditMode);
-        }
-
         protected void InitializeBlueprint()
         {
             // remove all exist blueprint container
@@ -64,6 +57,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                     LyricEditorMode.EditTimeTag => timeTagEditMode == TimeTagEditMode.Adjust ? new TimeTagBlueprintContainer(lyric) : null,
                     _ => null
                 };
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(ILyricEditorState state, ITimeTagModeState timeTagModeState)
+        {
+            bindableMode.BindTo(state.BindableMode);
+            bindableTimeTagEditMode.BindTo(timeTagModeState.BindableEditMode);
         }
     }
 }

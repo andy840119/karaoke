@@ -27,7 +27,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
                         {
                             new NoteEditModeSection(),
                             new NoteConfigSection(),
-                            new NoteSwitchSpecialActionSection(),
+                            new NoteSwitchSpecialActionSection()
                         };
                         break;
 
@@ -36,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
                         {
                             new NoteEditModeSection(),
                             new NoteEditPropertyModeSection(),
-                            new NoteEditPropertySection(),
+                            new NoteEditPropertySection()
                         };
                         break;
 

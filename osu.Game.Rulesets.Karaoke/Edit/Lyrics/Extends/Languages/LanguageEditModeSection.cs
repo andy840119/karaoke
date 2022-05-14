@@ -17,14 +17,26 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
         [Resolved]
         private ILanguageModeState languageModeState { get; set; }
 
+        internal override void UpdateEditMode(LanguageEditMode mode)
+        {
+            languageModeState.ChangeEditMode(mode);
+
+            base.UpdateEditMode(mode);
+        }
+
         protected override OverlayColourScheme CreateColourScheme()
-            => OverlayColourScheme.Pink;
+        {
+            return OverlayColourScheme.Pink;
+        }
 
         protected override LanguageEditMode DefaultMode()
-            => languageModeState.EditMode;
+        {
+            return languageModeState.EditMode;
+        }
 
         protected override Dictionary<LanguageEditMode, EditModeSelectionItem> CreateSelections()
-            => new()
+        {
+            return new()
             {
                 {
                     LanguageEditMode.Generate, new EditModeSelectionItem("Generate", "Auto-generate language with just a click.")
@@ -33,20 +45,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
                     LanguageEditMode.Verify, new EditModeSelectionItem("Verify", "Check if have lyric with no language.")
                 }
             };
+        }
 
-        protected override Color4 GetColour(OsuColour colours, LanguageEditMode mode, bool active) =>
-            mode switch
+        protected override Color4 GetColour(OsuColour colours, LanguageEditMode mode, bool active)
+        {
+            return mode switch
             {
                 LanguageEditMode.Generate => active ? colours.Blue : colours.BlueDarker,
                 LanguageEditMode.Verify => active ? colours.Yellow : colours.YellowDarker,
                 _ => throw new ArgumentOutOfRangeException(nameof(mode))
             };
-
-        internal override void UpdateEditMode(LanguageEditMode mode)
-        {
-            languageModeState.ChangeEditMode(mode);
-
-            base.UpdateEditMode(mode);
         }
     }
 }

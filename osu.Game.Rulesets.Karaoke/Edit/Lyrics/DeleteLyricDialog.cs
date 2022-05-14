@@ -19,13 +19,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                 new PopupDialogOkButton
                 {
                     Text = @"Yes. Go for it.",
-                    Action = () => okAction?.Invoke(true),
+                    Action = () => okAction?.Invoke(true)
                 },
                 new PopupDialogCancelButton
                 {
                     Text = @"No! Abort mission!",
-                    Action = () => okAction?.Invoke(false),
-                },
+                    Action = () => okAction?.Invoke(false)
+                }
             };
         }
     }

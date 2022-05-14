@@ -31,7 +31,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.SubInfo
             Child = singerDisplay = new SingerDisplay
             {
                 Anchor = Anchor.TopRight,
-                Origin = Anchor.TopRight,
+                Origin = Anchor.TopRight
             };
         }
 

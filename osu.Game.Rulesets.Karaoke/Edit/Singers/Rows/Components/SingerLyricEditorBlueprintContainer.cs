@@ -49,25 +49,36 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
             });
         }
 
+        protected override IEnumerable<SelectionBlueprint<Lyric>> SortForMovement(IReadOnlyList<SelectionBlueprint<Lyric>> blueprints)
+        {
+            return blueprints.OrderBy(b => b.Item.LyricStartTime);
+        }
+
+        protected override Container<SelectionBlueprint<Lyric>> CreateSelectionBlueprintContainer()
+        {
+            return new SingerLyricSelectionBlueprintContainer { RelativeSizeAxes = Axes.Both };
+        }
+
+        protected override SelectionHandler<Lyric> CreateSelectionHandler()
+        {
+            return new SingerLyricSelectionHandler();
+        }
+
+        protected override SelectionBlueprint<Lyric> CreateBlueprintFor(Lyric item)
+        {
+            return new LyricTimelineHitObjectBlueprint(item);
+        }
+
+        protected override DragBox CreateDragBox(Action<RectangleF> performSelect)
+        {
+            return new SingerLyricDragBox(performSelect);
+        }
+
         [BackgroundDependencyLoader]
         private void load(ILyricsProvider lyricsProvider)
         {
             bindableLyrics.BindTo(lyricsProvider.BindableLyrics);
         }
-
-        protected override IEnumerable<SelectionBlueprint<Lyric>> SortForMovement(IReadOnlyList<SelectionBlueprint<Lyric>> blueprints)
-            => blueprints.OrderBy(b => b.Item.LyricStartTime);
-
-        protected override Container<SelectionBlueprint<Lyric>> CreateSelectionBlueprintContainer()
-            => new SingerLyricSelectionBlueprintContainer { RelativeSizeAxes = Axes.Both };
-
-        protected override SelectionHandler<Lyric> CreateSelectionHandler()
-            => new SingerLyricSelectionHandler();
-
-        protected override SelectionBlueprint<Lyric> CreateBlueprintFor(Lyric item)
-            => new LyricTimelineHitObjectBlueprint(item);
-
-        protected override DragBox CreateDragBox(Action<RectangleF> performSelect) => new SingerLyricDragBox(performSelect);
 
         protected class SingerLyricSelectionHandler : SelectionHandler<Lyric>
         {
@@ -79,12 +90,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
 
             [Resolved]
             private BindableList<Lyric> selectedLyrics { get; set; }
-
-            [BackgroundDependencyLoader]
-            private void load()
-            {
-                SelectedItems.BindTo(selectedLyrics);
-            }
 
             protected override void OnSelectionChanged()
             {
@@ -107,12 +112,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
             protected override void DeleteItems(IEnumerable<Lyric> items)
             {
                 // todo : remove all in the same time.
-                foreach (var item in items)
-                {
-                    lyricSingerChangeHandler.Clear();
-                }
+                foreach (var item in items) lyricSingerChangeHandler.Clear();
 
                 selectedLyrics.Clear();
+            }
+
+            [BackgroundDependencyLoader]
+            private void load()
+            {
+                SelectedItems.BindTo(selectedLyrics);
             }
         }
 
@@ -132,12 +140,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
             {
             }
 
-            protected override Drawable CreateBox() => new Box
-            {
-                RelativeSizeAxes = Axes.Y,
-                Alpha = 0.3f
-            };
-
             public override bool HandleDrag(MouseButtonEvent e)
             {
                 selectionStart ??= e.MouseDownPosition.X / editor.CurrentZoom;
@@ -148,6 +150,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
 
                 updateDragBoxPosition();
                 return true;
+            }
+
+            public override void Hide()
+            {
+                base.Hide();
+                selectionStart = null;
+            }
+
+            protected override Drawable CreateBox()
+            {
+                return new Box
+                {
+                    RelativeSizeAxes = Axes.Y,
+                    Alpha = 0.3f
+                };
             }
 
             private void updateDragBoxPosition()
@@ -168,12 +185,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
                 boxScreenRect.Height *= 2;
 
                 PerformSelection?.Invoke(boxScreenRect);
-            }
-
-            public override void Hide()
-            {
-                base.Hide();
-                selectionStart = null;
             }
         }
 

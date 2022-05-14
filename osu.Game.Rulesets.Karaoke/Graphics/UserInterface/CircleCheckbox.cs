@@ -20,6 +20,26 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
 {
     public class CircleCheckbox : Checkbox, IHasAccentColour, IHasTooltip
     {
+        public Color4 AccentColour
+        {
+            get => accentColour;
+            set
+            {
+                accentColour = value;
+
+                background.Colour = AccentColour.Darken(1.5f);
+                border.Colour = AccentColour;
+                selectedIcon.Colour = AccentColour;
+            }
+        }
+
+        public LocalisableString TooltipText { get; set; }
+
+        /// <summary>
+        ///     Whether to play sounds when the state changes as a result of user interaction.
+        /// </summary>
+        protected virtual bool PlaySoundsOnUserChange => true;
+
         private const float expanded_size = 24;
 
         private readonly Circle background;
@@ -29,10 +49,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
         private Sample sampleChecked;
         private Sample sampleUnchecked;
 
-        /// <summary>
-        /// Whether to play sounds when the state changes as a result of user interaction.
-        /// </summary>
-        protected virtual bool PlaySoundsOnUserChange => true;
+        private Color4 accentColour;
 
         public CircleCheckbox()
         {
@@ -43,12 +60,12 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 background = new Circle
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Alpha = 0.5f,
+                    Alpha = 0.5f
                 },
                 border = new SpriteIcon
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Icon = FontAwesome.Regular.Circle,
+                    Icon = FontAwesome.Regular.Circle
                 },
                 selectedIcon = new SpriteIcon
                 {
@@ -56,7 +73,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.Both,
                     Icon = FontAwesome.Solid.Check,
-                    Scale = new Vector2(0),
+                    Scale = new Vector2(0)
                 },
                 new HoverSounds()
             };
@@ -73,28 +90,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
             };
         }
 
-        [BackgroundDependencyLoader]
-        private void load(AudioManager audio)
-        {
-            sampleChecked = audio.Samples.Get(@"UI/check-on");
-            sampleUnchecked = audio.Samples.Get(@"UI/check-off");
-        }
-
-        private Color4 accentColour;
-
-        public Color4 AccentColour
-        {
-            get => accentColour;
-            set
-            {
-                accentColour = value;
-
-                background.Colour = AccentColour.Darken(1.5f);
-                border.Colour = AccentColour;
-                selectedIcon.Colour = AccentColour;
-            }
-        }
-
         protected override void OnUserChange(bool value)
         {
             base.OnUserChange(value);
@@ -108,6 +103,11 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 sampleUnchecked?.Play();
         }
 
-        public LocalisableString TooltipText { get; set; }
+        [BackgroundDependencyLoader]
+        private void load(AudioManager audio)
+        {
+            sampleChecked = audio.Samples.Get(@"UI/check-on");
+            sampleUnchecked = audio.Samples.Get(@"UI/check-off");
+        }
     }
 }

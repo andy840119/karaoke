@@ -15,13 +15,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
     {
         private const float triangle_width = 8;
 
+        private readonly DrawableTextIndex drawableTextIndex;
+
         [Resolved]
         private OsuColour colours { get; set; }
 
         [Resolved]
         private EditorKaraokeSpriteText karaokeSpriteText { get; set; }
-
-        private readonly DrawableTextIndex drawableTextIndex;
 
         public DrawableTimeTagRecordCaret(bool preview)
             : base(preview)

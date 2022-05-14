@@ -52,6 +52,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
             addCreateButton();
         }
 
+        protected abstract IBindableList<TTextTag> GetBindableTextTags(Lyric lyric);
+
+        protected abstract LabelledTextTagTextBox<TTextTag> CreateLabelledTextTagTextBox(TTextTag textTag);
+
+        protected abstract void AddTextTag(TTextTag textTag);
+
         [BackgroundDependencyLoader]
         private void load(ILyricCaretState lyricCaretState)
         {
@@ -59,15 +65,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
             {
                 Lyric = e.NewValue?.Lyric;
 
-                if (e.OldValue?.Lyric != null)
-                {
-                    TextTags.UnbindFrom(GetBindableTextTags(e.OldValue.Lyric));
-                }
+                if (e.OldValue?.Lyric != null) TextTags.UnbindFrom(GetBindableTextTags(e.OldValue.Lyric));
 
-                if (e.NewValue?.Lyric != null)
-                {
-                    TextTags.BindTo(GetBindableTextTags(e.NewValue.Lyric));
-                }
+                if (e.NewValue?.Lyric != null) TextTags.BindTo(GetBindableTextTags(e.NewValue.Lyric));
 
                 Schedule(() =>
                 {
@@ -92,12 +92,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
                 Action = AddTextTag
             });
         }
-
-        protected abstract IBindableList<TTextTag> GetBindableTextTags(Lyric lyric);
-
-        protected abstract LabelledTextTagTextBox<TTextTag> CreateLabelledTextTagTextBox(TTextTag textTag);
-
-        protected abstract void AddTextTag(TTextTag textTag);
 
         private class CreateNewButton : OsuButton, IHasPopover
         {
@@ -153,21 +147,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
                             Label = "Start index",
                             Description = "Please enter the start text index in the lyric",
                             PlaceholderText = "0",
-                            TabbableContentContainer = this,
+                            TabbableContentContainer = this
                         },
                         labelledEndIndexNumberBox = new LabelledNumberBox
                         {
                             Label = "End index",
                             Description = "Please enter the end text index in the lyric",
                             PlaceholderText = "1",
-                            TabbableContentContainer = this,
+                            TabbableContentContainer = this
                         },
                         labelledTagTextBox = new LabelledTextBox
                         {
                             Label = getTextTagLabel(),
                             Description = getTextTagDescription(),
                             PlaceholderText = getPlaceholderText(),
-                            TabbableContentContainer = this,
+                            TabbableContentContainer = this
                         },
                         new AddButton
                         {

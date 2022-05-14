@@ -18,13 +18,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                 new PopupDialogDangerousButton
                 {
                     Text = @"Forget all changes",
-                    Action = () => okAction?.Invoke(true),
+                    Action = () => okAction?.Invoke(true)
                 },
                 new PopupDialogCancelButton
                 {
                     Text = @"Let me think about it",
-                    Action = () => okAction?.Invoke(false),
-                },
+                    Action = () => okAction?.Invoke(false)
+                }
             };
         }
     }

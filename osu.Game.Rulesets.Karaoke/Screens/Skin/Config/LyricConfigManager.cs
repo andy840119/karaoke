@@ -23,6 +23,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
         [Resolved]
         private ISkinSource source { get; set; }
 
+        public void ApplyCurrentLyricConfigChange(Action<LyricConfig> action)
+        {
+            action?.Invoke(LoadedLyricConfig.Value);
+            LoadedLyricConfig.TriggerChange();
+        }
+
         [BackgroundDependencyLoader]
         private void load()
         {
@@ -33,12 +39,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
 
             LoadedLyricConfig.Value = Configs.FirstOrDefault();
             EditLyricConfig.Value = Configs.FirstOrDefault();
-        }
-
-        public void ApplyCurrentLyricConfigChange(Action<LyricConfig> action)
-        {
-            action?.Invoke(LoadedLyricConfig.Value);
-            LoadedLyricConfig.TriggerChange();
         }
     }
 }

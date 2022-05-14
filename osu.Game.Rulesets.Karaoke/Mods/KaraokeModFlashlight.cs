@@ -61,14 +61,22 @@ namespace osu.Game.Rulesets.Karaoke.Mods
             flashlight.Y = 80;
         }
 
-        protected override Flashlight CreateFlashlight() => new KaraokeFlashlight(this);
+        protected override Flashlight CreateFlashlight()
+        {
+            return new KaraokeFlashlight(this);
+        }
 
         internal class KaraokeFlashlight : Flashlight
         {
+            protected override string FragmentShader => "RectangularFlashlight";
             private readonly LayoutValue flashlightProperties = new(Invalidation.DrawSize);
 
             private readonly IBindable<ScrollingDirection> direction = new Bindable<ScrollingDirection>();
             private readonly IBindable<double> timeRange = new Bindable<double>();
+
+            private KaraokeScrollingDirection scrollingDirection;
+
+            private float flashLightMultiple;
 
             public KaraokeFlashlight(KaraokeModFlashlight modFlashlight)
                 : base(modFlashlight)
@@ -88,25 +96,11 @@ namespace osu.Game.Rulesets.Karaoke.Mods
                 flashlightProperties.Validate();
             }
 
-            [BackgroundDependencyLoader(true)]
-            private void load([NotNull] IScrollingInfo scrollingInfo)
-            {
-                direction.BindTo(scrollingInfo.Direction);
-                direction.BindValueChanged(OnDirectionChanged, true);
-
-                timeRange.BindTo(scrollingInfo.TimeRange);
-                timeRange.BindValueChanged(OnTimeRangeChanged, true);
-            }
-
-            private KaraokeScrollingDirection scrollingDirection;
-
             protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> e)
             {
                 scrollingDirection = (KaraokeScrollingDirection)e.NewValue;
                 flashlightProperties.Invalidate();
             }
-
-            private float flashLightMultiple;
 
             protected virtual void OnTimeRangeChanged(ValueChangedEvent<double> e)
             {
@@ -119,7 +113,15 @@ namespace osu.Game.Rulesets.Karaoke.Mods
                 this.TransformTo(nameof(FlashlightSize), new Vector2(DrawWidth, GetSizeFor(e.NewValue)), FLASHLIGHT_FADE_DURATION);
             }
 
-            protected override string FragmentShader => "RectangularFlashlight";
+            [BackgroundDependencyLoader(true)]
+            private void load([NotNull] IScrollingInfo scrollingInfo)
+            {
+                direction.BindTo(scrollingInfo.Direction);
+                direction.BindValueChanged(OnDirectionChanged, true);
+
+                timeRange.BindTo(scrollingInfo.TimeRange);
+                timeRange.BindValueChanged(OnTimeRangeChanged, true);
+            }
         }
     }
 }

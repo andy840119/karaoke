@@ -60,6 +60,8 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
         }
 
         private static string getNameByType(MemberInfo type)
-            => type.Name;
+        {
+            return type.Name;
+        }
     }
 }

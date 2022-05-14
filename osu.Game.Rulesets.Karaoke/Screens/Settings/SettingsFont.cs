@@ -20,25 +20,16 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
 {
     public class SettingsFont : SettingsItem<FontUsage>
     {
-        protected override Drawable CreateControl() => new FontSelectionButton
+        protected override Drawable CreateControl()
         {
-            RelativeSizeAxes = Axes.X,
-        };
+            return new FontSelectionButton
+            {
+                RelativeSizeAxes = Axes.X
+            };
+        }
 
         private class FontSelectionButton : CompositeDrawable, IHasCurrentValue<FontUsage>, IHasPopover
         {
-            private const float height = 30;
-
-            private readonly BindableWithCurrent<FontUsage> current = new();
-            private BindableFontUsage bindableFontUsage;
-
-            private readonly GridContainer grid;
-            private readonly SettingsButton fontButton;
-            private readonly SettingsButton decreaseFontSizeButton;
-            private readonly SettingsButton increaseFontSizeButton;
-
-            private float[] availableSizes = FontUtils.DefaultFontSize();
-
             public Bindable<FontUsage> Current
             {
                 get => current.Current;
@@ -63,10 +54,22 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                         new Dimension(GridSizeMode.Absolute, spacing),
                         new Dimension(GridSizeMode.Absolute, buttonWidth),
                         new Dimension(GridSizeMode.Absolute, spacing),
-                        new Dimension(GridSizeMode.Absolute, buttonWidth),
+                        new Dimension(GridSizeMode.Absolute, buttonWidth)
                     };
                 }
             }
+
+            private const float height = 30;
+
+            private readonly BindableWithCurrent<FontUsage> current = new();
+
+            private readonly GridContainer grid;
+            private readonly SettingsButton fontButton;
+            private readonly SettingsButton decreaseFontSizeButton;
+            private readonly SettingsButton increaseFontSizeButton;
+            private BindableFontUsage bindableFontUsage;
+
+            private float[] availableSizes = FontUtils.DefaultFontSize();
 
             public FontSelectionButton()
             {
@@ -124,7 +127,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                                     current.Value = current.Value.With(size: nextSize);
                                 }
                             }
-                        },
+                        }
                     }
                 };
 

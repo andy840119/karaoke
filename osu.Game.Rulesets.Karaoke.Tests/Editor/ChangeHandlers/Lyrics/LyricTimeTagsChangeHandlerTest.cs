@@ -23,215 +23,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             return baseDependencies;
         }
 
-        [Test]
-        public void TestAutoGenerateSupportedLyric()
-        {
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                Language = new CultureInfo(17)
-            });
-
-            TriggerHandlerChanged(c => c.AutoGenerate());
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual(5, h.TimeTags.Count);
-            });
-        }
-
-        [Test]
-        public void TestAutoGenerateNonSupportedLyric()
-        {
-            PrepareHitObjects(new[]
-            {
-                new Lyric
-                {
-                    Text = "カラオケ",
-                },
-                new Lyric
-                {
-                    Text = "",
-                },
-                new Lyric
-                {
-                    Text = null,
-                },
-                new Lyric
-                {
-                    Text = "",
-                    Language = new CultureInfo(17)
-                },
-                new Lyric
-                {
-                    Text = null,
-                    Language = new CultureInfo(17)
-                }
-            });
-
-            TriggerHandlerChanged(c => c.AutoGenerate());
-
-            AssertSelectedHitObject(h =>
-            {
-                // should not able to generate time-tag if lyric text is empty, or did not have language.
-                Assert.IsEmpty(h.TimeTags);
-            });
-        }
-
-        [Test]
-        public void TestSetTimeTagTime()
-        {
-            var timeTag = new TimeTag(new TextIndex(), 1000);
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                TimeTags = new[]
-                {
-                    timeTag
-                }
-            });
-
-            TriggerHandlerChanged(c => c.SetTimeTagTime(timeTag, 2000));
-
-            AssertSelectedHitObject(_ =>
-            {
-                Assert.AreEqual(2000, timeTag.Time);
-            });
-        }
-
-        [Test]
-        public void TestClearTimeTagTime()
-        {
-            var timeTag = new TimeTag(new TextIndex(), 1000);
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                TimeTags = new[]
-                {
-                    timeTag
-                }
-            });
-
-            TriggerHandlerChanged(c => c.ClearTimeTagTime(timeTag));
-
-            AssertSelectedHitObject(_ =>
-            {
-                Assert.IsNull(timeTag.Time);
-            });
-        }
-
-        [Test]
-        public void TestAdd()
-        {
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-            });
-
-            TriggerHandlerChanged(c => c.Add(new TimeTag(new TextIndex(), 1000)));
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual(1, h.TimeTags.Count);
-                Assert.AreEqual(1000, h.TimeTags[0].Time);
-            });
-        }
-
-        [Test]
-        public void TestRemove()
-        {
-            var removedTag = new TimeTag(new TextIndex(), 1000);
-
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                TimeTags = new[]
-                {
-                    removedTag,
-                }
-            });
-
-            TriggerHandlerChanged(c => c.Remove(removedTag));
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.IsEmpty(h.TimeTags);
-            });
-        }
-
-        [Test]
-        public void TestAddByPosition()
-        {
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-            });
-
-            TriggerHandlerChanged(c => c.AddByPosition(new TextIndex(3, TextIndex.IndexState.End)));
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual(1, h.TimeTags.Count);
-
-                var actualTimeTag = h.TimeTags[0];
-                Assert.AreEqual(new TextIndex(3, TextIndex.IndexState.End), actualTimeTag.Index);
-                Assert.IsNull(actualTimeTag.Time);
-            });
-        }
-
-        [Test]
-        public void TestRemoveByPosition()
-        {
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                TimeTags = new[]
-                {
-                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 4000),
-                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End)),
-                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 5000),
-                }
-            });
-
-            TriggerHandlerChanged(c => c.RemoveByPosition(new TextIndex(3, TextIndex.IndexState.End)));
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual(2, h.TimeTags.Count);
-
-                // should delete the min time of the time-tag
-                var actualTimeTag = h.TimeTags[0];
-                Assert.AreEqual(new TextIndex(3, TextIndex.IndexState.End), actualTimeTag.Index);
-                Assert.AreEqual(4000, actualTimeTag.Time);
-            });
-        }
-
-        [Test]
-        public void TestRemoveByPositionCase2()
-        {
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                TimeTags = new[]
-                {
-                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 5000),
-                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 4000),
-                }
-            });
-
-            TriggerHandlerChanged(c => c.RemoveByPosition(new TextIndex(3, TextIndex.IndexState.End)));
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual(1, h.TimeTags.Count);
-
-                // should delete the min time of the time-tag
-                var actualTimeTag = h.TimeTags[0];
-                Assert.AreEqual(new TextIndex(3, TextIndex.IndexState.End), actualTimeTag.Index);
-                Assert.AreEqual(5000, actualTimeTag.Time);
-            });
-        }
-
         [TestCase(ShiftingDirection.Left, ShiftingType.Index, 1)]
         [TestCase(ShiftingDirection.Left, ShiftingType.State, 2)]
         [TestCase(ShiftingDirection.Right, ShiftingType.State, 2)]
@@ -247,7 +38,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                     new TimeTag(new TextIndex(1, TextIndex.IndexState.End)),
                     new TimeTag(new TextIndex(2), 4000), // target.
                     new TimeTag(new TextIndex(2, TextIndex.IndexState.End)),
-                    new TimeTag(new TextIndex(3)),
+                    new TimeTag(new TextIndex(3))
                 }
             });
 
@@ -276,7 +67,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 TimeTags = new[]
                 {
                     new TimeTag(new TextIndex(1)), // target.
-                    new TimeTag(new TextIndex(3)),
+                    new TimeTag(new TextIndex(3))
                 }
             });
 
@@ -305,7 +96,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 TimeTags = new[]
                 {
                     new TimeTag(new TextIndex(0)),
-                    new TimeTag(new TextIndex(2)), // target.
+                    new TimeTag(new TextIndex(2)) // target.
                 }
             });
 
@@ -335,7 +126,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 {
                     new TimeTag(new TextIndex(0)),
                     new TimeTag(new TextIndex(2), 4000), // target.
-                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End)),
+                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End))
                 }
             });
 
@@ -363,7 +154,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Text = "カラオケ",
                 TimeTags = new[]
                 {
-                    new TimeTag(new TextIndex(2), 4000), // target.
+                    new TimeTag(new TextIndex(2), 4000) // target.
                 }
             });
 
@@ -394,7 +185,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 {
                     new TimeTag(new TextIndex(2), 3000),
                     new TimeTag(new TextIndex(2), 4000), // target.
-                    new TimeTag(new TextIndex(2), 5000),
+                    new TimeTag(new TextIndex(2), 5000)
                 }
             });
 
@@ -424,7 +215,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Text = "-",
                 TimeTags = new[]
                 {
-                    new TimeTag(new TextIndex(0, state), 5000), // target.
+                    new TimeTag(new TextIndex(0, state), 5000) // target.
                 }
             });
 
@@ -437,6 +228,215 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                     var targetTimeTag = lyric.TimeTags[0];
                     c.Shifting(targetTimeTag, direction, type);
                 });
+            });
+        }
+
+        [Test]
+        public void TestAdd()
+        {
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ"
+            });
+
+            TriggerHandlerChanged(c => c.Add(new TimeTag(new TextIndex(), 1000)));
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual(1, h.TimeTags.Count);
+                Assert.AreEqual(1000, h.TimeTags[0].Time);
+            });
+        }
+
+        [Test]
+        public void TestAddByPosition()
+        {
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ"
+            });
+
+            TriggerHandlerChanged(c => c.AddByPosition(new TextIndex(3, TextIndex.IndexState.End)));
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual(1, h.TimeTags.Count);
+
+                var actualTimeTag = h.TimeTags[0];
+                Assert.AreEqual(new TextIndex(3, TextIndex.IndexState.End), actualTimeTag.Index);
+                Assert.IsNull(actualTimeTag.Time);
+            });
+        }
+
+        [Test]
+        public void TestAutoGenerateNonSupportedLyric()
+        {
+            PrepareHitObjects(new[]
+            {
+                new Lyric
+                {
+                    Text = "カラオケ"
+                },
+                new Lyric
+                {
+                    Text = ""
+                },
+                new Lyric
+                {
+                    Text = null
+                },
+                new Lyric
+                {
+                    Text = "",
+                    Language = new CultureInfo(17)
+                },
+                new Lyric
+                {
+                    Text = null,
+                    Language = new CultureInfo(17)
+                }
+            });
+
+            TriggerHandlerChanged(c => c.AutoGenerate());
+
+            AssertSelectedHitObject(h =>
+            {
+                // should not able to generate time-tag if lyric text is empty, or did not have language.
+                Assert.IsEmpty(h.TimeTags);
+            });
+        }
+
+        [Test]
+        public void TestAutoGenerateSupportedLyric()
+        {
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                Language = new CultureInfo(17)
+            });
+
+            TriggerHandlerChanged(c => c.AutoGenerate());
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual(5, h.TimeTags.Count);
+            });
+        }
+
+        [Test]
+        public void TestClearTimeTagTime()
+        {
+            var timeTag = new TimeTag(new TextIndex(), 1000);
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                TimeTags = new[]
+                {
+                    timeTag
+                }
+            });
+
+            TriggerHandlerChanged(c => c.ClearTimeTagTime(timeTag));
+
+            AssertSelectedHitObject(_ =>
+            {
+                Assert.IsNull(timeTag.Time);
+            });
+        }
+
+        [Test]
+        public void TestRemove()
+        {
+            var removedTag = new TimeTag(new TextIndex(), 1000);
+
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                TimeTags = new[]
+                {
+                    removedTag
+                }
+            });
+
+            TriggerHandlerChanged(c => c.Remove(removedTag));
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.IsEmpty(h.TimeTags);
+            });
+        }
+
+        [Test]
+        public void TestRemoveByPosition()
+        {
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                TimeTags = new[]
+                {
+                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 4000),
+                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End)),
+                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 5000)
+                }
+            });
+
+            TriggerHandlerChanged(c => c.RemoveByPosition(new TextIndex(3, TextIndex.IndexState.End)));
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual(2, h.TimeTags.Count);
+
+                // should delete the min time of the time-tag
+                var actualTimeTag = h.TimeTags[0];
+                Assert.AreEqual(new TextIndex(3, TextIndex.IndexState.End), actualTimeTag.Index);
+                Assert.AreEqual(4000, actualTimeTag.Time);
+            });
+        }
+
+        [Test]
+        public void TestRemoveByPositionCase2()
+        {
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                TimeTags = new[]
+                {
+                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 5000),
+                    new TimeTag(new TextIndex(3, TextIndex.IndexState.End), 4000)
+                }
+            });
+
+            TriggerHandlerChanged(c => c.RemoveByPosition(new TextIndex(3, TextIndex.IndexState.End)));
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual(1, h.TimeTags.Count);
+
+                // should delete the min time of the time-tag
+                var actualTimeTag = h.TimeTags[0];
+                Assert.AreEqual(new TextIndex(3, TextIndex.IndexState.End), actualTimeTag.Index);
+                Assert.AreEqual(5000, actualTimeTag.Time);
+            });
+        }
+
+        [Test]
+        public void TestSetTimeTagTime()
+        {
+            var timeTag = new TimeTag(new TextIndex(), 1000);
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                TimeTags = new[]
+                {
+                    timeTag
+                }
+            });
+
+            TriggerHandlerChanged(c => c.SetTimeTagTime(timeTag, 2000));
+
+            AssertSelectedHitObject(_ =>
+            {
+                Assert.AreEqual(2000, timeTag.Time);
             });
         }
     }

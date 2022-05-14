@@ -11,7 +11,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class OrderUtils
     {
         /// <summary>
-        /// Check objects contains duplicated ids.
+        ///     Check objects contains duplicated ids.
         /// </summary>
         /// <typeparam name="T">IHasOrder</typeparam>
         /// <param name="objects">objects</param>
@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Get min order number
+        ///     Get min order number
         /// </summary>
         /// <typeparam name="T">IHasOrder</typeparam>
         /// <param name="objects">objects</param>
@@ -39,7 +39,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Get max order number
+        ///     Get max order number
         /// </summary>
         /// <typeparam name="T">IHasOrder</typeparam>
         /// <param name="objects">objects</param>
@@ -53,7 +53,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Get sorted objects
+        ///     Get sorted objects
         /// </summary>
         /// <typeparam name="T">IHasOrder</typeparam>
         /// <param name="objects">objects</param>
@@ -64,25 +64,22 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Shifting order.
+        ///     Shifting order.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="objects"></param>
         /// <param name="offset"></param>
         public static void ShiftingOrder<T>(IEnumerable<T> objects, int offset) where T : class, IHasOrder
         {
-            foreach (var processObject in objects)
-            {
-                processObject.Order += offset;
-            }
+            foreach (var processObject in objects) processObject.Order += offset;
         }
 
         /// <summary>
-        /// Re-generate order number if has gap between two order number
+        ///     Re-generate order number if has gap between two order number
         /// </summary>
         /// <example>
-        /// Valid: 1, 2, 3, 4
-        /// Should be generated: 1, 3, 4, 5, 7
+        ///     Valid: 1, 2, 3, 4
+        ///     Should be generated: 1, 3, 4, 5, 7
         /// </example>
         /// <typeparam name="T">IHasOrder</typeparam>
         /// <param name="objects">objects</param>
@@ -118,7 +115,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Change order.
+        ///     Change order.
         /// </summary>
         /// <typeparam name="T">IHasOrder</typeparam>
         /// <param name="objects">objects</param>

@@ -9,7 +9,9 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class TextIndexUtils
     {
         public static int ToStringIndex(TextIndex index)
-            => GetValueByState(index, index.Index, index.Index + 1);
+        {
+            return GetValueByState(index, index.Index, index.Index + 1);
+        }
 
         public static TextIndex FromStringIndex(int index, bool end)
         {
@@ -36,7 +38,9 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         public static TextIndex ShiftingIndex(TextIndex originIndex, int offset)
-            => new(originIndex.Index + offset, originIndex.State);
+        {
+            return new(originIndex.Index + offset, originIndex.State);
+        }
 
         public static bool OutOfRange(TextIndex index, string lyric)
         {
@@ -46,20 +50,22 @@ namespace osu.Game.Rulesets.Karaoke.Utils
             return index.Index < 0 || index.Index >= lyric.Length;
         }
 
-        public static T GetValueByState<T>(TextIndex index, T startValue, T endValue) =>
-            index.State switch
+        public static T GetValueByState<T>(TextIndex index, T startValue, T endValue)
+        {
+            return index.State switch
             {
                 TextIndex.IndexState.Start => startValue,
                 TextIndex.IndexState.End => endValue,
                 _ => throw new ArgumentOutOfRangeException(nameof(index))
             };
+        }
 
         /// <summary>
-        /// Display string with position format
+        ///     Display string with position format
         /// </summary>
         /// <example>
-        /// 3
-        /// 4(end)
+        ///     3
+        ///     4(end)
         /// </example>
         /// <param name="textIndex"></param>
         /// <returns></returns>

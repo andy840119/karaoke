@@ -12,27 +12,6 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
 {
     public abstract class DrawableKaraokeScrollingHitObject : DrawableHitObject<KaraokeHitObject>
     {
-        protected readonly IBindable<ScrollingDirection> Direction = new Bindable<ScrollingDirection>();
-
-        protected readonly IBindable<double> TimeRange = new Bindable<double>();
-
-        protected DrawableKaraokeScrollingHitObject(KaraokeHitObject hitObject)
-            : base(hitObject)
-        {
-        }
-
-        [BackgroundDependencyLoader(true)]
-        private void load([NotNull] IScrollingInfo scrollingInfo)
-        {
-            Direction.BindTo(scrollingInfo.Direction);
-            Direction.BindValueChanged(OnDirectionChanged, true);
-
-            TimeRange.BindTo(scrollingInfo.TimeRange);
-            TimeRange.BindValueChanged(OnTimeRangeChanged, true);
-        }
-
-        private double computedLifetimeStart;
-
         public override double LifetimeStart
         {
             get => base.LifetimeStart;
@@ -44,8 +23,6 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
                     base.LifetimeStart = value;
             }
         }
-
-        private double computedLifetimeEnd;
 
         public override double LifetimeEnd
         {
@@ -59,10 +36,8 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             }
         }
 
-        private bool alwaysAlive;
-
         /// <summary>
-        /// Whether this <see cref="DrawableKaraokeHitObject"/> should always remain alive.
+        ///     Whether this <see cref="DrawableKaraokeHitObject" /> should always remain alive.
         /// </summary>
         internal bool AlwaysAlive
         {
@@ -88,6 +63,21 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             }
         }
 
+        protected readonly IBindable<ScrollingDirection> Direction = new Bindable<ScrollingDirection>();
+
+        protected readonly IBindable<double> TimeRange = new Bindable<double>();
+
+        private double computedLifetimeStart;
+
+        private double computedLifetimeEnd;
+
+        private bool alwaysAlive;
+
+        protected DrawableKaraokeScrollingHitObject(KaraokeHitObject hitObject)
+            : base(hitObject)
+        {
+        }
+
         protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> e)
         {
             Anchor = Origin = e.NewValue == ScrollingDirection.Left ? Anchor.CentreLeft : Anchor.CentreRight;
@@ -95,6 +85,16 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
 
         protected virtual void OnTimeRangeChanged(ValueChangedEvent<double> e)
         {
+        }
+
+        [BackgroundDependencyLoader(true)]
+        private void load([NotNull] IScrollingInfo scrollingInfo)
+        {
+            Direction.BindTo(scrollingInfo.Direction);
+            Direction.BindValueChanged(OnDirectionChanged, true);
+
+            TimeRange.BindTo(scrollingInfo.TimeRange);
+            TimeRange.BindValueChanged(OnTimeRangeChanged, true);
         }
     }
 

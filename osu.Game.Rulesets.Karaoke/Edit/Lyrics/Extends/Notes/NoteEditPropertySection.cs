@@ -61,7 +61,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
                         },
                         NoteEditPropertyMode.Display => new LabelledNoteDisplaySwitchButton(x)
                         {
-                            Label = x.Text,
+                            Label = x.Text
                         },
                         _ => throw new ArgumentOutOfRangeException(nameof(bindableNoteEditPropertyMode.Value))
                     };
@@ -91,10 +91,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
             }
 
             protected override string GetFieldValue(Note note)
-                => note.Text;
+            {
+                return note.Text;
+            }
 
             protected override void ApplyValue(Note note, string value)
-                => notesChangeHandler.ChangeText(value);
+            {
+                notesChangeHandler.ChangeText(value);
+            }
 
             [BackgroundDependencyLoader]
             private void load(IEditNoteModeState editNoteModeState)
@@ -114,10 +118,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
             }
 
             protected override string GetFieldValue(Note note)
-                => note.RubyText;
+            {
+                return note.RubyText;
+            }
 
             protected override void ApplyValue(Note note, string value)
-                => notesChangeHandler.ChangeRubyText(value);
+            {
+                notesChangeHandler.ChangeRubyText(value);
+            }
 
             [BackgroundDependencyLoader]
             private void load(IEditNoteModeState editNoteModeState)
@@ -137,10 +145,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
             }
 
             protected override bool GetFieldValue(Note note)
-                => note.Display;
+            {
+                return note.Display;
+            }
 
             protected override void ApplyValue(Note note, bool value)
-                => notesChangeHandler.ChangeDisplayState(value);
+            {
+                notesChangeHandler.ChangeDisplayState(value);
+            }
 
             [BackgroundDependencyLoader]
             private void load(IEditNoteModeState editNoteModeState)

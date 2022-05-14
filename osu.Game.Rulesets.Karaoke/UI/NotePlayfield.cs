@@ -28,6 +28,8 @@ namespace osu.Game.Rulesets.Karaoke.UI
 {
     public class NotePlayfield : ScrollingNotePlayfield, IKeyBindingHandler<KaraokeSaitenAction>
     {
+        // Note playfield should be present even being hidden.
+        public override bool IsPresent => true;
         private readonly BindableInt saitenPitch = new();
 
         private readonly CenterLine centerLine;
@@ -41,9 +43,6 @@ namespace osu.Game.Rulesets.Karaoke.UI
         private readonly ReplaySaitenVisualization replaySaitenVisualization;
 
         private readonly SaitenStatus saitenStatus;
-
-        // Note playfield should be present even being hidden.
-        public override bool IsPresent => true;
 
         [Resolved]
         private INotePositionInfo notePositionInfo { get; set; }
@@ -75,7 +74,7 @@ namespace osu.Game.Rulesets.Karaoke.UI
                 centerLine = new CenterLine
                 {
                     Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
+                    Origin = Anchor.Centre
                 }
             });
 
@@ -96,7 +95,7 @@ namespace osu.Game.Rulesets.Karaoke.UI
                     {
                         RelativeSizeAxes = Axes.Y,
                         Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
+                        Origin = Anchor.Centre
                     },
                     saitenMarker = new SaitenMarker
                     {
@@ -117,11 +116,76 @@ namespace osu.Game.Rulesets.Karaoke.UI
                 realTimeSaitenVisualization = new RealTimeSaitenVisualization
                 {
                     Name = "Saiten Visualization",
-                    RelativeSizeAxes = Axes.Both,
-                },
+                    RelativeSizeAxes = Axes.Both
+                }
             });
 
             AddInternal(saitenStatus = new SaitenStatus(SaitenStatusMode.NotInitialized));
+        }
+
+        public void ClearReplay()
+        {
+            replaySaitenVisualization.Clear();
+        }
+
+        public void AddReplay(KaraokeReplayFrame frame)
+        {
+            replaySaitenVisualization.Add(frame);
+        }
+
+        public bool OnPressed(KeyBindingPressEvent<KaraokeSaitenAction> e)
+        {
+            // TODO : appear marker and move position with delay time
+            saitenMarker.Y = notePositionInfo.Calculator.YPositionAt(e.Action);
+            saitenMarker.Alpha = 1;
+
+            // Mark as singing
+            realTimeSaitenVisualization.AddAction(e.Action);
+
+            return true;
+        }
+
+        public void OnReleased(KeyBindingReleaseEvent<KaraokeSaitenAction> e)
+        {
+            // TODO : disappear marker
+            saitenMarker.Alpha = 0;
+
+            // Stop singing
+            realTimeSaitenVisualization.Release();
+        }
+
+        internal void OnNewResult(DrawableHitObject judgedObject, JudgementResult result)
+        {
+            // Add judgement
+            if (!judgedObject.DisplayResult || !DisplayJudgements.Value)
+                return;
+
+            if (judgedObject is not DrawableNote note)
+                return;
+
+            judgements.Clear();
+            judgements.Add(new DrawableNoteJudgement(result, judgedObject)
+            {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                Y = notePositionInfo.Calculator.YPositionAt(note.HitObject.Tone + 2)
+            });
+
+            // Add hit explosion
+            if (!result.IsHit)
+                return;
+
+            var explosion = new SkinnableDrawable(new KaraokeSkinComponent(KaraokeSkinComponents.HitExplosion), _ =>
+                new DefaultHitExplosion(judgedObject.AccentColour.Value, judgedObject is DrawableNote))
+            {
+                Y = notePositionInfo.Calculator.YPositionAt(note.HitObject)
+            };
+
+            // todo : should be added into hitObjectArea.Explosions
+            // see how mania ruleset do
+            HitObjectArea.Add(explosion);
+
+            explosion.Delay(200).Expire(true);
         }
 
         protected override void OnDirectionChanged(KaraokeScrollingDirection direction, float judgementAreaPercentage)
@@ -167,77 +231,12 @@ namespace osu.Game.Rulesets.Karaoke.UI
             }, true);
         }
 
-        public void ClearReplay()
-        {
-            replaySaitenVisualization.Clear();
-        }
-
-        public void AddReplay(KaraokeReplayFrame frame)
-        {
-            replaySaitenVisualization.Add(frame);
-        }
-
-        internal void OnNewResult(DrawableHitObject judgedObject, JudgementResult result)
-        {
-            // Add judgement
-            if (!judgedObject.DisplayResult || !DisplayJudgements.Value)
-                return;
-
-            if (judgedObject is not DrawableNote note)
-                return;
-
-            judgements.Clear();
-            judgements.Add(new DrawableNoteJudgement(result, judgedObject)
-            {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Y = notePositionInfo.Calculator.YPositionAt(note.HitObject.Tone + 2)
-            });
-
-            // Add hit explosion
-            if (!result.IsHit)
-                return;
-
-            var explosion = new SkinnableDrawable(new KaraokeSkinComponent(KaraokeSkinComponents.HitExplosion), _ =>
-                new DefaultHitExplosion(judgedObject.AccentColour.Value, judgedObject is DrawableNote))
-            {
-                Y = notePositionInfo.Calculator.YPositionAt(note.HitObject)
-            };
-
-            // todo : should be added into hitObjectArea.Explosions
-            // see how mania ruleset do
-            HitObjectArea.Add(explosion);
-
-            explosion.Delay(200).Expire(true);
-        }
-
         [BackgroundDependencyLoader(true)]
         private void load([CanBeNull] KaraokeSessionStatics session)
         {
             session?.BindWith(KaraokeRulesetSession.SaitenPitch, saitenPitch);
 
             session?.GetBindable<SaitenStatusMode>(KaraokeRulesetSession.SaitenStatus).BindValueChanged(e => { saitenStatus.SaitenStatusMode = e.NewValue; });
-        }
-
-        public bool OnPressed(KeyBindingPressEvent<KaraokeSaitenAction> e)
-        {
-            // TODO : appear marker and move position with delay time
-            saitenMarker.Y = notePositionInfo.Calculator.YPositionAt(e.Action);
-            saitenMarker.Alpha = 1;
-
-            // Mark as singing
-            realTimeSaitenVisualization.AddAction(e.Action);
-
-            return true;
-        }
-
-        public void OnReleased(KeyBindingReleaseEvent<KaraokeSaitenAction> e)
-        {
-            // TODO : disappear marker
-            saitenMarker.Alpha = 0;
-
-            // Stop singing
-            realTimeSaitenVisualization.Release();
         }
     }
 }

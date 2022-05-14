@@ -26,19 +26,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                 {
                     Label = "Record tag mode",
                     Description = "Only record time with start/end time-tag while recording.",
-                    Current = lyricEditorConfigManager.GetBindable<MovingTimeTagCaretMode>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagMovingCaretMode),
+                    Current = lyricEditorConfigManager.GetBindable<MovingTimeTagCaretMode>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagMovingCaretMode)
                 },
                 new LabelledSwitchButton
                 {
                     Label = "Auto move to next tag",
                     Description = "Auto move to next time-tag if set time to current time-tag.",
-                    Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.RecordingAutoMoveToNextTimeTag),
+                    Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.RecordingAutoMoveToNextTimeTag)
                 },
                 new LabelledSwitchButton
                 {
                     Label = "Change the time by time-tag.",
                     Description = "Change the track time if change the recording caret while pausing.",
-                    Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.RecordingChangeTimeWhileMovingTheCaret),
+                    Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.RecordingChangeTimeWhileMovingTheCaret)
                 },
                 new LabelledRealTimeSliderBar<float>
                 {
@@ -51,14 +51,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                     Label = "Waveform",
                     Description = "Show/hide or change the opacity of the waveform.",
                     Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagShowWaveform),
-                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagWaveformOpacity),
+                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagWaveformOpacity)
                 },
                 new LabelledOpacityAdjustment
                 {
                     Label = "Ticks",
                     Description = "Show/hide or change the opacity of the ticks.",
                     Current = lyricEditorConfigManager.GetBindable<bool>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagShowTick),
-                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagTickOpacity),
+                    Opacity = lyricEditorConfigManager.GetBindable<float>(KaraokeRulesetLyricEditorSetting.RecordingTimeTagTickOpacity)
                 }
             };
         }

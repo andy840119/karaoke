@@ -11,12 +11,13 @@ using SharpCompress.Archives.Zip;
 namespace osu.Game.Rulesets.Karaoke.IO.Archives
 {
     /// <summary>
-    /// For reading cached font reader.
-    /// Cached font will be saved as xxx.cached fnt into cached folder.
-    /// And notice that this class is just copied from <see cref="ZipArchiveReader"/>
+    ///     For reading cached font reader.
+    ///     Cached font will be saved as xxx.cached fnt into cached folder.
+    ///     And notice that this class is just copied from <see cref="ZipArchiveReader" />
     /// </summary>
     public class CachedFontArchiveReader : ArchiveReader
     {
+        public override IEnumerable<string> Filenames => archive.Entries.Select(e => e.Key).ExcludeSystemFileNames();
         private readonly Stream archiveStream;
         private readonly ZipArchive archive;
 
@@ -26,6 +27,16 @@ namespace osu.Game.Rulesets.Karaoke.IO.Archives
             this.archiveStream = archiveStream;
             archive = ZipArchive.Open(archiveStream);
         }
+
+        #region Disposal
+
+        public override void Dispose()
+        {
+            archive.Dispose();
+            archiveStream.Dispose();
+        }
+
+        #endregion
 
         public override Stream GetStream(string name)
         {
@@ -45,13 +56,5 @@ namespace osu.Game.Rulesets.Karaoke.IO.Archives
 
             return copy;
         }
-
-        public override void Dispose()
-        {
-            archive.Dispose();
-            archiveStream.Dispose();
-        }
-
-        public override IEnumerable<string> Filenames => archive.Entries.Select(e => e.Key).ExcludeSystemFileNames();
     }
 }

@@ -24,6 +24,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
 {
     public class DrawableLyricEditListItem : OsuRearrangeableListItem<Lyric>
     {
+        public float ExtendHeight => getExtend()?.ContentHeight ?? 0;
+
+        private readonly IBindable<LyricEditorMode> bindableMode = new Bindable<LyricEditorMode>();
+        private readonly IBindable<TimeTagEditMode> bindableTimeTagEditMode = new Bindable<TimeTagEditMode>();
+        private readonly IBindable<ICaretPosition> bindableHoverCaretPosition = new Bindable<ICaretPosition>();
+        private readonly IBindable<ICaretPosition> bindableCaretPosition = new Bindable<ICaretPosition>();
         private Box background;
         private FillFlowContainer content;
 
@@ -32,11 +38,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
 
         [Resolved]
         private ILyricCaretState lyricCaretState { get; set; }
-
-        private readonly IBindable<LyricEditorMode> bindableMode = new Bindable<LyricEditorMode>();
-        private readonly IBindable<TimeTagEditMode> bindableTimeTagEditMode = new Bindable<TimeTagEditMode>();
-        private readonly IBindable<ICaretPosition> bindableHoverCaretPosition = new Bindable<ICaretPosition>();
-        private readonly IBindable<ICaretPosition> bindableCaretPosition = new Bindable<ICaretPosition>();
 
         public DrawableLyricEditListItem(Lyric item)
             : base(item)
@@ -111,13 +112,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             }
         }
 
-        private EditRowExtend getExtend()
-        {
-            return content?.Children.OfType<EditRowExtend>().FirstOrDefault();
-        }
-
-        public float ExtendHeight => getExtend()?.ContentHeight ?? 0;
-
         protected override Drawable CreateContent()
         {
             return new Container
@@ -149,17 +143,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             };
         }
 
-        [BackgroundDependencyLoader]
-        private void load(ILyricEditorState state, ITimeTagModeState timeTagModeState)
-        {
-            bindableMode.BindTo(state.BindableMode);
-            bindableTimeTagEditMode.BindTo(timeTagModeState.BindableEditMode);
-            bindableHoverCaretPosition.BindTo(lyricCaretState.BindableHoverCaretPosition);
-            bindableCaretPosition.BindTo(lyricCaretState.BindableCaretPosition);
-
-            updateBackgroundColour();
-        }
-
         protected override bool OnDragStart(DragStartEvent e)
         {
             if (!base.OnDragStart(e))
@@ -178,6 +161,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             updateBackgroundColour();
 
             base.OnDragEnd(e);
+        }
+
+        private EditRowExtend getExtend()
+        {
+            return content?.Children.OfType<EditRowExtend>().FirstOrDefault();
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(ILyricEditorState state, ITimeTagModeState timeTagModeState)
+        {
+            bindableMode.BindTo(state.BindableMode);
+            bindableTimeTagEditMode.BindTo(timeTagModeState.BindableEditMode);
+            bindableHoverCaretPosition.BindTo(lyricCaretState.BindableHoverCaretPosition);
+            bindableCaretPosition.BindTo(lyricCaretState.BindableCaretPosition);
+
+            updateBackgroundColour();
         }
 
         private void updateBackgroundColour()

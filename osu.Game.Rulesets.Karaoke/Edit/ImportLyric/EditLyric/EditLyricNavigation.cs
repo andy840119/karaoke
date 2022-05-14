@@ -26,17 +26,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.EditLyric
             });
         }
 
-        [BackgroundDependencyLoader]
-        private void load(ILyricEditorState state)
+        protected override NavigationTextContainer CreateTextContainer()
         {
-            bindableMode.BindTo(state.BindableMode);
+            return new EditLyricTextFlowContainer(Screen);
         }
 
-        protected override NavigationTextContainer CreateTextContainer()
-            => new EditLyricTextFlowContainer(Screen);
-
         protected override NavigationState GetState(Lyric[] lyrics)
-            => NavigationState.Working;
+        {
+            return NavigationState.Working;
+        }
 
         protected override string GetNavigationText(NavigationState value)
         {
@@ -65,7 +63,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.EditLyric
         }
 
         protected override bool AbleToNextStep(NavigationState value)
-            => true;
+        {
+            return true;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(ILyricEditorState state)
+        {
+            bindableMode.BindTo(state.BindableMode);
+        }
 
         private class EditLyricTextFlowContainer : NavigationTextContainer
         {

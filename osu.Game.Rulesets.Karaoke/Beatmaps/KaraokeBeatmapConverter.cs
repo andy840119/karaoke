@@ -18,7 +18,10 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps
         {
         }
 
-        public override bool CanConvert() => Beatmap.HitObjects.All(h => h is KaraokeHitObject);
+        public override bool CanConvert()
+        {
+            return Beatmap.HitObjects.All(h => h is KaraokeHitObject);
+        }
 
         protected override Beatmap<KaraokeHitObject> ConvertBeatmap(IBeatmap original, CancellationToken cancellationToken)
         {
@@ -40,8 +43,13 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps
         }
 
         protected override IEnumerable<KaraokeHitObject> ConvertHitObject(HitObject original, IBeatmap beatmap, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+        {
+            throw new NotImplementedException();
+        }
 
-        protected override Beatmap<KaraokeHitObject> CreateBeatmap() => new KaraokeBeatmap();
+        protected override Beatmap<KaraokeHitObject> CreateBeatmap()
+        {
+            return new KaraokeBeatmap();
+        }
     }
 }

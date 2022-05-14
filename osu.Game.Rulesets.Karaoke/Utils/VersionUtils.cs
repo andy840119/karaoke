@@ -8,12 +8,9 @@ namespace osu.Game.Rulesets.Karaoke.Utils
 {
     public static class VersionUtils
     {
-        public static Version GetVersion()
-            => AssemblyUtils.GetAssemblyByName("osu.Game.Rulesets.Karaoke")?.GetName().Version ?? new Version();
-
         /// <summary>
-        /// Get the major version of this ruleset.
-        /// Will be a noun or word.
+        ///     Get the major version of this ruleset.
+        ///     Will be a noun or word.
         /// </summary>
         /// <returns>Major version name</returns>
         public static string MajorVersionName => "UwU";
@@ -31,6 +28,11 @@ namespace osu.Game.Rulesets.Karaoke.Utils
 
                 return $@"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}-{MajorVersionName}";
             }
+        }
+
+        public static Version GetVersion()
+        {
+            return AssemblyUtils.GetAssemblyByName("osu.Game.Rulesets.Karaoke")?.GetName().Version ?? new Version();
         }
     }
 }

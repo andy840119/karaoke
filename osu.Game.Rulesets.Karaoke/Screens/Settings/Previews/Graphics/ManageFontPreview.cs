@@ -29,13 +29,13 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
 
         private const float angle = 30;
 
+        private EggContainer eggContainer;
+        private FillFlowContainer<GenerateRowContainer> textContainer;
+
         public ManageFontPreview()
         {
             ShowBackground = false;
         }
-
-        private EggContainer eggContainer;
-        private FillFlowContainer<GenerateRowContainer> textContainer;
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures, OsuColour colour)
@@ -47,7 +47,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
                     Name = "Egg container",
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = new Vector2(preview_width, preview_height),
+                    Size = new Vector2(preview_width, preview_height)
                 },
                 new Container
                 {
@@ -63,7 +63,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
                         new Box
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Colour = colour.Gray3,
+                            Colour = colour.Gray3
                         },
                         textContainer = new FillFlowContainer<GenerateRowContainer>
                         {
@@ -82,7 +82,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
                                 new GenerateRowContainer(GenerateDirection.LeftToRight),
                                 new GenerateRowContainer(GenerateDirection.RightToLeft),
                                 new GenerateRowContainer(GenerateDirection.LeftToRight),
-                                new GenerateRowContainer(GenerateDirection.RightToLeft),
+                                new GenerateRowContainer(GenerateDirection.RightToLeft)
                             }
                         }
                     }
@@ -133,6 +133,8 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
 
         public class GenerateRowContainer : BeatSyncedContainer
         {
+            public Action<string> ClickedText;
+
             private readonly IDictionary<string, int> words = new Dictionary<string, int>
             {
                 { "Font", 10 },
@@ -156,7 +158,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
                 { "(／・ω・)／", 1 },
                 { "(((ﾟдﾟ)))", 1 },
                 { "( • ̀ω•́ )", 1 },
-                { "┌(┌^o^)┐", 1 },
+                { "┌(┌^o^)┐", 1 }
             };
 
             private const float moving_speed = 60;
@@ -165,8 +167,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
             private const float font_size = 48;
 
             private readonly GenerateDirection direction;
-
-            public Action<string> ClickedText;
 
             public GenerateRowContainer(GenerateDirection direction)
             {
@@ -225,7 +225,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
                     Origin = Anchor.Centre,
                     Text = getRandomText(),
                     Colour = getRandomColour(),
-                    Font = OsuFont.Default.With(size: font_size),
+                    Font = OsuFont.Default.With(size: font_size)
                 };
                 Add(text);
 
@@ -318,7 +318,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Graphics
         {
             LeftToRight,
 
-            RightToLeft,
+            RightToLeft
         }
     }
 }

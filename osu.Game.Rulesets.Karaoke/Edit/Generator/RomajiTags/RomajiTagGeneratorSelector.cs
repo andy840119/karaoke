@@ -32,6 +32,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.RomajiTags
         }
 
         protected override KaraokeRulesetEditGeneratorSetting GetGeneratorConfigSetting(CultureInfo info)
-            => KaraokeRulesetEditGeneratorSetting.JaRomajiTagGeneratorConfig;
+        {
+            return KaraokeRulesetEditGeneratorSetting.JaRomajiTagGeneratorConfig;
+        }
     }
 }

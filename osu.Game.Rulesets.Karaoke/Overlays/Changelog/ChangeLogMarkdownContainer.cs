@@ -26,26 +26,27 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
             DocumentUrl = build.DocumentUrl;
             RootUrl = build.RootUrl;
 
-            using (var httpClient = new HttpClient())
-            {
-                Text = httpClient.GetStringAsync(build.ReadmeDownloadUrl).Result;
-            }
+            using (var httpClient = new HttpClient()) Text = httpClient.GetStringAsync(build.ReadmeDownloadUrl).Result;
         }
 
-        public override MarkdownTextFlowContainer CreateTextFlow() => new ChangeLogMarkdownTextFlowContainer();
-
-        public override SpriteText CreateSpriteText() => base.CreateSpriteText().With(s =>
+        public override MarkdownTextFlowContainer CreateTextFlow()
         {
-            s.Font = OsuFont.GetFont(size: 16, weight: FontWeight.Regular);
-        });
+            return new ChangeLogMarkdownTextFlowContainer();
+        }
+
+        public override SpriteText CreateSpriteText()
+        {
+            return base.CreateSpriteText().With(s =>
+            {
+                s.Font = OsuFont.GetFont(size: 16, weight: FontWeight.Regular);
+            });
+        }
 
         /// <summary>
-        /// Re-calculate image size by changelog width.
+        ///     Re-calculate image size by changelog width.
         /// </summary>
         public class ChangeLogMarkdownTextFlowContainer : OsuMarkdownTextFlowContainer
         {
-            protected override void AddImage(LinkInline linkInline) => AddDrawable(new ChangeLogMarkdownImage(linkInline));
-
             private readonly IDictionary<string, string> githubUrls = new Dictionary<string, string>
             {
                 { "karaoke", "https://github.com/karaoke-dev/karaoke/" },
@@ -56,6 +57,11 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
                 { "microphone-package", "https://github.com/karaoke-dev/osu-framework-microphone/" },
                 { "font-package", "https://github.com/karaoke-dev/osu-framework-font/" }
             };
+
+            protected override void AddImage(LinkInline linkInline)
+            {
+                AddDrawable(new ChangeLogMarkdownImage(linkInline));
+            }
 
             protected override void AddLinkText(string text, LinkInline linkInline)
             {
@@ -121,18 +127,20 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
                     })
                     {
                         Scale = textScale,
-                        Anchor = Anchor.BottomLeft,
+                        Anchor = Anchor.BottomLeft
                     });
                 }
             }
 
             /// <summary>
-            /// Override <see cref="OsuMarkdownImage"/> to limit image display size
+            ///     Override <see cref="OsuMarkdownImage" /> to limit image display size
             /// </summary>
             /// <returns></returns>
             private class ChangeLogMarkdownImage : OsuMarkdownImage
             {
                 private readonly LayoutValue widthSizeCache = new(Invalidation.DrawSize);
+
+                private bool imageLoaded;
 
                 public ChangeLogMarkdownImage(LinkInline linkInline)
                     : base(linkInline)
@@ -142,8 +150,6 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
 
                     AddLayout(widthSizeCache);
                 }
-
-                private bool imageLoaded;
 
                 protected override void Update()
                 {

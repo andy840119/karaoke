@@ -9,6 +9,8 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class FontUsageUtils
     {
         public static FontInfo ToFontInfo(FontUsage fontUsage, FontFormat fontFormat)
-            => new(fontUsage.FontName, fontFormat);
+        {
+            return new(fontUsage.FontName, fontFormat);
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
                 new LyricsPreview
                 {
                     Height = 580,
-                    RelativeSizeAxes = Axes.X,
+                    RelativeSizeAxes = Axes.X
                 }
             };
         }

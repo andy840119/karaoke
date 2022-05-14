@@ -22,6 +22,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup
         {
         }
 
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            saitenable.Current.BindValueChanged(_ => updateBeatmap());
+        }
+
         [BackgroundDependencyLoader]
         private void load()
         {
@@ -41,13 +48,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup
                     SingerNamePrefix = "#"
                 }
             };
-        }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            saitenable.Current.BindValueChanged(_ => updateBeatmap());
         }
 
         private void updateBeatmap()

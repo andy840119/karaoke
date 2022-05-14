@@ -35,32 +35,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.AssignLanguage
             AddInternal(lyricRomajiTagsChangeHandler = new LyricRomajiTagsChangeHandler());
         }
 
-        protected override TopNavigation CreateNavigation()
-            => new AssignLanguageNavigation(this);
-
-        protected override Drawable CreateContent()
-            => base.CreateContent().With(_ =>
-            {
-                SwitchLyricEditorMode(LyricEditorMode.Language);
-            });
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            AskForAutoAssignLanguage();
-        }
-
         public override void Complete()
         {
             // Check is need to go to generate ruby/romaji step or just skip.
             if (lyricRubyTagsChangeHandler.CanGenerate() || lyricRomajiTagsChangeHandler.CanGenerate())
-            {
                 ScreenStack.Push(LyricImporterStep.GenerateRuby);
-            }
             else
-            {
                 ScreenStack.Push(LyricImporterStep.GenerateTimeTag);
-            }
         }
 
         internal void AskForAutoAssignLanguage()
@@ -72,6 +53,25 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.AssignLanguage
 
                 PrepareAutoGenerate();
             }));
+        }
+
+        protected override TopNavigation CreateNavigation()
+        {
+            return new AssignLanguageNavigation(this);
+        }
+
+        protected override Drawable CreateContent()
+        {
+            return base.CreateContent().With(_ =>
+            {
+                SwitchLyricEditorMode(LyricEditorMode.Language);
+            });
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            AskForAutoAssignLanguage();
         }
     }
 }

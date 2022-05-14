@@ -10,33 +10,39 @@ namespace osu.Game.Rulesets.Karaoke.Extensions
     public static class EnumerableExtensions
     {
         /// <summary>
-        /// Retrieves the item after a pivot from an <see cref="IEnumerable{T}"/>.
+        ///     Retrieves the item after a pivot from an <see cref="IEnumerable{T}" />.
         /// </summary>
         /// <typeparam name="T">The type of the items stored in the collection.</typeparam>
         /// <param name="collection">The collection to iterate on.</param>
         /// <param name="pivot">The pivot value.</param>
         /// <param name="action">Match action</param>
-        /// <returns>The item in <paramref name="collection"/> appearing after <paramref name="pivot"/>, or null if no such item exists.</returns>
+        /// <returns>
+        ///     The item in <paramref name="collection" /> appearing after <paramref name="pivot" />, or null if no such item
+        ///     exists.
+        /// </returns>
         public static T GetNextMatch<T>(this IEnumerable<T> collection, T pivot, Func<T, bool> action)
         {
             return collection.SkipWhile(i => !EqualityComparer<T>.Default.Equals(i, pivot)).Skip(1).SkipWhile(x => !action(x)).FirstOrDefault();
         }
 
         /// <summary>
-        /// Retrieves the item before a pivot from an <see cref="IEnumerable{T}"/>.
+        ///     Retrieves the item before a pivot from an <see cref="IEnumerable{T}" />.
         /// </summary>
         /// <typeparam name="T">The type of the items stored in the collection.</typeparam>
         /// <param name="collection">The collection to iterate on.</param>
         /// <param name="pivot">The pivot value.</param>
         /// <param name="action">Match action</param>
-        /// <returns>The item in <paramref name="collection"/> appearing before <paramref name="pivot"/>, or null if no such item exists.</returns>
+        /// <returns>
+        ///     The item in <paramref name="collection" /> appearing before <paramref name="pivot" />, or null if no such item
+        ///     exists.
+        /// </returns>
         public static T GetPreviousMatch<T>(this IEnumerable<T> collection, T pivot, Func<T, bool> action)
         {
             return collection.Reverse().SkipWhile(i => !EqualityComparer<T>.Default.Equals(i, pivot)).Skip(1).SkipWhile(x => !action(x)).FirstOrDefault();
         }
 
         /// <summary>
-        /// Convert [][] to [,]
+        ///     Convert [][] to [,]
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -51,23 +57,22 @@ namespace osu.Game.Rulesets.Karaoke.Extensions
 
             for (int i = 0; i < data.Length; ++i)
             {
-                for (int j = 0; j < data[i].Length; ++j)
-                {
-                    res[i, j] = data[i][j];
-                }
+                for (int j = 0; j < data[i].Length; ++j) res[i, j] = data[i][j];
             }
 
             return res;
         }
 
         /// <summary>
-        /// Return empty list if null.
+        ///     Return empty list if null.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
         public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source)
-            => source ?? Enumerable.Empty<T>();
+        {
+            return source ?? Enumerable.Empty<T>();
+        }
 
         public static int IndexOf<T>(this IEnumerable<T> array, T value)
         {

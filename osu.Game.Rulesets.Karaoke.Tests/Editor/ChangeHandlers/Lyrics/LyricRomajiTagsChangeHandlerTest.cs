@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestAutoGenerateSupportedLyric()
+        public void TestAdd()
         {
             PrepareHitObject(new Lyric
             {
@@ -29,7 +29,12 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Language = new CultureInfo(17)
             });
 
-            TriggerHandlerChanged(c => c.AutoGenerate());
+            TriggerHandlerChanged(c => c.Add(new RomajiTag
+            {
+                StartIndex = 0,
+                EndIndex = 1,
+                Text = "kaze"
+            }));
 
             AssertSelectedHitObject(h =>
             {
@@ -46,15 +51,15 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             {
                 new Lyric
                 {
-                    Text = "風",
+                    Text = "風"
                 },
                 new Lyric
                 {
-                    Text = "",
+                    Text = ""
                 },
                 new Lyric
                 {
-                    Text = null,
+                    Text = null
                 },
                 new Lyric
                 {
@@ -78,7 +83,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestAdd()
+        public void TestAutoGenerateSupportedLyric()
         {
             PrepareHitObject(new Lyric
             {
@@ -86,12 +91,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Language = new CultureInfo(17)
             });
 
-            TriggerHandlerChanged(c => c.Add(new RomajiTag
-            {
-                StartIndex = 0,
-                EndIndex = 1,
-                Text = "kaze",
-            }));
+            TriggerHandlerChanged(c => c.AutoGenerate());
 
             AssertSelectedHitObject(h =>
             {
@@ -108,7 +108,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             {
                 StartIndex = 0,
                 EndIndex = 1,
-                Text = "kaze",
+                Text = "kaze"
             };
 
             PrepareHitObject(new Lyric
@@ -136,7 +136,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             {
                 StartIndex = 0,
                 EndIndex = 1,
-                Text = "ka",
+                Text = "ka"
             };
 
             PrepareHitObject(new Lyric
@@ -150,7 +150,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                     {
                         StartIndex = 1,
                         EndIndex = 2,
-                        Text = "ra",
+                        Text = "ra"
                     }
                 }
             });
@@ -170,7 +170,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             {
                 StartIndex = 0,
                 EndIndex = 1,
-                Text = "ka",
+                Text = "ka"
             };
 
             PrepareHitObject(new Lyric
@@ -193,13 +193,41 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
+        public void TestSetText()
+        {
+            var targetTag = new RomajiTag
+            {
+                StartIndex = 0,
+                EndIndex = 1,
+                Text = "ka"
+            };
+
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                Language = new CultureInfo(17),
+                RomajiTags = new List<RomajiTag>
+                {
+                    targetTag
+                }
+            });
+
+            TriggerHandlerChanged(c => c.SetText(targetTag, "karaoke"));
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual("karaoke", targetTag.Text);
+            });
+        }
+
+        [Test]
         public void TestShiftingIndex()
         {
             var targetTag = new RomajiTag
             {
                 StartIndex = 0,
                 EndIndex = 1,
-                Text = "ka",
+                Text = "ka"
             };
 
             PrepareHitObject(new Lyric
@@ -218,34 +246,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             {
                 Assert.AreEqual(1, targetTag.StartIndex);
                 Assert.AreEqual(2, targetTag.EndIndex);
-            });
-        }
-
-        [Test]
-        public void TestSetText()
-        {
-            var targetTag = new RomajiTag
-            {
-                StartIndex = 0,
-                EndIndex = 1,
-                Text = "ka",
-            };
-
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ",
-                Language = new CultureInfo(17),
-                RomajiTags = new List<RomajiTag>
-                {
-                    targetTag
-                }
-            });
-
-            TriggerHandlerChanged(c => c.SetText(targetTag, "karaoke"));
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual("karaoke", targetTag.Text);
             });
         }
     }

@@ -8,57 +8,57 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
     public enum LyricEditorMode
     {
         /// <summary>
-        /// Cannot edit anything except each lyric's left-side part.
+        ///     Cannot edit anything except each lyric's left-side part.
         /// </summary>
         [Description("View")]
         View,
 
         /// <summary>
-        /// Can create/delete/mode/split/combine lyric.
+        ///     Can create/delete/mode/split/combine lyric.
         /// </summary>
         [Description("Manage lyrics")]
         Manage,
 
         /// <summary>
-        /// Able to typing lyric.
+        ///     Able to typing lyric.
         /// </summary>
         [Description("Typing")]
         Typing,
 
         /// <summary>
-        /// Can edit each lyric's language.
+        ///     Can edit each lyric's language.
         /// </summary>
         [Description("Select language")]
         Language,
 
         /// <summary>
-        /// Able to create/delete ruby.
+        ///     Able to create/delete ruby.
         /// </summary>
         [Description("Edit ruby")]
         EditRuby,
 
         /// <summary>
-        /// Able to create/delete romaji.
+        ///     Able to create/delete romaji.
         /// </summary>
         [Description("Edit romaji")]
         EditRomaji,
 
         /// <summary>
-        /// Enable to create/delete and reset time tag.
+        ///     Enable to create/delete and reset time tag.
         /// </summary>
         [Description("Edit time tag")]
         EditTimeTag,
 
         /// <summary>
-        /// Enable to create/delete notes.
+        ///     Enable to create/delete notes.
         /// </summary>
         [Description("Edit note")]
         EditNote,
 
         /// <summary>
-        /// Can edit each lyric's singer.
+        ///     Can edit each lyric's singer.
         /// </summary>
         [Description("Select singer")]
-        Singer,
+        Singer
     }
 }

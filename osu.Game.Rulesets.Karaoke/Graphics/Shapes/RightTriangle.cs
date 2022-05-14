@@ -14,17 +14,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Shapes
 {
     public class RightTriangle : Sprite
     {
-        /// <summary>
-        /// Creates a new right triangle with a white pixel as texture.
-        /// </summary>
-        public RightTriangle()
-        {
-            Texture = Texture.WhitePixel;
-        }
-
         public override RectangleF BoundingBox => toTriangle(ToParentSpace(LayoutRectangle), RightAngleDirection).AABBFloat;
-
-        private TriangleRightAngleDirection rightAngleDirection = TriangleRightAngleDirection.BottomLeft;
 
         public TriangleRightAngleDirection RightAngleDirection
         {
@@ -36,8 +26,29 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Shapes
             }
         }
 
-        private static Triangle toTriangle(Quad q, TriangleRightAngleDirection rightAngleDirection) =>
-            rightAngleDirection switch
+        private TriangleRightAngleDirection rightAngleDirection = TriangleRightAngleDirection.BottomLeft;
+
+        /// <summary>
+        ///     Creates a new right triangle with a white pixel as texture.
+        /// </summary>
+        public RightTriangle()
+        {
+            Texture = Texture.WhitePixel;
+        }
+
+        public override bool Contains(Vector2 screenSpacePos)
+        {
+            return toTriangle(ScreenSpaceDrawQuad, RightAngleDirection).Contains(screenSpacePos);
+        }
+
+        protected override DrawNode CreateDrawNode()
+        {
+            return new TriangleDrawNode(this);
+        }
+
+        private static Triangle toTriangle(Quad q, TriangleRightAngleDirection rightAngleDirection)
+        {
+            return rightAngleDirection switch
             {
                 TriangleRightAngleDirection.TopLeft => new Triangle(q.TopLeft, q.TopRight, q.BottomLeft),
                 TriangleRightAngleDirection.TopRight => new Triangle(q.TopLeft, q.TopRight, q.BottomRight),
@@ -45,10 +56,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Shapes
                 TriangleRightAngleDirection.BottomRight => new Triangle(q.TopRight, q.BottomLeft, q.BottomRight),
                 _ => throw new ArgumentOutOfRangeException(nameof(rightAngleDirection), rightAngleDirection, null)
             };
-
-        public override bool Contains(Vector2 screenSpacePos) => toTriangle(ScreenSpaceDrawQuad, RightAngleDirection).Contains(screenSpacePos);
-
-        protected override DrawNode CreateDrawNode() => new TriangleDrawNode(this);
+        }
 
         private class TriangleDrawNode : SpriteDrawNode
         {
@@ -94,6 +102,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Shapes
 
         BottomLeft,
 
-        BottomRight,
+        BottomRight
     }
 }

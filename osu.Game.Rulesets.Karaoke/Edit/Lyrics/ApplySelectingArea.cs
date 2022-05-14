@@ -42,7 +42,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                 new Box
                 {
                     Colour = colours.Gray2,
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 },
                 new GridContainer
                 {
@@ -57,7 +57,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                         new Dimension(GridSizeMode.Absolute, button_width),
                         new Dimension(GridSizeMode.Absolute, spacing),
                         new Dimension(GridSizeMode.Absolute, button_width),
-                        new Dimension(GridSizeMode.Absolute, spacing),
+                        new Dimension(GridSizeMode.Absolute, spacing)
                     },
                     Content = new[]
                     {
@@ -65,11 +65,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                         {
                             new SelectArea
                             {
-                                RelativeSizeAxes = Axes.Both,
+                                RelativeSizeAxes = Axes.Both
                             },
                             new Container
                             {
-                                RelativeSizeAxes = Axes.Both,
+                                RelativeSizeAxes = Axes.Both
                             },
                             new Box(),
                             applyButton = new ActionButton
@@ -100,7 +100,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                                     // todo : implement
                                 }
                             },
-                            new Box(),
+                            new Box()
                         }
                     }
                 }
@@ -112,13 +112,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             selecting.BindValueChanged(e =>
             {
                 if (e.NewValue)
-                {
                     Show();
-                }
                 else
-                {
                     Hide();
-                }
             }, true);
 
             selectedLyrics.BindCollectionChanged((_, _) =>
@@ -137,18 +133,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             private readonly Box background;
             private readonly CircleCheckbox allSelectedCheckbox;
 
+            private bool selectedLyricsTriggering;
+            private bool checkboxClicking;
+
             public SelectArea()
             {
                 InternalChildren = new Drawable[]
                 {
                     background = new Box
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     allSelectedCheckbox = new CircleCheckbox
                     {
                         Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
+                        Origin = Anchor.Centre
                     }
                 };
             }
@@ -159,9 +158,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                 allSelectedCheckbox.TriggerEvent(e);
                 return base.OnClick(e);
             }
-
-            private bool selectedLyricsTriggering;
-            private bool checkboxClicking;
 
             [BackgroundDependencyLoader]
             private void load(ILyricEditorState state, ILyricSelectionState lyricSelectionState, LyricEditorColourProvider colourProvider, EditorBeatmap beatmap)

@@ -28,9 +28,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
         }
 
         protected override SelectionBlueprint<Note> CreateBlueprintFor(Note hitObject)
-            => new NoteEditorHitObjectBlueprint(lyric, hitObject);
+        {
+            return new NoteEditorHitObjectBlueprint(lyric, hitObject);
+        }
 
-        protected override SelectionHandler<Note> CreateSelectionHandler() => new NoteEditorSelectionHandler();
+        protected override SelectionHandler<Note> CreateSelectionHandler()
+        {
+            return new NoteEditorSelectionHandler();
+        }
 
         [BackgroundDependencyLoader]
         private void load(IEditNoteModeState editNoteModeState, EditorBeatmap beatmap)
@@ -45,18 +50,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
 
         protected class NoteEditorSelectionHandler : ExtendSelectionHandler<Note>
         {
-            [BackgroundDependencyLoader]
-            private void load(IEditNoteModeState editNoteModeState)
-            {
-                SelectedItems.BindTo(editNoteModeState.SelectedItems);
-            }
-
             protected override void DeleteItems(IEnumerable<Note> items)
             {
                 // todo : delete notes
                 foreach (var item in items)
                 {
                 }
+            }
+
+            [BackgroundDependencyLoader]
+            private void load(IEditNoteModeState editNoteModeState)
+            {
+                SelectedItems.BindTo(editNoteModeState.SelectedItems);
             }
         }
     }

@@ -25,6 +25,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks.Components
 
         Overlapping,
 
-        EmptyText,
+        EmptyText
     }
 }

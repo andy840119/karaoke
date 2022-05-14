@@ -13,6 +13,8 @@ namespace osu.Game.Rulesets.Karaoke.Difficulty
 {
     public class KaraokePerformanceCalculator : PerformanceCalculator
     {
+        private double totalHits => countPerfect + countOk + countGreat + countGood + countMeh + countMiss;
+
         // Score after being scaled by non-difficulty-increasing mods
         private double scaledScore;
 
@@ -107,7 +109,5 @@ namespace osu.Game.Rulesets.Karaoke.Difficulty
 
             return accuracyValue;
         }
-
-        private double totalHits => countPerfect + countOk + countGreat + countGood + countMeh + countMiss;
     }
 }

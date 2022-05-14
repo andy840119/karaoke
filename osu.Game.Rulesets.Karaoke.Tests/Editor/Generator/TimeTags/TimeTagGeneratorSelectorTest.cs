@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.TimeTags
             var lyric = new Lyric
             {
                 Language = new CultureInfo(lcid),
-                Text = text,
+                Text = text
             };
 
             var expected = TestCaseTagHelper.ParseTimeTags(expectedTimeTags);

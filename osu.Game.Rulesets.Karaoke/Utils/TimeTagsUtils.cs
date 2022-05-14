@@ -13,7 +13,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class TimeTagsUtils
     {
         /// <summary>
-        /// Generate center time-tag with time.
+        ///     Generate center time-tag with time.
         /// </summary>
         /// <param name="startTimeTag"></param>
         /// <param name="endTimeTag"></param>
@@ -53,10 +53,12 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         public static TimeTag GenerateCenterTimeTag(TimeTag startTimeTag, TimeTag endTimeTag, int index)
-            => GenerateCenterTimeTag(startTimeTag, endTimeTag, new TextIndex(index));
+        {
+            return GenerateCenterTimeTag(startTimeTag, endTimeTag, new TextIndex(index));
+        }
 
         /// <summary>
-        /// Sort list of time tags by index and time.
+        ///     Sort list of time tags by index and time.
         /// </summary>
         /// <param name="timeTags">Time tags</param>
         /// <returns>Sorted time tags</returns>
@@ -67,7 +69,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Find out of range time-tag.
+        ///     Find out of range time-tag.
         /// </summary>
         /// <param name="timeTags"></param>
         /// <param name="lyric"></param>
@@ -78,31 +80,37 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Find time-tag that has no time.
+        ///     Find time-tag that has no time.
         /// </summary>
         /// <param name="timeTags"></param>
         /// <returns></returns>
         public static TimeTag[] FindNoneTime(IEnumerable<TimeTag> timeTags)
-            => timeTags?.Where(x => x.Time == null).ToArray();
+        {
+            return timeTags?.Where(x => x.Time == null).ToArray();
+        }
 
         /// <summary>
-        /// Check lyric has start time-tag
+        ///     Check lyric has start time-tag
         /// </summary>
         /// <param name="timeTags"></param>
         /// <param name="lyric"></param>
         public static bool HasStartTimeTagInLyric(IEnumerable<TimeTag> timeTags, string lyric)
-            => !string.IsNullOrEmpty(lyric) && timeTags != null && timeTags.Any(x => x.Index.State == TextIndex.IndexState.Start && x.Index.Index == 0);
+        {
+            return !string.IsNullOrEmpty(lyric) && timeTags != null && timeTags.Any(x => x.Index.State == TextIndex.IndexState.Start && x.Index.Index == 0);
+        }
 
         /// <summary>
-        /// Check lyric has end time-tag
+        ///     Check lyric has end time-tag
         /// </summary>
         /// <param name="timeTags"></param>
         /// <param name="lyric"></param>
         public static bool HasEndTimeTagInLyric(IEnumerable<TimeTag> timeTags, string lyric)
-            => timeTags != null && timeTags.Any(x => x.Index.State == TextIndex.IndexState.End && x.Index.Index == lyric.Length - 1);
+        {
+            return timeTags != null && timeTags.Any(x => x.Index.State == TextIndex.IndexState.End && x.Index.Index == lyric.Length - 1);
+        }
 
         /// <summary>
-        /// Find overlapping time tags.
+        ///     Find overlapping time tags.
         /// </summary>
         /// <param name="timeTags">Time tags</param>
         /// <param name="other">Check way</param>
@@ -186,7 +194,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Auto fix overlapping time tags.
+        ///     Auto fix overlapping time tags.
         /// </summary>
         /// <param name="timeTags">Time tags</param>
         /// <param name="other">Fix way</param>
@@ -265,8 +273,8 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Convert list of time tag to dictionary.
-        /// WIll sort by the time.
+        ///     Convert list of time tag to dictionary.
+        ///     WIll sort by the time.
         /// </summary>
         /// <param name="timeTags">Time tags</param>
         /// <returns>Time tags with dictionary format.</returns>
@@ -287,7 +295,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Get start time.
+        ///     Get start time.
         /// </summary>
         /// <param name="timeTags">Time tags</param>
         /// <returns>Start time</returns>
@@ -301,7 +309,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Get End time.
+        ///     Get End time.
         /// </summary>
         /// <param name="timeTags">Time tags</param>
         /// <returns>End time</returns>
@@ -318,12 +326,12 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public enum GroupCheck
     {
         /// <summary>
-        /// Mark next time tag is error if conflict.
+        ///     Mark next time tag is error if conflict.
         /// </summary>
         Asc,
 
         /// <summary>
-        /// Mark previous tag is error if conflict.
+        ///     Mark previous tag is error if conflict.
         /// </summary>
         Desc
     }
@@ -331,13 +339,13 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public enum SelfCheck
     {
         /// <summary>
-        /// Mark end time tag is error if conflict.
+        ///     Mark end time tag is error if conflict.
         /// </summary>
         BasedOnStart,
 
         /// <summary>
-        /// Mark start time tag is error if conflict.
+        ///     Mark start time tag is error if conflict.
         /// </summary>
-        BasedOnEnd,
+        BasedOnEnd
     }
 }

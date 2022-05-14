@@ -17,14 +17,26 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
         [Resolved]
         private IEditNoteModeState editNoteModeState { get; set; }
 
+        internal override void UpdateEditMode(NoteEditMode mode)
+        {
+            editNoteModeState.ChangeEditMode(mode);
+
+            base.UpdateEditMode(mode);
+        }
+
         protected override OverlayColourScheme CreateColourScheme()
-            => OverlayColourScheme.Blue;
+        {
+            return OverlayColourScheme.Blue;
+        }
 
         protected override NoteEditMode DefaultMode()
-            => editNoteModeState.EditMode;
+        {
+            return editNoteModeState.EditMode;
+        }
 
         protected override Dictionary<NoteEditMode, EditModeSelectionItem> CreateSelections()
-            => new()
+        {
+            return new()
             {
                 {
                     NoteEditMode.Generate, new EditModeSelectionItem("Generate", "Using time-tag to create default notes.")
@@ -36,21 +48,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
                     NoteEditMode.Verify, new EditModeSelectionItem("Verify", "Check invalid notes in here.")
                 }
             };
+        }
 
-        protected override Color4 GetColour(OsuColour colours, NoteEditMode mode, bool active) =>
-            mode switch
+        protected override Color4 GetColour(OsuColour colours, NoteEditMode mode, bool active)
+        {
+            return mode switch
             {
                 NoteEditMode.Generate => active ? colours.Blue : colours.BlueDarker,
                 NoteEditMode.Edit => active ? colours.Red : colours.RedDarker,
                 NoteEditMode.Verify => active ? colours.Yellow : colours.YellowDarker,
                 _ => throw new ArgumentOutOfRangeException(nameof(mode))
             };
-
-        internal override void UpdateEditMode(NoteEditMode mode)
-        {
-            editNoteModeState.ChangeEditMode(mode);
-
-            base.UpdateEditMode(mode);
         }
     }
 }

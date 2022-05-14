@@ -19,13 +19,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Checks
     [TestFixture]
     public class CheckInvalidPropertyLyricsTest
     {
-        private CheckInvalidPropertyLyrics check;
-
         [SetUp]
         public void Setup()
         {
             check = new CheckInvalidPropertyLyrics();
         }
+
+        private CheckInvalidPropertyLyrics check;
 
         [TestCase("Ja-jp", false)]
         [TestCase("", false)] // should not have issue if CultureInfo accept it.
@@ -34,7 +34,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Checks
         {
             var lyric = new Lyric
             {
-                Language = language != null ? new CultureInfo(language) : null,
+                Language = language != null ? new CultureInfo(language) : null
             };
 
             bool actual = run(lyric).Select(x => x.Template).OfType<IssueTemplateNotFillLanguage>().Any();

@@ -24,7 +24,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
                 {
                     Text = "Playback:"
                 },
-                playBackSliderBar = new ClickablePlayerSliderBar(),
+                playBackSliderBar = new ClickablePlayerSliderBar()
             };
         }
 

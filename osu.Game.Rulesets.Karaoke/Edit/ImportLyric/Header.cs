@@ -36,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Color4Extensions.FromHex(@"#1f1921"),
+                    Colour = Color4Extensions.FromHex(@"#1f1921")
                 },
                 new Container
                 {
@@ -49,15 +49,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                         title = new LyricImporterHeaderTitle
                         {
                             Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.BottomLeft,
+                            Origin = Anchor.BottomLeft
                         },
                         breadcrumbs = new HeaderBreadcrumbControl(stack)
                         {
                             Anchor = Anchor.BottomLeft,
                             Origin = Anchor.BottomLeft
                         }
-                    },
-                },
+                    }
+                }
             };
 
             breadcrumbs.Current.ValueChanged += screen =>
@@ -71,15 +71,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
 
         private class LyricImporterHeaderTitle : CompositeDrawable
         {
-            private const float spacing = 6;
-
-            private readonly OsuSpriteText dot;
-            private readonly OsuSpriteText pageTitle;
-
             public ILyricImporterStepScreen Screen
             {
                 set => pageTitle.Text = value.ShortTitle;
             }
+
+            private const float spacing = 6;
+
+            private readonly OsuSpriteText dot;
+            private readonly OsuSpriteText pageTitle;
 
             public LyricImporterHeaderTitle()
             {
@@ -112,10 +112,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                             {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,
-                                Font = OsuFont.GetFont(size: 24),
+                                Font = OsuFont.GetFont(size: 24)
                             }
                         }
-                    },
+                    }
                 };
             }
 
@@ -163,10 +163,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                 });
             }
 
-            protected override TabItem<IScreen> CreateTabItem(IScreen value) => new HeaderBreadcrumbTabItem(value)
+            protected override TabItem<IScreen> CreateTabItem(IScreen value)
             {
-                AccentColour = AccentColour
-            };
+                return new HeaderBreadcrumbTabItem(value)
+                {
+                    AccentColour = AccentColour
+                };
+            }
 
             private class HeaderBreadcrumbTabItem : BreadcrumbTabItem
             {

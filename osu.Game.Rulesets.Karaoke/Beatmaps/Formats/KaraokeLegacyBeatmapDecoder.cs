@@ -19,6 +19,15 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
     {
         public new const int LATEST_VERSION = 1;
 
+        private readonly IList<string> lrcLines = new List<string>();
+        private readonly IList<string> noteLines = new List<string>();
+        private readonly IList<string> translates = new List<string>();
+
+        public KaraokeLegacyBeatmapDecoder(int version = LATEST_VERSION)
+            : base(version)
+        {
+        }
+
         public new static void Register()
         {
             AddDecoder<Beatmap>(@"karaoke file format v", m => new KaraokeLegacyBeatmapDecoder(Parsing.ParseInt(m.Split('v').Last())));
@@ -26,15 +35,6 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             // use this weird way to let all the fall-back beatmap(include karaoke beatmap) become karaoke beatmap.
             SetFallbackDecoder<Beatmap>(() => new KaraokeLegacyBeatmapDecoder());
         }
-
-        public KaraokeLegacyBeatmapDecoder(int version = LATEST_VERSION)
-            : base(version)
-        {
-        }
-
-        private readonly IList<string> lrcLines = new List<string>();
-        private readonly IList<string> noteLines = new List<string>();
-        private readonly IList<string> translates = new List<string>();
 
         protected override void ParseLine(Beatmap beatmap, Section section, string line)
         {
@@ -157,9 +157,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
                                     ruby = rubyNoteProperty[2];
                             }
                             else
-                            {
                                 tone = rubyNote;
-                            }
 
                             // Split note and apply them
                             var splitDefaultNote = NoteUtils.SliceNote(defaultNote, startPercentage, percentage);
@@ -236,10 +234,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
 
                 int size = Math.Min(lyrics.Count, translation.Count());
 
-                for (int j = 0; j < size; j++)
-                {
-                    lyrics[j].Translates.Add(cultureInfo, values[j]);
-                }
+                for (int j = 0; j < size; j++) lyrics[j].Translates.Add(cultureInfo, values[j]);
 
                 availableTranslates.Add(cultureInfo);
             }

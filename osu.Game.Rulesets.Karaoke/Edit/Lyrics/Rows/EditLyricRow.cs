@@ -43,7 +43,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
             {
                 // todo : cannot use relative size to both because it will cause size cannot roll-back if make lyric smaller.
                 RelativeSizeAxes = Axes.X,
-                Height = min_height,
+                Height = min_height
             };
         }
 
@@ -52,12 +52,62 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
             return new SingleLyricEditor(lyric)
             {
                 Margin = new MarginPadding { Left = 10 },
-                RelativeSizeAxes = Axes.X,
+                RelativeSizeAxes = Axes.X
             };
         }
 
         public class InfoControl : Container, IHasContextMenu
         {
+            public Lyric Lyric { get; }
+
+            public MenuItem[] ContextMenuItems
+            {
+                get
+                {
+                    if (bindableMode.Value != LyricEditorMode.Manage)
+                        return null;
+
+                    // should select lyric if trying to interact with context menu.
+                    lyricCaretState.MoveCaretToTargetPosition(Lyric);
+
+                    var menuItems = new List<MenuItem>
+                    {
+                        new OsuMenuItem("Create new lyric", MenuItemType.Standard, () =>
+                        {
+                            lyricsChangeHandler.CreateAtPosition();
+                        })
+                    };
+
+                    // use lazy way to check lyric is not in first
+                    if (Lyric.Order > 1)
+                    {
+                        menuItems.Add(new OsuMenuItem("Combine with previous lyric", MenuItemType.Standard, () =>
+                        {
+                            lyricsChangeHandler.Combine();
+                        }));
+                    }
+
+                    menuItems.Add(new OsuMenuItem("Delete", MenuItemType.Destructive, () =>
+                    {
+                        if (dialogOverlay == null)
+                        {
+                            // todo : remove lyric directly in test case because pop-up dialog is not registered.
+                            lyricsChangeHandler.Remove();
+                        }
+                        else
+                        {
+                            dialogOverlay.Push(new DeleteLyricDialog(isOk =>
+                            {
+                                if (isOk)
+                                    lyricsChangeHandler.Remove();
+                            }));
+                        }
+                    }));
+
+                    return menuItems.ToArray();
+                }
+            }
+
             private const int max_height = 120;
 
             private readonly Box background;
@@ -77,8 +127,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
             [Resolved]
             private ILyricCaretState lyricCaretState { get; set; }
 
-            public Lyric Lyric { get; }
-
             public InfoControl(Lyric lyric)
             {
                 Lyric = lyric;
@@ -88,7 +136,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                     background = new Box
                     {
                         RelativeSizeAxes = Axes.X,
-                        Height = max_height,
+                        Height = max_height
                     },
                     new FillFlowContainer
                     {
@@ -115,7 +163,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                                         Anchor = Anchor.CentreLeft,
                                         Origin = Anchor.CentreLeft,
                                         Font = OsuFont.GetFont(size: 16, fixedWidth: true),
-                                        Margin = new MarginPadding(10),
+                                        Margin = new MarginPadding(10)
                                     },
                                     new InvalidInfo(lyric)
                                     {
@@ -123,8 +171,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                                         Origin = Anchor.CentreRight,
                                         Margin = new MarginPadding(10),
                                         Scale = new Vector2(1.3f),
-                                        Y = 1,
-                                    },
+                                        Y = 1
+                                    }
                                 }
                             },
                             new GridContainer
@@ -134,7 +182,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                                 ColumnDimensions = new[]
                                 {
                                     new Dimension(),
-                                    new Dimension(GridSizeMode.Absolute, 28),
+                                    new Dimension(GridSizeMode.Absolute, 28)
                                 },
                                 Content = new[]
                                 {
@@ -153,14 +201,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                                             Children = new Drawable[]
                                             {
                                                 new OrderInfo(lyric),
-                                                new LockInfo(lyric),
+                                                new LockInfo(lyric)
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    },
+                    }
                 };
 
                 timeRange.Text = LyricUtils.LyricTimeFormattedString(lyric);
@@ -174,16 +222,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                 {
                     InitializeBadge();
                 });
-            }
-
-            [BackgroundDependencyLoader]
-            private void load(OsuColour colours, ILyricEditorState state, ITimeTagModeState timeTagModeState)
-            {
-                background.Colour = colours.Gray2;
-                headerBackground.Colour = colours.Gray3;
-
-                bindableMode.BindTo(state.BindableMode);
-                bindableTimeTagEditMode.BindTo(timeTagModeState.BindableEditMode);
             }
 
             protected void InitializeBadge()
@@ -249,52 +287,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                 }
             }
 
-            public MenuItem[] ContextMenuItems
+            [BackgroundDependencyLoader]
+            private void load(OsuColour colours, ILyricEditorState state, ITimeTagModeState timeTagModeState)
             {
-                get
-                {
-                    if (bindableMode.Value != LyricEditorMode.Manage)
-                        return null;
+                background.Colour = colours.Gray2;
+                headerBackground.Colour = colours.Gray3;
 
-                    // should select lyric if trying to interact with context menu.
-                    lyricCaretState.MoveCaretToTargetPosition(Lyric);
-
-                    var menuItems = new List<MenuItem>
-                    {
-                        new OsuMenuItem("Create new lyric", MenuItemType.Standard, () =>
-                        {
-                            lyricsChangeHandler.CreateAtPosition();
-                        })
-                    };
-
-                    // use lazy way to check lyric is not in first
-                    if (Lyric.Order > 1)
-                    {
-                        menuItems.Add(new OsuMenuItem("Combine with previous lyric", MenuItemType.Standard, () =>
-                        {
-                            lyricsChangeHandler.Combine();
-                        }));
-                    }
-
-                    menuItems.Add(new OsuMenuItem("Delete", MenuItemType.Destructive, () =>
-                    {
-                        if (dialogOverlay == null)
-                        {
-                            // todo : remove lyric directly in test case because pop-up dialog is not registered.
-                            lyricsChangeHandler.Remove();
-                        }
-                        else
-                        {
-                            dialogOverlay.Push(new DeleteLyricDialog(isOk =>
-                            {
-                                if (isOk)
-                                    lyricsChangeHandler.Remove();
-                            }));
-                        }
-                    }));
-
-                    return menuItems.ToArray();
-                }
+                bindableMode.BindTo(state.BindableMode);
+                bindableTimeTagEditMode.BindTo(timeTagModeState.BindableEditMode);
             }
         }
 
@@ -313,15 +313,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                     karaokeSpriteText = new EditorKaraokeSpriteText(lyric),
                     new TimeTagLayer(lyric)
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     new CaretLayer(lyric)
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     new BlueprintLayer(lyric)
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     }
                 };
             }

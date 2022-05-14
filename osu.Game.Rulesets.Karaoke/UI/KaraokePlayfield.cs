@@ -22,9 +22,6 @@ namespace osu.Game.Rulesets.Karaoke.UI
 {
     public class KaraokePlayfield : ScrollingPlayfield
     {
-        [Resolved]
-        private IBindable<WorkingBeatmap> beatmap { get; set; }
-
         public WorkingBeatmap WorkingBeatmap => beatmap.Value;
 
         public Playfield LyricPlayfield { get; }
@@ -32,13 +29,15 @@ namespace osu.Game.Rulesets.Karaoke.UI
         public ScrollingNotePlayfield NotePlayfield { get; }
 
         public BindableBool DisplayCursor { get; set; } = new();
-        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) => !DisplayCursor.Value && base.ReceivePositionalInputAt(screenSpacePos);
 
         private readonly BindableInt bindablePitch = new();
         private readonly BindableInt bindableVocalPitch = new();
         private readonly BindableInt bindablePlayback = new();
         private readonly BindableDouble notePlayfieldAlpha = new();
         private readonly BindableDouble lyricPlayfieldAlpha = new();
+
+        [Resolved]
+        private IBindable<WorkingBeatmap> beatmap { get; set; }
 
         public KaraokePlayfield()
         {
@@ -90,11 +89,44 @@ namespace osu.Game.Rulesets.Karaoke.UI
             lyricPlayfieldAlpha.BindValueChanged(x => LyricPlayfield.Alpha = (float)x.NewValue);
         }
 
+        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos)
+        {
+            return !DisplayCursor.Value && base.ReceivePositionalInputAt(screenSpacePos);
+        }
+
+        public override void PostProcess()
+        {
+            base.PostProcess();
+
+            // trigger again to update note playfield alpha.
+            notePlayfieldAlpha.TriggerChange();
+        }
+
         protected virtual Playfield CreateLyricPlayfield()
-            => new LyricPlayfield();
+        {
+            return new LyricPlayfield();
+        }
 
         protected virtual ScrollingNotePlayfield CreateNotePlayfield(int columns)
-            => new NotePlayfield(columns);
+        {
+            return new NotePlayfield(columns);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(KaraokeRulesetConfigManager rulesetConfig, KaraokeSessionStatics session)
+        {
+            // Cursor
+            rulesetConfig?.BindWith(KaraokeRulesetSetting.ShowCursor, DisplayCursor);
+
+            // Alpha
+            rulesetConfig?.BindWith(KaraokeRulesetSetting.NoteAlpha, notePlayfieldAlpha);
+            rulesetConfig?.BindWith(KaraokeRulesetSetting.LyricAlpha, lyricPlayfieldAlpha);
+
+            // Pitch
+            session.BindWith(KaraokeRulesetSession.Pitch, bindablePitch);
+            session.BindWith(KaraokeRulesetSession.VocalPitch, bindableVocalPitch);
+            session.BindWith(KaraokeRulesetSession.PlaybackSpeed, bindablePlayback);
+        }
 
         #region Pooling support
 
@@ -156,38 +188,16 @@ namespace osu.Game.Rulesets.Karaoke.UI
             }
         }
 
-        public override bool Remove(DrawableHitObject h) =>
-            h switch
+        public override bool Remove(DrawableHitObject h)
+        {
+            return h switch
             {
                 DrawableLyric => LyricPlayfield.Remove(h),
                 DrawableNote => NotePlayfield.Remove(h),
                 _ => base.Remove(h)
             };
+        }
 
         #endregion
-
-        public override void PostProcess()
-        {
-            base.PostProcess();
-
-            // trigger again to update note playfield alpha.
-            notePlayfieldAlpha.TriggerChange();
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(KaraokeRulesetConfigManager rulesetConfig, KaraokeSessionStatics session)
-        {
-            // Cursor
-            rulesetConfig?.BindWith(KaraokeRulesetSetting.ShowCursor, DisplayCursor);
-
-            // Alpha
-            rulesetConfig?.BindWith(KaraokeRulesetSetting.NoteAlpha, notePlayfieldAlpha);
-            rulesetConfig?.BindWith(KaraokeRulesetSetting.LyricAlpha, lyricPlayfieldAlpha);
-
-            // Pitch
-            session.BindWith(KaraokeRulesetSession.Pitch, bindablePitch);
-            session.BindWith(KaraokeRulesetSession.VocalPitch, bindableVocalPitch);
-            session.BindWith(KaraokeRulesetSession.PlaybackSpeed, bindablePlayback);
-        }
     }
 }

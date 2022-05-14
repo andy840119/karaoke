@@ -23,6 +23,19 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             RelativeSizeAxes = Axes.Both;
         }
 
+        public static string GetTextureName()
+        {
+            return "karaoke-lighting";
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            explosion?.FadeInFromZero(80)
+                     .Then().FadeOut(120);
+        }
+
         [BackgroundDependencyLoader]
         private void load(ISkinSource skin, IScrollingInfo scrollingInfo)
         {
@@ -61,15 +74,5 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             if (explosion != null)
                 explosion.Anchor = direction.NewValue == ScrollingDirection.Left ? Anchor.CentreLeft : Anchor.CentreRight;
         }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            explosion?.FadeInFromZero(80)
-                     .Then().FadeOut(120);
-        }
-
-        public static string GetTextureName() => "karaoke-lighting";
     }
 }

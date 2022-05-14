@@ -18,13 +18,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
 {
     public class TimeTagBlueprintContainer : ExtendBlueprintContainer<TimeTag>
     {
-        [Resolved]
-        private ILyricCaretState lyricCaretState { get; set; }
+        protected readonly Lyric Lyric;
 
         [UsedImplicitly]
         private readonly BindableList<TimeTag> timeTags;
 
-        protected readonly Lyric Lyric;
+        [Resolved]
+        private ILyricCaretState lyricCaretState { get; set; }
 
         public TimeTagBlueprintContainer(Lyric lyric)
         {
@@ -38,6 +38,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             return base.OnMouseDown(e);
         }
 
+        protected override SelectionHandler<TimeTag> CreateSelectionHandler()
+        {
+            return new TimeTagSelectionHandler();
+        }
+
+        protected override SelectionBlueprint<TimeTag> CreateBlueprintFor(TimeTag item)
+        {
+            return new TimeTagSelectionBlueprint(item);
+        }
+
         [BackgroundDependencyLoader]
         private void load(ITimeTagModeState timeTagModeState)
         {
@@ -45,26 +55,23 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             RegisterBindable(timeTags);
         }
 
-        protected override SelectionHandler<TimeTag> CreateSelectionHandler()
-            => new TimeTagSelectionHandler();
-
-        protected override SelectionBlueprint<TimeTag> CreateBlueprintFor(TimeTag item)
-            => new TimeTagSelectionBlueprint(item);
-
         protected class TimeTagSelectionHandler : ExtendSelectionHandler<TimeTag>
         {
-            [BackgroundDependencyLoader]
-            private void load(ITimeTagModeState timeTagModeState)
-            {
-                SelectedItems.BindTo(timeTagModeState.SelectedItems);
-            }
-
             // for now we always allow movement. snapping is provided by the Timeline's "distance" snap implementation
-            public override bool HandleMovement(MoveSelectionEvent<TimeTag> moveEvent) => true;
+            public override bool HandleMovement(MoveSelectionEvent<TimeTag> moveEvent)
+            {
+                return true;
+            }
 
             protected override void DeleteItems(IEnumerable<TimeTag> items)
             {
                 // todo : delete time-tag
+            }
+
+            [BackgroundDependencyLoader]
+            private void load(ITimeTagModeState timeTagModeState)
+            {
+                SelectedItems.BindTo(timeTagModeState.SelectedItems);
             }
         }
     }

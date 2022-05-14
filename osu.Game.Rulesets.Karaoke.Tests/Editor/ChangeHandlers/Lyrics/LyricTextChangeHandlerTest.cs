@@ -10,19 +10,16 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
     public class LyricTextChangeHandlerTest : BaseHitObjectChangeHandlerTest<LyricTextChangeHandler, Lyric>
     {
         [Test]
-        public void TestInsertText()
+        public void TestDeleteAllLyricText()
         {
             PrepareHitObject(new Lyric
             {
-                Text = "カラ"
+                Text = "カ"
             });
 
-            TriggerHandlerChanged(c => c.InsertText(2, "オケ"));
+            TriggerHandlerChanged(c => c.DeleteLyricText(1));
 
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual("カラオケ", h.Text);
-            });
+            AssertHitObjects(Assert.IsEmpty);
         }
 
         [Test]
@@ -42,16 +39,19 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestDeleteAllLyricText()
+        public void TestInsertText()
         {
             PrepareHitObject(new Lyric
             {
-                Text = "カ"
+                Text = "カラ"
             });
 
-            TriggerHandlerChanged(c => c.DeleteLyricText(1));
+            TriggerHandlerChanged(c => c.InsertText(2, "オケ"));
 
-            AssertHitObjects(Assert.IsEmpty);
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual("カラオケ", h.Text);
+            });
         }
     }
 }

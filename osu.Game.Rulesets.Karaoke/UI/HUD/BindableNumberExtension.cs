@@ -6,7 +6,7 @@ using osu.Framework.Bindables;
 namespace osu.Game.Rulesets.Karaoke.UI.HUD
 {
     /// <summary>
-    /// Will move into framework layer
+    ///     Will move into framework layer
     /// </summary>
     public static class BindableNumberExtension
     {

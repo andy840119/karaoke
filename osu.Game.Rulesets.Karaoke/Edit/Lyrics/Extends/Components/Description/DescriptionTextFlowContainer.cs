@@ -18,19 +18,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components.Description
 {
     public class DescriptionTextFlowContainer : Container, IMarkdownTextComponent
     {
-        private readonly DescriptionMarkdownTextFlowContainer description;
-
-        public DescriptionTextFlowContainer()
-        {
-            AddInternal(description = new DescriptionMarkdownTextFlowContainer(this)
-            {
-                RelativeSizeAxes = Axes.X,
-                AutoSizeAxes = Axes.Y,
-            });
-        }
-
-        private DescriptionFormat descriptionFormat;
-
         public DescriptionFormat Description
         {
             get => descriptionFormat;
@@ -46,10 +33,26 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components.Description
             }
         }
 
-        public SpriteText CreateSpriteText() => new OsuSpriteText
+        private readonly DescriptionMarkdownTextFlowContainer description;
+
+        private DescriptionFormat descriptionFormat;
+
+        public DescriptionTextFlowContainer()
         {
-            Font = OsuFont.GetFont(size: 14, weight: FontWeight.Regular)
-        };
+            AddInternal(description = new DescriptionMarkdownTextFlowContainer(this)
+            {
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y
+            });
+        }
+
+        public SpriteText CreateSpriteText()
+        {
+            return new OsuSpriteText
+            {
+                Font = OsuFont.GetFont(size: 14, weight: FontWeight.Regular)
+            };
+        }
 
         internal class DescriptionMarkdownTextFlowContainer : OsuMarkdownTextFlowContainer
         {
@@ -66,7 +69,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components.Description
                 {
                     var keys = descriptionTextFlowContainer.Description.Keys;
                     string key = linkInline.Url;
-                    if (keys == null || !keys.TryGetValue(key, out InputKey inputKey))
+                    if (keys == null || !keys.TryGetValue(key, out var inputKey))
                         throw new ArgumentNullException(nameof(keys));
 
                     AddDrawable(new InputKeyText(inputKey));

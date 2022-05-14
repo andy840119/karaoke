@@ -10,17 +10,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Overlays
     [TestFixture]
     public class TestSceneKaraokeChangeLogOverlay : OsuTestScene
     {
-        private TestChangelogOverlay changelog;
-
         [SetUp]
-        public void SetUp() => Schedule(() => { Child = changelog = new TestChangelogOverlay(); });
-
-        [Test]
-        public void ShowWithNoFetch()
+        public void SetUp()
         {
-            AddStep(@"Show", () => changelog.Show());
-            AddAssert(@"listing displayed", () => changelog.Current.Value == null);
+            Schedule(() => { Child = changelog = new TestChangelogOverlay(); });
         }
+
+        private TestChangelogOverlay changelog;
 
         private class TestChangelogOverlay : KaraokeChangelogOverlay
         {
@@ -28,6 +24,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Overlays
                 : base("karaoke-dev")
             {
             }
+        }
+
+        [Test]
+        public void ShowWithNoFetch()
+        {
+            AddStep(@"Show", () => changelog.Show());
+            AddAssert(@"listing displayed", () => changelog.Current.Value == null);
         }
     }
 }

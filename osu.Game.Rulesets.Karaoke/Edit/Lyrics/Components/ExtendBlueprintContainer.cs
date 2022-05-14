@@ -58,7 +58,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Components
         }
 
         /// <summary>
-        /// This function will de-select all selection in relative blueprint container
+        ///     This function will de-select all selection in relative blueprint container
         /// </summary>
         protected virtual void DeselectAll()
         {

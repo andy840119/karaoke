@@ -26,6 +26,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit
 {
     public class KaraokeSelectionHandler : EditorSelectionHandler
     {
+        protected ScrollingNotePlayfield NotePlayfield => ((KaraokeHitObjectComposer)composer).Playfield.NotePlayfield;
+
         [Resolved]
         private EditorBeatmap beatmap { get; set; }
 
@@ -44,7 +46,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit
         [Resolved]
         private ILyricSingerChangeHandler lyricSingerChangeHandler { get; set; }
 
-        protected ScrollingNotePlayfield NotePlayfield => ((KaraokeHitObjectComposer)composer).Playfield.NotePlayfield;
+        public override bool HandleMovement(MoveSelectionEvent<HitObject> moveEvent)
+        {
+            // Only note can be moved.
+            if (moveEvent.Blueprint is not NoteSelectionBlueprint noteSelectionBlueprint)
+                return false;
+
+            var lastTone = noteSelectionBlueprint.HitObject.Tone;
+            performColumnMovement(lastTone, moveEvent);
+
+            return true;
+        }
 
         protected override IEnumerable<MenuItem> GetContextMenuItemsForSelection(IEnumerable<SelectionBlueprint<HitObject>> selection)
         {
@@ -98,18 +110,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit
         private MenuItem createSingerMenuItem()
         {
             return new SingerContextMenu(beatmap, lyricSingerChangeHandler, "Singer");
-        }
-
-        public override bool HandleMovement(MoveSelectionEvent<HitObject> moveEvent)
-        {
-            // Only note can be moved.
-            if (moveEvent.Blueprint is not NoteSelectionBlueprint noteSelectionBlueprint)
-                return false;
-
-            var lastTone = noteSelectionBlueprint.HitObject.Tone;
-            performColumnMovement(lastTone, moveEvent);
-
-            return true;
         }
 
         private void performColumnMovement(Tone lastTone, MoveSelectionEvent<HitObject> moveEvent)

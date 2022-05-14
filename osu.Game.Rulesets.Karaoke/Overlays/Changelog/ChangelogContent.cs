@@ -9,19 +9,22 @@ using osu.Game.Rulesets.Karaoke.Online.API.Requests.Responses;
 namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
 {
     /// <summary>
-    /// Base change log content
+    ///     Base change log content
     /// </summary>
     public abstract class ChangelogContent : FillFlowContainer
     {
         public Action<APIChangelogBuild> BuildSelected;
-
-        protected void SelectBuild(APIChangelogBuild build) => BuildSelected?.Invoke(build);
 
         protected ChangelogContent()
         {
             RelativeSizeAxes = Axes.X;
             AutoSizeAxes = Axes.Y;
             Direction = FillDirection.Vertical;
+        }
+
+        protected void SelectBuild(APIChangelogBuild build)
+        {
+            BuildSelected?.Invoke(build);
         }
     }
 }

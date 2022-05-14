@@ -20,17 +20,23 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
         }
 
         protected override Section[] CreateSelectionContainer()
-            => new Section[] { };
+        {
+            return new Section[] { };
+        }
 
         protected override Section[] CreatePropertiesContainer()
-            => new Section[]
+        {
+            return new Section[]
             {
                 new IntervalSection(),
                 new PositionSection(),
-                new RubyRomajiSection(),
+                new RubyRomajiSection()
             };
+        }
 
         protected override Container CreatePreviewArea()
-            => new();
+        {
+            return new();
+        }
     }
 }

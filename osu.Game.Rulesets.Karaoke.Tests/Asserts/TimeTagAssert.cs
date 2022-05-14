@@ -15,10 +15,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Asserts
             if (expected == null || actual == null)
                 return;
 
-            for (int i = 0; i < expected.Count; i++)
-            {
-                ArePropertyEqual(expected[i], actual[i]);
-            }
+            for (int i = 0; i < expected.Count; i++) ArePropertyEqual(expected[i], actual[i]);
         }
 
         public static void ArePropertyEqual(TimeTag expect, TimeTag actually)

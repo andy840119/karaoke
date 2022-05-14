@@ -66,6 +66,6 @@ namespace osu.Game.Rulesets.Karaoke
         DecreaseSaitenPitch,
 
         [Description("Reset saiten pitch")]
-        ResetSaitenPitch,
+        ResetSaitenPitch
     }
 }

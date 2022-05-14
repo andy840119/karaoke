@@ -23,7 +23,7 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                 {
                     Name = "Background",
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Color4.Black.Opacity(0.5f),
+                    Colour = Color4.Black.Opacity(0.5f)
                 },
                 new OsuSpriteText
                 {

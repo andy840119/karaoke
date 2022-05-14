@@ -9,6 +9,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
 
         SyncTime,
 
-        Clear,
+        Clear
     }
 }

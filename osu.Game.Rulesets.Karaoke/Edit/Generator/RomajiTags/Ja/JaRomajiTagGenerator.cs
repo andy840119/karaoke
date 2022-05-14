@@ -92,9 +92,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.RomajiTags.Ja
                     romajiTags.Add(combinedRomajiTag);
                 }
                 else
-                {
                     romajiTags.Add(processingTag.RomajiTag);
-                }
             }
 
             return romajiTags.ToArray();

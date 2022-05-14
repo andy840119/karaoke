@@ -45,9 +45,15 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             return Half ? 1 : 0;
         }
 
-        public bool Equals(Tone other) => Scale == other.Scale && Half == other.Half;
+        public bool Equals(Tone other)
+        {
+            return Scale == other.Scale && Half == other.Half;
+        }
 
-        public bool Equals(int other) => Scale == other && Half == false;
+        public bool Equals(int other)
+        {
+            return Scale == other && Half == false;
+        }
 
         public override bool Equals(object obj)
         {
@@ -59,56 +65,122 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             };
         }
 
-        public override int GetHashCode() => base.GetHashCode();
-
-        public static Tone operator +(Tone left, Tone right) => add(left, right);
-
-        public static Tone operator +(Tone tone1, int scale) => tone1 + new Tone { Scale = scale };
-
-        private static Tone add(Tone tone1, Tone tone2) => new()
+        public override int GetHashCode()
         {
-            Scale = tone1.Scale + tone2.Scale + (tone1.Half && tone2.Half ? 1 : 0),
-            Half = tone1.Half ^ tone2.Half
-        };
+            return base.GetHashCode();
+        }
 
-        public static Tone operator -(Tone tone1, Tone tone2) => subtract(tone1, tone2);
-
-        public static Tone operator -(Tone tone1, int scale) => tone1 - new Tone { Scale = scale };
-
-        private static Tone subtract(Tone tone1, Tone tone2) => tone1 + -tone2;
-
-        public static Tone operator -(Tone tone) => negate(tone);
-
-        private static Tone negate(Tone tone) => new()
+        public static Tone operator +(Tone left, Tone right)
         {
-            Scale = -tone.Scale + (tone.Half ? -1 : 0),
-            Half = tone.Half
-        };
+            return add(left, right);
+        }
 
-        public static bool operator ==(Tone tone1, Tone tone2) => tone1.Equals(tone2);
+        public static Tone operator +(Tone tone1, int scale)
+        {
+            return tone1 + new Tone { Scale = scale };
+        }
 
-        public static bool operator !=(Tone tone1, Tone tone2) => !tone1.Equals(tone2);
+        private static Tone add(Tone tone1, Tone tone2)
+        {
+            return new()
+            {
+                Scale = tone1.Scale + tone2.Scale + (tone1.Half && tone2.Half ? 1 : 0),
+                Half = tone1.Half ^ tone2.Half
+            };
+        }
 
-        public static bool operator ==(Tone tone1, int tone2) => tone1.Equals(tone2);
+        public static Tone operator -(Tone tone1, Tone tone2)
+        {
+            return subtract(tone1, tone2);
+        }
 
-        public static bool operator !=(Tone tone1, int tone2) => !tone1.Equals(tone2);
+        public static Tone operator -(Tone tone1, int scale)
+        {
+            return tone1 - new Tone { Scale = scale };
+        }
 
-        public static bool operator >(Tone tone1, Tone tone2) => tone1.CompareTo(tone2) > 0;
+        private static Tone subtract(Tone tone1, Tone tone2)
+        {
+            return tone1 + -tone2;
+        }
 
-        public static bool operator >=(Tone tone1, Tone tone2) => tone1.CompareTo(tone2) >= 0;
+        public static Tone operator -(Tone tone)
+        {
+            return negate(tone);
+        }
 
-        public static bool operator <(Tone tone1, Tone tone2) => tone1.CompareTo(tone2) < 0;
+        private static Tone negate(Tone tone)
+        {
+            return new()
+            {
+                Scale = -tone.Scale + (tone.Half ? -1 : 0),
+                Half = tone.Half
+            };
+        }
 
-        public static bool operator <=(Tone tone1, Tone tone2) => tone1.CompareTo(tone2) <= 0;
+        public static bool operator ==(Tone tone1, Tone tone2)
+        {
+            return tone1.Equals(tone2);
+        }
 
-        public static bool operator >(Tone tone1, int tone2) => tone1.CompareTo(tone2) > 0;
+        public static bool operator !=(Tone tone1, Tone tone2)
+        {
+            return !tone1.Equals(tone2);
+        }
 
-        public static bool operator >=(Tone tone1, int tone2) => tone1.CompareTo(tone2) >= 0;
+        public static bool operator ==(Tone tone1, int tone2)
+        {
+            return tone1.Equals(tone2);
+        }
 
-        public static bool operator <(Tone tone1, int tone2) => tone1.CompareTo(tone2) < 0;
+        public static bool operator !=(Tone tone1, int tone2)
+        {
+            return !tone1.Equals(tone2);
+        }
 
-        public static bool operator <=(Tone tone1, int tone2) => tone1.CompareTo(tone2) <= 0;
+        public static bool operator >(Tone tone1, Tone tone2)
+        {
+            return tone1.CompareTo(tone2) > 0;
+        }
 
-        public override string ToString() => $"Scale:{Scale}, Half:{Half}";
+        public static bool operator >=(Tone tone1, Tone tone2)
+        {
+            return tone1.CompareTo(tone2) >= 0;
+        }
+
+        public static bool operator <(Tone tone1, Tone tone2)
+        {
+            return tone1.CompareTo(tone2) < 0;
+        }
+
+        public static bool operator <=(Tone tone1, Tone tone2)
+        {
+            return tone1.CompareTo(tone2) <= 0;
+        }
+
+        public static bool operator >(Tone tone1, int tone2)
+        {
+            return tone1.CompareTo(tone2) > 0;
+        }
+
+        public static bool operator >=(Tone tone1, int tone2)
+        {
+            return tone1.CompareTo(tone2) >= 0;
+        }
+
+        public static bool operator <(Tone tone1, int tone2)
+        {
+            return tone1.CompareTo(tone2) < 0;
+        }
+
+        public static bool operator <=(Tone tone1, int tone2)
+        {
+            return tone1.CompareTo(tone2) <= 0;
+        }
+
+        public override string ToString()
+        {
+            return $"Scale:{Scale}, Half:{Half}";
+        }
     }
 }

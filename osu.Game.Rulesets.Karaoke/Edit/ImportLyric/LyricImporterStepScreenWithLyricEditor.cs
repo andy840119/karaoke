@@ -13,30 +13,34 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
 {
     public abstract class LyricImporterStepScreenWithLyricEditor : LyricImporterStepScreenWithTopNavigation
     {
+        public LyricEditorMode LyricEditorMode
+            => lyricEditor.Mode;
+
+        [Cached(typeof(ILockChangeHandler))]
+        private readonly LockChangeHandler lockChangeHandler;
+
         // it's a tricky way to let navigation bar able to get the lyric state.
         // not a good solution, but have no better way now.
         [Cached(typeof(ILyricEditorState))]
         private ImportLyricEditor lyricEditor { get; set; }
-
-        [Cached(typeof(ILockChangeHandler))]
-        private readonly LockChangeHandler lockChangeHandler;
 
         protected LyricImporterStepScreenWithLyricEditor()
         {
             AddInternal(lockChangeHandler = new LockChangeHandler());
         }
 
-        protected override Drawable CreateContent()
-            => lyricEditor = new ImportLyricEditor
-            {
-                RelativeSizeAxes = Axes.Both,
-            };
-
-        public LyricEditorMode LyricEditorMode
-            => lyricEditor.Mode;
-
         public virtual void SwitchLyricEditorMode(LyricEditorMode mode)
-            => lyricEditor.SwitchMode(mode);
+        {
+            lyricEditor.SwitchMode(mode);
+        }
+
+        protected override Drawable CreateContent()
+        {
+            return lyricEditor = new ImportLyricEditor
+            {
+                RelativeSizeAxes = Axes.Both
+            };
+        }
 
         protected void PrepareAutoGenerate()
         {
@@ -65,16 +69,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                 editRomajiModeState.ChangeEditMode(TextTagEditMode.Generate);
             }
 
-            protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
-            {
-                var dependencies = base.CreateChildDependencies(parent);
-                lyricSelectionState = dependencies.Get<ILyricSelectionState>();
-                languageModeState = dependencies.Get<ILanguageModeState>();
-                editRubyModeState = dependencies.Get<IEditRubyModeState>();
-                editRomajiModeState = dependencies.Get<IEditRomajiModeState>();
-                return dependencies;
-            }
-
             public override void NavigateToFix(LyricEditorMode mode)
             {
                 switch (mode)
@@ -94,6 +88,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                     default:
                         throw new ArgumentOutOfRangeException(nameof(mode));
                 }
+            }
+
+            protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
+            {
+                var dependencies = base.CreateChildDependencies(parent);
+                lyricSelectionState = dependencies.Get<ILyricSelectionState>();
+                languageModeState = dependencies.Get<ILanguageModeState>();
+                editRubyModeState = dependencies.Get<IEditRubyModeState>();
+                editRomajiModeState = dependencies.Get<IEditRomajiModeState>();
+                return dependencies;
             }
         }
     }

@@ -26,6 +26,8 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
         private readonly OsuSpriteText singerRomajiName;
         private readonly OsuSpriteText singerDescription;
 
+        private ISinger lastSinger;
+
         public SingerToolTip()
         {
             Child = new FillFlowContainer
@@ -44,7 +46,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
                         ColumnDimensions = new[]
                         {
                             new Dimension(GridSizeMode.Absolute, avatar_size),
-                            new Dimension(),
+                            new Dimension()
                         },
                         Content = new[]
                         {
@@ -53,7 +55,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
                                 avatar = new DrawableSingerAvatar
                                 {
                                     Name = "Avatar",
-                                    Size = new Vector2(avatar_size),
+                                    Size = new Vector2(avatar_size)
                                 },
                                 new Container
                                 {
@@ -75,15 +77,15 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
                                                     Name = "Singer name",
                                                     Font = OsuFont.GetFont(weight: FontWeight.Bold, size: main_text_size),
                                                     RelativeSizeAxes = Axes.X,
-                                                    Truncate = true,
+                                                    Truncate = true
                                                 },
                                                 singerRomajiName = new OsuSpriteText
                                                 {
                                                     Name = "Romaji name",
                                                     Font = OsuFont.GetFont(weight: FontWeight.Bold, size: sub_text_size),
                                                     RelativeSizeAxes = Axes.X,
-                                                    Truncate = true,
-                                                },
+                                                    Truncate = true
+                                                }
                                             }
                                         },
                                         singerEnglishName = new OsuSpriteText
@@ -93,7 +95,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
                                             Origin = Anchor.BottomLeft,
                                             Font = OsuFont.GetFont(weight: FontWeight.Bold, size: sub_text_size),
                                             RelativeSizeAxes = Axes.X,
-                                            Truncate = true,
+                                            Truncate = true
                                         }
                                     }
                                 }
@@ -106,13 +108,11 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Cursor
                         AllowMultiline = true,
                         Colour = Color4.White.Opacity(0.75f),
                         Font = OsuFont.Default.With(size: 14),
-                        Name = "Description",
+                        Name = "Description"
                     }
                 }
             };
         }
-
-        private ISinger lastSinger;
 
         public override void SetContent(ISinger singer)
         {

@@ -16,7 +16,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.UI
     {
         public SettingOverlayContainer SettingOverlayContainer { get; set; }
 
-        protected override Ruleset CreateRuleset() => new KaraokeRuleset();
+        protected override Ruleset CreateRuleset()
+        {
+            return new KaraokeRuleset();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -30,7 +33,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.UI
                 RelativeSizeAxes = Axes.Both,
                 Child = SettingOverlayContainer = new SettingOverlayContainer
                 {
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 }
             });
 

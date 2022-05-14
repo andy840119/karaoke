@@ -1,40 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Label="Project">
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyTitle>osu.Game.Rulesets.Karaoke</AssemblyTitle>
-    <OutputType>Library</OutputType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <RootNamespace>osu.Game.Rulesets.Karaoke</RootNamespace>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.18" />
-    <PackageReference Include="LanguageDetection.karaoke-dev" Version="1.3.3-alpha" />
-    <PackageReference Include="Octokit" Version="0.51.0" />
-    <PackageReference Include="osu.Framework.KaraokeFont" Version="2022.507.1" />
-    <PackageReference Include="osu.Framework.Microphone" Version="2022.327.0" />
-    <PackageReference Include="ppy.osu.Game" Version="2022.509.0" />
-    <PackageReference Include="LyricMaker" Version="1.1.1" />
-    <PackageReference Include="NicoKaraParser" Version="1.1.0" />
-    <PackageReference Include="SixLabors.Fonts" Version="1.0.0-beta15" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
-    <!--install because it might cause "Could not load file or assembly" error, might be removed eventually-->
-    <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
-    <PackageReference Include="WanaKanaSharp" Version="0.2.0" />
-    <PackageReference Include="Zipangu" Version="1.1.8" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Samples\Gameplay" />
-    <Folder Include="Resources\Textures" />
-  </ItemGroup>
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
+    <PropertyGroup Label="Project">
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyTitle>osu.Game.Rulesets.Karaoke</AssemblyTitle>
+        <OutputType>Library</OutputType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <RootNamespace>osu.Game.Rulesets.Karaoke</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.18"/>
+        <PackageReference Include="LanguageDetection.karaoke-dev" Version="1.3.3-alpha"/>
+        <PackageReference Include="Octokit" Version="0.51.0"/>
+        <PackageReference Include="osu.Framework.KaraokeFont" Version="2022.507.1"/>
+        <PackageReference Include="osu.Framework.Microphone" Version="2022.327.0"/>
+        <PackageReference Include="ppy.osu.Game" Version="2022.509.0"/>
+        <PackageReference Include="LyricMaker" Version="1.1.1"/>
+        <PackageReference Include="NicoKaraParser" Version="1.1.0"/>
+        <PackageReference Include="SixLabors.Fonts" Version="1.0.0-beta15"/>
+        <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13"/>
+        <!--install because it might cause "Could not load file or assembly" error, might be removed eventually-->
+        <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0"/>
+        <PackageReference Include="WanaKanaSharp" Version="0.2.0"/>
+        <PackageReference Include="Zipangu" Version="1.1.8"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Resources\Samples\Gameplay"/>
+        <Folder Include="Resources\Textures"/>
+    </ItemGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
-  <!--We need to copy framework assembly to the output, else ILRepack will fail to resolve framework assembly.-->
-  <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-  </PropertyGroup>
-  
+    <!--We need to copy framework assembly to the output, else ILRepack will fail to resolve framework assembly.-->
+    <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+
 </Project>

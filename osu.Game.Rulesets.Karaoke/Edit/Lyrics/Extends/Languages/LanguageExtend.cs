@@ -26,7 +26,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
                         Children = new Drawable[]
                         {
                             new LanguageEditModeSection(),
-                            new LanguageSwitchSpecialActionSection(),
+                            new LanguageSwitchSpecialActionSection()
                         };
                         break;
 
@@ -34,7 +34,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
                         Children = new Drawable[]
                         {
                             new LanguageEditModeSection(),
-                            new LanguageMissingSection(),
+                            new LanguageMissingSection()
                         };
                         break;
 

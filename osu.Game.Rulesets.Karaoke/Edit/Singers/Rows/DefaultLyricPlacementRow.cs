@@ -15,9 +15,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
 {
     public class DefaultLyricPlacementColumn : LyricPlacementColumn
     {
+        public static Singer DefaultSinger { get; } = new(0) { Name = "Default" };
         protected const int LEFT_MARGIN = 22;
 
-        public static Singer DefaultSinger { get; } = new(0) { Name = "Default" };
+        // should add extra width because this component is not draggable, which will have extra spacing.
+        protected override float SingerInfoSize => INFO_SIZE + LEFT_MARGIN;
 
         [Resolved]
         private ISingerScreenScrollingInfoProvider scrollingInfoProvider { get; set; }
@@ -27,52 +29,57 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
         {
         }
 
-        // should add extra width because this component is not draggable, which will have extra spacing.
-        protected override float SingerInfoSize => INFO_SIZE + LEFT_MARGIN;
-
         // todo : might display song info?
-        protected override Drawable CreateSingerInfo(Singer singer) => new Container
+        protected override Drawable CreateSingerInfo(Singer singer)
         {
-            Children = new Drawable[]
+            return new Container
             {
-                new Box
+                Children = new Drawable[]
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Color4Extensions.FromHex("333")
-                },
-                new Container<TimelineButton>
-                {
-                    Anchor = Anchor.CentreRight,
-                    Origin = Anchor.CentreRight,
-                    RelativeSizeAxes = Axes.Y,
-                    AutoSizeAxes = Axes.X,
-                    Masking = true,
-                    Children = new[]
+                    new Box
                     {
-                        new TimelineButton
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = Color4Extensions.FromHex("333")
+                    },
+                    new Container<TimelineButton>
+                    {
+                        Anchor = Anchor.CentreRight,
+                        Origin = Anchor.CentreRight,
+                        RelativeSizeAxes = Axes.Y,
+                        AutoSizeAxes = Axes.X,
+                        Masking = true,
+                        Children = new[]
                         {
-                            RelativeSizeAxes = Axes.Y,
-                            Height = 0.5f,
-                            Icon = FontAwesome.Solid.SearchPlus,
-                            Action = () => changeZoom(1)
-                        },
-                        new TimelineButton
-                        {
-                            Anchor = Anchor.BottomLeft,
-                            Origin = Anchor.BottomLeft,
-                            RelativeSizeAxes = Axes.Y,
-                            Height = 0.5f,
-                            Icon = FontAwesome.Solid.SearchMinus,
-                            Action = () => changeZoom(-1)
-                        },
+                            new TimelineButton
+                            {
+                                RelativeSizeAxes = Axes.Y,
+                                Height = 0.5f,
+                                Icon = FontAwesome.Solid.SearchPlus,
+                                Action = () => changeZoom(1)
+                            },
+                            new TimelineButton
+                            {
+                                Anchor = Anchor.BottomLeft,
+                                Origin = Anchor.BottomLeft,
+                                RelativeSizeAxes = Axes.Y,
+                                Height = 0.5f,
+                                Icon = FontAwesome.Solid.SearchMinus,
+                                Action = () => changeZoom(-1)
+                            }
+                        }
                     }
                 }
-            },
-        };
+            };
+        }
 
         protected override Drawable CreateTimeLinePart(Singer singer)
-            => new SingerLyricEditor(singer);
+        {
+            return new SingerLyricEditor(singer);
+        }
 
-        private void changeZoom(float change) => scrollingInfoProvider.BindableZoom.Value += change;
+        private void changeZoom(float change)
+        {
+            scrollingInfoProvider.BindableZoom.Value += change;
+        }
     }
 }

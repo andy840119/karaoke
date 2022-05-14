@@ -36,9 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
                     }));
                 }
                 else
-                {
                     languagesChangeHandler.Remove(currentLanguage.Value);
-                }
             };
         }
     }

@@ -15,6 +15,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Menus
 {
     public abstract class EnumMenu<T> : MenuItem where T : struct, Enum
     {
+        protected virtual IEnumerable<T> ValidEnums => EnumUtils.GetValues<T>();
         private readonly Bindable<T> bindableEnum = new();
 
         protected EnumMenu(Bindable<T> bindable, string text)
@@ -34,6 +35,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Menus
             }, true);
         }
 
+        protected string GetName(T selection)
+        {
+            return selection.GetDescription();
+        }
+
+        protected virtual void UpdateSelection(T selection)
+        {
+            bindableEnum.Value = selection;
+        }
+
         private ToggleMenuItem[] createMenuItems()
         {
             return ValidEnums.Select(e =>
@@ -41,16 +52,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Menus
                 var item = new ToggleMenuItem(GetName(e), MenuItemType.Standard, _ => UpdateSelection(e));
                 return item;
             }).ToArray();
-        }
-
-        protected virtual IEnumerable<T> ValidEnums => EnumUtils.GetValues<T>();
-
-        protected string GetName(T selection)
-            => selection.GetDescription();
-
-        protected virtual void UpdateSelection(T selection)
-        {
-            bindableEnum.Value = selection;
         }
     }
 }

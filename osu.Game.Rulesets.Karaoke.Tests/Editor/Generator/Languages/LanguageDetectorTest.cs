@@ -25,6 +25,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.Languages
             Assert.AreEqual(expected, actual);
         }
 
-        private static LanguageDetectorConfig generateConfig() => new();
+        private static LanguageDetectorConfig generateConfig()
+        {
+            return new();
+        }
     }
 }

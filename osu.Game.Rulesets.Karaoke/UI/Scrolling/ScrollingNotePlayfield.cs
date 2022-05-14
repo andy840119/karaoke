@@ -23,15 +23,15 @@ namespace osu.Game.Rulesets.Karaoke.UI.Scrolling
     {
         public const float COLUMN_SPACING = 1;
 
-        private readonly FillFlowContainer<DefaultColumnBackground> columnFlow;
+        public int Columns { get; }
 
         protected readonly Container BackgroundLayer;
         protected readonly Container HitObjectLayer;
         protected readonly Container HitObjectArea;
 
-        private readonly IBindable<NotePositionCalculator> calculator = new Bindable<NotePositionCalculator>();
+        private readonly FillFlowContainer<DefaultColumnBackground> columnFlow;
 
-        public int Columns { get; }
+        private readonly IBindable<NotePositionCalculator> calculator = new Bindable<NotePositionCalculator>();
 
         protected ScrollingNotePlayfield(int columns)
         {
@@ -69,7 +69,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Scrolling
                                     Direction = FillDirection.Vertical,
                                     Padding = new MarginPadding { Top = COLUMN_SPACING, Bottom = COLUMN_SPACING },
                                     Spacing = new Vector2(0, COLUMN_SPACING)
-                                },
+                                }
                                 // center line
                             }
                         },
@@ -91,14 +91,14 @@ namespace osu.Game.Rulesets.Karaoke.UI.Scrolling
                                             Name = "Hit objects",
                                             RelativeSizeAxes = Axes.Both,
                                             Child = HitObjectContainer
-                                        },
+                                        }
                                         // scoring visualization
                                     }
                                 }
-                            },
-                        },
+                            }
+                        }
                     }
-                },
+                }
                 // other things like microphone status
             };
 
@@ -157,10 +157,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Scrolling
             {
                 float columnHeight = e.NewValue.ColumnHeight;
 
-                for (int i = 0; i < Columns; i++)
-                {
-                    columnFlow[i].Height = columnHeight;
-                }
+                for (int i = 0; i < Columns; i++) columnFlow[i].Height = columnHeight;
             }, true);
         }
     }

@@ -51,7 +51,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                     new(new TextIndex(1), startTime + 600),
                     new(new TextIndex(2), startTime + 1000),
                     new(new TextIndex(3), startTime + 1500),
-                    new(new TextIndex(4), startTime + 2000),
+                    new(new TextIndex(4), startTime + 2000)
                 },
                 RubyTags = new[]
                 {
@@ -82,7 +82,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                         EndIndex = 4,
                         Text = "ke"
                     }
-                },
+                }
             };
 
             lyric.Translates.Add(cultureInfo, "karaoke");
@@ -99,12 +99,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
         private int depthIndex;
 
         protected virtual TestDrawableLyric CreateDrawableLyric(Lyric lyric)
-            => new(lyric)
+        {
+            return new(lyric)
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 Depth = depthIndex++
             };
+        }
 
         protected class TestDrawableLyric : DrawableLyric
         {

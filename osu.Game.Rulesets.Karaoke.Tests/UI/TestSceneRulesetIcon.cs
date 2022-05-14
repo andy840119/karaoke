@@ -26,7 +26,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.UI
                     Type = EdgeEffectType.Glow,
                     Colour = new Color4(255, 194, 224, 100),
                     Radius = 15,
-                    Roundness = 15,
+                    Roundness = 15
                 },
                 Size = new Vector2(40)
             };

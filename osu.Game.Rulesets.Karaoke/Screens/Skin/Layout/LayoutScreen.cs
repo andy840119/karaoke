@@ -22,20 +22,25 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
         }
 
         protected override Section[] CreateSelectionContainer()
-            => new Section[]
+        {
+            return new Section[]
             {
-                new LayoutSelection(),
+                new LayoutSelection()
             };
+        }
 
         protected override Section[] CreatePropertiesContainer()
-            => new Section[]
+        {
+            return new Section[]
             {
                 new LayoutAlignmentSection(),
-                new PreviewSection(),
+                new PreviewSection()
             };
+        }
 
         protected override Container CreatePreviewArea()
-            => new LayoutPreview
+        {
+            return new LayoutPreview
             {
                 Name = "Layout preview area",
                 Anchor = Anchor.Centre,
@@ -43,5 +48,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                 Size = new Vector2(0.95f),
                 RelativeSizeAxes = Axes.Both
             };
+        }
     }
 }

@@ -21,6 +21,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
         private const float caret_move_time = 60;
         private const float caret_width = 3;
 
+        private readonly Box drawableCaret;
+        private readonly InputCaretTextBox inputCaretTextBox;
+
+        private TextCaretPosition caretPosition;
+
         [Resolved]
         private EditorKaraokeSpriteText karaokeSpriteText { get; set; }
 
@@ -29,11 +34,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
 
         [Resolved]
         private ILyricCaretState lyricCaretState { get; set; }
-
-        private readonly Box drawableCaret;
-        private readonly InputCaretTextBox inputCaretTextBox;
-
-        private TextCaretPosition caretPosition;
 
         public DrawableLyricInputCaret(bool preview)
             : base(preview)
@@ -44,7 +44,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
             {
                 RelativeSizeAxes = Axes.Both,
                 Colour = Color4.White,
-                Alpha = preview ? 0.5f : 1,
+                Alpha = preview ? 0.5f : 1
             };
 
             if (!preview)
@@ -95,7 +95,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
             }
         }
 
-        public override void Hide() => this.FadeOut(200);
+        public override void Hide()
+        {
+            this.FadeOut(200);
+        }
 
         protected override void Apply(TextCaretPosition caret)
         {
@@ -127,12 +130,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
 
         private class InputCaretTextBox : BasicTextBox
         {
+            // should not accept tab event because all focus/unfocus should be controlled by caret.
+            public override bool CanBeTabbedTo => false;
             public Action<string> NewCommitText;
 
             public Action DeleteText;
-
-            // should not accept tab event because all focus/unfocus should be controlled by caret.
-            public override bool CanBeTabbedTo => false;
 
             // should not allow cursor index change because press left/right event is handled by parent caret.
             protected override bool AllowWordNavigation => false;
@@ -167,10 +169,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
                 }
 
                 // should not block the move left/right event if there's on text in the text box.
-                if (triggerMoveTextCaretIndex && string.IsNullOrEmpty(Text))
-                {
-                    return false;
-                }
+                if (triggerMoveTextCaretIndex && string.IsNullOrEmpty(Text)) return false;
 
                 return base.OnPressed(e);
 

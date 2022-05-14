@@ -19,13 +19,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
         private ILyricRomajiTagsChangeHandler romajiTagsChangeHandler { get; set; }
 
         protected override IBindableList<RomajiTag> GetBindableTextTags(Lyric lyric)
-            => lyric.RomajiTagsBindable;
+        {
+            return lyric.RomajiTagsBindable;
+        }
 
         protected override LabelledTextTagTextBox<RomajiTag> CreateLabelledTextTagTextBox(RomajiTag textTag)
-            => new LabelledRomajiTagTextBox(Lyric, textTag);
+        {
+            return new LabelledRomajiTagTextBox(Lyric, textTag);
+        }
 
         protected override void AddTextTag(RomajiTag textTag)
-            => romajiTagsChangeHandler.Add(textTag);
+        {
+            romajiTagsChangeHandler.Add(textTag);
+        }
 
         protected class LabelledRomajiTagTextBox : LabelledTextTagTextBox<RomajiTag>
         {
@@ -39,13 +45,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
             }
 
             protected override void ApplyValue(RomajiTag item, string value)
-                => romajiTagsChangeHandler.SetText(item, value);
+            {
+                romajiTagsChangeHandler.SetText(item, value);
+            }
 
             protected override void SetIndex(RomajiTag item, int? startIndex, int? endIndex)
-                => romajiTagsChangeHandler.SetIndex(item, startIndex, endIndex);
+            {
+                romajiTagsChangeHandler.SetIndex(item, startIndex, endIndex);
+            }
 
             protected override void RemoveTextTag(RomajiTag textTag)
-                => romajiTagsChangeHandler.Remove(textTag);
+            {
+                romajiTagsChangeHandler.Remove(textTag);
+            }
 
             [BackgroundDependencyLoader]
             private void load(IEditRomajiModeState editRomajiModeState)

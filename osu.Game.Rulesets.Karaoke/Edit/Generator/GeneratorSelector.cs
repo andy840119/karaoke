@@ -21,6 +21,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator
             this.generatorConfigManager = generatorConfigManager;
         }
 
+        public bool CanGenerate(Lyric lyric)
+        {
+            return Generator.Keys.Any(k => EqualityComparer<CultureInfo>.Default.Equals(k, lyric.Language));
+        }
+
         protected void RegisterGenerator<TGenerator, TConfig>(CultureInfo info) where TGenerator : TBaseGenerator where TConfig : TBaseConfig, new()
         {
             Generator.Add(info, new Lazy<TBaseGenerator>(() =>
@@ -33,8 +38,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator
         }
 
         protected abstract KaraokeRulesetEditGeneratorSetting GetGeneratorConfigSetting(CultureInfo info);
-
-        public bool CanGenerate(Lyric lyric)
-            => Generator.Keys.Any(k => EqualityComparer<CultureInfo>.Default.Equals(k, lyric.Language));
     }
 }

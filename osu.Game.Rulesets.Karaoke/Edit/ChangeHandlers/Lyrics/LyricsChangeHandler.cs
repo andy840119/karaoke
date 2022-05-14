@@ -74,7 +74,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
                 var createLyric = new Lyric
                 {
                     Text = "New lyric",
-                    Order = order + 1,
+                    Order = order + 1
                 };
                 Add(createLyric);
             });
@@ -88,7 +88,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
             Add(new Lyric
             {
                 Text = "New lyric",
-                Order = order + 1,
+                Order = order + 1
             });
         }
 
@@ -123,6 +123,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
         }
 
         private int getId()
-            => HitObjects.Any() ? HitObjects.Max(x => x.ID) + 1 : 1;
+        {
+            return HitObjects.Any() ? HitObjects.Max(x => x.ID) + 1 : 1;
+        }
     }
 }

@@ -29,12 +29,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
 
     public abstract class TopNavigation : CompositeDrawable
     {
-        [Resolved]
-        private OsuColour colours { get; set; }
-
-        [Resolved]
-        private EditorBeatmap editorBeatmap { get; set; }
-
         protected LyricImporterStepScreen Screen { get; }
 
         private readonly CornerBackground background;
@@ -42,6 +36,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
         private readonly IconButton button;
 
         private NavigationState state;
+
+        [Resolved]
+        private OsuColour colours { get; set; }
+
+        [Resolved]
+        private EditorBeatmap editorBeatmap { get; set; }
 
         protected TopNavigation(LyricImporterStepScreen screen)
         {
@@ -52,7 +52,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
             {
                 background = new CornerBackground
                 {
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 },
                 text = CreateTextContainer().With(t =>
                 {
@@ -69,13 +69,32 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                     Margin = new MarginPadding { Right = 5 },
                     Action = () =>
                     {
-                        if (AbleToNextStep(state))
-                        {
-                            CompleteClicked();
-                        }
+                        if (AbleToNextStep(state)) CompleteClicked();
                     }
                 }
             };
+        }
+
+        protected void TriggerStateChange()
+        {
+            state = GetState(editorBeatmap.HitObjects.OfType<Lyric>().ToArray());
+            updateNavigationDisplayInfo(state);
+        }
+
+        protected abstract NavigationTextContainer CreateTextContainer();
+
+        protected abstract NavigationState GetState(Lyric[] lyrics);
+
+        protected abstract string GetNavigationText(NavigationState value);
+
+        protected virtual bool AbleToNextStep(NavigationState value)
+        {
+            return value == NavigationState.Done;
+        }
+
+        protected virtual void CompleteClicked()
+        {
+            Screen.Complete();
         }
 
         [BackgroundDependencyLoader]
@@ -87,12 +106,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
             editorBeatmap.TransactionEnded += TriggerStateChange;
 
             TriggerStateChange();
-        }
-
-        protected void TriggerStateChange()
-        {
-            state = GetState(editorBeatmap.HitObjects.OfType<Lyric>().ToArray());
-            updateNavigationDisplayInfo(state);
         }
 
         private void updateNavigationDisplayInfo(NavigationState value)
@@ -132,24 +145,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
             }
 
             // Force change style if this step is able to go to next step.
-            if (AbleToNextStep(value))
-            {
-                button.Icon = FontAwesome.Regular.ArrowAltCircleRight;
-            }
+            if (AbleToNextStep(value)) button.Icon = FontAwesome.Regular.ArrowAltCircleRight;
 
             text.Text = GetNavigationText(value);
         }
-
-        protected abstract NavigationTextContainer CreateTextContainer();
-
-        protected abstract NavigationState GetState(Lyric[] lyrics);
-
-        protected abstract string GetNavigationText(NavigationState value);
-
-        protected virtual bool AbleToNextStep(NavigationState value)
-            => value == NavigationState.Done;
-
-        protected virtual void CompleteClicked() => Screen.Complete();
 
         public class NavigationTextContainer : CustomizableTextContainer
         {

@@ -23,10 +23,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
     {
         private const float timeline_height = 38;
 
+        private CurrentTimeMarker currentTimeMarker;
+
         [Resolved]
         private EditorClock editorClock { get; set; }
-
-        private CurrentTimeMarker currentTimeMarker;
 
         public TimeTagEditor(Lyric lyric)
             : base(lyric)
@@ -34,24 +34,39 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             Padding = new MarginPadding { Top = 10 };
         }
 
-        [BackgroundDependencyLoader]
-        private void load(OsuColour colours, ITimeTagModeState timeTagModeState, KaraokeRulesetLyricEditorConfigManager lyricEditorConfigManager)
+        public SnapResult FindSnappedPosition(Vector2 screenSpacePosition)
         {
-            BindableZoom.BindTo(timeTagModeState.BindableAdjustZoom);
+            return new(screenSpacePosition, null);
+        }
 
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagShowWaveform, ShowWaveformGraph);
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagWaveformOpacity, WaveformOpacity);
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagShowTick, ShowTick);
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagTickOpacity, TickOpacity);
+        public SnapResult FindSnappedPositionAndTime(Vector2 screenSpacePosition)
+        {
+            return new(screenSpacePosition, getTimeFromPosition(Content.ToLocalSpace(screenSpacePosition)));
+        }
 
-            AddInternal(new Box
-            {
-                Name = "Background",
-                Depth = 1,
-                RelativeSizeAxes = Axes.X,
-                Height = timeline_height,
-                Colour = colours.Gray3,
-            });
+        public float GetBeatSnapDistanceAt(HitObject referenceObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public float DurationToDistance(HitObject referenceObject, double duration)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double DistanceToDuration(HitObject referenceObject, float distance)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double GetSnappedDurationFromDistance(HitObject referenceObject, float distance)
+        {
+            throw new NotImplementedException();
+        }
+
+        public float GetSnappedDistanceFromDistance(HitObject referenceObject, float distance)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void PostProcessContent(Container content)
@@ -60,7 +75,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             content.AddRange(new Drawable[]
             {
                 new TimeTagEditorBlueprintContainer(HitObject),
-                currentTimeMarker = new CurrentTimeMarker(),
+                currentTimeMarker = new CurrentTimeMarker()
             });
         }
 
@@ -97,26 +112,34 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             base.OnUserScroll(value, animated, distanceDecay);
         }
 
-        public SnapResult FindSnappedPosition(Vector2 screenSpacePosition) =>
-            new(screenSpacePosition, null);
+        [BackgroundDependencyLoader]
+        private void load(OsuColour colours, ITimeTagModeState timeTagModeState, KaraokeRulesetLyricEditorConfigManager lyricEditorConfigManager)
+        {
+            BindableZoom.BindTo(timeTagModeState.BindableAdjustZoom);
 
-        public SnapResult FindSnappedPositionAndTime(Vector2 screenSpacePosition) =>
-            new(screenSpacePosition, getTimeFromPosition(Content.ToLocalSpace(screenSpacePosition)));
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagShowWaveform, ShowWaveformGraph);
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagWaveformOpacity, WaveformOpacity);
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagShowTick, ShowTick);
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.AdjustTimeTagTickOpacity, TickOpacity);
 
-        private double getTimeFromPosition(Vector2 localPosition) =>
-            localPosition.X / Content.DrawWidth * editorClock.TrackLength;
+            AddInternal(new Box
+            {
+                Name = "Background",
+                Depth = 1,
+                RelativeSizeAxes = Axes.X,
+                Height = timeline_height,
+                Colour = colours.Gray3
+            });
+        }
+
+        private double getTimeFromPosition(Vector2 localPosition)
+        {
+            return localPosition.X / Content.DrawWidth * editorClock.TrackLength;
+        }
 
         private float getPositionFromTime(double time)
-            => (float)(time / editorClock.TrackLength) * Content.DrawWidth;
-
-        public float GetBeatSnapDistanceAt(HitObject referenceObject) => throw new NotImplementedException();
-
-        public float DurationToDistance(HitObject referenceObject, double duration) => throw new NotImplementedException();
-
-        public double DistanceToDuration(HitObject referenceObject, float distance) => throw new NotImplementedException();
-
-        public double GetSnappedDurationFromDistance(HitObject referenceObject, float distance) => throw new NotImplementedException();
-
-        public float GetSnappedDistanceFromDistance(HitObject referenceObject, float distance) => throw new NotImplementedException();
+        {
+            return (float)(time / editorClock.TrackLength) * Content.DrawWidth;
+        }
     }
 }

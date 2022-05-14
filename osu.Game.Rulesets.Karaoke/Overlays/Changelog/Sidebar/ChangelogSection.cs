@@ -24,10 +24,9 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog.Sidebar
 {
     public class ChangelogSection : CompositeDrawable
     {
+        public readonly BindableBool Expanded = new(true);
         private const int animation_duration = 250;
         private const float font_size = 16;
-
-        public readonly BindableBool Expanded = new(true);
 
         public ChangelogSection(int year, IEnumerable<APIChangelogBuild> posts)
         {

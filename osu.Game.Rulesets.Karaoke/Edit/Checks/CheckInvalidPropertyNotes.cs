@@ -15,7 +15,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
 
         public IEnumerable<IssueTemplate> PossibleTemplates => new IssueTemplate[]
         {
-            new IssueTemplateInvalidParentLyric(this),
+            new IssueTemplateInvalidParentLyric(this)
         };
 
         public IEnumerable<Issue> Run(BeatmapVerifierContext context)
@@ -37,7 +37,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Note note)
-                => new(note, this);
+            {
+                return new(note, this);
+            }
         }
     }
 }

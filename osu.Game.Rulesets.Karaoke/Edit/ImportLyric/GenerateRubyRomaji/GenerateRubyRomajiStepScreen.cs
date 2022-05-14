@@ -31,26 +31,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateRubyRomaji
             AddInternal(lyricRomajiTagsChangeHandler = new LyricRomajiTagsChangeHandler());
         }
 
-        protected override TopNavigation CreateNavigation()
-            => new GenerateRubyRomajiNavigation(this);
-
-        protected override Drawable CreateContent()
-            => base.CreateContent().With(_ =>
-            {
-                SwitchLyricEditorMode(LyricEditorMode.EditRomaji);
-            });
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            // Asking auto-generate ruby or romaji.
-            if (lyricRubyTagsChangeHandler.CanGenerate())
-                AskForAutoGenerateRuby();
-            else if (lyricRomajiTagsChangeHandler.CanGenerate())
-                AskForAutoGenerateRomaji();
-        }
-
         public override void Complete()
         {
             ScreenStack.Push(LyricImporterStep.GenerateTimeTag);
@@ -80,6 +60,30 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateRubyRomaji
 
                 PrepareAutoGenerate();
             }));
+        }
+
+        protected override TopNavigation CreateNavigation()
+        {
+            return new GenerateRubyRomajiNavigation(this);
+        }
+
+        protected override Drawable CreateContent()
+        {
+            return base.CreateContent().With(_ =>
+            {
+                SwitchLyricEditorMode(LyricEditorMode.EditRomaji);
+            });
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            // Asking auto-generate ruby or romaji.
+            if (lyricRubyTagsChangeHandler.CanGenerate())
+                AskForAutoGenerateRuby();
+            else if (lyricRomajiTagsChangeHandler.CanGenerate())
+                AskForAutoGenerateRomaji();
         }
     }
 }

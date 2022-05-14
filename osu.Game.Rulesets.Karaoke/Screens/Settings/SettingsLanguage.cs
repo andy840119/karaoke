@@ -16,20 +16,23 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
 {
     public class SettingsLanguage : SettingsItem<CultureInfo>
     {
-        protected override Drawable CreateControl() => new LanguageSelectionButton
+        protected override Drawable CreateControl()
         {
-            RelativeSizeAxes = Axes.X,
-        };
+            return new LanguageSelectionButton
+            {
+                RelativeSizeAxes = Axes.X
+            };
+        }
 
         private class LanguageSelectionButton : SettingsButton, IHasCurrentValue<CultureInfo>, IHasPopover
         {
-            private readonly BindableWithCurrent<CultureInfo> current = new();
-
             public Bindable<CultureInfo> Current
             {
                 get => current.Current;
                 set => current.Current = value;
             }
+
+            private readonly BindableWithCurrent<CultureInfo> current = new();
 
             public LanguageSelectionButton()
             {
@@ -40,7 +43,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
             }
 
             public Popover GetPopover()
-                => new LanguageSelectorPopover(Current);
+            {
+                return new LanguageSelectorPopover(Current);
+            }
         }
 
         private class LanguageSelectorPopover : OsuPopover

@@ -16,22 +16,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
     {
         public IBindable<bool> Selecting => selecting;
 
-        private readonly BindableDictionary<Lyric, string> bindableDisableSelectingLyric = new();
-        private readonly BindableList<Lyric> bindableSelectedLyrics = new();
-
         public IBindableDictionary<Lyric, string> DisableSelectingLyric => bindableDisableSelectingLyric;
 
         public IBindableList<Lyric> SelectedLyrics => bindableSelectedLyrics;
 
         public Action<LyricEditorSelectingAction> Action { get; set; }
 
+        private readonly BindableDictionary<Lyric, string> bindableDisableSelectingLyric = new();
+        private readonly BindableList<Lyric> bindableSelectedLyrics = new();
+
+        private readonly BindableBool selecting = new();
+
         [Resolved]
         private EditorBeatmap beatmap { get; set; }
 
         [Resolved]
         private ILyricCaretState lyricCaretState { get; set; }
-
-        private readonly BindableBool selecting = new();
 
         public void StartSelecting()
         {
@@ -81,10 +81,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
             var disableSelectingLyrics = bindableDisableSelectingLyric.Keys;
             var lyrics = beatmap.HitObjects.OfType<Lyric>().Where(x => !disableSelectingLyrics.Contains(x));
 
-            foreach (var lyric in lyrics)
-            {
-                Select(lyric);
-            }
+            foreach (var lyric in lyrics) Select(lyric);
         }
 
         public void UnSelectAll()

@@ -20,8 +20,8 @@ using osu.Game.Screens.Edit;
 namespace osu.Game.Rulesets.Karaoke.Edit.Checker
 {
     /// <summary>
-    /// This manager is for register and able to get invalid change by bindable.
-    /// Note : this manager will be removed if able to get check result directly.
+    ///     This manager is for register and able to get invalid change by bindable.
+    ///     Note : this manager will be removed if able to get check result directly.
     /// </summary>
     public class LyricCheckerManager : Component
     {
@@ -56,10 +56,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checker
         }
 
         public void CheckLyric(Lyric lyric)
-            => CheckLyrics(new List<HitObject> { lyric });
+        {
+            CheckLyrics(new List<HitObject> { lyric });
+        }
 
         protected void RemoveFromCheckList(Lyric lyric)
-            => BindableReports.Remove(lyric);
+        {
+            BindableReports.Remove(lyric);
+        }
 
         [BackgroundDependencyLoader(true)]
         private void load(EditorBeatmap beatmap, KaraokeRulesetEditCheckerConfigManager rulesetEditCheckerConfigManager)
@@ -94,11 +98,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checker
                 {
                     new CheckInvalidPropertyLyrics(),
                     new CheckInvalidRubyRomajiLyrics(config),
-                    new CheckInvalidTimeLyrics(config),
+                    new CheckInvalidTimeLyrics(config)
                 };
             }
 
-            public IEnumerable<Issue> Run(BeatmapVerifierContext context) => checks.SelectMany(check => check.Run(context));
+            public IEnumerable<Issue> Run(BeatmapVerifierContext context)
+            {
+                return checks.SelectMany(check => check.Run(context));
+            }
         }
     }
 }

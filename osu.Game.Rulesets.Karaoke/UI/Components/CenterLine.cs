@@ -19,7 +19,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
 
             Child = centerLineBox = new Box
             {
-                RelativeSizeAxes = Axes.Both,
+                RelativeSizeAxes = Axes.Both
             };
         }
 

@@ -34,6 +34,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
     {
         State,
 
-        Index,
+        Index
     }
 }

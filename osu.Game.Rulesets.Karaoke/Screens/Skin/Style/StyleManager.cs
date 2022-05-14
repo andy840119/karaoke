@@ -15,11 +15,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
 
         public readonly Bindable<NoteStyle> EditNoteStyle = new();
 
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-        }
-
         public void ApplyCurrentStyleChange(Action<LyricStyle> action)
         {
             action?.Invoke(EditStyle.Value);
@@ -30,6 +25,11 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
         {
             action?.Invoke(EditNoteStyle.Value);
             EditNoteStyle.TriggerChange();
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
         }
     }
 }

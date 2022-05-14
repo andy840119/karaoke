@@ -13,11 +13,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
         [Resolved]
         private IEditRomajiModeState editRomajiModeState { get; set; }
 
+        internal override void UpdateEditMode(TextTagEditMode mode)
+        {
+            editRomajiModeState.ChangeEditMode(mode);
+
+            base.UpdateEditMode(mode);
+        }
+
         protected override TextTagEditMode DefaultMode()
-            => editRomajiModeState.EditMode;
+        {
+            return editRomajiModeState.EditMode;
+        }
 
         protected override Dictionary<TextTagEditMode, EditModeSelectionItem> CreateSelections()
-            => new()
+        {
+            return new()
             {
                 {
                     TextTagEditMode.Generate, new EditModeSelectionItem("Generate", "Auto-generate romajies in the lyric.")
@@ -52,7 +62,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
                                         KaraokeEditAction.EditTextTagReduceStartIndex,
                                         KaraokeEditAction.EditTextTagIncreaseStartIndex,
                                         KaraokeEditAction.EditTextTagReduceEndIndex,
-                                        KaraokeEditAction.EditTextTagIncreaseEndIndex,
+                                        KaraokeEditAction.EditTextTagIncreaseEndIndex
                                     }
                                 }
                             }
@@ -63,12 +73,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
                     TextTagEditMode.Verify, new EditModeSelectionItem("Verify", "Check invalid romajies in here.")
                 }
             };
-
-        internal override void UpdateEditMode(TextTagEditMode mode)
-        {
-            editRomajiModeState.ChangeEditMode(mode);
-
-            base.UpdateEditMode(mode);
         }
     }
 }

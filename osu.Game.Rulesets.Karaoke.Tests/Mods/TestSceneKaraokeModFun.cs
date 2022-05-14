@@ -10,21 +10,27 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Mods
     public class TestSceneKaraokeModFun : KaraokeModTestScene
     {
         [Test]
-        public void TestSnowMod() => CreateModTest(new ModTestData
+        public void TestSnowMod()
         {
-            Mod = new KaraokeModSnow(),
-            Autoplay = false,
-            Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
-            PassCondition = () => true
-        });
+            CreateModTest(new ModTestData
+            {
+                Mod = new KaraokeModSnow(),
+                Autoplay = false,
+                Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
+                PassCondition = () => true
+            });
+        }
 
         [Test]
-        public void TestWindowsUpdateMod() => CreateModTest(new ModTestData
+        public void TestWindowsUpdateMod()
         {
-            Mod = new KaraokeModWindowsUpdate(),
-            Autoplay = false,
-            Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
-            PassCondition = () => true
-        });
+            CreateModTest(new ModTestData
+            {
+                Mod = new KaraokeModWindowsUpdate(),
+                Autoplay = false,
+                Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
+                PassCondition = () => true
+            });
+        }
     }
 }

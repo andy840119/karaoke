@@ -26,14 +26,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
         [Cached]
         private readonly OverlayColourProvider overlayColourProvider;
 
+        private readonly EditModeButton[] buttons;
+        private readonly DescriptionTextFlowContainer description;
+
         [Resolved]
         private OsuColour colours { get; set; }
 
         [Resolved]
         private ILyricSelectionState lyricSelectionState { get; set; }
-
-        private readonly EditModeButton[] buttons;
-        private readonly DescriptionTextFlowContainer description;
 
         protected EditModeSection()
         {
@@ -54,14 +54,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                         buttons = CreateSelections().Select(x => new EditModeButton(x.Key, x.Value)
                         {
                             Padding = new MarginPadding { Horizontal = 5 },
-                            Action = UpdateEditMode,
-                        }).ToArray(),
+                            Action = UpdateEditMode
+                        }).ToArray()
                     }
                 },
                 description = new DescriptionTextFlowContainer
                 {
                     RelativeSizeAxes = Axes.X,
-                    AutoSizeAxes = Axes.Y,
+                    AutoSizeAxes = Axes.Y
                 }
             };
 
@@ -106,11 +106,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
 
         private class EditModeButton : OsuButton
         {
-            public new Action<T> Action;
-
             public T Mode { get; }
 
             public EditModeSelectionItem Item { get; }
+            public new Action<T> Action;
 
             public EditModeButton(T mode, EditModeSelectionItem item)
             {
@@ -137,17 +136,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
         protected class EditModeSelectionItem
         {
             /// <summary>
-            /// The text which this <see cref="EditModeButton"/> displays.
+            ///     The text which this <see cref="EditModeButton" /> displays.
             /// </summary>
             public readonly Bindable<LocalisableString> Text = new(string.Empty);
 
             /// <summary>
-            /// The description which this <see cref="EditModeButton"/> displays.
+            ///     The description which this <see cref="EditModeButton" /> displays.
             /// </summary>
             public readonly Bindable<DescriptionFormat> Description = new();
 
             /// <summary>
-            /// The alert number which this <see cref="EditModeButton"/> displays.
+            ///     The alert number which this <see cref="EditModeButton" /> displays.
             /// </summary>
             public readonly Bindable<int> Alert = new();
 

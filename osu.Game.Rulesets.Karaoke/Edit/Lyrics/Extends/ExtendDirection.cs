@@ -6,12 +6,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends
     public enum ExtendDirection
     {
         /// <summary>
-        /// At the right side of the main lyric editor.
+        ///     At the right side of the main lyric editor.
         /// </summary>
         Left,
 
         /// <summary>
-        /// At the right side of the main lyric editor.
+        ///     At the right side of the main lyric editor.
         /// </summary>
         Right
     }

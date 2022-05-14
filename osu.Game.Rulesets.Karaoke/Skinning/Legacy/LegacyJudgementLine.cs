@@ -19,6 +19,8 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
         private readonly IBindable<ScrollingDirection> direction = new Bindable<ScrollingDirection>();
         private readonly LayoutValue subtractionCache = new(Invalidation.DrawSize);
 
+        private Sprite judgementLineBodySprite;
+
         public LegacyJudgementLine()
         {
             RelativeSizeAxes = Axes.Y;
@@ -28,7 +30,42 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             AddLayout(subtractionCache);
         }
 
-        private Sprite judgementLineBodySprite;
+        protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> direction)
+        {
+            Scale = direction.NewValue == ScrollingDirection.Left ? Vector2.One : new Vector2(-1, 1);
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (!subtractionCache.IsValid && DrawHeight > 0)
+            {
+                if (judgementLineBodySprite.Texture != null) judgementLineBodySprite.Width = getWidth(judgementLineBodySprite);
+
+                subtractionCache.Validate();
+            }
+
+            static float getWidth(Sprite s) => s.Texture?.DisplayWidth ?? 0;
+        }
+
+        private static Texture getTextureFromLookup(ISkin skin, LegacyKaraokeSkinConfigurationLookups lookup)
+        {
+            return skin.GetTexture(getTextureNameFromLookup(lookup));
+        }
+
+        private static string getTextureNameFromLookup(LegacyKaraokeSkinConfigurationLookups lookup)
+        {
+            string suffix = lookup switch
+            {
+                LegacyKaraokeSkinConfigurationLookups.JudgementLineBodyImage => "body",
+                LegacyKaraokeSkinConfigurationLookups.JudgementLineHeadImage => "head",
+                LegacyKaraokeSkinConfigurationLookups.JudgementLineTailImage => "tail",
+                _ => throw new ArgumentOutOfRangeException(nameof(lookup))
+            };
+
+            return $"karaoke-judgement-line-{suffix}";
+        }
 
         [BackgroundDependencyLoader]
         private void load(ISkinSource skin, IScrollingInfo scrollingInfo)
@@ -64,44 +101,6 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
 
             direction.BindTo(scrollingInfo.Direction);
             direction.BindValueChanged(OnDirectionChanged, true);
-        }
-
-        protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> direction)
-        {
-            Scale = direction.NewValue == ScrollingDirection.Left ? Vector2.One : new Vector2(-1, 1);
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-
-            if (!subtractionCache.IsValid && DrawHeight > 0)
-            {
-                if (judgementLineBodySprite.Texture != null)
-                {
-                    judgementLineBodySprite.Width = getWidth(judgementLineBodySprite);
-                }
-
-                subtractionCache.Validate();
-            }
-
-            static float getWidth(Sprite s) => s.Texture?.DisplayWidth ?? 0;
-        }
-
-        private static Texture getTextureFromLookup(ISkin skin, LegacyKaraokeSkinConfigurationLookups lookup)
-            => skin.GetTexture(getTextureNameFromLookup(lookup));
-
-        private static string getTextureNameFromLookup(LegacyKaraokeSkinConfigurationLookups lookup)
-        {
-            string suffix = lookup switch
-            {
-                LegacyKaraokeSkinConfigurationLookups.JudgementLineBodyImage => "body",
-                LegacyKaraokeSkinConfigurationLookups.JudgementLineHeadImage => "head",
-                LegacyKaraokeSkinConfigurationLookups.JudgementLineTailImage => "tail",
-                _ => throw new ArgumentOutOfRangeException(nameof(lookup))
-            };
-
-            return $"karaoke-judgement-line-{suffix}";
         }
     }
 }

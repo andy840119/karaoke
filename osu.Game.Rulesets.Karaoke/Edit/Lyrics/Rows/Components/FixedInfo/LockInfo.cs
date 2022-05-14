@@ -22,6 +22,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.FixedInfo
 {
     public class LockInfo : SpriteIcon, IHasContextMenu
     {
+        public MenuItem[] ContextMenuItems => new LyricLockContextMenu(lockChangeHandler, lyric, "Lock").Items.ToArray();
+
+        private readonly Lyric lyric;
+
+        private readonly IBindable<LockState> bindableLockState;
+
         [Resolved]
         private ILockChangeHandler lockChangeHandler { get; set; }
 
@@ -31,18 +37,29 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.FixedInfo
         [Resolved]
         private KaraokeRulesetLyricEditorConfigManager configManager { get; set; }
 
-        public MenuItem[] ContextMenuItems => new LyricLockContextMenu(lockChangeHandler, lyric, "Lock").Items.ToArray();
-
-        private readonly Lyric lyric;
-
-        private readonly IBindable<LockState> bindableLockState;
-
         public LockInfo(Lyric lyric)
         {
             this.lyric = lyric;
             bindableLockState = lyric.LockBindable.GetBoundCopy();
 
             Size = new Vector2(12);
+        }
+
+        protected override bool OnClick(ClickEvent e)
+        {
+            if (bindableLockState.Value == LockState.None)
+            {
+                // should mark lyric as selected for able to apply the lock state.
+                lyricCaretState.MoveCaretToTargetPosition(lyric);
+
+                // change the state by config.
+                var newLockState = configManager.Get<LockState>(KaraokeRulesetLyricEditorSetting.ClickToLockLyricState);
+                lockChangeHandler.Lock(newLockState);
+            }
+            else
+                lockChangeHandler.Unlock();
+
+            return base.OnClick(e);
         }
 
         [BackgroundDependencyLoader]
@@ -71,25 +88,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.FixedInfo
                         throw new ArgumentOutOfRangeException(nameof(value.NewValue));
                 }
             }, true);
-        }
-
-        protected override bool OnClick(ClickEvent e)
-        {
-            if (bindableLockState.Value == LockState.None)
-            {
-                // should mark lyric as selected for able to apply the lock state.
-                lyricCaretState.MoveCaretToTargetPosition(lyric);
-
-                // change the state by config.
-                var newLockState = configManager.Get<LockState>(KaraokeRulesetLyricEditorSetting.ClickToLockLyricState);
-                lockChangeHandler.Lock(newLockState);
-            }
-            else
-            {
-                lockChangeHandler.Unlock();
-            }
-
-            return base.OnClick(e);
         }
     }
 }

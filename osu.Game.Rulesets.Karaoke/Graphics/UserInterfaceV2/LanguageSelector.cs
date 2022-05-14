@@ -16,13 +16,13 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
 {
     public class LanguageSelector : CompositeDrawable
     {
-        private readonly BindableWithCurrent<CultureInfo> current = new();
-
         public Bindable<CultureInfo> Current
         {
             get => current.Current;
             set => current.Current = value;
         }
+
+        private readonly BindableWithCurrent<CultureInfo> current = new();
 
         public LanguageSelector()
         {
@@ -44,7 +44,7 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                     {
                         filter = new LanguageSelectionSearchTextBox
                         {
-                            RelativeSizeAxes = Axes.X,
+                            RelativeSizeAxes = Axes.X
                         }
                     },
                     new Drawable[]
@@ -79,16 +79,12 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
         private class RearrangeableLanguageListContainer : RearrangeableTextFlowListContainer<CultureInfo>
         {
             protected override DrawableTextListItem CreateDrawable(CultureInfo item)
-                => new DrawableLanguageListItem(item);
+            {
+                return new DrawableLanguageListItem(item);
+            }
 
             private class DrawableLanguageListItem : DrawableTextListItem
             {
-                public DrawableLanguageListItem(CultureInfo item)
-                    : base(item)
-                {
-                    Padding = new MarginPadding { Left = 5 };
-                }
-
                 public override IEnumerable<string> FilterTerms => new[]
                 {
                     Model.Name,
@@ -97,8 +93,16 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                     Model.NativeName
                 };
 
+                public DrawableLanguageListItem(CultureInfo item)
+                    : base(item)
+                {
+                    Padding = new MarginPadding { Left = 5 };
+                }
+
                 protected override void CreateDisplayContent(OsuTextFlowContainer textFlowContainer, CultureInfo model)
-                    => textFlowContainer.AddText(CultureInfoUtils.GetLanguageDisplayText(model));
+                {
+                    textFlowContainer.AddText(CultureInfoUtils.GetLanguageDisplayText(model));
+                }
             }
         }
     }

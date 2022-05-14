@@ -9,7 +9,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class TimeTagUtils
     {
         /// <summary>
-        /// Shifting time-tag.
+        ///     Shifting time-tag.
         /// </summary>
         /// <param name="timeTag"></param>
         /// <param name="offset"></param>
@@ -22,11 +22,11 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Display string with time format
+        ///     Display string with time format
         /// </summary>
         /// <example>
-        /// 02:32:155
-        /// --:--:---
+        ///     02:32:155
+        ///     --:--:---
         /// </example>
         /// <param name="timeTag"></param>
         /// <returns></returns>

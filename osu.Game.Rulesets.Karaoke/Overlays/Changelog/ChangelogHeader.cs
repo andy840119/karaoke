@@ -12,15 +12,15 @@ using osu.Game.Rulesets.Karaoke.Online.API.Requests.Responses;
 namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
 {
     /// <summary>
-    /// Change log header, display <see cref="APIChangelogBuild"/> title
+    ///     Change log header, display <see cref="APIChangelogBuild" /> title
     /// </summary>
     public class ChangelogHeader : BreadcrumbControlOverlayHeader
     {
         public readonly Bindable<APIChangelogBuild> Build = new();
 
-        public Action ListingSelected;
-
         public static LocalisableString ListingString => LayoutStrings.HeaderChangelogIndex;
+
+        public Action ListingSelected;
 
         public ChangelogHeader()
         {
@@ -43,13 +43,14 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
                     Current.Value = e.NewValue.DisplayVersion;
                 }
                 else
-                {
                     Current.Value = ListingString;
-                }
             });
         }
 
-        protected override OverlayTitle CreateTitle() => new ChangelogHeaderTitle();
+        protected override OverlayTitle CreateTitle()
+        {
+            return new ChangelogHeaderTitle();
+        }
 
         private class ChangelogHeaderTitle : OverlayTitle
         {

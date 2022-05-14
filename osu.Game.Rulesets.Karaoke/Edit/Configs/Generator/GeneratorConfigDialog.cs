@@ -17,12 +17,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
 {
     public abstract class GeneratorConfigDialog<T> : OsuFocusedOverlayContainer where T : IHasConfig<T>, new()
     {
+        [Cached]
+        protected readonly OverlayColourProvider ColourProvider;
+
+        protected abstract KaraokeRulesetEditGeneratorSetting Config { get; }
+
+        protected abstract OverlayColourScheme OverlayColourScheme { get; }
+
+        protected abstract string Title { get; }
+
+        protected abstract string Description { get; }
         private const float section_scale = 0.75f;
 
         private readonly Bindable<T> bindableConfig = new();
-
-        [Cached]
-        protected readonly OverlayColourProvider ColourProvider;
 
         protected GeneratorConfigDialog()
         {
@@ -44,7 +51,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
                     new Box
                     {
                         Colour = ColourProvider.Background2,
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     new SectionsContainer<GeneratorConfigSection>
                     {
@@ -59,14 +66,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
             };
         }
 
-        protected abstract KaraokeRulesetEditGeneratorSetting Config { get; }
-
-        protected abstract OverlayColourScheme OverlayColourScheme { get; }
-
-        protected abstract string Title { get; }
-
-        protected abstract string Description { get; }
-
         protected abstract GeneratorConfigSection[] CreateConfigSection(Bindable<T> current);
 
         [BackgroundDependencyLoader]
@@ -77,13 +76,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator
 
         internal class GeneratorConfigScreenHeader : OverlayHeader
         {
-            protected override OverlayTitle CreateTitle() => new GeneratorConfigScreenTitle();
-
             public GeneratorConfigScreenHeader(GeneratorConfigDialog<T> dialog)
             {
                 // todo : need to think about is there any better way to place title and description in here
                 if (Title is GeneratorConfigScreenTitle generatorConfigScreenTitle)
                     generatorConfigScreenTitle.SetTitleFromDialog(dialog);
+            }
+
+            protected override OverlayTitle CreateTitle()
+            {
+                return new GeneratorConfigScreenTitle();
             }
 
             private class GeneratorConfigScreenTitle : OverlayTitle

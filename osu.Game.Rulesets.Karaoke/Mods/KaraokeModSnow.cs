@@ -25,11 +25,6 @@ namespace osu.Game.Rulesets.Karaoke.Mods
         public override IconUsage? Icon => FontAwesome.Regular.Snowflake;
         public override ModType Type => ModType.Fun;
 
-        public void ApplyToHUD(HUDOverlay overlay)
-        {
-            overlay.Add(CreateSnowContainer);
-        }
-
         protected virtual SnowContainer CreateSnowContainer => new()
         {
             SnowGenerateParSecond = 1,
@@ -42,8 +37,13 @@ namespace osu.Game.Rulesets.Karaoke.Mods
             TexturePath = @"Mod/Snow/Snow",
             Clock = new FramedClock(new StopwatchClock(true)),
             RelativeSizeAxes = Axes.Both,
-            Depth = 1,
+            Depth = 1
         };
+
+        public void ApplyToHUD(HUDOverlay overlay)
+        {
+            overlay.Add(CreateSnowContainer);
+        }
 
         protected class SnowContainer : Container
         {
@@ -121,7 +121,7 @@ namespace osu.Game.Rulesets.Karaoke.Mods
             }
 
             /// <summary>
-            /// Show spirit
+            ///     Show spirit
             /// </summary>
             private class SnowSprite : Circle
             {

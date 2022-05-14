@@ -21,25 +21,19 @@ using osuTK;
 namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
 {
     /// <summary>
-    /// A component which displays a singer along with related description text.
+    ///     A component which displays a singer along with related description text.
     /// </summary>
     public class SingerDisplay : CompositeDrawable, IHasCurrentValue<Singer>
     {
-        /// <summary>
-        /// Invoked when the user has requested the singer corresponding to this <see cref="SingerDisplay"/>
-        /// to be removed from its palette.
-        /// </summary>
-        public event Action<SingerDisplay> DeleteRequested;
-
-        private readonly BindableWithCurrent<Singer> current = new();
-
-        private OsuSpriteText singerName;
-
         public Bindable<Singer> Current
         {
             get => current.Current;
             set => current.Current = value;
         }
+
+        private readonly BindableWithCurrent<Singer> current = new();
+
+        private OsuSpriteText singerName;
 
         [BackgroundDependencyLoader]
         private void load()
@@ -71,9 +65,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
             Current.BindValueChanged(singer => singerName.Text = singer.NewValue?.Name, true);
         }
 
+        /// <summary>
+        ///     Invoked when the user has requested the singer corresponding to this <see cref="SingerDisplay" />
+        ///     to be removed from its palette.
+        /// </summary>
+        public event Action<SingerDisplay> DeleteRequested;
+
         private class SingerCircle : OsuClickableContainer, IHasContextMenu, IHasCustomTooltip<Singer>
         {
             public Bindable<Singer> Current { get; } = new();
+
+            public MenuItem[] ContextMenuItems => new MenuItem[]
+            {
+                new OsuMenuItem("Delete", MenuItemType.Destructive, () => DeleteRequested?.Invoke())
+            };
+
+            public Singer TooltipContent => Current.Value;
 
             public Action DeleteRequested { get; set; }
 
@@ -100,9 +107,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     }
                 };
+            }
+
+            public ITooltip<Singer> GetCustomTooltip()
+            {
+                return new SingerToolTip();
             }
 
             protected override void LoadComplete()
@@ -117,15 +129,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
                 BorderColour = SingerUtils.GetContentColour(Current.Value);
                 singerAvatar.Singer = Current.Value;
             }
-
-            public MenuItem[] ContextMenuItems => new MenuItem[]
-            {
-                new OsuMenuItem("Delete", MenuItemType.Destructive, () => DeleteRequested?.Invoke())
-            };
-
-            public ITooltip<Singer> GetCustomTooltip() => new SingerToolTip();
-
-            public Singer TooltipContent => Current.Value;
         }
     }
 }

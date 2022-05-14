@@ -12,7 +12,7 @@ using osu.Game.Rulesets.Karaoke.Skinning;
 namespace osu.Game.Rulesets.Karaoke.IO.Serialization
 {
     /// <summary>
-    /// This contract resolver is for save and load data from <see cref="KaraokeSkin"/>
+    ///     This contract resolver is for save and load data from <see cref="KaraokeSkin" />
     /// </summary>
     public class KaraokeSkinContractResolver : SnakeCaseKeyContractResolver
     {

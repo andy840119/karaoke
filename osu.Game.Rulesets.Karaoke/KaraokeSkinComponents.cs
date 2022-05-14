@@ -9,6 +9,6 @@ namespace osu.Game.Rulesets.Karaoke
         StageBackground,
         JudgementLine,
         Note,
-        HitExplosion,
+        HitExplosion
     }
 }

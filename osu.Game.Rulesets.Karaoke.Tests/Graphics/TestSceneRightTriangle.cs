@@ -31,7 +31,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
                     new Box
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Colour = colours.Gray4,
+                        Colour = colours.Gray4
                     },
                     rightTriangle = new RightTriangle
                     {

@@ -17,7 +17,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Components
         }
 
         /// <summary>
-        /// Updates whether this <see cref="SelectionHandler{T}"/> is visible.
+        ///     Updates whether this <see cref="SelectionHandler{T}" /> is visible.
         /// </summary>
         private void updateVisibility()
         {

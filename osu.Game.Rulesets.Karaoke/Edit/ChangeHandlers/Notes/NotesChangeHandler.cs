@@ -60,10 +60,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Notes
 
                 var combinedNote = NotesUtils.CombineNote(notes[0], notes[1]);
 
-                for (int i = 2; i < notes.Count; i++)
-                {
-                    combinedNote = NotesUtils.CombineNote(notes[i - 1], notes[i]);
-                }
+                for (int i = 2; i < notes.Count; i++) combinedNote = NotesUtils.CombineNote(notes[i - 1], notes[i]);
 
                 RemoveRange(notes);
                 Add(combinedNote);
@@ -111,10 +108,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Notes
             });
         }
 
-        protected void PerformOnLyricSelection(Action<Lyric> action) => beatmap.PerformOnSelection(h =>
+        protected void PerformOnLyricSelection(Action<Lyric> action)
         {
-            if (h is Lyric lyric)
-                action.Invoke(lyric);
-        });
+            beatmap.PerformOnSelection(h =>
+            {
+                if (h is Lyric lyric)
+                    action.Invoke(lyric);
+            });
+        }
     }
 }

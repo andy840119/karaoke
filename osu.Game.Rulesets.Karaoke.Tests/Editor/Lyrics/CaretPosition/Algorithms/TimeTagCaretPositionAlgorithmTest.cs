@@ -168,9 +168,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
         protected override void AssertEqual(TimeTagCaretPosition expected, TimeTagCaretPosition actual)
         {
             if (expected == null)
-            {
                 Assert.IsNull(actual);
-            }
             else
             {
                 Assert.AreEqual(expected.Lyric, actual.Lyric);
@@ -187,8 +185,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
             var timeTag = lyric?.TimeTags?.ElementAtOrDefault(timeTagIndex);
             return new TimeTagCaretPosition(lyric, timeTag);
         }
-
-        #region source
 
         private static Lyric[] singleLyric => new[]
         {
@@ -273,7 +269,5 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
                 })
             }
         };
-
-        #endregion
     }
 }

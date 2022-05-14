@@ -15,8 +15,8 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Overlays.Dialog
                 new PopupDialogOkButton
                 {
                     Text = @"OK",
-                    Action = () => okAction?.Invoke(true),
-                },
+                    Action = () => okAction?.Invoke(true)
+                }
             };
         }
     }

@@ -11,12 +11,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
 {
     public class RubyTagsConverterTest : BaseSingleConverterTest<RubyTagsConverter>
     {
-        protected override JsonConverter[] CreateExtraConverts()
-            => new JsonConverter[]
-            {
-                new RubyTagConverter(),
-            };
-
         [Test]
         public void TestSerialize()
         {
@@ -33,7 +27,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                     StartIndex = 1,
                     EndIndex = 2,
                     Text = "ル"
-                },
+                }
             };
 
             const string expected = "[\"[1,2]:ル\",\"[2,3]:ビ\"]";
@@ -59,10 +53,18 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                     StartIndex = 2,
                     EndIndex = 3,
                     Text = "ビ"
-                },
+                }
             };
             var actual = JsonConvert.DeserializeObject<RubyTag[]>(json, CreateSettings());
             TextTagAssert.ArePropertyEqual(expected, actual);
+        }
+
+        protected override JsonConverter[] CreateExtraConverts()
+        {
+            return new JsonConverter[]
+            {
+                new RubyTagConverter()
+            };
         }
     }
 }

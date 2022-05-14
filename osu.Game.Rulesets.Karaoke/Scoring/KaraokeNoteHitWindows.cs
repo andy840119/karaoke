@@ -11,17 +11,22 @@ namespace osu.Game.Rulesets.Karaoke.Scoring
         {
             new(HitResult.Perfect, 80, 50, 20),
             new(HitResult.Meh, 80, 50, 20),
-            new(HitResult.Miss, 2000, 1500, 1000),
+            new(HitResult.Miss, 2000, 1500, 1000)
         };
 
-        public override bool IsHitResultAllowed(HitResult result) =>
-            result switch
+        public override bool IsHitResultAllowed(HitResult result)
+        {
+            return result switch
             {
                 HitResult.Perfect => true,
                 HitResult.Meh => true,
                 _ => false
             };
+        }
 
-        protected override DifficultyRange[] GetRanges() => karaoke_ranges;
+        protected override DifficultyRange[] GetRanges()
+        {
+            return karaoke_ranges;
+        }
     }
 }

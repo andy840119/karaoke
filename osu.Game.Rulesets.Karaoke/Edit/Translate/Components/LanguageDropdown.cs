@@ -11,6 +11,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
     public class LanguageDropdown : OsuDropdown<CultureInfo>
     {
         protected override LocalisableString GenerateItemText(CultureInfo item)
-            => CultureInfoUtils.GetLanguageDisplayText(item);
+        {
+            return CultureInfoUtils.GetLanguageDisplayText(item);
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Input
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         HasDevice = hasDevice,
-                        DeviceName = deviceName,
+                        DeviceName = deviceName
                     }
                 };
             }, true);

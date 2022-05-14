@@ -10,23 +10,23 @@ using osu.Game.Rulesets.Karaoke.Utils;
 namespace osu.Game.Rulesets.Karaoke.Skinning
 {
     /// <summary>
-    /// todo: it might be better just throw the whole <see cref="KaraokeHitObject"/> to get the config.
-    /// because cannot get the result just by id.
+    ///     todo: it might be better just throw the whole <see cref="KaraokeHitObject" /> to get the config.
+    ///     because cannot get the result just by id.
     /// </summary>
     public readonly struct KaraokeSkinLookup
     {
         /// <summary>
-        /// Parts wants to be searched.
+        ///     Parts wants to be searched.
         /// </summary>
         public ElementType Type { get; }
 
         /// <summary>
-        /// Lookup index
+        ///     Lookup index
         /// </summary>
         public int Lookup { get; }
 
         /// <summary>
-        /// Ctor for <see cref="ElementType.LyricStyle"/> and <see cref="ElementType.NoteStyle"/>
+        ///     Ctor for <see cref="ElementType.LyricStyle" /> and <see cref="ElementType.NoteStyle" />
         /// </summary>
         /// <param name="type"></param>
         /// <param name="singers"></param>

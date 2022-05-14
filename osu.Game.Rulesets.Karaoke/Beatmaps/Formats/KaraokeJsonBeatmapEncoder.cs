@@ -30,10 +30,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             var notes = output.HitObjects.OfType<Note>();
 
             // make sure that every note has parent lyric.
-            if (notes.Any(note => note.ParentLyric == null || !lyrics.Contains(note.ParentLyric)))
-            {
-                throw new InvalidOperationException();
-            }
+            if (notes.Any(note => note.ParentLyric == null || !lyrics.Contains(note.ParentLyric))) throw new InvalidOperationException();
 
             // replace string stream.ReadToEnd().Serialize(output);
             string json = JsonConvert.SerializeObject(output, globalSetting);

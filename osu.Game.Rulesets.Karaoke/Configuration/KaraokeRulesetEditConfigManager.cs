@@ -23,6 +23,6 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
         // Note editor
         DisplayRuby,
         DisplayRomaji,
-        DisplayTranslate,
+        DisplayTranslate
     }
 }

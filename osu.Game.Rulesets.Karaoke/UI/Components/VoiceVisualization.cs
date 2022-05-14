@@ -21,37 +21,37 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
 {
     public abstract class VoiceVisualization<T> : LifetimeManagementContainer
     {
+        protected IEnumerable<SaitenPath> Paths => InternalChildren.OfType<SaitenPath>();
+        protected IEnumerable<SaitenPath> AlivePaths => AliveInternalChildren.OfType<SaitenPath>();
+
+        protected virtual float PathRadius => 2;
+
+        protected virtual float Offset => 0;
         private const float safe_lifetime_end_multiplier = 1;
 
         private readonly IBindable<double> timeRange = new BindableDouble();
         private readonly IBindable<ScrollingDirection> direction = new Bindable<ScrollingDirection>();
-
-        [Resolved]
-        private IScrollingInfo scrollingInfo { get; set; }
 
         private readonly LayoutValue initialStateCache = new(Invalidation.RequiredParentSizeToFit | Invalidation.DrawInfo);
 
         private readonly IDictionary<SaitenPath, IList<T>> frames = new Dictionary<SaitenPath, IList<T>>();
         private readonly IDictionary<SaitenPath, Cached> pathInitialStateCache = new Dictionary<SaitenPath, Cached>();
 
-        protected IEnumerable<SaitenPath> Paths => InternalChildren.OfType<SaitenPath>();
-        protected IEnumerable<SaitenPath> AlivePaths => AliveInternalChildren.OfType<SaitenPath>();
+        private float scrollLength;
 
-        protected virtual float PathRadius => 2;
+        [Resolved]
+        private IScrollingInfo scrollingInfo { get; set; }
 
         protected VoiceVisualization()
         {
             AddLayout(initialStateCache);
         }
 
-        [BackgroundDependencyLoader]
-        private void load()
+        public void Clear()
         {
-            direction.BindTo(scrollingInfo.Direction);
-            timeRange.BindTo(scrollingInfo.TimeRange);
-
-            direction.ValueChanged += _ => initialStateCache.Invalidate();
-            timeRange.ValueChanged += _ => initialStateCache.Invalidate();
+            frames.Clear();
+            pathInitialStateCache.Clear();
+            ClearInternal();
         }
 
         protected abstract double GetTime(T frame);
@@ -62,7 +62,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
         {
             var path = new SaitenPath
             {
-                PathRadius = PathRadius,
+                PathRadius = PathRadius
             };
             frames.Add(path, new List<T> { point });
             pathInitialStateCache.Add(path, new Cached());
@@ -74,15 +74,6 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
         {
             frames.LastOrDefault().Value.Add(point);
         }
-
-        public void Clear()
-        {
-            frames.Clear();
-            pathInitialStateCache.Clear();
-            ClearInternal();
-        }
-
-        private float scrollLength;
 
         protected override void Update()
         {
@@ -110,9 +101,43 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
             AlivePaths.ForEach(computePath);
         }
 
-        protected void MarkAsInvalid(SaitenPath path) => pathInitialStateCache[path].Invalidate();
+        protected void MarkAsInvalid(SaitenPath path)
+        {
+            pathInitialStateCache[path].Invalidate();
+        }
 
-        protected void Invalid() => initialStateCache.Invalidate();
+        protected void Invalid()
+        {
+            initialStateCache.Invalidate();
+        }
+
+        protected override void UpdateAfterChildrenLife()
+        {
+            base.UpdateAfterChildrenLife();
+
+            // We need to calculate hit object positions as soon as possible after lifetimes so that hitobjects get the final say in their positions
+            foreach (var path in AlivePaths)
+                updatePosition(path, Time.Current);
+        }
+
+        protected override void OnChildLifetimeBoundaryCrossed(LifetimeBoundaryCrossedEvent e)
+        {
+            // Recalculate path if appear
+            if (e.Kind == LifetimeBoundaryKind.Start && e.Child is SaitenPath path)
+                computePath(path);
+
+            base.OnChildLifetimeBoundaryCrossed(e);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            direction.BindTo(scrollingInfo.Direction);
+            timeRange.BindTo(scrollingInfo.TimeRange);
+
+            direction.ValueChanged += _ => initialStateCache.Invalidate();
+            timeRange.ValueChanged += _ => initialStateCache.Invalidate();
+        }
 
         private void computeLifetime(SaitenPath path)
         {
@@ -137,54 +162,37 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
         }
 
         // Cant use AddOnce() since the delegate is re-constructed every invocation
-        private void computePath(SaitenPath path) => path.Schedule(() =>
+        private void computePath(SaitenPath path)
         {
-            var firstFrameInPath = frames[path].FirstOrDefault();
-            if (firstFrameInPath == null)
-                return;
-
-            double startTime = GetTime(firstFrameInPath);
-            if (pathInitialStateCache[path].IsValid)
-                return;
-
-            pathInitialStateCache?[path].Validate();
-
-            // Calculate path
-            var frameList = frames[path];
-            if (frameList.Count <= 1)
-                return;
-
-            path.ClearVertices();
-
-            bool left = direction.Value == ScrollingDirection.Left;
-            path.Anchor = path.Origin = left ? Anchor.TopLeft : Anchor.TopRight;
-
-            foreach (var frame in frameList)
+            path.Schedule(() =>
             {
-                float x = scrollingInfo.Algorithm.GetLength(startTime, GetTime(frame), timeRange.Value, scrollLength);
-                path.AddVertex(new Vector2(left ? x : -x, GetPosition(frame)));
-            }
-        });
+                var firstFrameInPath = frames[path].FirstOrDefault();
+                if (firstFrameInPath == null)
+                    return;
 
-        protected override void UpdateAfterChildrenLife()
-        {
-            base.UpdateAfterChildrenLife();
+                double startTime = GetTime(firstFrameInPath);
+                if (pathInitialStateCache[path].IsValid)
+                    return;
 
-            // We need to calculate hit object positions as soon as possible after lifetimes so that hitobjects get the final say in their positions
-            foreach (var path in AlivePaths)
-                updatePosition(path, Time.Current);
+                pathInitialStateCache?[path].Validate();
+
+                // Calculate path
+                var frameList = frames[path];
+                if (frameList.Count <= 1)
+                    return;
+
+                path.ClearVertices();
+
+                bool left = direction.Value == ScrollingDirection.Left;
+                path.Anchor = path.Origin = left ? Anchor.TopLeft : Anchor.TopRight;
+
+                foreach (var frame in frameList)
+                {
+                    float x = scrollingInfo.Algorithm.GetLength(startTime, GetTime(frame), timeRange.Value, scrollLength);
+                    path.AddVertex(new Vector2(left ? x : -x, GetPosition(frame)));
+                }
+            });
         }
-
-        protected override void OnChildLifetimeBoundaryCrossed(LifetimeBoundaryCrossedEvent e)
-        {
-            // Recalculate path if appear
-            if (e.Kind == LifetimeBoundaryKind.Start && e.Child is SaitenPath path)
-                computePath(path);
-
-            base.OnChildLifetimeBoundaryCrossed(e);
-        }
-
-        protected virtual float Offset => 0;
 
         private void updatePosition(SaitenPath path, double currentTime)
         {
@@ -203,10 +211,13 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
             public override bool RemoveWhenNotAlive => false;
 
             /// <summary>
-            /// Schedules an <see cref="Action"/> to this <see cref="SaitenPath"/>.
-            /// todo : might move this?
+            ///     Schedules an <see cref="Action" /> to this <see cref="SaitenPath" />.
+            ///     todo : might move this?
             /// </summary>
-            protected internal new ScheduledDelegate Schedule(Action action) => base.Schedule(action);
+            protected internal new ScheduledDelegate Schedule(Action action)
+            {
+                return base.Schedule(action);
+            }
         }
     }
 }

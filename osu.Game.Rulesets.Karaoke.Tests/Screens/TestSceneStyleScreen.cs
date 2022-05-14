@@ -10,6 +10,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Screens
     [TestFixture]
     public class TestSceneStyleScreen : KaraokeSkinEditorScreenTestScene<StyleScreen>
     {
-        protected override StyleScreen CreateEditorScreen(KaraokeSkin karaokeSkin) => new(karaokeSkin);
+        protected override StyleScreen CreateEditorScreen(KaraokeSkin karaokeSkin)
+        {
+            return new(karaokeSkin);
+        }
     }
 }

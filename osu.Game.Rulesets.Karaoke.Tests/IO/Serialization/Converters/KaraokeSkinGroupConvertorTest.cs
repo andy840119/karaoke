@@ -50,7 +50,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
             {
                 ID = 123,
                 Name = "Two singers",
-                SingerNumber = 2,
+                SingerNumber = 2
             };
 
             const string expected = "{\"$type\":\"GroupBySingerNumber\",\"singer_number\":2,\"id\":123,\"name\":\"Two singers\"}";
@@ -67,7 +67,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
             {
                 ID = 123,
                 Name = "Two singers",
-                SingerNumber = 2,
+                SingerNumber = 2
             };
             var actual = JsonConvert.DeserializeObject<IGroup>(json, CreateSettings()) as GroupBySingerNumber;
             Assert.IsNotNull(actual);

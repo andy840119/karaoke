@@ -10,6 +10,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.Languages
     {
         public CultureInfo[] AcceptLanguages { get; set; }
 
-        public LanguageDetectorConfig CreateDefaultConfig() => new();
+        public LanguageDetectorConfig CreateDefaultConfig()
+        {
+            return new();
+        }
     }
 }

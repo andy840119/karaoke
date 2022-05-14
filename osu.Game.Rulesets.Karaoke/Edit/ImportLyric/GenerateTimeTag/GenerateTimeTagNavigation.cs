@@ -17,7 +17,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateTimeTag
         }
 
         protected override NavigationTextContainer CreateTextContainer()
-            => new GenerateTimeTagTextFlowContainer(Screen);
+        {
+            return new GenerateTimeTagTextFlowContainer(Screen);
+        }
 
         protected override NavigationState GetState(Lyric[] lyrics)
         {
@@ -33,8 +35,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateTimeTag
                 => lyric.TimeTags != null && lyric.TimeTags.Any();
         }
 
-        protected override string GetNavigationText(NavigationState value) =>
-            value switch
+        protected override string GetNavigationText(NavigationState value)
+        {
+            return value switch
             {
                 NavigationState.Initial => $"Press [{auto_generate_time_tag}] to auto-generate time tag. It's very easy.",
                 NavigationState.Working => $"Cool, you can reset your time-tag by pressing [{auto_generate_time_tag}]",
@@ -42,9 +45,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateTimeTag
                 NavigationState.Error => "Oops, seems cause some error in here.",
                 _ => throw new ArgumentOutOfRangeException(nameof(value))
             };
+        }
 
         protected override bool AbleToNextStep(NavigationState value)
-            => value is NavigationState.Working or NavigationState.Done;
+        {
+            return value is NavigationState.Working or NavigationState.Done;
+        }
 
         private class GenerateTimeTagTextFlowContainer : NavigationTextContainer
         {

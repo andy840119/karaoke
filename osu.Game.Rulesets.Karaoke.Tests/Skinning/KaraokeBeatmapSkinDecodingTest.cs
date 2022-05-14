@@ -48,11 +48,11 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
 
             var firstLyric = new Lyric
             {
-                ID = 1,
+                ID = 1
             };
             var secondLyric = new Lyric
             {
-                ID = 2,
+                ID = 2
             };
 
             // try to get customized value from the skin.

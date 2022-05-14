@@ -10,10 +10,41 @@ namespace osu.Game.Rulesets.Karaoke.Objects
 {
     public class RomajiTag : ITextTag
     {
+        [JsonIgnore]
+        public readonly Bindable<string> TextBindable = new();
+
+        [JsonIgnore]
+        public readonly BindableInt StartIndexBindable = new();
+
+        [JsonIgnore]
+        public readonly BindableInt EndIndexBindable = new();
+
         /// <summary>
-        /// Invoked when any property of this <see cref="RomajiTag"/> is changed.
+        ///     If kanji Matched, then apply romaji
         /// </summary>
-        public event Action Changed;
+        public string Text
+        {
+            get => TextBindable.Value;
+            set => TextBindable.Value = value;
+        }
+
+        /// <summary>
+        ///     Start index
+        /// </summary>
+        public int StartIndex
+        {
+            get => StartIndexBindable.Value;
+            set => StartIndexBindable.Value = value;
+        }
+
+        /// <summary>
+        ///     End index
+        /// </summary>
+        public int EndIndex
+        {
+            get => EndIndexBindable.Value;
+            set => EndIndexBindable.Value = value;
+        }
 
         public RomajiTag()
         {
@@ -22,40 +53,9 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             EndIndexBindable.ValueChanged += _ => Changed?.Invoke();
         }
 
-        [JsonIgnore]
-        public readonly Bindable<string> TextBindable = new();
-
         /// <summary>
-        /// If kanji Matched, then apply romaji
+        ///     Invoked when any property of this <see cref="RomajiTag" /> is changed.
         /// </summary>
-        public string Text
-        {
-            get => TextBindable.Value;
-            set => TextBindable.Value = value;
-        }
-
-        [JsonIgnore]
-        public readonly BindableInt StartIndexBindable = new();
-
-        /// <summary>
-        /// Start index
-        /// </summary>
-        public int StartIndex
-        {
-            get => StartIndexBindable.Value;
-            set => StartIndexBindable.Value = value;
-        }
-
-        [JsonIgnore]
-        public readonly BindableInt EndIndexBindable = new();
-
-        /// <summary>
-        /// End index
-        /// </summary>
-        public int EndIndex
-        {
-            get => EndIndexBindable.Value;
-            set => EndIndexBindable.Value = value;
-        }
+        public event Action Changed;
     }
 }

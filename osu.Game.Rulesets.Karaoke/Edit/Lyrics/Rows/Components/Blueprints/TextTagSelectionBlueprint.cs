@@ -17,6 +17,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Blueprints
 {
     public abstract class TextTagSelectionBlueprint<T> : SelectionBlueprint<T> where T : ITextTag
     {
+        public override Vector2 ScreenSpaceSelectionPoint => previewTextArea.ScreenSpaceDrawQuad.Centre;
+
+        public override Quad SelectionQuad => previewTextArea.ScreenSpaceDrawQuad;
         private readonly Container previewTextArea;
         private readonly Container indexRangeBackground;
 
@@ -30,7 +33,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Blueprints
             {
                 previewTextArea = new Container
                 {
-                    Alpha = 0,
+                    Alpha = 0
                 },
                 indexRangeBackground = new Container
                 {
@@ -44,17 +47,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Blueprints
                         {
                             RelativeSizeAxes = Axes.Both,
                             Alpha = 0f,
-                            AlwaysPresent = true,
-                        },
+                            AlwaysPresent = true
+                        }
                     }
-                },
+                }
             };
         }
 
-        [BackgroundDependencyLoader]
-        private void load(OsuColour colour)
+        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos)
         {
-            indexRangeBackground.Colour = colour.Pink;
+            return previewTextArea.ReceivePositionalInputAt(screenSpacePos);
         }
 
         protected override void OnSelected()
@@ -95,11 +97,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Blueprints
             }
         }
 
-        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos)
-            => previewTextArea.ReceivePositionalInputAt(screenSpacePos);
-
-        public override Vector2 ScreenSpaceSelectionPoint => previewTextArea.ScreenSpaceDrawQuad.Centre;
-
-        public override Quad SelectionQuad => previewTextArea.ScreenSpaceDrawQuad;
+        [BackgroundDependencyLoader]
+        private void load(OsuColour colour)
+        {
+            indexRangeBackground.Colour = colour.Pink;
+        }
     }
 }

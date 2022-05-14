@@ -29,6 +29,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
 {
     public class TimeTagEditorBlueprintContainer : ExtendBlueprintContainer<TimeTag>
     {
+        protected readonly Lyric Lyric;
+
+        [UsedImplicitly]
+        private readonly BindableList<TimeTag> timeTags;
+
         [Resolved(CanBeNull = true)]
         private TimeTagEditor timeline { get; set; }
 
@@ -38,26 +43,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
         [Resolved]
         private ILyricTimeTagsChangeHandler lyricTimeTagsChangeHandler { get; set; }
 
-        [UsedImplicitly]
-        private readonly BindableList<TimeTag> timeTags;
-
-        protected readonly Lyric Lyric;
-
         public TimeTagEditorBlueprintContainer(Lyric lyric)
         {
             Lyric = lyric;
             timeTags = lyric.TimeTagsBindable.GetBoundCopy();
         }
 
-        [BackgroundDependencyLoader]
-        private void load(ITimeTagModeState timeTagModeState)
-        {
-            // Add time-tag into blueprint container
-            RegisterBindable(timeTags);
-        }
-
         protected override IEnumerable<SelectionBlueprint<TimeTag>> SortForMovement(IReadOnlyList<SelectionBlueprint<TimeTag>> blueprints)
-            => blueprints.OrderBy(b => b.Item.Index);
+        {
+            return blueprints.OrderBy(b => b.Item.Index);
+        }
 
         protected override bool ApplySnapResult(SelectionBlueprint<TimeTag>[] blueprints, SnapResult result)
         {
@@ -87,7 +82,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
         }
 
         /// <summary>
-        /// Commit time-tag time.
+        ///     Commit time-tag time.
         /// </summary>
         protected override void DragOperationCompleted()
         {
@@ -102,15 +97,24 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
         }
 
         protected override Container<SelectionBlueprint<TimeTag>> CreateSelectionBlueprintContainer()
-            => new TimeTagEditorSelectionBlueprintContainer { RelativeSizeAxes = Axes.Both };
+        {
+            return new TimeTagEditorSelectionBlueprintContainer { RelativeSizeAxes = Axes.Both };
+        }
 
         protected override SelectionHandler<TimeTag> CreateSelectionHandler()
-            => new TimeTagEditorSelectionHandler();
+        {
+            return new TimeTagEditorSelectionHandler();
+        }
 
         protected override SelectionBlueprint<TimeTag> CreateBlueprintFor(TimeTag item)
-            => new TimeTagEditorHitObjectBlueprint(item);
+        {
+            return new TimeTagEditorHitObjectBlueprint(item);
+        }
 
-        protected override DragBox CreateDragBox(Action<RectangleF> performSelect) => new TimelineDragBox(performSelect);
+        protected override DragBox CreateDragBox(Action<RectangleF> performSelect)
+        {
+            return new TimelineDragBox(performSelect);
+        }
 
         protected override bool OnClick(ClickEvent e)
         {
@@ -129,27 +133,28 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             return true;
         }
 
+        [BackgroundDependencyLoader]
+        private void load(ITimeTagModeState timeTagModeState)
+        {
+            // Add time-tag into blueprint container
+            RegisterBindable(timeTags);
+        }
+
         protected class TimeTagEditorSelectionHandler : ExtendSelectionHandler<TimeTag>
         {
             [Resolved]
             private ILyricTimeTagsChangeHandler lyricTimeTagsChangeHandler { get; set; }
 
-            [BackgroundDependencyLoader]
-            private void load(ITimeTagModeState timeTagModeState)
-            {
-                SelectedItems.BindTo(timeTagModeState.SelectedItems);
-            }
-
             // for now we always allow movement. snapping is provided by the Timeline's "distance" snap implementation
-            public override bool HandleMovement(MoveSelectionEvent<TimeTag> moveEvent) => true;
+            public override bool HandleMovement(MoveSelectionEvent<TimeTag> moveEvent)
+            {
+                return true;
+            }
 
             protected override void DeleteItems(IEnumerable<TimeTag> items)
             {
                 // todo : delete time-line
-                foreach (var item in items)
-                {
-                    lyricTimeTagsChangeHandler.Remove(item);
-                }
+                foreach (var item in items) lyricTimeTagsChangeHandler.Remove(item);
             }
 
             protected override IEnumerable<MenuItem> GetContextMenuItemsForSelection(IEnumerable<SelectionBlueprint<TimeTag>> selection)
@@ -171,6 +176,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
 
                 return base.GetContextMenuItemsForSelection(selection);
             }
+
+            [BackgroundDependencyLoader]
+            private void load(ITimeTagModeState timeTagModeState)
+            {
+                SelectedItems.BindTo(timeTagModeState.SelectedItems);
+            }
         }
 
         private class TimelineDragBox : DragBox
@@ -189,12 +200,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             {
             }
 
-            protected override Drawable CreateBox() => new Box
-            {
-                RelativeSizeAxes = Axes.Y,
-                Alpha = 0.3f
-            };
-
             public override bool HandleDrag(MouseButtonEvent e)
             {
                 selectionStart ??= e.MouseDownPosition.X / timeline.CurrentZoom;
@@ -205,6 +210,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
 
                 updateDragBoxPosition();
                 return true;
+            }
+
+            public override void Hide()
+            {
+                base.Hide();
+                selectionStart = null;
+            }
+
+            protected override Drawable CreateBox()
+            {
+                return new Box
+                {
+                    RelativeSizeAxes = Axes.Y,
+                    Alpha = 0.3f
+                };
             }
 
             private void updateDragBoxPosition()
@@ -225,12 +245,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
                 boxScreenRect.Height *= 2;
 
                 PerformSelection?.Invoke(boxScreenRect);
-            }
-
-            public override void Hide()
-            {
-                base.Hide();
-                selectionStart = null;
             }
         }
 

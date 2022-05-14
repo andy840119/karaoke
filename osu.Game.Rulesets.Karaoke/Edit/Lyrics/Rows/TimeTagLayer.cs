@@ -12,10 +12,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
 {
     public class TimeTagLayer : CompositeDrawable
     {
+        private readonly IBindableList<TimeTag> timeTagsBindable = new BindableList<TimeTag>();
+
         [Resolved]
         private EditorKaraokeSpriteText karaokeSpriteText { get; set; }
-
-        private readonly IBindableList<TimeTag> timeTagsBindable = new BindableList<TimeTag>();
 
         public TimeTagLayer(Lyric lyric)
         {

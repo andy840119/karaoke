@@ -15,6 +15,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
     {
         protected sealed override string Title => "Action";
 
+        protected abstract string SwitchActionTitle { get; }
+
+        protected abstract string SwitchActionDescription { get; }
+
         private readonly Bindable<TAction> bindableModeSpecialAction = new();
 
         [Resolved]
@@ -28,7 +32,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                 {
                     Label = SwitchActionTitle,
                     Description = SwitchActionDescription,
-                    Current = bindableModeSpecialAction,
+                    Current = bindableModeSpecialAction
                 }
             };
 
@@ -45,10 +49,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
         {
             bindableModeSpecialAction.BindTo(specialAction.BindableSpecialAction);
         }
-
-        protected abstract string SwitchActionTitle { get; }
-
-        protected abstract string SwitchActionDescription { get; }
 
         protected abstract void UpdateActionArea(TAction action);
 

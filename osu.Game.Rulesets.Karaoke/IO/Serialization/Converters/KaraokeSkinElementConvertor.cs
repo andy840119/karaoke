@@ -28,6 +28,30 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
             localSerializer = JsonSerializer.Create(settings);
         }
 
+        public static ElementType GetElementType(Type elementType)
+        {
+            return elementType switch
+            {
+                var type when type == typeof(LyricConfig) => ElementType.LyricConfig,
+                var type when type == typeof(LyricLayout) => ElementType.LyricLayout,
+                var type when type == typeof(LyricStyle) => ElementType.LyricStyle,
+                var type when type == typeof(NoteStyle) => ElementType.NoteStyle,
+                _ => throw new NotSupportedException()
+            };
+        }
+
+        public static Type GetObjectType(ElementType elementType)
+        {
+            return elementType switch
+            {
+                ElementType.LyricConfig => typeof(LyricConfig),
+                ElementType.LyricLayout => typeof(LyricLayout),
+                ElementType.LyricStyle => typeof(LyricStyle),
+                ElementType.NoteStyle => typeof(NoteStyle),
+                _ => throw new NotSupportedException()
+            };
+        }
+
         public override IKaraokeSkinElement ReadJson(JsonReader reader, Type objectType, IKaraokeSkinElement existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
@@ -55,25 +79,5 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
             jObject.AddFirst(new JProperty("$type", GetElementType(value.GetType())));
             jObject.WriteTo(writer);
         }
-
-        public static ElementType GetElementType(Type elementType) =>
-            elementType switch
-            {
-                var type when type == typeof(LyricConfig) => ElementType.LyricConfig,
-                var type when type == typeof(LyricLayout) => ElementType.LyricLayout,
-                var type when type == typeof(LyricStyle) => ElementType.LyricStyle,
-                var type when type == typeof(NoteStyle) => ElementType.NoteStyle,
-                _ => throw new NotSupportedException()
-            };
-
-        public static Type GetObjectType(ElementType elementType) =>
-            elementType switch
-            {
-                ElementType.LyricConfig => typeof(LyricConfig),
-                ElementType.LyricLayout => typeof(LyricLayout),
-                ElementType.LyricStyle => typeof(LyricStyle),
-                ElementType.NoteStyle => typeof(NoteStyle),
-                _ => throw new NotSupportedException()
-            };
     }
 }

@@ -9,6 +9,9 @@ namespace osu.Game.Rulesets.Karaoke.Judgements
     {
         public override HitResult MaxResult => HitResult.Perfect;
 
-        protected override double HealthIncreaseFor(HitResult result) => 0;
+        protected override double HealthIncreaseFor(HitResult result)
+        {
+            return 0;
+        }
     }
 }

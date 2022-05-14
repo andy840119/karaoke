@@ -14,17 +14,17 @@ using osuTK.Graphics;
 namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
 {
     /// <summary>
-    /// Display full content in <see cref="APIChangelogBuild"/>
+    ///     Display full content in <see cref="APIChangelogBuild" />
     /// </summary>
     public class ChangelogBuild : FillFlowContainer
     {
         public const float HORIZONTAL_PADDING = 70;
 
+        public readonly ChangeLogMarkdownContainer ChangelogEntries;
+
         public Action<APIChangelogBuild> SelectBuild;
 
         protected readonly APIChangelogBuild Build;
-
-        public readonly ChangeLogMarkdownContainer ChangelogEntries;
 
         public ChangelogBuild(APIChangelogBuild build)
         {
@@ -41,52 +41,55 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog
                 ChangelogEntries = new ChangeLogMarkdownContainer(build)
                 {
                     RelativeSizeAxes = Axes.X,
-                    AutoSizeAxes = Axes.Y,
-                },
+                    AutoSizeAxes = Axes.Y
+                }
             };
         }
 
-        protected virtual FillFlowContainer CreateHeader() => new()
+        protected virtual FillFlowContainer CreateHeader()
         {
-            Anchor = Anchor.TopCentre,
-            Origin = Anchor.TopCentre,
-            AutoSizeAxes = Axes.Both,
-            Direction = FillDirection.Horizontal,
-            Margin = new MarginPadding { Top = 20 },
-            Children = new Drawable[]
+            return new()
             {
-                new OsuHoverContainer
+                Anchor = Anchor.TopCentre,
+                Origin = Anchor.TopCentre,
+                AutoSizeAxes = Axes.Both,
+                Direction = FillDirection.Horizontal,
+                Margin = new MarginPadding { Top = 20 },
+                Children = new Drawable[]
                 {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    AutoSizeAxes = Axes.Both,
-                    Action = () => SelectBuild?.Invoke(Build),
-                    Child = new FillFlowContainer<SpriteText>
+                    new OsuHoverContainer
                     {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
                         AutoSizeAxes = Axes.Both,
-                        Margin = new MarginPadding { Horizontal = 40 },
-                        Children = new[]
+                        Action = () => SelectBuild?.Invoke(Build),
+                        Child = new FillFlowContainer<SpriteText>
                         {
-                            new OsuSpriteText
+                            AutoSizeAxes = Axes.Both,
+                            Margin = new MarginPadding { Horizontal = 40 },
+                            Children = new[]
                             {
-                                Text = "Karaoke!",
-                                Font = OsuFont.GetFont(weight: FontWeight.Medium, size: 19),
-                            },
-                            new OsuSpriteText
-                            {
-                                Text = " ",
-                                Font = OsuFont.GetFont(weight: FontWeight.Medium, size: 19),
-                            },
-                            new OsuSpriteText
-                            {
-                                Text = Build.DisplayVersion,
-                                Font = OsuFont.GetFont(weight: FontWeight.Light, size: 19),
-                                Colour = Color4.Red,
-                            },
+                                new OsuSpriteText
+                                {
+                                    Text = "Karaoke!",
+                                    Font = OsuFont.GetFont(weight: FontWeight.Medium, size: 19)
+                                },
+                                new OsuSpriteText
+                                {
+                                    Text = " ",
+                                    Font = OsuFont.GetFont(weight: FontWeight.Medium, size: 19)
+                                },
+                                new OsuSpriteText
+                                {
+                                    Text = Build.DisplayVersion,
+                                    Font = OsuFont.GetFont(weight: FontWeight.Light, size: 19),
+                                    Colour = Color4.Red
+                                }
+                            }
                         }
                     }
-                },
-            }
-        };
+                }
+            };
+        }
     }
 }

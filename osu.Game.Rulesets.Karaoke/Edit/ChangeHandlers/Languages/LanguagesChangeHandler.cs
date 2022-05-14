@@ -13,8 +13,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Languages
     {
         public IBindableList<CultureInfo> Languages => Items;
 
+        public bool IsLanguageContainsTranslate(CultureInfo cultureInfo)
+        {
+            return Lyrics.Any(x => x.Translates.ContainsKey(cultureInfo));
+        }
+
         protected override List<CultureInfo> GetItemsFromBeatmap(KaraokeBeatmap beatmap)
-            => beatmap.AvailableTranslates;
+        {
+            return beatmap.AvailableTranslates;
+        }
 
         protected override void OnItemAdded(CultureInfo item)
         {
@@ -24,13 +31,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Languages
         protected override void OnItemRemoved(CultureInfo item)
         {
             // Delete from lyric also.
-            foreach (var lyric in Lyrics.Where(lyric => lyric.Translates.ContainsKey(item)))
-            {
-                lyric.Translates.Remove(item);
-            }
+            foreach (var lyric in Lyrics.Where(lyric => lyric.Translates.ContainsKey(item))) lyric.Translates.Remove(item);
         }
-
-        public bool IsLanguageContainsTranslate(CultureInfo cultureInfo)
-            => Lyrics.Any(x => x.Translates.ContainsKey(cultureInfo));
     }
 }

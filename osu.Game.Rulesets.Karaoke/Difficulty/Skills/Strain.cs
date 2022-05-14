@@ -13,11 +13,10 @@ namespace osu.Game.Rulesets.Karaoke.Difficulty.Skills
 {
     public class Strain : StrainDecaySkill
     {
-        private const double individual_decay_base = 0.125;
-        private const double overall_decay_base = 0.30;
-
         protected override double SkillMultiplier => 1;
         protected override double StrainDecayBase => 1;
+        private const double individual_decay_base = 0.125;
+        private const double overall_decay_base = 0.30;
 
         private readonly double[] holdEndTimes;
         private readonly double[] individualStrains;
@@ -76,10 +75,14 @@ namespace osu.Game.Rulesets.Karaoke.Difficulty.Skills
         }
 
         protected override double CalculateInitialStrain(double time)
-            => applyDecay(individualStrain, time - Previous[0].StartTime, individual_decay_base)
-               + applyDecay(overallStrain, time - Previous[0].StartTime, overall_decay_base);
+        {
+            return applyDecay(individualStrain, time - Previous[0].StartTime, individual_decay_base)
+                   + applyDecay(overallStrain, time - Previous[0].StartTime, overall_decay_base);
+        }
 
         private double applyDecay(double value, double deltaTime, double decayBase)
-            => value * Math.Pow(decayBase, deltaTime / 1000);
+        {
+            return value * Math.Pow(decayBase, deltaTime / 1000);
+        }
     }
 }

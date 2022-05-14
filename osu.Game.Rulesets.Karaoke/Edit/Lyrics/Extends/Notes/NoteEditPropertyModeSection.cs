@@ -22,8 +22,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
                 {
                     Label = "Edit property",
                     Description = "Batch edit text, ruby(alternative) text or display from notes",
-                    Current = editNoteModeState.NoteEditPropertyMode,
-                },
+                    Current = editNoteModeState.NoteEditPropertyMode
+                }
             };
         }
     }

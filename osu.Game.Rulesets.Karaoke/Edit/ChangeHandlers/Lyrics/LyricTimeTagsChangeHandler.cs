@@ -16,12 +16,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
     {
         private TimeTagGeneratorSelector selector;
 
-        [BackgroundDependencyLoader]
-        private void load(KaraokeRulesetEditGeneratorConfigManager config)
-        {
-            selector = new TimeTagGeneratorSelector(config);
-        }
-
         public void AutoGenerate()
         {
             PerformOnSelection(lyric =>
@@ -164,6 +158,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
             }
         }
 
+        [BackgroundDependencyLoader]
+        private void load(KaraokeRulesetEditGeneratorConfigManager config)
+        {
+            selector = new TimeTagGeneratorSelector(config);
+        }
+
         private void insertTimeTag(Lyric lyric, TimeTag timeTag, InsertDirection direction)
         {
             var timeTags = lyric.TimeTags;
@@ -176,13 +176,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
             }
 
             if (timeTags.All(x => x.Index < timeTag.Index))
-            {
                 timeTags.Add(timeTag);
-            }
             else if (timeTags.All(x => x.Index > timeTag.Index))
-            {
                 timeTags.Insert(0, timeTag);
-            }
             else
             {
                 switch (direction)
@@ -210,7 +206,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
         }
 
         /// <summary>
-        /// Insert direction if contains the time-tag with the same index.
+        ///     Insert direction if contains the time-tag with the same index.
         /// </summary>
         private enum InsertDirection
         {

@@ -19,8 +19,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateTimeTag
                 new PopupDialogOkButton
                 {
                     Text = @"OK",
-                    Action = () => okAction?.Invoke(true),
-                },
+                    Action = () => okAction?.Invoke(true)
+                }
             };
         }
     }

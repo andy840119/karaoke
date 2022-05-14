@@ -25,13 +25,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.ContextMenu
             {
                 // if only one lyric
                 if (allSingerInLyric(singer))
-                {
                     lyricSingerChangeHandler.Remove(singer);
-                }
                 else
-                {
                     lyricSingerChangeHandler.Add(singer);
-                }
 
                 postProcess?.Invoke();
             })).ToList();

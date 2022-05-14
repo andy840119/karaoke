@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.Notes
             var lyric = new Lyric
             {
                 Text = "カラオケ",
-                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags),
+                TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
             };
             var notes = generator.CreateNotes(lyric);
 

@@ -11,8 +11,8 @@ namespace osu.Game.Rulesets.Karaoke.Replays
     public class KaraokeReplayFrame : ReplayFrame, IConvertibleReplayFrame
     {
         /// <summary>
-        /// Use for Saiten playfield
-        /// Maybe format will be changed, but i have no idea now.
+        ///     Use for Saiten playfield
+        ///     Maybe format will be changed, but i have no idea now.
         /// </summary>
         public float Scale { get; private set; }
 
@@ -35,7 +35,10 @@ namespace osu.Game.Rulesets.Karaoke.Replays
             Sound = true;
         }
 
-        public override string ToString() => $"{Time}, {Scale}";
+        public override string ToString()
+        {
+            return $"{Time}, {Scale}";
+        }
 
         public void FromLegacy(LegacyReplayFrame currentFrame, IBeatmap beatmap, ReplayFrame lastFrame = null)
         {

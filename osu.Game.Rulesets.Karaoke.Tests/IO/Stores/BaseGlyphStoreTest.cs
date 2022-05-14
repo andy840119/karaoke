@@ -9,34 +9,17 @@ using osu.Game.Rulesets.Karaoke.Tests.Resources;
 namespace osu.Game.Rulesets.Karaoke.Tests.IO.Stores
 {
     /// <summary>
-    /// Use <see cref="GlyphStore"/> as test case actual result for comparing.
+    ///     Use <see cref="GlyphStore" /> as test case actual result for comparing.
     /// </summary>
     /// <typeparam name="TGlyphStore"></typeparam>
     public abstract class BaseGlyphStoreTest<TGlyphStore> where TGlyphStore : IGlyphStore
     {
-        protected TGlyphStore CustomizeGlyphStore { get; private set; }
-
-        protected GlyphStore GlyphStore { get; private set; }
-
-        [OneTimeSetUp]
-        protected void OneTimeSetUp()
-        {
-            // create and load glyph store.
-            var fontResourceStore = new NamespacedResourceStore<byte[]>(TestResources.GetStore(), "Resources.Testing.Fonts.Fnt.OpenSans");
-            GlyphStore = new GlyphStore(fontResourceStore, FontName);
-            GlyphStore.LoadFontAsync().Wait();
-
-            // create load load customize glyph store.
-            var customizeFontResourceStore = new NamespacedResourceStore<byte[]>(TestResources.GetStore(), $"Resources.Testing.Fonts.{FontType}");
-            CustomizeGlyphStore = CreateFontStore(customizeFontResourceStore, FontName);
-            CustomizeGlyphStore.LoadFontAsync().Wait();
-        }
-
         protected abstract string FontType { get; }
 
         protected abstract string FontName { get; }
+        protected TGlyphStore CustomizeGlyphStore { get; private set; }
 
-        protected abstract TGlyphStore CreateFontStore(ResourceStore<byte[]> store, string assetName);
+        protected GlyphStore GlyphStore { get; private set; }
 
         [Test]
         public void CompareFontNameWithOrigin()
@@ -117,5 +100,21 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Stores
             Assert.AreEqual(expected.Width, actual.Width);
             Assert.AreEqual(expected.Height, actual.Height);
         }
+
+        [OneTimeSetUp]
+        protected void OneTimeSetUp()
+        {
+            // create and load glyph store.
+            var fontResourceStore = new NamespacedResourceStore<byte[]>(TestResources.GetStore(), "Resources.Testing.Fonts.Fnt.OpenSans");
+            GlyphStore = new GlyphStore(fontResourceStore, FontName);
+            GlyphStore.LoadFontAsync().Wait();
+
+            // create load load customize glyph store.
+            var customizeFontResourceStore = new NamespacedResourceStore<byte[]>(TestResources.GetStore(), $"Resources.Testing.Fonts.{FontType}");
+            CustomizeGlyphStore = CreateFontStore(customizeFontResourceStore, FontName);
+            CustomizeGlyphStore.LoadFontAsync().Wait();
+        }
+
+        protected abstract TGlyphStore CreateFontStore(ResourceStore<byte[]> store, string assetName);
     }
 }

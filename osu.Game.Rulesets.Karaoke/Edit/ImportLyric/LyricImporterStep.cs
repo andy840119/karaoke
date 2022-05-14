@@ -15,6 +15,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
 
         GenerateTimeTag,
 
-        Success,
+        Success
     }
 }

@@ -42,7 +42,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
         {
             Children = new[]
             {
-                table = new TimeTagIssueTable(),
+                table = new TimeTagIssueTable()
             };
 
             bindableReports = lyricCheckerManager.BindableReports.GetBoundCopy();
@@ -56,9 +56,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
 
         public class TimeTagIssueTable : IssueTableContainer
         {
-            [Resolved]
-            private OsuColour colours { get; set; }
-
             public IEnumerable<TimeTagIssue> Issues
             {
                 set
@@ -81,10 +78,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                         if (g.MissingEndTimeTag)
                             rows.Add(createMissingStartOrEndTimeTagContent(lyric));
 
-                        foreach (var (invalidReason, timeTags) in g.InvalidTimeTags)
-                        {
-                            rows.AddRange(timeTags.Select(timeTag => createContent(lyric, timeTag, invalidReason)));
-                        }
+                        foreach (var (invalidReason, timeTags) in g.InvalidTimeTags) rows.AddRange(timeTags.Select(timeTag => createContent(lyric, timeTag, invalidReason)));
 
                         return rows;
                     }).SelectMany(x => x).ToArray().ToRectangular();
@@ -101,106 +95,121 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                         if (g.MissingEndTimeTag)
                             rows.Add(new TimeTagRowBackground(lyric, null));
 
-                        foreach (var (_, timeTags) in g.InvalidTimeTags)
-                        {
-                            rows.AddRange(timeTags.Select(timeTag => new TimeTagRowBackground(lyric, timeTag)));
-                        }
+                        foreach (var (_, timeTags) in g.InvalidTimeTags) rows.AddRange(timeTags.Select(timeTag => new TimeTagRowBackground(lyric, timeTag)));
 
                         return rows;
                     }).SelectMany(x => x).ToArray();
                 }
             }
 
-            protected override TableColumn[] CreateHeaders() => new[]
-            {
-                new TableColumn(string.Empty, Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 30)),
-                new TableColumn("Lyric", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 40)),
-                new TableColumn("Position", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 60)),
-                new TableColumn("Message", Anchor.CentreLeft),
-            };
+            [Resolved]
+            private OsuColour colours { get; set; }
 
-            private Drawable[] createContent(Lyric lyric, TimeTag timeTag, TimeTagInvalid invalid) => new Drawable[]
+            protected override TableColumn[] CreateHeaders()
             {
-                new DrawableTextIndex
+                return new[]
                 {
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(10),
-                    Colour = getInvalidColour(invalid),
-                    Margin = new MarginPadding { Left = 10 },
-                },
-                new OsuSpriteText
-                {
-                    Text = $"#{lyric.Order}",
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
-                    Margin = new MarginPadding { Right = 10 },
-                },
-                new OsuSpriteText
-                {
-                    Text = TextIndexUtils.PositionFormattedString(timeTag.Index),
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
-                    Margin = new MarginPadding { Right = 10 },
-                },
-                new OsuSpriteText
-                {
-                    Text = getInvalidReason(invalid),
-                    Truncate = true,
-                    RelativeSizeAxes = Axes.X,
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
-                },
-            };
+                    new TableColumn(string.Empty, Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 30)),
+                    new TableColumn("Lyric", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 40)),
+                    new TableColumn("Position", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 60)),
+                    new TableColumn("Message", Anchor.CentreLeft)
+                };
+            }
 
-            private Drawable[] createMissingStartOrEndTimeTagContent(Lyric lyric) => new Drawable[]
+            private Drawable[] createContent(Lyric lyric, TimeTag timeTag, TimeTagInvalid invalid)
             {
-                new SpriteIcon
+                return new Drawable[]
                 {
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(10),
-                    Colour = colours.Red,
-                    Margin = new MarginPadding { Left = 10 },
-                    Icon = FontAwesome.Solid.AlignLeft
-                },
-                new OsuSpriteText
-                {
-                    Text = $"#{lyric.Order}",
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
-                    Margin = new MarginPadding { Right = 10 },
-                },
-                new OsuSpriteText
-                {
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
-                    Margin = new MarginPadding { Right = 10 },
-                },
-                new OsuSpriteText
-                {
-                    Text = "Missing end time-tag in lyric.",
-                    Truncate = true,
-                    RelativeSizeAxes = Axes.X,
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
-                },
-            };
+                    new DrawableTextIndex
+                    {
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(10),
+                        Colour = getInvalidColour(invalid),
+                        Margin = new MarginPadding { Left = 10 }
+                    },
+                    new OsuSpriteText
+                    {
+                        Text = $"#{lyric.Order}",
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
+                        Margin = new MarginPadding { Right = 10 }
+                    },
+                    new OsuSpriteText
+                    {
+                        Text = TextIndexUtils.PositionFormattedString(timeTag.Index),
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
+                        Margin = new MarginPadding { Right = 10 }
+                    },
+                    new OsuSpriteText
+                    {
+                        Text = getInvalidReason(invalid),
+                        Truncate = true,
+                        RelativeSizeAxes = Axes.X,
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
+                    }
+                };
+            }
 
-            private Color4 getInvalidColour(TimeTagInvalid invalid) =>
-                invalid switch
+            private Drawable[] createMissingStartOrEndTimeTagContent(Lyric lyric)
+            {
+                return new Drawable[]
+                {
+                    new SpriteIcon
+                    {
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(10),
+                        Colour = colours.Red,
+                        Margin = new MarginPadding { Left = 10 },
+                        Icon = FontAwesome.Solid.AlignLeft
+                    },
+                    new OsuSpriteText
+                    {
+                        Text = $"#{lyric.Order}",
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
+                        Margin = new MarginPadding { Right = 10 }
+                    },
+                    new OsuSpriteText
+                    {
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
+                        Margin = new MarginPadding { Right = 10 }
+                    },
+                    new OsuSpriteText
+                    {
+                        Text = "Missing end time-tag in lyric.",
+                        Truncate = true,
+                        RelativeSizeAxes = Axes.X,
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
+                    }
+                };
+            }
+
+            private Color4 getInvalidColour(TimeTagInvalid invalid)
+            {
+                return invalid switch
                 {
                     TimeTagInvalid.OutOfRange => colours.Red,
                     TimeTagInvalid.Overlapping => colours.Red,
                     TimeTagInvalid.EmptyTime => colours.Yellow,
                     _ => throw new ArgumentOutOfRangeException(nameof(invalid))
                 };
+            }
 
-            private string getInvalidReason(TimeTagInvalid invalid) =>
-                invalid switch
+            private string getInvalidReason(TimeTagInvalid invalid)
+            {
+                return invalid switch
                 {
                     TimeTagInvalid.OutOfRange => "Time-tag out of range.",
                     TimeTagInvalid.Overlapping => "Time-tag overlapping.",
                     TimeTagInvalid.EmptyTime => "Time-tag has no time.",
                     _ => throw new ArgumentOutOfRangeException(nameof(invalid))
                 };
+            }
 
             public class TimeTagRowBackground : RowBackground
             {
                 private readonly Lyric lyric;
                 private readonly TimeTag timeTag;
+
+                private BindableList<TimeTag> selectedTimeTags;
 
                 [Resolved]
                 private EditorClock clock { get; set; }
@@ -210,8 +219,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                     this.lyric = lyric;
                     this.timeTag = timeTag;
                 }
-
-                private BindableList<TimeTag> selectedTimeTags;
 
                 [BackgroundDependencyLoader]
                 private void load(ILyricCaretState lyricCaretState, ITimeTagModeState timeTagModeState)

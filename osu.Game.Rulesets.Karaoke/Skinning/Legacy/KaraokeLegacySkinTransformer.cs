@@ -43,7 +43,7 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
                             components.Add(new SettingButtonsDisplay
                             {
                                 Anchor = Anchor.CentreRight,
-                                Origin = Anchor.CentreRight,
+                                Origin = Anchor.CentreRight
                             });
                             return components;
 
@@ -80,16 +80,16 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
                 };
         }
 
-        private Drawable getResult(HitResult result)
-        {
-            // todo : get real component
-            return null;
-        }
-
         public override IBindable<TValue> GetConfig<TLookup, TValue>(TLookup lookup)
         {
             var config = defaultKaraokeSkin.GetConfig<TLookup, TValue>(lookup);
             return config ?? base.GetConfig<TLookup, TValue>(lookup);
+        }
+
+        private Drawable getResult(HitResult result)
+        {
+            // todo : get real component
+            return null;
         }
 
         // it's a temp class for just getting SkinnableTarget.MainHUDComponents
@@ -103,18 +103,21 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
 
         private class InternalSkinStorageResourceProvider : IStorageResourceProvider
         {
+            public AudioManager AudioManager => null;
+            public IResourceStore<byte[]> Files { get; }
+            public IResourceStore<byte[]> Resources { get; }
+            public RealmAccess RealmAccess => null;
+
             public InternalSkinStorageResourceProvider(string skinName)
             {
                 var store = new KaraokeRuleset().CreateResourceStore();
                 Files = Resources = new NamespacedResourceStore<byte[]>(store, $"Skin/{skinName}");
             }
 
-            public IResourceStore<TextureUpload> CreateTextureLoaderStore(IResourceStore<byte[]> underlyingStore) => null;
-
-            public AudioManager AudioManager => null;
-            public IResourceStore<byte[]> Files { get; }
-            public IResourceStore<byte[]> Resources { get; }
-            public RealmAccess RealmAccess => null;
+            public IResourceStore<TextureUpload> CreateTextureLoaderStore(IResourceStore<byte[]> underlyingStore)
+            {
+                return null;
+            }
         }
     }
 }

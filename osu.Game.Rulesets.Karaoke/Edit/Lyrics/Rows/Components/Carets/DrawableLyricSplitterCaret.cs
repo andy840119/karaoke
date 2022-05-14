@@ -50,7 +50,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.BottomCentre,
                             Scale = new Vector2(1, -1),
-                            Size = new Vector2(10, 5),
+                            Size = new Vector2(10, 5)
                         },
                         new Box
                         {
@@ -65,17 +65,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Carets
             };
         }
 
+        protected override void Apply(TextCaretPosition caret)
+        {
+            Position = GetPosition(caret);
+            Height = karaokeSpriteText.LineBaseHeight;
+        }
+
         [BackgroundDependencyLoader]
         private void load(OsuColour colours)
         {
             splitter.Colour = colours.Red;
             splitIcon.Colour = colours.Yellow;
-        }
-
-        protected override void Apply(TextCaretPosition caret)
-        {
-            Position = GetPosition(caret);
-            Height = karaokeSpriteText.LineBaseHeight;
         }
     }
 }

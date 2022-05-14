@@ -22,6 +22,16 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             AddDecoder<Beatmap>("[", _ => new LrcDecoder());
         }
 
+        /// <summary>
+        ///     Convert dictionary to list of time tags.
+        /// </summary>
+        /// <param name="dictionary">Dictionary.</param>
+        /// <returns>Time tags</returns>
+        internal static TimeTag[] ToTimeTagList(IReadOnlyDictionary<TextIndex, double> dictionary)
+        {
+            return dictionary.Select(d => new TimeTag(d.Key, d.Value)).ToArray();
+        }
+
         protected override void ParseStreamInto(LineBufferedReader stream, Beatmap output)
         {
             // Clear all hitobjects
@@ -79,16 +89,6 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
                     throw new FormatException(message, ex);
                 }
             }
-        }
-
-        /// <summary>
-        /// Convert dictionary to list of time tags.
-        /// </summary>
-        /// <param name="dictionary">Dictionary.</param>
-        /// <returns>Time tags</returns>
-        internal static TimeTag[] ToTimeTagList(IReadOnlyDictionary<TextIndex, double> dictionary)
-        {
-            return dictionary.Select(d => new TimeTag(d.Key, d.Value)).ToArray();
         }
     }
 }

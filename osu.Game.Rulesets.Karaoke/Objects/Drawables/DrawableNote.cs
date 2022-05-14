@@ -22,29 +22,28 @@ using osu.Game.Skinning;
 namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
 {
     /// <summary>
-    /// Visualises a <see cref="Note"/> hit object.
+    ///     Visualises a <see cref="Note" /> hit object.
     /// </summary>
     public class DrawableNote : DrawableKaraokeScrollingHitObject<Note>, IKeyBindingHandler<KaraokeSaitenAction>
     {
-        private readonly SkinnableDrawable background;
-        private readonly OsuSpriteText textPiece;
-
-        /// <summary>
-        /// Time at which the user started holding this hold note. Null if the user is not holding this hold note.
-        /// </summary>
-        private double? holdStartTime;
-
         public IBindable<bool> IsHitting => isHitting;
-
-        private readonly Bindable<bool> isHitting = new();
-
-        private readonly IBindable<NotePositionCalculator> positionBindable = new Bindable<NotePositionCalculator>();
 
         public readonly IBindable<string> TextBindable = new Bindable<string>();
         public readonly IBindable<string> RubyTextBindable = new Bindable<string>();
         public readonly IBindableList<int> SingersBindable = new BindableList<int>();
         public readonly IBindable<bool> DisplayBindable = new Bindable<bool>();
         public readonly IBindable<Tone> ToneBindable = new Bindable<Tone>();
+        private readonly SkinnableDrawable background;
+        private readonly OsuSpriteText textPiece;
+
+        private readonly Bindable<bool> isHitting = new();
+
+        private readonly IBindable<NotePositionCalculator> positionBindable = new Bindable<NotePositionCalculator>();
+
+        /// <summary>
+        ///     Time at which the user started holding this hold note. Null if the user is not holding this hold note.
+        /// </summary>
+        private double? holdStartTime;
 
         public DrawableNote()
             : this(null)
@@ -57,7 +56,7 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             AddRangeInternal(new Drawable[]
             {
                 background = new SkinnableDrawable(new KaraokeSkinComponent(KaraokeSkinComponents.Note), _ => new DefaultBodyPiece { RelativeSizeAxes = Axes.Both }),
-                textPiece = new OsuSpriteText(),
+                textPiece = new OsuSpriteText()
             });
 
             // Comment it because i'm not sure will it be used in the future or not.
@@ -69,23 +68,44 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             */
         }
 
-        [BackgroundDependencyLoader]
-        private void load(INotePositionInfo notePositionInfo)
+        public bool OnPressed(KeyBindingPressEvent<KaraokeSaitenAction> e)
         {
-            positionBindable.BindTo(notePositionInfo.Position);
+            // Make sure the action happened within the body of the hold note
+            if (Time.Current < HitObject.StartTime && holdStartTime == null || Time.Current > HitObject.EndTime && holdStartTime == null)
+                return false;
 
-            positionBindable.BindValueChanged(_ => updateNotePositionAndHeight());
-            TextBindable.BindValueChanged(_ => { changeText(HitObject); });
-            RubyTextBindable.BindValueChanged(_ => { changeText(HitObject); });
-            SingersBindable.BindCollectionChanged((_, _) => { ApplySkin(CurrentSkin, false); });
-            DisplayBindable.BindValueChanged(e => { (Result.Judgement as KaraokeNoteJudgement).Saitenable = e.NewValue; });
-            ToneBindable.BindValueChanged(_ => updateNotePositionAndHeight());
-
-            void updateNotePositionAndHeight()
+            if (holdStartTime == null)
             {
-                Y = notePositionInfo.Calculator.YPositionAt(HitObject);
-                Height = notePositionInfo.Calculator.ColumnHeight;
+                // User start singing this note
+                BeginSing();
             }
+            else if (Time.Current > HitObject.EndTime || Time.Current < HitObject.StartTime)
+            {
+                // User stop singing this note
+                EndSing();
+            }
+
+            return false;
+        }
+
+        public void OnReleased(KeyBindingReleaseEvent<KaraokeSaitenAction> e)
+        {
+            // Make sure that the user started holding the key during the hold note
+            if (!holdStartTime.HasValue)
+                return;
+
+            // User stop singing this note
+            EndSing();
+        }
+
+        public void ApplyToLyricText(Action<OsuSpriteText> action)
+        {
+            action?.Invoke(textPiece);
+        }
+
+        public void ApplyToBackground(Action<SkinnableDrawable> action)
+        {
+            action?.Invoke(background);
         }
 
         protected override void OnApply()
@@ -139,12 +159,6 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             textPiece.Padding = new MarginPadding { Left = paddingSize, Right = paddingSize };
         }
 
-        private void changeText(Note note)
-        {
-            // todo: should apply the setting.
-            textPiece.Text = NoteUtils.DisplayText(note, true);
-        }
-
         protected void BeginSing()
         {
             holdStartTime = Time.Current;
@@ -177,38 +191,29 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Drawables
             ApplyResult(r => r.Type = result);
         }
 
-        public bool OnPressed(KeyBindingPressEvent<KaraokeSaitenAction> e)
+        [BackgroundDependencyLoader]
+        private void load(INotePositionInfo notePositionInfo)
         {
-            // Make sure the action happened within the body of the hold note
-            if (Time.Current < HitObject.StartTime && holdStartTime == null || Time.Current > HitObject.EndTime && holdStartTime == null)
-                return false;
+            positionBindable.BindTo(notePositionInfo.Position);
 
-            if (holdStartTime == null)
-            {
-                // User start singing this note
-                BeginSing();
-            }
-            else if (Time.Current > HitObject.EndTime || Time.Current < HitObject.StartTime)
-            {
-                // User stop singing this note
-                EndSing();
-            }
+            positionBindable.BindValueChanged(_ => updateNotePositionAndHeight());
+            TextBindable.BindValueChanged(_ => { changeText(HitObject); });
+            RubyTextBindable.BindValueChanged(_ => { changeText(HitObject); });
+            SingersBindable.BindCollectionChanged((_, _) => { ApplySkin(CurrentSkin, false); });
+            DisplayBindable.BindValueChanged(e => { (Result.Judgement as KaraokeNoteJudgement).Saitenable = e.NewValue; });
+            ToneBindable.BindValueChanged(_ => updateNotePositionAndHeight());
 
-            return false;
+            void updateNotePositionAndHeight()
+            {
+                Y = notePositionInfo.Calculator.YPositionAt(HitObject);
+                Height = notePositionInfo.Calculator.ColumnHeight;
+            }
         }
 
-        public void OnReleased(KeyBindingReleaseEvent<KaraokeSaitenAction> e)
+        private void changeText(Note note)
         {
-            // Make sure that the user started holding the key during the hold note
-            if (!holdStartTime.HasValue)
-                return;
-
-            // User stop singing this note
-            EndSing();
+            // todo: should apply the setting.
+            textPiece.Text = NoteUtils.DisplayText(note, true);
         }
-
-        public void ApplyToLyricText(Action<OsuSpriteText> action) => action?.Invoke(textPiece);
-
-        public void ApplyToBackground(Action<SkinnableDrawable> action) => action?.Invoke(background);
     }
 }

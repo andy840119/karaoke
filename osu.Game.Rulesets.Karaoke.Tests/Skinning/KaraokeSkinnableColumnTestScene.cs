@@ -18,7 +18,7 @@ using osuTK.Graphics;
 namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
 {
     /// <summary>
-    /// A test scene for skinnable karaoke components.
+    ///     A test scene for skinnable karaoke components.
     /// </summary>
     public abstract class KaraokeSkinnableColumnTestScene : KaraokeSkinnableTestScene
     {
@@ -33,7 +33,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
         [Cached(typeof(INotePositionInfo))]
         private readonly PreviewNotePositionInfo notePositionInfo = new();
 
-        protected override Ruleset CreateRulesetForSkinProvider() => new KaraokeRuleset();
+        protected override Ruleset CreateRulesetForSkinProvider()
+        {
+            return new KaraokeRuleset();
+        }
 
         protected KaraokeSkinnableColumnTestScene()
         {
@@ -57,18 +60,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
             Dependencies.Cache(session);
         }
 
-        [Test]
-        public void TestScrollingDown()
-        {
-            AddStep("change direction to left", () => scrollingInfo.Direction.Value = ScrollingDirection.Left);
-        }
-
-        [Test]
-        public void TestScrollingUp()
-        {
-            AddStep("change direction to right", () => scrollingInfo.Direction.Value = ScrollingDirection.Right);
-        }
-
         private class TestScrollingInfo : IScrollingInfo
         {
             public readonly Bindable<ScrollingDirection> Direction = new();
@@ -81,16 +72,24 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
         private class ZeroScrollAlgorithm : IScrollAlgorithm
         {
             public double GetDisplayStartTime(double originTime, float offset, double timeRange, float scrollLength)
-                => double.MinValue;
+            {
+                return double.MinValue;
+            }
 
             public float GetLength(double startTime, double endTime, double timeRange, float scrollLength)
-                => scrollLength;
+            {
+                return scrollLength;
+            }
 
             public float PositionAt(double time, double currentTime, double timeRange, float scrollLength)
-                => (float)((time - START_TIME) / timeRange) * scrollLength;
+            {
+                return (float)((time - START_TIME) / timeRange) * scrollLength;
+            }
 
             public double TimeAt(float position, double currentTime, double timeRange, float scrollLength)
-                => 0;
+            {
+                return 0;
+            }
 
             public void Reset()
             {
@@ -103,6 +102,18 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning
                 new Bindable<NotePositionCalculator>(new NotePositionCalculator(COLUMNS, DefaultColumnBackground.COLUMN_HEIGHT, ScrollingNotePlayfield.COLUMN_SPACING));
 
             public NotePositionCalculator Calculator => Position.Value;
+        }
+
+        [Test]
+        public void TestScrollingDown()
+        {
+            AddStep("change direction to left", () => scrollingInfo.Direction.Value = ScrollingDirection.Left);
+        }
+
+        [Test]
+        public void TestScrollingUp()
+        {
+            AddStep("change direction to right", () => scrollingInfo.Direction.Value = ScrollingDirection.Right);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.PlayerSettings
                 displayRomajiCheckBox = new PlayerCheckbox
                 {
                     LabelText = "Display romaji"
-                },
+                }
             };
         }
 

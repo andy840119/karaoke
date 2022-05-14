@@ -42,21 +42,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
             if (lyric.TimeTags == null)
                 return;
 
-            foreach (var timeTag in lyric.TimeTags)
-            {
-                Add(new RecordingTimeTagVisualization(lyric, timeTag));
-            }
+            foreach (var timeTag in lyric.TimeTags) Add(new RecordingTimeTagVisualization(lyric, timeTag));
 
             Add(new CurrentRecordingTimeTagVisualization(lyric));
         }
 
         private class CurrentRecordingTimeTagVisualization : CompositeDrawable
         {
-            private IBindable<ICaretPosition> position;
-
             private readonly Lyric lyric;
 
             private readonly DrawableTextIndex drawableTextIndex;
+            private IBindable<ICaretPosition> position;
 
             public CurrentRecordingTimeTagVisualization(Lyric lyric)
             {
@@ -71,7 +67,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
                     Name = "Time tag triangle",
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 };
             }
 
@@ -104,32 +100,40 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
                         this.MoveToX((float)timeline.GetPreviewTime(timeTag), 100, Easing.OutCubic);
                     }
                     else
-                    {
                         Hide();
-                    }
                 });
             }
         }
 
         private class RecordingTimeTagVisualization : CompositeDrawable, IHasCustomTooltip<TimeTag>, IHasContextMenu
         {
-            [Resolved]
-            private ILyricCaretState lyricCaretState { get; set; }
+            public TimeTag TooltipContent { get; }
 
-            [Resolved]
-            private ILyricTimeTagsChangeHandler lyricTimeTagsChangeHandler { get; set; }
+            public MenuItem[] ContextMenuItems =>
+                new MenuItem[]
+                {
+                    new OsuMenuItem("Clear time", MenuItemType.Destructive, () =>
+                    {
+                        lyricTimeTagsChangeHandler.ClearTimeTagTime(TooltipContent);
+                    })
+                };
 
             private readonly Bindable<double?> bindableTime;
 
             private readonly TextIndexPiece textIndexPiece;
 
             private readonly Lyric lyric;
-            private readonly TimeTag timeTag;
+
+            [Resolved]
+            private ILyricCaretState lyricCaretState { get; set; }
+
+            [Resolved]
+            private ILyricTimeTagsChangeHandler lyricTimeTagsChangeHandler { get; set; }
 
             public RecordingTimeTagVisualization(Lyric lyric, TimeTag timeTag)
             {
                 this.lyric = lyric;
-                this.timeTag = timeTag;
+                this.TooltipContent = timeTag;
 
                 var textIndex = timeTag.Index;
 
@@ -154,16 +158,28 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
                     {
                         Text = LyricUtils.GetTimeTagDisplayRubyText(lyric, timeTag),
                         Anchor = TextIndexUtils.GetValueByState(textIndex, Anchor.BottomLeft, Anchor.BottomRight),
-                        Origin = TextIndexUtils.GetValueByState(textIndex, Anchor.TopLeft, Anchor.TopRight),
+                        Origin = TextIndexUtils.GetValueByState(textIndex, Anchor.TopLeft, Anchor.TopRight)
                     }
                 };
+            }
+
+            public ITooltip<TimeTag> GetCustomTooltip()
+            {
+                return new TimeTagTooltip();
+            }
+
+            protected override bool OnClick(ClickEvent e)
+            {
+                lyricCaretState.MoveCaretToTargetPosition(new TimeTagCaretPosition(lyric, TooltipContent));
+
+                return base.OnClick(e);
             }
 
             [BackgroundDependencyLoader]
             private void load(EditorClock clock, OsuColour colours, RecordingTimeTagEditor timeline)
             {
                 textIndexPiece.Clock = clock;
-                textIndexPiece.Colour = colours.GetTimeTagColour(timeTag);
+                textIndexPiece.Colour = colours.GetTimeTagColour(TooltipContent);
 
                 bindableTime.BindValueChanged(e =>
                 {
@@ -176,7 +192,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
                     // should wait until all time-tag time has been modified.
                     Schedule(() =>
                     {
-                        double previewTime = timeline.GetPreviewTime(timeTag);
+                        double previewTime = timeline.GetPreviewTime(TooltipContent);
 
                         // adjust position.
                         X = (float)previewTime;
@@ -186,32 +202,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
 
                         using (textIndexPiece.BeginAbsoluteSequence(previewTime))
                         {
-                            textIndexPiece.Colour = colours.GetTimeTagColour(timeTag);
+                            textIndexPiece.Colour = colours.GetTimeTagColour(TooltipContent);
                             textIndexPiece.FlashColour(colours.RedDark, 750, Easing.OutQuint);
                         }
                     });
                 }, true);
             }
-
-            protected override bool OnClick(ClickEvent e)
-            {
-                lyricCaretState.MoveCaretToTargetPosition(new TimeTagCaretPosition(lyric, timeTag));
-
-                return base.OnClick(e);
-            }
-
-            public ITooltip<TimeTag> GetCustomTooltip() => new TimeTagTooltip();
-
-            public TimeTag TooltipContent => timeTag;
-
-            public MenuItem[] ContextMenuItems =>
-                new MenuItem[]
-                {
-                    new OsuMenuItem("Clear time", MenuItemType.Destructive, () =>
-                    {
-                        lyricTimeTagsChangeHandler.ClearTimeTagTime(timeTag);
-                    })
-                };
         }
 
         private class TextIndexPiece : DrawableTextIndex

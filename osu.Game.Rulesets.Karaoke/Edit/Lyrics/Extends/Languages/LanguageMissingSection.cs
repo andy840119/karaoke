@@ -34,7 +34,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
         {
             Children = new[]
             {
-                table = new LyricLanguageIssueTable(),
+                table = new LyricLanguageIssueTable()
             };
 
             bindableReports = lyricCheckerManager.BindableReports.GetBoundCopy();
@@ -47,9 +47,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
 
         public class LyricLanguageIssueTable : IssueTableContainer
         {
-            [Resolved]
-            private OsuColour colours { get; set; }
-
             public IEnumerable<Issue> Issues
             {
                 set
@@ -74,37 +71,46 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
                 }
             }
 
-            protected override TableColumn[] CreateHeaders() => new[]
-            {
-                new TableColumn(string.Empty, Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 30)),
-                new TableColumn("Lyric", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 40)),
-                new TableColumn("Message", Anchor.CentreLeft),
-            };
+            [Resolved]
+            private OsuColour colours { get; set; }
 
-            private Drawable[] createContent(Lyric lyric) => new Drawable[]
+            protected override TableColumn[] CreateHeaders()
             {
-                new SpriteIcon
+                return new[]
                 {
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(10),
-                    Colour = colours.Red,
-                    Margin = new MarginPadding { Left = 10 },
-                    Icon = FontAwesome.Solid.Globe,
-                },
-                new OsuSpriteText
+                    new TableColumn(string.Empty, Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 30)),
+                    new TableColumn("Lyric", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 40)),
+                    new TableColumn("Message", Anchor.CentreLeft)
+                };
+            }
+
+            private Drawable[] createContent(Lyric lyric)
+            {
+                return new Drawable[]
                 {
-                    Text = $"#{lyric.Order}",
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
-                    Margin = new MarginPadding { Right = 10 },
-                },
-                new OsuSpriteText
-                {
-                    Text = "This lyric is missing language.",
-                    Truncate = true,
-                    RelativeSizeAxes = Axes.X,
-                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
-                },
-            };
+                    new SpriteIcon
+                    {
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(10),
+                        Colour = colours.Red,
+                        Margin = new MarginPadding { Left = 10 },
+                        Icon = FontAwesome.Solid.Globe
+                    },
+                    new OsuSpriteText
+                    {
+                        Text = $"#{lyric.Order}",
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
+                        Margin = new MarginPadding { Right = 10 }
+                    },
+                    new OsuSpriteText
+                    {
+                        Text = "This lyric is missing language.",
+                        Truncate = true,
+                        RelativeSizeAxes = Axes.X,
+                        Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
+                    }
+                };
+            }
 
             private class LyricLanguageRowBackground : RowBackground
             {

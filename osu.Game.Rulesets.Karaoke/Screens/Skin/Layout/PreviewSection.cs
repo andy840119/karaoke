@@ -23,11 +23,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
 {
     internal class PreviewSection : LayoutSection
     {
+        protected override string Title => "Preview (Won't be saved)";
         private LabelledEnumDropdown<PreviewRatio> previewRatioDropdown;
         private LabelledEnumDropdown<PreviewSample> previewSampleDropdown;
         private StyleLabelledDropdown previewStyleDropdown;
-
-        protected override string Title => "Preview (Won't be saved)";
 
         [BackgroundDependencyLoader]
         private void load(LayoutManager manager)
@@ -37,19 +36,19 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                 previewRatioDropdown = new LabelledEnumDropdown<PreviewRatio>
                 {
                     Label = "Ratio",
-                    Description = "Adjust to see different preview ratio.",
+                    Description = "Adjust to see different preview ratio."
                 },
                 previewSampleDropdown = new LabelledEnumDropdown<PreviewSample>
                 {
                     Label = "Lyric",
-                    Description = "Select different lyric to check layout is valid.",
+                    Description = "Select different lyric to check layout is valid."
                 },
                 previewStyleDropdown = new StyleLabelledDropdown
                 {
                     Label = "Style",
                     Description = "Select different style to check layout is valid.",
-                    Items = manager.PreviewFontSelections,
-                },
+                    Items = manager.PreviewFontSelections
+                }
             };
 
             previewRatioDropdown.Current.BindValueChanged(e =>
@@ -72,8 +71,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
             }, true);
         }
 
-        private Lyric getLyricSampleBySelection(PreviewSample previewSample) =>
-            previewSample switch
+        private Lyric getLyricSampleBySelection(PreviewSample previewSample)
+        {
+            return previewSample switch
             {
                 PreviewSample.SampleSmall => createDefaultLyric("@カラオケ",
                     new[]
@@ -112,6 +112,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                     Array.Empty<string>(), "karaoke"),
                 _ => null
             };
+        }
 
         private Lyric createDefaultLyric(string text, string[] ruby, string[] romaji, string translate)
         {
@@ -163,7 +164,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
             WideScreen,
 
             [Description("4:3")]
-            LegacyScreen,
+            LegacyScreen
         }
 
         internal enum PreviewSample
@@ -181,15 +182,19 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
         private class StyleLabelledDropdown : LabelledDropdown<KeyValuePair<int, string>>
         {
             protected override OsuDropdown<KeyValuePair<int, string>> CreateDropdown()
-                => new StyleDropdown
+            {
+                return new StyleDropdown
                 {
-                    RelativeSizeAxes = Axes.X,
+                    RelativeSizeAxes = Axes.X
                 };
+            }
 
             private class StyleDropdown : OsuDropdown<KeyValuePair<int, string>>
             {
                 protected override LocalisableString GenerateItemText(KeyValuePair<int, string> item)
-                    => item.Value ?? $"Style{item.Key}";
+                {
+                    return item.Value ?? $"Style{item.Key}";
+                }
             }
         }
     }

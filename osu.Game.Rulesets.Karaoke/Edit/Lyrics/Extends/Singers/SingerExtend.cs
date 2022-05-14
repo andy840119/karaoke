@@ -13,7 +13,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Singers
         {
             Children = new[]
             {
-                new SingerEditSection(),
+                new SingerEditSection()
             };
         }
     }

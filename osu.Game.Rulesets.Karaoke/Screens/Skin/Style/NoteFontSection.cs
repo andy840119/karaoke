@@ -11,10 +11,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
 {
     internal class NoteFontSection : StyleSection
     {
+        protected override string Title => "Font";
         private LabelledColourSelector textColorPicker;
         private LabelledSwitchButton boldSwitchButton;
-
-        protected override string Title => "Font";
 
         [BackgroundDependencyLoader]
         private void load(SkinManager manager)
@@ -24,12 +23,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 textColorPicker = new LabelledColourSelector
                 {
                     Label = "Color",
-                    Description = "Select color.",
+                    Description = "Select color."
                 },
                 boldSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Bold",
-                    Description = "Select bold or not.",
+                    Description = "Select bold or not."
                 }
             };
         }

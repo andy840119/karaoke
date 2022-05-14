@@ -14,22 +14,22 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Elements
         public string Name { get; set; }
 
         /// <summary>
-        /// Group
+        ///     Group
         /// </summary>
         public int Group { get; set; }
 
         /// <summary>
-        /// Lyric alignment
+        ///     Lyric alignment
         /// </summary>
         public Anchor Alignment { get; set; } = Anchor.Centre;
 
         /// <summary>
-        /// Horizontal margin
+        ///     Horizontal margin
         /// </summary>
         public int HorizontalMargin { get; set; }
 
         /// <summary>
-        /// Vertical margin
+        ///     Vertical margin
         /// </summary>
         public int VerticalMargin { get; set; }
 

@@ -31,6 +31,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks.Components
 
         Overlapping,
 
-        EmptyTime,
+        EmptyTime
     }
 }

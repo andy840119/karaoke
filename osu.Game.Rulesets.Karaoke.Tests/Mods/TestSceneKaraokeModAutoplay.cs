@@ -10,12 +10,15 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Mods
     public class TestSceneKaraokeModAutoplay : KaraokeModTestScene
     {
         [Ignore("mod auto-play will cause crash")]
-        public void TestMod() => CreateModTest(new ModTestData
+        public void TestMod()
         {
-            Mod = new KaraokeModAutoplay(),
-            Autoplay = true,
-            Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
-            PassCondition = () => true
-        });
+            CreateModTest(new ModTestData
+            {
+                Mod = new KaraokeModAutoplay(),
+                Autoplay = true,
+                Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
+                PassCondition = () => true
+            });
+        }
     }
 }

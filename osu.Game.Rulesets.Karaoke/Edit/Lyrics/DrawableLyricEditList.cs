@@ -22,7 +22,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
         protected override Vector2 Spacing => new(0, 2);
 
         protected override OsuRearrangeableListItem<Lyric> CreateOsuDrawable(Lyric item)
-            => new DrawableLyricEditListItem(item);
+        {
+            return new DrawableLyricEditListItem(item);
+        }
 
         protected override Drawable CreateBottomDrawable()
         {
@@ -46,7 +48,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                         },
                         new CreateNewLyricRow
                         {
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         }
                     }
                 }

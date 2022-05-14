@@ -21,10 +21,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
 {
     public abstract class TextTagBlueprintContainer<T> : ExtendBlueprintContainer<T> where T : class, ITextTag
     {
+        protected readonly Lyric Lyric;
+
         [Resolved]
         private ILyricCaretState lyricCaretState { get; set; }
-
-        protected readonly Lyric Lyric;
 
         protected TextTagBlueprintContainer(Lyric lyric)
         {
@@ -38,14 +38,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
         }
 
         protected override IEnumerable<SelectionBlueprint<T>> SortForMovement(IReadOnlyList<SelectionBlueprint<T>> blueprints)
-            => blueprints.OrderBy(b => b.Item.StartIndex);
+        {
+            return blueprints.OrderBy(b => b.Item.StartIndex);
+        }
 
         protected abstract class TextTagSelectionHandler : ExtendSelectionHandler<T>
         {
+            private float deltaScaleSize;
+
             [Resolved]
             private EditorKaraokeSpriteText karaokeSpriteText { get; set; }
-
-            private float deltaScaleSize;
 
             protected override void OnSelectionChanged()
             {
@@ -57,6 +59,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
                 // should clear delta size before change start/end index.
                 deltaScaleSize = 0;
             }
+
+            protected abstract void SetTextTagShifting(IEnumerable<T> textTags, int offset);
+
+            protected abstract void SetTextTagIndex(T textTag, int? startPosition, int? endPosition);
 
             #region User Input Handling
 
@@ -146,10 +152,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components
             }
 
             #endregion
-
-            protected abstract void SetTextTagShifting(IEnumerable<T> textTags, int offset);
-
-            protected abstract void SetTextTagIndex(T textTag, int? startPosition, int? endPosition);
         }
     }
 }

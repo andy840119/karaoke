@@ -34,13 +34,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.TimeTags
             return generator.Value.CreateTimeTags(lyric);
         }
 
-        protected override KaraokeRulesetEditGeneratorSetting GetGeneratorConfigSetting(CultureInfo info) =>
-            info.LCID switch
+        protected override KaraokeRulesetEditGeneratorSetting GetGeneratorConfigSetting(CultureInfo info)
+        {
+            return info.LCID switch
             {
                 17 => KaraokeRulesetEditGeneratorSetting.JaTimeTagGeneratorConfig,
                 1041 => KaraokeRulesetEditGeneratorSetting.JaTimeTagGeneratorConfig,
                 1028 => KaraokeRulesetEditGeneratorSetting.ZhTimeTagGeneratorConfig,
                 _ => throw new ArgumentOutOfRangeException(nameof(info))
             };
+        }
     }
 }

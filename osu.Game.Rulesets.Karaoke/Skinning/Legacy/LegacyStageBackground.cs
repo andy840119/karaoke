@@ -21,6 +21,16 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             RelativeSizeAxes = Axes.Both;
         }
 
+        public static string GetTextureName()
+        {
+            return "karaoke-stage-background";
+        }
+
+        protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> direction)
+        {
+            Scale = direction.NewValue == ScrollingDirection.Left ? Vector2.One : new Vector2(-1, 1);
+        }
+
         [BackgroundDependencyLoader]
         private void load(ISkinSource skin, IScrollingInfo scrollingInfo)
         {
@@ -35,13 +45,9 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             direction.BindValueChanged(OnDirectionChanged, true);
         }
 
-        protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> direction)
+        private Texture getTexture(ISkinSource skin)
         {
-            Scale = direction.NewValue == ScrollingDirection.Left ? Vector2.One : new Vector2(-1, 1);
+            return skin.GetTexture(GetTextureName());
         }
-
-        private Texture getTexture(ISkinSource skin) => skin.GetTexture(GetTextureName());
-
-        public static string GetTextureName() => "karaoke-stage-background";
     }
 }

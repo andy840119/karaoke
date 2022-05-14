@@ -18,14 +18,26 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
         [Resolved]
         private ITimeTagModeState timeTagModeState { get; set; }
 
+        internal override void UpdateEditMode(TimeTagEditMode mode)
+        {
+            timeTagModeState.ChangeEditMode(mode);
+
+            base.UpdateEditMode(mode);
+        }
+
         protected override OverlayColourScheme CreateColourScheme()
-            => OverlayColourScheme.Orange;
+        {
+            return OverlayColourScheme.Orange;
+        }
 
         protected override TimeTagEditMode DefaultMode()
-            => timeTagModeState.EditMode;
+        {
+            return timeTagModeState.EditMode;
+        }
 
         protected override Dictionary<TimeTagEditMode, EditModeSelectionItem> CreateSelections()
-            => new()
+        {
+            return new()
             {
                 {
                     TimeTagEditMode.Create, new EditModeSelectionItem("Adjust", "Create the time-tag or adjust the position.")
@@ -55,6 +67,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                     TimeTagEditMode.Adjust, new EditModeSelectionItem("Adjust", "Drag to adjust time-tag time precisely.")
                 }
             };
+        }
 
         protected override Color4 GetColour(OsuColour colours, TimeTagEditMode mode, bool active)
         {
@@ -65,13 +78,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                 TimeTagEditMode.Adjust => active ? colours.Yellow : colours.YellowDarker,
                 _ => throw new ArgumentOutOfRangeException(nameof(mode))
             };
-        }
-
-        internal override void UpdateEditMode(TimeTagEditMode mode)
-        {
-            timeTagModeState.ChangeEditMode(mode);
-
-            base.UpdateEditMode(mode);
         }
     }
 }

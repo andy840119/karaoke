@@ -31,7 +31,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.Y,
-                    Width = bar_width,
+                    Width = bar_width
                 },
                 new Triangle
                 {

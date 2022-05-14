@@ -44,16 +44,16 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                             Name = "Background",
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         },
                         lyricGraph = new SaitenResultLyricPreview(beatmap)
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Spacing = new Vector2(5),
+                            Spacing = new Vector2(5)
                         },
                         noteGraph = new NoteGraph(score)
-                    },
-                },
+                    }
+                }
             };
 
             lyricGraph.SelectedLyric.BindValueChanged(e =>
@@ -72,6 +72,12 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
         public class LyricPreview : CompositeDrawable
         {
             public Bindable<Lyric> SelectedLyric { get; } = new();
+
+            public Vector2 Spacing
+            {
+                get => lyricTable.Spacing;
+                set => lyricTable.Spacing = value;
+            }
 
             private readonly FillFlowContainer<ClickableLyric> lyricTable;
 
@@ -105,6 +111,11 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                 });
             }
 
+            protected virtual ClickableLyric CreateLyricContainer(Lyric lyric)
+            {
+                return new(lyric);
+            }
+
             private void triggerLyric(Lyric lyric)
             {
                 if (SelectedLyric.Value == lyric)
@@ -113,26 +124,35 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                     SelectedLyric.Value = lyric;
             }
 
-            public Vector2 Spacing
-            {
-                get => lyricTable.Spacing;
-                set => lyricTable.Spacing = value;
-            }
-
-            protected virtual ClickableLyric CreateLyricContainer(Lyric lyric) => new(lyric);
-
             public class ClickableLyric : ClickableContainer
             {
-                private const float fade_duration = 100;
+                public Lyric Lyric;
 
-                private Color4 hoverTextColour;
-                private Color4 idolTextColour;
+                public bool Selected
+                {
+                    get => selected;
+                    set
+                    {
+                        if (value == selected) return;
+
+                        selected = value;
+
+                        background.FadeTo(Selected ? 1 : 0, fade_duration);
+                        icon.FadeTo(Selected ? 1 : 0, fade_duration);
+                        drawableLyric.FadeColour(Selected ? hoverTextColour : idolTextColour, fade_duration);
+                    }
+                }
+
+                private const float fade_duration = 100;
 
                 private readonly Box background;
                 private readonly Drawable icon;
                 private readonly DrawableLyricSpriteText drawableLyric;
 
-                public Lyric Lyric;
+                private Color4 hoverTextColour;
+                private Color4 idolTextColour;
+
+                private bool selected;
 
                 public ClickableLyric(Lyric lyric)
                 {
@@ -149,42 +169,31 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                             RelativeSizeAxes = Axes.Both
                         },
                         icon = CreateIcon(),
-                        drawableLyric = CreateLyric(lyric),
+                        drawableLyric = CreateLyric(lyric)
                     };
                 }
 
-                protected virtual DrawableLyricSpriteText CreateLyric(Lyric lyric) => new(lyric)
+                protected virtual DrawableLyricSpriteText CreateLyric(Lyric lyric)
                 {
-                    Font = new FontUsage(size: 25),
-                    RubyFont = new FontUsage(size: 10),
-                    RomajiFont = new FontUsage(size: 10),
-                    Margin = new MarginPadding { Left = 25 }
-                };
-
-                protected virtual Drawable CreateIcon() => new SpriteIcon
-                {
-                    Anchor = Anchor.CentreLeft,
-                    Origin = Anchor.CentreLeft,
-                    Size = new Vector2(15),
-                    Icon = FontAwesome.Solid.Play,
-                    Margin = new MarginPadding { Left = 5 }
-                };
-
-                private bool selected;
-
-                public bool Selected
-                {
-                    get => selected;
-                    set
+                    return new(lyric)
                     {
-                        if (value == selected) return;
+                        Font = new FontUsage(size: 25),
+                        RubyFont = new FontUsage(size: 10),
+                        RomajiFont = new FontUsage(size: 10),
+                        Margin = new MarginPadding { Left = 25 }
+                    };
+                }
 
-                        selected = value;
-
-                        background.FadeTo(Selected ? 1 : 0, fade_duration);
-                        icon.FadeTo(Selected ? 1 : 0, fade_duration);
-                        drawableLyric.FadeColour(Selected ? hoverTextColour : idolTextColour, fade_duration);
-                    }
+                protected virtual Drawable CreateIcon()
+                {
+                    return new SpriteIcon
+                    {
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        Size = new Vector2(15),
+                        Icon = FontAwesome.Solid.Play,
+                        Margin = new MarginPadding { Left = 5 }
+                    };
                 }
 
                 [BackgroundDependencyLoader]
@@ -210,7 +219,9 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
             }
 
             protected override ClickableLyric CreateLyricContainer(Lyric lyric)
-                => new SaitenResultClickableLyric(lyric);
+            {
+                return new SaitenResultClickableLyric(lyric);
+            }
 
             private class SaitenResultClickableLyric : ClickableLyric
             {
@@ -220,16 +231,20 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                 }
 
                 protected override DrawableLyricSpriteText CreateLyric(Lyric lyric)
-                    => new(lyric)
+                {
+                    return new(lyric)
                     {
                         Font = new FontUsage(size: 15),
                         RubyFont = new FontUsage(size: 7),
                         RomajiFont = new FontUsage(size: 7),
                         Margin = new MarginPadding { Left = 5 }
                     };
+                }
 
                 protected override Drawable CreateIcon()
-                    => new Container();
+                {
+                    return new Container();
+                }
             }
         }
 

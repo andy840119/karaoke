@@ -22,6 +22,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Blueprints.Notes
 {
     public class NoteSelectionBlueprint : KaraokeSelectionBlueprint<Note>, IHasPopover
     {
+        public override MenuItem[] ContextMenuItems => new MenuItem[]
+        {
+            new OsuMenuItem(HitObject.Display ? "Hide" : "Show", HitObject.Display ? MenuItemType.Destructive : MenuItemType.Standard, () => notesChangeHandler.ChangeDisplayState(!HitObject.Display)),
+            new OsuMenuItem("Split", MenuItemType.Destructive, () => notesChangeHandler.Split())
+        };
+
+        protected ScrollingHitObjectContainer HitObjectContainer => ((KaraokePlayfield)playfield).NotePlayfield.HitObjectContainer;
+
         [Resolved]
         private INotesChangeHandler notesChangeHandler { get; set; }
 
@@ -37,8 +45,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Blueprints.Notes
         [Resolved]
         private EditorBeatmap beatmap { get; set; }
 
-        protected ScrollingHitObjectContainer HitObjectContainer => ((KaraokePlayfield)playfield).NotePlayfield.HitObjectContainer;
-
         public NoteSelectionBlueprint(Note note)
             : base(note)
         {
@@ -46,6 +52,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Blueprints.Notes
             {
                 RelativeSizeAxes = Axes.Both
             });
+        }
+
+        public Popover GetPopover()
+        {
+            return new NoteEditPopover(HitObject);
         }
 
         protected override void Update()
@@ -61,14 +72,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Blueprints.Notes
             Width = HitObjectContainer.LengthAtTime(HitObject.StartTime, HitObject.EndTime);
             Height = notePositionInfo.Calculator.ColumnHeight;
         }
-
-        public override MenuItem[] ContextMenuItems => new MenuItem[]
-        {
-            new OsuMenuItem(HitObject.Display ? "Hide" : "Show", HitObject.Display ? MenuItemType.Destructive : MenuItemType.Standard, () => notesChangeHandler.ChangeDisplayState(!HitObject.Display)),
-            new OsuMenuItem("Split", MenuItemType.Destructive, () => notesChangeHandler.Split()),
-        };
-
-        public Popover GetPopover() => new NoteEditPopover(HitObject);
 
         protected override bool OnClick(ClickEvent e)
         {

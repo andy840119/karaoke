@@ -38,7 +38,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Detail
                     Label = "Description",
                     Current = singer.DescriptionBindable,
                     TabbableContentContainer = this
-                },
+                }
             };
 
             // todo: see NoteEditPopover to implement the undo behavior.

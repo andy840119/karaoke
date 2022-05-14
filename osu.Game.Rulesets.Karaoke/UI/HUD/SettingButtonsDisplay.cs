@@ -18,18 +18,19 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
 {
     public class SettingButtonsDisplay : CompositeDrawable, ISkinnableDrawable
     {
-        private readonly CornerBackground background;
-        private readonly FillFlowContainer<SettingButton> triggerButtons;
-
-        public bool UsesFixedAnchor { get; set; }
-
         [SettingSource("Alpha", "The alpha value of this box")]
         public BindableNumber<float> BoxAlpha { get; } = new(1)
         {
             MinValue = 0,
             MaxValue = 1,
-            Precision = 0.01f,
+            Precision = 0.01f
         };
+
+        public bool UsesFixedAnchor { get; set; }
+        private readonly CornerBackground background;
+        private readonly FillFlowContainer<SettingButton> triggerButtons;
+
+        private SettingOverlayContainer settingOverlayContainer;
 
         public SettingButtonsDisplay()
         {
@@ -38,7 +39,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
             {
                 background = new CornerBackground
                 {
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 },
                 triggerButtons = new FillFlowContainer<SettingButton>
                 {
@@ -49,7 +50,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
                     Margin = new MarginPadding(10),
                     Direction = FillDirection.Vertical,
                     AlwaysPresent = true
-                },
+                }
             };
         }
 
@@ -64,8 +65,6 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
 
             return base.OnInvalidate(invalidation, source);
         }
-
-        private SettingOverlayContainer settingOverlayContainer;
 
         [BackgroundDependencyLoader]
         private void load(OsuColour colours, HUDOverlay hud, Player player)

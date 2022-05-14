@@ -29,7 +29,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                     RelativeSizeAxes = Axes.Both,
                     Colour = Color4.Black,
                     Alpha = 0.5f
-                },
+                }
             });
 
             HitObjectArea.Add(singerVoiceVisualization = new SingerVoiceVisualization
@@ -48,10 +48,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit
 
         public class SingerVoiceVisualization : VoiceVisualization<KeyValuePair<double, float?>>
         {
-            protected override double GetTime(KeyValuePair<double, float?> frame) => frame.Key;
-
-            protected override float GetPosition(KeyValuePair<double, float?> frame) => frame.Value ?? 0;
-
             private bool createNew = true;
 
             private double minAvailableTime;
@@ -79,9 +75,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                     CreateNew(point);
                 }
                 else
-                {
                     Append(point);
-                }
+            }
+
+            protected override double GetTime(KeyValuePair<double, float?> frame)
+            {
+                return frame.Key;
+            }
+
+            protected override float GetPosition(KeyValuePair<double, float?> frame)
+            {
+                return frame.Value ?? 0;
             }
 
             [BackgroundDependencyLoader]

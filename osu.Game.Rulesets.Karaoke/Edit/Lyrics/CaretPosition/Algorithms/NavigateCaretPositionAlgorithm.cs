@@ -65,6 +65,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
             return new NavigateCaretPosition(lyric);
         }
 
-        public override NavigateCaretPosition MoveToTarget(Lyric lyric) => new(lyric);
+        public override NavigateCaretPosition MoveToTarget(Lyric lyric)
+        {
+            return new(lyric);
+        }
     }
 }

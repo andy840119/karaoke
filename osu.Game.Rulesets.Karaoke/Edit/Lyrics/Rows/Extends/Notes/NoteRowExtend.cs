@@ -27,7 +27,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Notes
             return new NoteEditor(lyric)
             {
                 RelativeSizeAxes = Axes.X,
-                Height = 150,
+                Height = 150
             };
         }
     }

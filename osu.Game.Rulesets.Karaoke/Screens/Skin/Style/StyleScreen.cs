@@ -23,10 +23,13 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
         }
 
         protected override Section[] CreateSelectionContainer()
-            => new Section[] { };
+        {
+            return new Section[] { };
+        }
 
         protected override Section[] CreatePropertiesContainer()
-            => new Section[]
+        {
+            return new Section[]
             {
                 // style
                 new LyricColorSection(),
@@ -34,11 +37,13 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 new LyricShadowSection(),
                 // note
                 new NoteColorSection(),
-                new NoteFontSection(),
+                new NoteFontSection()
             };
+        }
 
         protected override Container CreatePreviewArea()
-            => new LyricStylePreview
+        {
+            return new LyricStylePreview
             {
                 Name = "Lyric style preview area",
                 Anchor = Anchor.Centre,
@@ -46,6 +51,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 Size = new Vector2(0.95f),
                 RelativeSizeAxes = Axes.Both
             };
+        }
 
         /*
         protected override Container CreatePreviewArea()

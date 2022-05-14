@@ -21,14 +21,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Checks
     [TestFixture]
     public class CheckInvalidRubyRomajiLyricsTest
     {
-        private CheckInvalidRubyRomajiLyrics check;
-
         [SetUp]
         public void Setup()
         {
             var config = new LyricCheckerConfig().CreateDefaultConfig();
             check = new CheckInvalidRubyRomajiLyrics(config);
         }
+
+        private CheckInvalidRubyRomajiLyrics check;
 
         [TestCase("カラオケ", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, new RubyTagInvalid[] { })]
         [TestCase("カラオケ", new[] { "[0,4]:からおけ" }, new RubyTagInvalid[] { })]

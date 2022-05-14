@@ -17,14 +17,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
 
             var extraConvertors = CreateExtraConverts() ?? Array.Empty<JsonConverter>();
 
-            foreach (var extraConvertor in extraConvertors)
-            {
-                globalSetting.Converters.Add(extraConvertor);
-            }
+            foreach (var extraConvertor in extraConvertors) globalSetting.Converters.Add(extraConvertor);
 
             return globalSetting;
         }
 
-        protected virtual JsonConverter[] CreateExtraConverts() => null;
+        protected virtual JsonConverter[] CreateExtraConverts()
+        {
+            return null;
+        }
     }
 }

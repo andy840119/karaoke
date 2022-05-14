@@ -33,22 +33,35 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
         }
 
         protected override Drawable CreateSingerInfo(Singer singer)
-            => new DrawableSingerInfo(singer);
+        {
+            return new DrawableSingerInfo(singer);
+        }
 
         protected override Drawable CreateTimeLinePart(Singer singer)
-            => new SingerLyricEditor(singer);
+        {
+            return new SingerLyricEditor(singer);
+        }
 
         internal class DrawableSingerInfo : CompositeDrawable, IHasCustomTooltip<Singer>, IHasContextMenu, IHasPopover
         {
+            public Singer TooltipContent { get; }
+
+            public MenuItem[] ContextMenuItems => new MenuItem[]
+            {
+                new OsuMenuItem("Edit singer info", MenuItemType.Standard, this.ShowPopover),
+                new OsuMenuItem("Delete", MenuItemType.Destructive, () =>
+                {
+                    dialogOverlay.Push(new DeleteSingerDialog(isOk =>
+                    {
+                        if (isOk)
+                            singersChangeHandler.Remove(TooltipContent);
+                    }));
+                })
+            };
+
             private const int avatar_size = 48;
             private const int main_text_size = 24;
             private const int sub_text_size = 12;
-
-            [Resolved]
-            private ISingersChangeHandler singersChangeHandler { get; set; }
-
-            [Resolved]
-            private IDialogOverlay dialogOverlay { get; set; }
 
             private readonly IBindable<int> bindableOrder = new Bindable<int>();
             private readonly IBindable<float> bindableHue = new Bindable<float>();
@@ -56,11 +69,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
             private readonly IBindable<string> bindableSingerName = new Bindable<string>();
             private readonly IBindable<string> bindableEnglishName = new Bindable<string>();
 
-            private readonly Singer singer;
+            [Resolved]
+            private ISingersChangeHandler singersChangeHandler { get; set; }
+
+            [Resolved]
+            private IDialogOverlay dialogOverlay { get; set; }
 
             public DrawableSingerInfo(Singer singer)
             {
-                this.singer = singer;
+                this.TooltipContent = singer;
 
                 bindableOrder.BindTo(singer.OrderBindable);
                 bindableHue.BindTo(singer.HueBindable);
@@ -78,7 +95,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                     background = new Box
                     {
                         Name = "Background",
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     new Container
                     {
@@ -92,7 +109,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                             ColumnDimensions = new[]
                             {
                                 new Dimension(GridSizeMode.Absolute, avatar_size),
-                                new Dimension(),
+                                new Dimension()
                             },
                             Content = new[]
                             {
@@ -101,7 +118,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                                     avatar = new DrawableSingerAvatar
                                     {
                                         Name = "Avatar",
-                                        Size = new Vector2(avatar_size),
+                                        Size = new Vector2(avatar_size)
                                     },
                                     new FillFlowContainer
                                     {
@@ -118,20 +135,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                                                 Name = "Singer name",
                                                 Font = OsuFont.GetFont(weight: FontWeight.Bold, size: main_text_size),
                                                 RelativeSizeAxes = Axes.X,
-                                                Truncate = true,
+                                                Truncate = true
                                             },
                                             singerEnglishName = new OsuSpriteText
                                             {
                                                 Name = "English name",
                                                 Font = OsuFont.GetFont(weight: FontWeight.Bold, size: sub_text_size),
                                                 RelativeSizeAxes = Axes.X,
-                                                Truncate = true,
+                                                Truncate = true
                                             }
                                         }
                                     }
                                 }
                             }
-                        },
+                        }
                     }
                 };
 
@@ -163,31 +180,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                 }, true);
             }
 
-            public ITooltip<Singer> GetCustomTooltip() => new SingerToolTip();
-
-            public Singer TooltipContent => singer;
-
-            public MenuItem[] ContextMenuItems => new MenuItem[]
+            public ITooltip<Singer> GetCustomTooltip()
             {
-                new OsuMenuItem("Edit singer info", MenuItemType.Standard, this.ShowPopover),
-                new OsuMenuItem("Delete", MenuItemType.Destructive, () =>
-                {
-                    dialogOverlay.Push(new DeleteSingerDialog(isOk =>
-                    {
-                        if (isOk)
-                            singersChangeHandler.Remove(singer);
-                    }));
-                }),
-            };
+                return new SingerToolTip();
+            }
+
+            public Popover GetPopover()
+            {
+                return new SingerEditPopover(TooltipContent);
+            }
 
             protected override bool OnClick(ClickEvent e)
             {
                 this.ShowPopover();
                 return base.OnClick(e);
             }
-
-            public Popover GetPopover()
-                => new SingerEditPopover(singer);
         }
     }
 }

@@ -35,10 +35,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
         {
             Project nicoKaraProject;
 
-            using (TextReader sr = new StringReader(stream.ReadToEnd()))
-            {
-                nicoKaraProject = new Parser().Deserialize(sr);
-            }
+            using (TextReader sr = new StringReader(stream.ReadToEnd())) nicoKaraProject = new Parser().Deserialize(sr);
 
             // Clean-up layout
             output.Layouts = new List<LyricLayout>();
@@ -50,7 +47,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
                     Name = karaokeLayout.Name,
                     Alignment = convertAnchor(karaokeLayout.HorizontalAlignment, karaokeLayout.VerticalAlignment),
                     HorizontalMargin = karaokeLayout.HorizontalMargin,
-                    VerticalMargin = karaokeLayout.VerticalMargin,
+                    VerticalMargin = karaokeLayout.VerticalMargin
                 });
             }
 
@@ -63,7 +60,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
                 {
                     Name = nicoKaraFont.Name,
                     LeftLyricTextShaders = createShaders(nicoKaraFont, ApplyShaderPart.Left),
-                    RightLyricTextShaders = createShaders(nicoKaraFont, ApplyShaderPart.Right),
+                    RightLyricTextShaders = createShaders(nicoKaraFont, ApplyShaderPart.Right)
                 });
             }
 
@@ -86,7 +83,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
                 RubyMargin = firstLayout.RubyMargin,
                 MainTextFont = convertFontInfo(firstFont.FontInfos[0]),
                 RubyTextFont = convertFontInfo(firstFont.FontInfos[3]),
-                RomajiTextFont = convertFontInfo(firstFont.FontInfos[3]),
+                RomajiTextFont = convertFontInfo(firstFont.FontInfos[3])
             };
         }
 
@@ -113,21 +110,20 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
 
             bool hasShadow = font.UseShadow;
 
-            if (hasShadow)
-            {
-                shaders.Add(createShadowShader(shaderBrushInfo, font.ShadowSlide));
-            }
+            if (hasShadow) shaders.Add(createShadowShader(shaderBrushInfo, font.ShadowSlide));
 
             return shaders;
         }
 
-        private static BrushInfo[] getBrushInfos(KaraokeFont font, ApplyShaderPart part) =>
-            part switch
+        private static BrushInfo[] getBrushInfos(KaraokeFont font, ApplyShaderPart part)
+        {
+            return part switch
             {
                 ApplyShaderPart.Left => font.BrushInfos.GetRange(0, 3).ToArray(),
                 ApplyShaderPart.Right => font.BrushInfos.GetRange(3, 3).ToArray(),
                 _ => throw new ArgumentOutOfRangeException(nameof(part))
             };
+        }
 
         private static OutlineShader createOutlineShader(BrushInfo info, FontInfo fontInfo)
         {
@@ -138,7 +134,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             {
                 OutlineColour = color,
                 // Notice that should adjust the radius for looking the same.
-                Radius = (int)(radius / 3),
+                Radius = (int)(radius / 3)
             };
 
             static float convertEdgeSize(FontInfo info) => info.EdgeSize;
@@ -152,7 +148,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             return new ShadowShader
             {
                 ShadowColour = color,
-                ShadowOffset = shadowOffset,
+                ShadowOffset = shadowOffset
             };
 
             static Vector2 convertShadowSlide(ShadowSlide side) => new(side.X, side.Y);

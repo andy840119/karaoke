@@ -26,6 +26,11 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             RelativeSizeAxes = Axes.Both;
         }
 
+        public static string GetTextureName()
+        {
+            return "karaoke-stage-light";
+        }
+
         [BackgroundDependencyLoader]
         private void load(ISkinSource skin, IScrollingInfo scrollingInfo)
         {
@@ -98,7 +103,5 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
                 lightContainer.Scale = Vector2.One;
             }
         }
-
-        public static string GetTextureName() => "karaoke-stage-light";
     }
 }

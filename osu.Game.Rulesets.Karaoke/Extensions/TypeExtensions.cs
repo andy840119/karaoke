@@ -9,15 +9,15 @@ namespace osu.Game.Rulesets.Karaoke.Extensions
     public static class TypeExtensions
     {
         /// <summary>
-        /// Returns <paramref name="type"/>'s <see cref="Type.AssemblyQualifiedName"/>
-        /// with the assembly version, culture and public key token values removed.
+        ///     Returns <paramref name="type" />'s <see cref="Type.AssemblyQualifiedName" />
+        ///     with the assembly version, culture and public key token values removed.
         /// </summary>
         /// <remarks>
-        /// This method is usually used in extensibility scenarios (i.e. for custom rulesets or skins)
-        /// when a version-agnostic identifier associated with a C# class - potentially originating from
-        /// an external assembly - is needed.
-        /// Leaving only the type and assembly names in such a scenario allows to preserve compatibility
-        /// across assembly versions.
+        ///     This method is usually used in extensibility scenarios (i.e. for custom rulesets or skins)
+        ///     when a version-agnostic identifier associated with a C# class - potentially originating from
+        ///     an external assembly - is needed.
+        ///     Leaving only the type and assembly names in such a scenario allows to preserve compatibility
+        ///     across assembly versions.
         /// </remarks>
         public static string GetInvariantInstantiationInfo(this Type type)
         {

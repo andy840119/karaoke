@@ -20,12 +20,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
             Padding = new MarginPadding
             {
                 Top = Spacing.Y,
-                Bottom = Spacing.Y,
+                Bottom = Spacing.Y
             };
         }
 
         protected override OsuRearrangeableListItem<Singer> CreateOsuDrawable(Singer item)
-            => new SingerRearrangeableListItem(item);
+        {
+            return new SingerRearrangeableListItem(item);
+        }
 
         protected override Drawable CreateBottomDrawable()
         {
@@ -41,7 +43,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
                     RelativeSizeAxes = Axes.Both,
                     Child = new CreateNewLyricPlacementColumn
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     }
                 }
             };

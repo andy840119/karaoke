@@ -11,15 +11,6 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Elements
 {
     public class NoteStyle : IKaraokeSkinElement
     {
-        public static NoteStyle CreateDefault() => new()
-        {
-            Name = "Default",
-            NoteColor = Color4Extensions.FromHex("#44AADD"),
-            BlinkColor = Color4Extensions.FromHex("#FF66AA"),
-            TextColor = Color4Extensions.FromHex("#FFFFFF"),
-            BoldText = true,
-        };
-
         public int ID { get; set; }
 
         public string Name { get; set; }
@@ -31,6 +22,18 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Elements
         public Color4 TextColor { get; set; }
 
         public bool BoldText { get; set; }
+
+        public static NoteStyle CreateDefault()
+        {
+            return new()
+            {
+                Name = "Default",
+                NoteColor = Color4Extensions.FromHex("#44AADD"),
+                BlinkColor = Color4Extensions.FromHex("#FF66AA"),
+                TextColor = Color4Extensions.FromHex("#FFFFFF"),
+                BoldText = true
+            };
+        }
 
         public void ApplyTo(Drawable d)
         {

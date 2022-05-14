@@ -13,6 +13,13 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites
 {
     public class DrawableSingerAvatar : Container
     {
+        public virtual ISinger Singer
+        {
+            get;
+            set;
+            // todo : update texture.
+        }
+
         [BackgroundDependencyLoader]
         private void load(LargeTextureStore textures)
         {
@@ -30,18 +37,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre
             });
-        }
-
-        private ISinger singer;
-
-        public virtual ISinger Singer
-        {
-            get => singer;
-            set
-            {
-                singer = value;
-                // todo : update texture.
-            }
         }
     }
 }

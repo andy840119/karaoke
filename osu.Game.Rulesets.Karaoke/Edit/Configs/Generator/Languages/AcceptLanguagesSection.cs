@@ -87,10 +87,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.Languages
         // todo: will use rearrangeable list view for able to change the order.
         private class SelectedLanguage : CompositeDrawable
         {
+            public Action OnDeleteButtonClick;
+
+            public string Text
+            {
+                set => languageSpriteText.Text = value;
+            }
+
             private const float delete_button_size = 20f;
             private const int padding = 15;
-
-            public Action OnDeleteButtonClick;
 
             private readonly OsuSpriteText languageSpriteText;
             private readonly Box background;
@@ -105,7 +110,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.Languages
                 {
                     background = new Box
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     languageSpriteText = new OsuSpriteText
                     {
@@ -115,9 +120,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.Languages
                         Padding = new MarginPadding
                         {
                             Left = padding,
-                            Right = padding * 2 + delete_button_size,
+                            Right = padding * 2 + delete_button_size
                         },
-                        Truncate = true,
+                        Truncate = true
                     },
                     new DeleteIconButton
                     {
@@ -125,10 +130,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.Languages
                         Origin = Anchor.CentreRight,
                         Margin = new MarginPadding
                         {
-                            Right = padding,
+                            Right = padding
                         },
                         Size = new Vector2(delete_button_size),
-                        Action = () => OnDeleteButtonClick?.Invoke(),
+                        Action = () => OnDeleteButtonClick?.Invoke()
                     }
                 };
             }
@@ -138,20 +143,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.Languages
             {
                 background.Colour = colourProvider.Background3;
             }
-
-            public string Text
-            {
-                set => languageSpriteText.Text = value;
-            }
         }
 
         private class CreateLanguageSubsection : CompositeDrawable
         {
+            public Action<CultureInfo> LanguageSelected;
             private const int padding = 15;
 
             private readonly Bindable<CultureInfo> current = new();
-
-            public Action<CultureInfo> LanguageSelected;
 
             public CreateLanguageSubsection()
             {

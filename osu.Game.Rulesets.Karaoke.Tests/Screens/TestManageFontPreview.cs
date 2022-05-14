@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Screens
             Add(np = new NowPlayingOverlay
             {
                 Origin = Anchor.TopRight,
-                Anchor = Anchor.TopRight,
+                Anchor = Anchor.TopRight
             });
         }
 
@@ -39,7 +39,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Screens
             Add(new ManageFontPreview
             {
                 Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
+                Origin = Anchor.Centre
             });
         }
 

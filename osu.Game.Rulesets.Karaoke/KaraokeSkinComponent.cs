@@ -7,13 +7,13 @@ namespace osu.Game.Rulesets.Karaoke
 {
     public class KaraokeSkinComponent : GameplaySkinComponent<KaraokeSkinComponents>
     {
+        protected override string RulesetPrefix => KaraokeRuleset.SHORT_NAME;
+
+        protected override string ComponentName => Component.ToString().ToLower();
+
         public KaraokeSkinComponent(KaraokeSkinComponents component)
             : base(component)
         {
         }
-
-        protected override string RulesetPrefix => KaraokeRuleset.SHORT_NAME;
-
-        protected override string ComponentName => Component.ToString().ToLower();
     }
 }

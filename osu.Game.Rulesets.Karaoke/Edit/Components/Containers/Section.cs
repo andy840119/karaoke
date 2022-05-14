@@ -15,11 +15,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Containers
 
         protected const float SECTION_SPACING = 10;
 
-        private readonly FillFlowContainer flow;
-
         protected override Container<Drawable> Content => flow;
 
         protected abstract string Title { get; }
+
+        private readonly FillFlowContainer flow;
 
         protected Section()
         {
@@ -33,7 +33,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Containers
                 new OsuSpriteText
                 {
                     Font = OsuFont.GetFont(weight: FontWeight.Bold, size: 18),
-                    Text = Title,
+                    Text = Title
                 },
                 flow = new FillFlowContainer
                 {

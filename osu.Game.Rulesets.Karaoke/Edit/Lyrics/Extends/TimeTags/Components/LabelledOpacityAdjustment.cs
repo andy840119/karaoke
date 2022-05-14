@@ -17,6 +17,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags.Components
 {
     public class LabelledOpacityAdjustment : LabelledSwitchButton
     {
+        public Bindable<float> Opacity
+        {
+            set => opacityButton.Current = value;
+        }
+
         protected const float CONFIG_BUTTON_SIZE = 20f;
 
         private readonly OpacityButton opacityButton;
@@ -31,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags.Components
             {
                 Horizontal = CONTENT_PADDING_HORIZONTAL,
                 Vertical = CONTENT_PADDING_VERTICAL,
-                Right = CONTENT_PADDING_HORIZONTAL + CONFIG_BUTTON_SIZE + CONTENT_PADDING_HORIZONTAL,
+                Right = CONTENT_PADDING_HORIZONTAL + CONFIG_BUTTON_SIZE + CONTENT_PADDING_HORIZONTAL
             };
 
             // add config button.
@@ -42,13 +47,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags.Components
                 Padding = new MarginPadding
                 {
                     Top = CONTENT_PADDING_VERTICAL,
-                    Right = CONTENT_PADDING_HORIZONTAL,
+                    Right = CONTENT_PADDING_HORIZONTAL
                 },
                 Child = opacityButton = new OpacityButton
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
-                    Size = new Vector2(CONFIG_BUTTON_SIZE),
+                    Size = new Vector2(CONFIG_BUTTON_SIZE)
                 }
             });
 
@@ -62,11 +67,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags.Components
             opacityButton.Enabled.Value = showOpacityButton;
         }
 
-        public Bindable<float> Opacity
-        {
-            set => opacityButton.Current = value;
-        }
-
         private class OpacityButton : IconButton, IHasPopover, IHasCurrentValue<float>
         {
             public Bindable<float> Current { get; set; }
@@ -78,14 +78,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags.Components
             }
 
             public Popover GetPopover()
-                => new OsuPopover
+            {
+                return new OsuPopover
                 {
                     Child = new OpacitySliderBar
                     {
                         Width = 150,
-                        Current = Current,
+                        Current = Current
                     }
                 };
+            }
 
             private class OpacitySliderBar : OsuSliderBar<float>
             {

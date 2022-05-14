@@ -14,12 +14,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
     {
         private RomajiTagGeneratorSelector selector;
 
-        [BackgroundDependencyLoader]
-        private void load(KaraokeRulesetEditGeneratorConfigManager config)
-        {
-            selector = new RomajiTagGeneratorSelector(config);
-        }
-
         public void AutoGenerate()
         {
             PerformOnSelection(lyric =>
@@ -30,15 +24,29 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
         }
 
         public bool CanGenerate()
-            => HitObjects.Any(lyric => selector.CanGenerate(lyric));
+        {
+            return HitObjects.Any(lyric => selector.CanGenerate(lyric));
+        }
 
         protected override bool ContainsInLyric(Lyric lyric, RomajiTag textTag)
-            => lyric.RomajiTags.Contains(textTag);
+        {
+            return lyric.RomajiTags.Contains(textTag);
+        }
 
         protected override void AddToLyric(Lyric lyric, RomajiTag textTag)
-            => lyric.RomajiTags.Add(textTag);
+        {
+            lyric.RomajiTags.Add(textTag);
+        }
 
         protected override void RemoveFromLyric(Lyric lyric, RomajiTag textTag)
-            => lyric.RomajiTags.Remove(textTag);
+        {
+            lyric.RomajiTags.Remove(textTag);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(KaraokeRulesetEditGeneratorConfigManager config)
+        {
+            selector = new RomajiTagGeneratorSelector(config);
+        }
     }
 }

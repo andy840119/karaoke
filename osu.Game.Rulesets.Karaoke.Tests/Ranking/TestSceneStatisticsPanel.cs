@@ -12,6 +12,31 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
 {
     public class TestSceneStatisticsPanel : OsuTestScene
     {
+        private void loadPanel(ScoreInfo score)
+        {
+            AddStep("load panel", () =>
+            {
+                Child = new StatisticsPanel
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    State = { Value = Visibility.Visible },
+                    Score = { Value = score }
+                };
+            });
+        }
+
+        [Test]
+        public void TestNullScore()
+        {
+            loadPanel(null);
+        }
+
+        [Test]
+        public void TestScoreWithoutStatistics()
+        {
+            loadPanel(new TestKaraokeScoreInfo());
+        }
+
         [Test]
         public void TestScoreWithStatistics()
         {
@@ -22,27 +47,5 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
 
             loadPanel(score);
         }
-
-        [Test]
-        public void TestScoreWithoutStatistics()
-        {
-            loadPanel(new TestKaraokeScoreInfo());
-        }
-
-        [Test]
-        public void TestNullScore()
-        {
-            loadPanel(null);
-        }
-
-        private void loadPanel(ScoreInfo score) => AddStep("load panel", () =>
-        {
-            Child = new StatisticsPanel
-            {
-                RelativeSizeAxes = Axes.Both,
-                State = { Value = Visibility.Visible },
-                Score = { Value = score }
-            };
-        });
     }
 }

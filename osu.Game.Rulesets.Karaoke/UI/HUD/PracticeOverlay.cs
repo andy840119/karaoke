@@ -25,12 +25,15 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
             };
         }
 
-        protected override SettingButton CreateButton() => new()
+        protected override SettingButton CreateButton()
         {
-            Name = "Toggle Practice",
-            Text = "Practice",
-            TooltipText = "Open/Close practice overlay",
-            Action = ToggleVisibility
-        };
+            return new()
+            {
+                Name = "Toggle Practice",
+                Text = "Practice",
+                TooltipText = "Open/Close practice overlay",
+                Action = ToggleVisibility
+            };
+        }
     }
 }

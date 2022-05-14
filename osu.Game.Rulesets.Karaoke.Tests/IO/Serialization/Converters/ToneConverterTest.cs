@@ -21,7 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
             var tone = new Tone
             {
                 Scale = scale,
-                Half = half,
+                Half = half
             };
 
             string expected = $"{json}";
@@ -40,7 +40,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
             var expected = new Tone
             {
                 Scale = scale,
-                Half = half,
+                Half = half
             };
             var actual = JsonConvert.DeserializeObject<Tone>($"{json}", CreateSettings());
             Assert.AreEqual(expected, actual);

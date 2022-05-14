@@ -14,6 +14,11 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
 {
     public class KaraokeRulesetEditGeneratorConfigManager : InMemoryConfigManager<KaraokeRulesetEditGeneratorSetting>
     {
+        protected static T CreateDefaultConfig<T>() where T : IHasConfig<T>, new()
+        {
+            return new T().CreateDefaultConfig();
+        }
+
         protected override void InitialiseDefaults()
         {
             base.InitialiseDefaults();
@@ -34,9 +39,6 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
             SetDefault(KaraokeRulesetEditGeneratorSetting.JaTimeTagGeneratorConfig, CreateDefaultConfig<JaTimeTagGeneratorConfig>());
             SetDefault(KaraokeRulesetEditGeneratorSetting.ZhTimeTagGeneratorConfig, CreateDefaultConfig<ZhTimeTagGeneratorConfig>());
         }
-
-        protected static T CreateDefaultConfig<T>() where T : IHasConfig<T>, new()
-            => new T().CreateDefaultConfig();
     }
 
     public enum KaraokeRulesetEditGeneratorSetting

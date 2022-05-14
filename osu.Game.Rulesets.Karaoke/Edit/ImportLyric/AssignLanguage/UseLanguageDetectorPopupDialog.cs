@@ -19,13 +19,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.AssignLanguage
                 new PopupDialogOkButton
                 {
                     Text = @"OK",
-                    Action = () => okAction?.Invoke(true),
+                    Action = () => okAction?.Invoke(true)
                 },
                 new PopupDialogCancelButton
                 {
                     Text = @"Cancel",
-                    Action = () => okAction?.Invoke(false),
-                },
+                    Action = () => okAction?.Invoke(false)
+                }
             };
         }
     }

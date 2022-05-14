@@ -131,9 +131,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
         protected override void AssertEqual(TextCaretPosition expected, TextCaretPosition actual)
         {
             if (expected == null)
-            {
                 Assert.IsNull(actual);
-            }
             else
             {
                 Assert.AreEqual(expected.Lyric, actual.Lyric);
@@ -149,8 +147,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
             var lyric = lyrics.ElementAtOrDefault(lyricIndex);
             return new TextCaretPosition(lyric, index);
         }
-
-        #region source
 
         private static Lyric[] singleLyric => new[]
         {
@@ -189,7 +185,5 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
                 Text = "大好き"
             }
         };
-
-        #endregion
     }
 }

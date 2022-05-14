@@ -14,6 +14,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin
         Style,
 
         [Description("Layout")]
-        Layout,
+        Layout
     }
 }

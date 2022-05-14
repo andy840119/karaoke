@@ -84,7 +84,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
             return new TextCaretPosition(lyric, GetMaxIndex(lyric.Text));
         }
 
-        public override TextCaretPosition MoveToTarget(Lyric lyric) => new(lyric, GetMinIndex(lyric.Text));
+        public override TextCaretPosition MoveToTarget(Lyric lyric)
+        {
+            return new(lyric, GetMinIndex(lyric.Text));
+        }
+
+        protected virtual int GetMinIndex(string text)
+        {
+            return 0;
+        }
+
+        protected virtual int GetMaxIndex(string text)
+        {
+            return text?.Length ?? 0;
+        }
 
         private bool lyricMovable(Lyric lyric)
         {
@@ -100,9 +113,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
 
             return index >= GetMinIndex(text) && index <= GetMaxIndex(text);
         }
-
-        protected virtual int GetMinIndex(string text) => 0;
-
-        protected virtual int GetMaxIndex(string text) => text?.Length ?? 0;
     }
 }

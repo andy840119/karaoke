@@ -12,19 +12,22 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
     public class LyricTranslateChangeHandlerTest : BaseHitObjectChangeHandlerTest<LyricTranslateChangeHandler, Lyric>
     {
         [Test]
-        public void TestUpdateTranslateWithNewLanguage()
+        public void TestUpdateTranslateWithEmptyText()
         {
             PrepareHitObject(new Lyric
             {
                 Text = "カラオケ",
+                Translates = new Dictionary<CultureInfo, string>
+                {
+                    { new CultureInfo(17), "からおけ" }
+                }
             });
 
-            TriggerHandlerChanged(c => c.UpdateTranslate(new CultureInfo(17), "からおけ"));
+            TriggerHandlerChanged(c => c.UpdateTranslate(new CultureInfo(17), ""));
 
             AssertSelectedHitObject(h =>
             {
-                Assert.AreEqual(1, h.Translates.Count);
-                Assert.AreEqual("からおけ", h.Translates[new CultureInfo(17)]);
+                Assert.IsEmpty(h.Translates);
             });
         }
 
@@ -50,22 +53,19 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestUpdateTranslateWithEmptyText()
+        public void TestUpdateTranslateWithNewLanguage()
         {
             PrepareHitObject(new Lyric
             {
-                Text = "カラオケ",
-                Translates = new Dictionary<CultureInfo, string>
-                {
-                    { new CultureInfo(17), "からおけ" }
-                }
+                Text = "カラオケ"
             });
 
-            TriggerHandlerChanged(c => c.UpdateTranslate(new CultureInfo(17), ""));
+            TriggerHandlerChanged(c => c.UpdateTranslate(new CultureInfo(17), "からおけ"));
 
             AssertSelectedHitObject(h =>
             {
-                Assert.IsEmpty(h.Translates);
+                Assert.AreEqual(1, h.Translates.Count);
+                Assert.AreEqual("からおけ", h.Translates[new CultureInfo(17)]);
             });
         }
 

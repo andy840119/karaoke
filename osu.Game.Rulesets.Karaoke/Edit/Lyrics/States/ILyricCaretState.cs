@@ -16,6 +16,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
 
         IBindable<ICaretPositionAlgorithm> BindableCaretPositionAlgorithm { get; }
 
+        bool CaretEnabled { get; }
+
         bool MoveCaret(MovingCaretAction action);
 
         void MoveCaretToTargetPosition(Lyric lyric);
@@ -29,7 +31,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
         bool CaretPositionMovable(ICaretPosition position);
 
         void SyncSelectedHitObjectWithCaret();
-
-        bool CaretEnabled { get; }
     }
 }

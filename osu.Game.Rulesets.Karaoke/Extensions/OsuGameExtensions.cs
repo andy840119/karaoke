@@ -11,7 +11,7 @@ using osu.Game.Screens;
 namespace osu.Game.Rulesets.Karaoke.Extensions
 {
     /// <summary>
-    /// Collect dirty logic to get target drawable from <see cref="OsuGame"/>
+    ///     Collect dirty logic to get target drawable from <see cref="OsuGame" />
     /// </summary>
     public static class OsuGameExtensions
     {
@@ -21,16 +21,24 @@ namespace osu.Game.Rulesets.Karaoke.Extensions
             return (KaraokeRuleset)rulesets.FirstOrDefault(r => r is KaraokeRuleset);
         }
 
-        private static Container getBasePlacementContainer(this OsuGame game)
-            => game?.Children[4] as Container;
-
         public static Container GetChangelogPlacementContainer(this OsuGame game)
-            => game.getBasePlacementContainer().Children[0] as Container;
+        {
+            return game.getBasePlacementContainer().Children[0] as Container;
+        }
 
         public static SettingsOverlay GetSettingsOverlay(this OsuGame game)
-            => game.getBasePlacementContainer()?.ChildrenOfType<SettingsOverlay>().FirstOrDefault();
+        {
+            return game.getBasePlacementContainer()?.ChildrenOfType<SettingsOverlay>().FirstOrDefault();
+        }
 
         public static OsuScreenStack GetScreenStack(this OsuGame game)
-            => ((game?.Children[3] as Container)?.Child as Container)?.Children.OfType<OsuScreenStack>().FirstOrDefault();
+        {
+            return ((game?.Children[3] as Container)?.Child as Container)?.Children.OfType<OsuScreenStack>().FirstOrDefault();
+        }
+
+        private static Container getBasePlacementContainer(this OsuGame game)
+        {
+            return game?.Children[4] as Container;
+        }
     }
 }

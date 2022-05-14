@@ -17,10 +17,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
 {
     public class CreateNewLanguageButton : IconButton, IHasPopover
     {
+        private readonly Bindable<CultureInfo> currentLanguage = new();
+
         [Resolved]
         private ILanguagesChangeHandler languagesChangeHandler { get; set; }
-
-        private readonly Bindable<CultureInfo> currentLanguage = new();
 
         public CreateNewLanguageButton()
         {
@@ -33,10 +33,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
                 if (newLanguage == null)
                     return;
 
-                if (!languagesChangeHandler.Languages.Contains(newLanguage))
-                {
-                    languagesChangeHandler.Add(newLanguage);
-                }
+                if (!languagesChangeHandler.Languages.Contains(newLanguage)) languagesChangeHandler.Add(newLanguage);
 
                 // after selected the language, should always hide the popover.
                 this.HidePopover();
@@ -47,6 +44,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Translate.Components
         }
 
         public Popover GetPopover()
-            => new LanguageSelectorPopover(currentLanguage);
+        {
+            return new LanguageSelectorPopover(currentLanguage);
+        }
     }
 }

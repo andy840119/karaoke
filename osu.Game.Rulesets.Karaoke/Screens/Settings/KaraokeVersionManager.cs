@@ -17,6 +17,16 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
 {
     public class KaraokeVersionManager : VisibilityContainer
     {
+        protected override void PopIn()
+        {
+            this.FadeIn(1400, Easing.OutQuint);
+        }
+
+        protected override void PopOut()
+        {
+            this.FadeOut(500, Easing.OutQuint);
+        }
+
         [BackgroundDependencyLoader]
         private void load(OsuColour colours, TextureStore textures)
         {
@@ -54,9 +64,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                                 {
                                     Colour = DebugUtils.IsDebugBuild ? colours.Red : Color4.White,
                                     Text = VersionUtils.DisplayVersion
-                                },
+                                }
                             }
-                        },
+                        }
                     }
                 }
             };
@@ -77,20 +87,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings
                     {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Texture = textures.Get(@"Menu/dev-build-footer"),
-                    },
+                        Texture = textures.Get(@"Menu/dev-build-footer")
+                    }
                 });
             }
-        }
-
-        protected override void PopIn()
-        {
-            this.FadeIn(1400, Easing.OutQuint);
-        }
-
-        protected override void PopOut()
-        {
-            this.FadeOut(500, Easing.OutQuint);
         }
     }
 }

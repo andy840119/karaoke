@@ -35,6 +35,10 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
         private readonly IBindable<bool> display = new Bindable<bool>();
         private readonly IBindableList<int> singer = new BindableList<int>();
 
+        private LayerContainer background;
+        private LayerContainer foreground;
+        private LayerContainer border;
+
         public LegacyNotePiece()
         {
             Anchor = Anchor.Centre;
@@ -44,9 +48,77 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             AddLayout(subtractionCache);
         }
 
-        private LayerContainer background;
-        private LayerContainer foreground;
-        private LayerContainer border;
+        protected override void Update()
+        {
+            base.Update();
+
+            if (!subtractionCache.IsValid && DrawWidth > 0)
+            {
+                // TODO : maybe do something
+                subtractionCache.Validate();
+            }
+        }
+
+        protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> direction)
+        {
+            if (direction.NewValue == ScrollingDirection.Left)
+                InternalChildren.ForEach(x => x.Scale = Vector2.One);
+            else
+                InternalChildren.ForEach(x => x.Scale = new Vector2(-1, 1));
+        }
+
+        private static Sprite getSpriteFromLookup(ISkin skin, LegacyKaraokeSkinConfigurationLookups lookup, LegacyKaraokeSkinNoteLayer layer)
+        {
+            string name = getTextureNameFromLookup(lookup, layer);
+
+            switch (layer)
+            {
+                case LegacyKaraokeSkinNoteLayer.Background:
+                case LegacyKaraokeSkinNoteLayer.Border:
+                    return getSpriteByName(name) ?? new Sprite();
+
+                case LegacyKaraokeSkinNoteLayer.Foreground:
+                    return getSpriteByName(name)
+                           ?? getSpriteByName(getTextureNameFromLookup(lookup, LegacyKaraokeSkinNoteLayer.Background))
+                           ?? new Sprite();
+
+                default:
+                    return null;
+            }
+
+            Sprite getSpriteByName(string spriteName) => (Sprite)skin.GetAnimation(spriteName, true, true).With(d =>
+            {
+                switch (d)
+                {
+                    case null:
+                        return;
+
+                    case TextureAnimation animation:
+                        animation.IsPlaying = false;
+                        break;
+                }
+            });
+        }
+
+        private static string getTextureNameFromLookup(LegacyKaraokeSkinConfigurationLookups lookup, LegacyKaraokeSkinNoteLayer layer)
+        {
+            string suffix = lookup switch
+            {
+                LegacyKaraokeSkinConfigurationLookups.NoteBodyImage => "body",
+                LegacyKaraokeSkinConfigurationLookups.NoteHeadImage => "head",
+                LegacyKaraokeSkinConfigurationLookups.NoteTailImage => "tail",
+                _ => throw new ArgumentOutOfRangeException(nameof(lookup))
+            };
+
+            string layerSuffix = layer switch
+            {
+                LegacyKaraokeSkinNoteLayer.Border => "border",
+                LegacyKaraokeSkinNoteLayer.Background => "background",
+                _ => string.Empty
+            };
+
+            return $"karaoke-note-{layerSuffix}-{suffix}";
+        }
 
         [BackgroundDependencyLoader]
         private void load(DrawableHitObject drawableObject, ISkinSource skin, IScrollingInfo scrollingInfo)
@@ -109,31 +181,9 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
             HitColour.Value = noteSkin.BlinkColor;
         }
 
-        protected override void Update()
+        private LayerContainer createLayer(string name, ISkin skin, LegacyKaraokeSkinNoteLayer layer)
         {
-            base.Update();
-
-            if (!subtractionCache.IsValid && DrawWidth > 0)
-            {
-                // TODO : maybe do something
-                subtractionCache.Validate();
-            }
-        }
-
-        protected virtual void OnDirectionChanged(ValueChangedEvent<ScrollingDirection> direction)
-        {
-            if (direction.NewValue == ScrollingDirection.Left)
-            {
-                InternalChildren.ForEach(x => x.Scale = Vector2.One);
-            }
-            else
-            {
-                InternalChildren.ForEach(x => x.Scale = new Vector2(-1, 1));
-            }
-        }
-
-        private LayerContainer createLayer(string name, ISkin skin, LegacyKaraokeSkinNoteLayer layer) =>
-            new()
+            return new()
             {
                 RelativeSizeAxes = Axes.Both,
                 Name = name,
@@ -171,64 +221,15 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
                         d.Name = "Tail";
                         d.Anchor = Anchor.CentreRight;
                         d.Origin = Anchor.Centre;
-                    }),
+                    })
                 }
             };
-
-        private static Sprite getSpriteFromLookup(ISkin skin, LegacyKaraokeSkinConfigurationLookups lookup, LegacyKaraokeSkinNoteLayer layer)
-        {
-            string name = getTextureNameFromLookup(lookup, layer);
-
-            switch (layer)
-            {
-                case LegacyKaraokeSkinNoteLayer.Background:
-                case LegacyKaraokeSkinNoteLayer.Border:
-                    return getSpriteByName(name) ?? new Sprite();
-
-                case LegacyKaraokeSkinNoteLayer.Foreground:
-                    return getSpriteByName(name)
-                           ?? getSpriteByName(getTextureNameFromLookup(lookup, LegacyKaraokeSkinNoteLayer.Background))
-                           ?? new Sprite();
-
-                default:
-                    return null;
-            }
-
-            Sprite getSpriteByName(string spriteName) => (Sprite)skin.GetAnimation(spriteName, true, true).With(d =>
-            {
-                switch (d)
-                {
-                    case null:
-                        return;
-
-                    case TextureAnimation animation:
-                        animation.IsPlaying = false;
-                        break;
-                }
-            });
         }
 
-        private static string getTextureNameFromLookup(LegacyKaraokeSkinConfigurationLookups lookup, LegacyKaraokeSkinNoteLayer layer)
+        private void onAccentChanged()
         {
-            string suffix = lookup switch
-            {
-                LegacyKaraokeSkinConfigurationLookups.NoteBodyImage => "body",
-                LegacyKaraokeSkinConfigurationLookups.NoteHeadImage => "head",
-                LegacyKaraokeSkinConfigurationLookups.NoteTailImage => "tail",
-                _ => throw new ArgumentOutOfRangeException(nameof(lookup))
-            };
-
-            string layerSuffix = layer switch
-            {
-                LegacyKaraokeSkinNoteLayer.Border => "border",
-                LegacyKaraokeSkinNoteLayer.Background => "background",
-                _ => string.Empty
-            };
-
-            return $"karaoke-note-{layerSuffix}-{suffix}";
+            onAccentChanged(new ValueChangedEvent<Color4>(AccentColour.Value, AccentColour.Value));
         }
-
-        private void onAccentChanged() => onAccentChanged(new ValueChangedEvent<Color4>(AccentColour.Value, AccentColour.Value));
 
         private void onAccentChanged(ValueChangedEvent<Color4> accent)
         {
@@ -247,7 +248,10 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
                 set => AnimateChildren.ForEach(d => d.IsPlaying = value);
             }
 
-            public void Reset() => AnimateChildren.ForEach(d => d.GotoFrame(0));
+            public void Reset()
+            {
+                AnimateChildren.ForEach(d => d.GotoFrame(0));
+            }
         }
     }
 }

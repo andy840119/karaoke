@@ -22,11 +22,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components.Blueprints
 {
     public class LyricTimelineHitObjectBlueprint : SelectionBlueprint<Lyric>, IHasCustomTooltip<Lyric>
     {
+        public Lyric TooltipContent => Item;
+
+        // prevent selection.
+        public override Vector2 ScreenSpaceSelectionPoint => isSingerMatched ? ScreenSpaceDrawQuad.TopLeft : new Vector2(int.MinValue);
+
+        // prevent single select.
+        public override Quad SelectionQuad => isSingerMatched ? base.SelectionQuad : new Quad();
         private const float lyric_size = 20;
 
-        private bool isSingerMatched;
-
         private readonly IBindableList<int> singersBindable;
+
+        private bool isSingerMatched;
 
         public LyricTimelineHitObjectBlueprint(Lyric item)
             : base(item)
@@ -54,7 +61,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components.Blueprints
                     new Box
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Colour = Color4.Gray,
+                        Colour = Color4.Gray
                     },
                     new OsuSpriteText
                     {
@@ -69,36 +76,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components.Blueprints
             });
         }
 
-        [BackgroundDependencyLoader]
-        private void load(SingerLyricEditor editor)
+        public ITooltip<Lyric> GetCustomTooltip()
         {
-            singersBindable.BindCollectionChanged((_, _) =>
-            {
-                // Check is lyric contains this singer, or default singer
-                isSingerMatched = lyricInCurrentSinger(Item, editor.Singer);
-
-                if (isSingerMatched)
-                {
-                    Show();
-                }
-                else
-                {
-                    this.FadeTo(0.1f, 200);
-                }
-            }, true);
-
-            static bool lyricInCurrentSinger(Lyric lyric, Singer singer)
-            {
-                if (singer == DefaultLyricPlacementColumn.DefaultSinger)
-                    return lyric.Singers == null || !lyric.Singers.Any();
-
-                return LyricUtils.ContainsSinger(lyric, singer);
-            }
+            return new LyricTooltip();
         }
-
-        public ITooltip<Lyric> GetCustomTooltip() => new LyricTooltip();
-
-        public Lyric TooltipContent => Item;
 
         protected override void OnSelected()
         {
@@ -110,12 +91,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components.Blueprints
             // base logic hides selected blueprints when not selected, but timeline doesn't do that.
         }
 
-        // prevent selection.
-        public override Vector2 ScreenSpaceSelectionPoint => isSingerMatched ? ScreenSpaceDrawQuad.TopLeft : new Vector2(int.MinValue);
-
-        // prevent single select.
-        public override Quad SelectionQuad => isSingerMatched ? base.SelectionQuad : new Quad();
-
         protected override void Update()
         {
             base.Update();
@@ -123,9 +98,29 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components.Blueprints
             // no bindable so we perform this every update
             float duration = (float)Item.LyricDuration;
 
-            if (Width != duration)
+            if (Width != duration) Width = duration;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(SingerLyricEditor editor)
+        {
+            singersBindable.BindCollectionChanged((_, _) =>
             {
-                Width = duration;
+                // Check is lyric contains this singer, or default singer
+                isSingerMatched = lyricInCurrentSinger(Item, editor.Singer);
+
+                if (isSingerMatched)
+                    Show();
+                else
+                    this.FadeTo(0.1f, 200);
+            }, true);
+
+            static bool lyricInCurrentSinger(Lyric lyric, Singer singer)
+            {
+                if (singer == DefaultLyricPlacementColumn.DefaultSinger)
+                    return lyric.Singers == null || !lyric.Singers.Any();
+
+                return LyricUtils.ContainsSinger(lyric, singer);
             }
         }
     }

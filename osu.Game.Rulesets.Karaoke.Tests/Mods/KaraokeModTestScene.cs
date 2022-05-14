@@ -7,6 +7,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Mods
 {
     public abstract class KaraokeModTestScene : ModTestScene
     {
-        protected override Ruleset CreatePlayerRuleset() => new KaraokeRuleset();
+        protected override Ruleset CreatePlayerRuleset()
+        {
+            return new KaraokeRuleset();
+        }
     }
 }

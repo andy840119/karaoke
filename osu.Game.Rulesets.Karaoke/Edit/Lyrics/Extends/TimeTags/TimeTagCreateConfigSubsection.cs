@@ -23,6 +23,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
 {
     public class TimeTagCreateConfigSubsection : FillFlowContainer, IHasCurrentValue<CreateTimeTagEditMode>
     {
+        public Bindable<CreateTimeTagEditMode> Current
+        {
+            get => current.Current;
+            set => current.Current = value;
+        }
+
         private const int button_vertical_margin = 20;
         private const int horizontal_padding = 20;
         private const int corner_radius = 15;
@@ -32,16 +38,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
 
         private readonly BindableWithCurrent<CreateTimeTagEditMode> current = new();
 
-        public Bindable<CreateTimeTagEditMode> Current
-        {
-            get => current.Current;
-            set => current.Current = value;
-        }
+        private readonly Box background;
 
         [Resolved]
         private OsuColour colours { get; set; }
-
-        private readonly Box background;
 
         public TimeTagCreateConfigSubsection()
         {
@@ -61,7 +61,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                     {
                         background = new Box
                         {
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         },
                         new GridContainer
                         {
@@ -78,8 +78,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                                     Text = getButtonTitle(x),
                                     Margin = new MarginPadding { Vertical = button_vertical_margin },
                                     Padding = new MarginPadding { Horizontal = horizontal_padding },
-                                    Action = () => current.Value = x,
-                                }).ToArray(),
+                                    Action = () => current.Value = x
+                                }).ToArray()
                             }
                         }
                     }
@@ -88,7 +88,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                 {
                     Padding = new MarginPadding { Horizontal = horizontal_padding },
                     RelativeSizeAxes = Axes.X,
-                    AutoSizeAxes = Axes.Y,
+                    AutoSizeAxes = Axes.Y
                 }
             };
 
@@ -122,23 +122,28 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
         }
 
         private LocalisableString getButtonTitle(CreateTimeTagEditMode mode)
-            => mode switch
+        {
+            return mode switch
             {
                 CreateTimeTagEditMode.Create => "Create",
                 CreateTimeTagEditMode.Modify => "Modify",
                 _ => throw new InvalidOperationException(nameof(mode))
             };
+        }
 
         private Color4 getButtonColour(CreateTimeTagEditMode mode, bool active)
-            => mode switch
+        {
+            return mode switch
             {
                 CreateTimeTagEditMode.Create => active ? colours.Green : colours.GreenDarker,
                 CreateTimeTagEditMode.Modify => active ? colours.Pink : colours.PinkDarker,
                 _ => throw new InvalidOperationException(nameof(mode))
             };
+        }
 
-        private DescriptionFormat getDescription(CreateTimeTagEditMode mode) =>
-            mode switch
+        private DescriptionFormat getDescription(CreateTimeTagEditMode mode)
+        {
+            return mode switch
             {
                 CreateTimeTagEditMode.Create => new DescriptionFormat
                 {
@@ -164,7 +169,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                                     KaraokeEditAction.ShiftTheTimeTagLeft,
                                     KaraokeEditAction.ShiftTheTimeTagRight,
                                     KaraokeEditAction.ShiftTheTimeTagStateLeft,
-                                    KaraokeEditAction.ShiftTheTimeTagStateRight,
+                                    KaraokeEditAction.ShiftTheTimeTagStateRight
                                 }
                             }
                         },
@@ -174,6 +179,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                 },
                 _ => throw new InvalidOperationException(nameof(mode))
             };
+        }
 
         private class EditModeButton : OsuButton
         {

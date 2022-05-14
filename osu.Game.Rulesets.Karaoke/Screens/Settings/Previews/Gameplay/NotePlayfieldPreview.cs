@@ -33,6 +33,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
 
         private readonly NotePlayfield notePlayfield;
 
+        private readonly Bindable<KaraokeScrollingDirection> configDirection = new();
+
+        private double lastCreateSampleTime;
+
         public NotePlayfieldPreview()
         {
             Size = new Vector2(0.7f, 0.5f);
@@ -44,12 +48,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
                 Child = notePlayfield = new NotePlayfield(columns)
                 {
                     Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
+                    Origin = Anchor.Centre
                 }
             };
         }
-
-        private double lastCreateSampleTime;
 
         protected override void Update()
         {
@@ -66,7 +68,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
                 StartTime = startTime,
                 Duration = 1000,
                 Text = "Note",
-                HitWindows = new KaraokeNoteHitWindows(),
+                HitWindows = new KaraokeNoteHitWindows()
             });
 
             notePlayfield.Add(new BarLine
@@ -75,8 +77,6 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
                 Major = true
             });
         }
-
-        private readonly Bindable<KaraokeScrollingDirection> configDirection = new();
 
         [BackgroundDependencyLoader]
         private void load(KaraokeRulesetConfigManager config)

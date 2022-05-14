@@ -74,12 +74,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
         }
 
         ICaretPosition ICaretPositionAlgorithm.MoveToFirst()
-            => MoveToFirst();
+        {
+            return MoveToFirst();
+        }
 
         ICaretPosition ICaretPositionAlgorithm.MoveToLast()
-            => MoveToLast();
+        {
+            return MoveToLast();
+        }
 
         ICaretPosition ICaretPositionAlgorithm.MoveToTarget(Lyric lyric)
-            => MoveToTarget(lyric);
+        {
+            return MoveToTarget(lyric);
+        }
     }
 }

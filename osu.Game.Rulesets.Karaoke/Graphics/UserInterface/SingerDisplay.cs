@@ -20,13 +20,9 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
 {
     public class SingerDisplay : Container, IHasCurrentValue<IReadOnlyList<Singer>>
     {
-        private const int fade_duration = 1000;
-
         public bool DisplayUnrankedText = true;
 
         public ExpansionMode ExpansionMode = ExpansionMode.ExpandOnHover;
-
-        private readonly Bindable<IReadOnlyList<Singer>> current = new();
 
         public Bindable<IReadOnlyList<Singer>> Current
         {
@@ -40,6 +36,10 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 current.BindTo(value);
             }
         }
+
+        private const int fade_duration = 1000;
+
+        private readonly Bindable<IReadOnlyList<Singer>> current = new();
 
         private readonly FillFlowContainer<DrawableSinger> iconsContainer;
 
@@ -60,9 +60,9 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
                         AutoSizeAxes = Axes.Both,
-                        Direction = FillDirection.Horizontal,
-                    },
-                },
+                        Direction = FillDirection.Horizontal
+                    }
+                }
             };
 
             Current.ValueChanged += singers =>
@@ -84,11 +84,15 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
             };
         }
 
+        #region Disposal
+
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
             Current.UnbindAll();
         }
+
+        #endregion
 
         protected override void LoadComplete()
         {
@@ -96,6 +100,18 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
 
             appearTransform();
             iconsContainer.FadeInFromZero(fade_duration, Easing.OutQuint);
+        }
+
+        protected override bool OnHover(HoverEvent e)
+        {
+            expand();
+            return base.OnHover(e);
+        }
+
+        protected override void OnHoverLost(HoverLostEvent e)
+        {
+            contract();
+            base.OnHoverLost(e);
         }
 
         private void appearTransform()
@@ -118,40 +134,31 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 iconsContainer.TransformSpacingTo(new Vector2(-25, 0), 500, Easing.OutQuint);
         }
 
-        protected override bool OnHover(HoverEvent e)
-        {
-            expand();
-            return base.OnHover(e);
-        }
-
-        protected override void OnHoverLost(HoverLostEvent e)
-        {
-            contract();
-            base.OnHoverLost(e);
-        }
-
         private class DrawableSinger : DrawableCircleSingerAvatar, IHasCustomTooltip<ISinger>
         {
-            public ITooltip<ISinger> GetCustomTooltip() => new SingerToolTip();
-
             public ISinger TooltipContent => Singer;
+
+            public ITooltip<ISinger> GetCustomTooltip()
+            {
+                return new SingerToolTip();
+            }
         }
     }
 
     public enum ExpansionMode
     {
         /// <summary>
-        /// The <see cref="SingerDisplay"/> will expand only when hovered.
+        ///     The <see cref="SingerDisplay" /> will expand only when hovered.
         /// </summary>
         ExpandOnHover,
 
         /// <summary>
-        /// The <see cref="SingerDisplay"/> will always be expanded.
+        ///     The <see cref="SingerDisplay" /> will always be expanded.
         /// </summary>
         AlwaysExpanded,
 
         /// <summary>
-        /// The <see cref="SingerDisplay"/> will always be contracted.
+        ///     The <see cref="SingerDisplay" /> will always be contracted.
         /// </summary>
         AlwaysContracted
     }

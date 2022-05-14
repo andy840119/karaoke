@@ -24,6 +24,14 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog.Sidebar
 
         private FillFlowContainer<ChangelogSection> changelogsFlow;
 
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            Metadata.BindValueChanged(e => onMetadataChanged(e.NewValue, Year.Value), true);
+            Year.BindValueChanged(e => onMetadataChanged(Metadata.Value, e.NewValue), true);
+        }
+
         [BackgroundDependencyLoader]
         private void load(OverlayColourProvider colourProvider, Bindable<APIChangelogBuild> current)
         {
@@ -99,14 +107,6 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog.Sidebar
 
                 Year.Value = e.NewValue.PublishedAt.Year;
             });
-        }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            Metadata.BindValueChanged(e => onMetadataChanged(e.NewValue, Year.Value), true);
-            Year.BindValueChanged(e => onMetadataChanged(Metadata.Value, e.NewValue), true);
         }
 
         private void onMetadataChanged(APIChangelogSidebar metadata, int targetYear)

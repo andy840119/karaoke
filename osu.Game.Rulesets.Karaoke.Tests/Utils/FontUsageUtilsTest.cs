@@ -22,10 +22,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             Assert.AreEqual(expectedFamily, fontInfo.Family);
 
             // note: font info should not follow rules as fontUsage.
-            if (!italics)
-            {
-                Assert.AreEqual(expectedWeight, fontInfo.Weight);
-            }
+            if (!italics) Assert.AreEqual(expectedWeight, fontInfo.Weight);
         }
     }
 }

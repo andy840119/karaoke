@@ -26,6 +26,29 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Beatmaps.Formats
             KaraokeLegacyBeatmapDecoder.Register();
         }
 
+        private static KaraokeBeatmap decodeBeatmap(string fileName)
+        {
+            using (var resStream = TestResources.OpenBeatmapResource(fileName))
+            using (var stream = new LineBufferedReader(resStream))
+            {
+                // Create karaoke beatmap decoder
+                var lrcDecoder = new KaraokeLegacyBeatmapDecoder();
+
+                // Create initial beatmap
+                var beatmap = lrcDecoder.Decode(stream);
+
+                // Convert to karaoke beatmap
+                return new KaraokeBeatmapConverter(beatmap, new KaraokeRuleset()).Convert() as KaraokeBeatmap;
+            }
+        }
+
+        private static void testNote(string expectedText, int expectedTone, bool expectedHalf = false, [NotNull] Note actualNote = default!)
+        {
+            Assert.AreEqual(expectedText, actualNote?.Text);
+            Assert.AreEqual(expectedTone, actualNote?.Tone.Scale);
+            Assert.AreEqual(expectedHalf, actualNote?.Tone.Half);
+        }
+
         [Test]
         public void TestDecodeBeatmapLyric()
         {
@@ -106,29 +129,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Beatmaps.Formats
             var englishLanguageId = translates[1];
             Assert.AreEqual("karaoke", lyrics[0].Translates[englishLanguageId]);
             Assert.AreEqual("like it", lyrics[1].Translates[englishLanguageId]);
-        }
-
-        private static KaraokeBeatmap decodeBeatmap(string fileName)
-        {
-            using (var resStream = TestResources.OpenBeatmapResource(fileName))
-            using (var stream = new LineBufferedReader(resStream))
-            {
-                // Create karaoke beatmap decoder
-                var lrcDecoder = new KaraokeLegacyBeatmapDecoder();
-
-                // Create initial beatmap
-                var beatmap = lrcDecoder.Decode(stream);
-
-                // Convert to karaoke beatmap
-                return new KaraokeBeatmapConverter(beatmap, new KaraokeRuleset()).Convert() as KaraokeBeatmap;
-            }
-        }
-
-        private static void testNote(string expectedText, int expectedTone, bool expectedHalf = false, [NotNull] Note actualNote = default!)
-        {
-            Assert.AreEqual(expectedText, actualNote?.Text);
-            Assert.AreEqual(expectedTone, actualNote?.Tone.Scale);
-            Assert.AreEqual(expectedHalf, actualNote?.Tone.Half);
         }
     }
 }

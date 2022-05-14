@@ -47,7 +47,10 @@ namespace osu.Game.Rulesets.Karaoke.UI
                          .FadeOut(200);
         }
 
-        protected override Drawable CreateDefaultJudgement(HitResult result) => new DefaultKaraokeJudgementPiece(result);
+        protected override Drawable CreateDefaultJudgement(HitResult result)
+        {
+            return new DefaultKaraokeJudgementPiece(result);
+        }
 
         private class DefaultKaraokeJudgementPiece : DefaultJudgementPiece
         {

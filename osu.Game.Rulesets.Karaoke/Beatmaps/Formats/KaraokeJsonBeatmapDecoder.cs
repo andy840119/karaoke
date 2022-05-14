@@ -42,10 +42,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             globalSetting.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
 
             // should not let json decoder to read this line.
-            if (stream.PeekLine().Contains("// karaoke json file format v"))
-            {
-                stream.ReadLine();
-            }
+            if (stream.PeekLine().Contains("// karaoke json file format v")) stream.ReadLine();
 
             // equal to stream.ReadToEnd().DeserializeInto(output); in the base class.
             JsonConvert.PopulateObject(stream.ReadToEnd(), output, globalSetting);
@@ -75,10 +72,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             {
                 var props = base.CreateProperties(type, memberSerialization);
 
-                if (type == typeof(BeatmapInfo))
-                {
-                    return props.Where(p => p.PropertyName != "ruleset_id").ToList();
-                }
+                if (type == typeof(BeatmapInfo)) return props.Where(p => p.PropertyName != "ruleset_id").ToList();
 
                 return props;
             }

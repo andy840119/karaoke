@@ -32,6 +32,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.RubyTags
         }
 
         protected override KaraokeRulesetEditGeneratorSetting GetGeneratorConfigSetting(CultureInfo info)
-            => KaraokeRulesetEditGeneratorSetting.JaRubyTagGeneratorConfig;
+        {
+            return KaraokeRulesetEditGeneratorSetting.JaRubyTagGeneratorConfig;
+        }
     }
 }

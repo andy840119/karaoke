@@ -11,14 +11,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites
 {
     public class DrawableCircleSingerAvatar : DrawableSingerAvatar
     {
-        [BackgroundDependencyLoader]
-        private void load(LargeTextureStore textures)
-        {
-            Masking = true;
-            CornerRadius = Math.Min(DrawSize.X, DrawSize.Y) / 2f;
-            BorderThickness = 5;
-        }
-
         public override ISinger Singer
         {
             get => base.Singer;
@@ -27,6 +19,14 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites
                 base.Singer = value;
                 BorderColour = SingerUtils.GetContentColour(Singer);
             }
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(LargeTextureStore textures)
+        {
+            Masking = true;
+            CornerRadius = Math.Min(DrawSize.X, DrawSize.Y) / 2f;
+            BorderThickness = 5;
         }
     }
 }

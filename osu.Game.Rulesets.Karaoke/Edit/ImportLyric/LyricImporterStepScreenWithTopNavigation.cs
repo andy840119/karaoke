@@ -25,12 +25,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
                 {
                     new Drawable[]
                     {
-                        CreateNavigation(),
+                        CreateNavigation()
                     },
                     Array.Empty<Drawable>(),
                     new[]
                     {
-                        CreateContent(),
+                        CreateContent()
                     }
                 }
             };

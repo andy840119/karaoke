@@ -12,21 +12,24 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Mods
     public class TestSceneKaraokeModDisableNote : KaraokeModTestScene
     {
         [Test]
-        public void TestCheckNoteExistInPlayfield() => CreateModTest(new ModTestData
+        public void TestCheckNoteExistInPlayfield()
         {
-            Mod = new KaraokeModDisableNote(),
-            Autoplay = true,
-            Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
-            PassCondition = () =>
+            CreateModTest(new ModTestData
             {
-                var lyricPlayfield = Player.GetLyricPlayfield();
-                var notePlayfield = Player.GetNotePlayfield();
-                if (lyricPlayfield == null || notePlayfield == null)
-                    return false;
+                Mod = new KaraokeModDisableNote(),
+                Autoplay = true,
+                Beatmap = new TestKaraokeBeatmap(Ruleset.Value),
+                PassCondition = () =>
+                {
+                    var lyricPlayfield = Player.GetLyricPlayfield();
+                    var notePlayfield = Player.GetNotePlayfield();
+                    if (lyricPlayfield == null || notePlayfield == null)
+                        return false;
 
-                // check has no note in playfield
-                return lyricPlayfield.AllHitObjects.Any() && notePlayfield.Alpha == 0f;
-            }
-        });
+                    // check has no note in playfield
+                    return lyricPlayfield.AllHitObjects.Any() && notePlayfield.Alpha == 0f;
+                }
+            });
+        }
     }
 }

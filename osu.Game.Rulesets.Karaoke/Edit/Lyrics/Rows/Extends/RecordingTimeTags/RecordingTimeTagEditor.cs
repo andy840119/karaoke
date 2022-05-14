@@ -23,70 +23,38 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
     {
         public const float TIMELINE_HEIGHT = 20;
 
-        [Resolved]
-        private EditorClock editorClock { get; set; }
+        private readonly CentreMarker centreMarker;
 
         /// <summary>
-        /// The timeline's scroll position in the last frame.
+        ///     The timeline's scroll position in the last frame.
         /// </summary>
         private float lastScrollPosition;
 
         /// <summary>
-        /// The track time in the last frame.
+        ///     The track time in the last frame.
         /// </summary>
         private double lastTrackTime;
 
         /// <summary>
-        /// Whether the user is currently dragging the timeline.
+        ///     Whether the user is currently dragging the timeline.
         /// </summary>
         private bool handlingDragInput;
 
         /// <summary>
-        /// Whether the track was playing before a user drag event.
+        ///     Whether the track was playing before a user drag event.
         /// </summary>
         private bool trackWasPlaying;
 
-        private readonly CentreMarker centreMarker;
-
         private OsuSpriteText trackTimer;
+
+        [Resolved]
+        private EditorClock editorClock { get; set; }
 
         public RecordingTimeTagEditor(Lyric lyric)
             : base(lyric)
         {
             // We don't want the centre marker to scroll
             AddInternal(centreMarker = new CentreMarker());
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(OsuColour colours, ITimeTagModeState timeTagModeState, KaraokeRulesetLyricEditorConfigManager lyricEditorConfigManager)
-        {
-            BindableZoom.BindTo(timeTagModeState.BindableRecordZoom);
-
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagShowWaveform, ShowWaveformGraph);
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagWaveformOpacity, WaveformOpacity);
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagShowTick, ShowTick);
-            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagTickOpacity, TickOpacity);
-
-            AddRangeInternal(new Drawable[]
-            {
-                new Box
-                {
-                    Name = "Background",
-                    Depth = 1,
-                    Y = 10,
-                    RelativeSizeAxes = Axes.X,
-                    Height = TIMELINE_HEIGHT,
-                    Colour = colours.Gray3,
-                },
-                trackTimer = new OsuSpriteText
-                {
-                    Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.BottomLeft,
-                    Colour = colours.Red,
-                    X = 5,
-                    Font = OsuFont.GetFont(size: 16, fixedWidth: true),
-                }
-            });
         }
 
         protected override void PostProcessContent(Container content)
@@ -96,7 +64,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
             content.AddRange(new[]
             {
                 centreMarker.CreateProxy(),
-                new RecordingTimeTagPart(HitObject),
+                new RecordingTimeTagPart(HitObject)
             });
         }
 
@@ -139,6 +107,53 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
             lastTrackTime = editorClock.CurrentTime;
         }
 
+        protected override bool OnMouseDown(MouseDownEvent e)
+        {
+            if (!base.OnMouseDown(e))
+                return false;
+
+            beginUserDrag();
+            return true;
+        }
+
+        protected override void OnMouseUp(MouseUpEvent e)
+        {
+            endUserDrag();
+            base.OnMouseUp(e);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(OsuColour colours, ITimeTagModeState timeTagModeState, KaraokeRulesetLyricEditorConfigManager lyricEditorConfigManager)
+        {
+            BindableZoom.BindTo(timeTagModeState.BindableRecordZoom);
+
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagShowWaveform, ShowWaveformGraph);
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagWaveformOpacity, WaveformOpacity);
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagShowTick, ShowTick);
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagTickOpacity, TickOpacity);
+
+            AddRangeInternal(new Drawable[]
+            {
+                new Box
+                {
+                    Name = "Background",
+                    Depth = 1,
+                    Y = 10,
+                    RelativeSizeAxes = Axes.X,
+                    Height = TIMELINE_HEIGHT,
+                    Colour = colours.Gray3
+                },
+                trackTimer = new OsuSpriteText
+                {
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomLeft,
+                    Colour = colours.Red,
+                    X = 5,
+                    Font = OsuFont.GetFont(size: 16, fixedWidth: true)
+                }
+            });
+        }
+
         private void seekTrackToCurrent()
         {
             if (!Track.IsLoaded)
@@ -159,21 +174,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.RecordingTimeTags
                 editorClock.Stop();
 
             ScrollTo((float)(editorClock.CurrentTime / editorClock.TrackLength) * Content.DrawWidth, false);
-        }
-
-        protected override bool OnMouseDown(MouseDownEvent e)
-        {
-            if (!base.OnMouseDown(e))
-                return false;
-
-            beginUserDrag();
-            return true;
-        }
-
-        protected override void OnMouseUp(MouseUpEvent e)
-        {
-            endUserDrag();
-            base.OnMouseUp(e);
         }
 
         private void beginUserDrag()

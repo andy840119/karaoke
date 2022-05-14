@@ -9,14 +9,17 @@ namespace osu.Game.Rulesets.Karaoke.Objects
 {
     public class BarLine : KaraokeHitObject, IBarLine
     {
+        public readonly Bindable<bool> MajorBindable = new BindableBool();
+
         public bool Major
         {
             get => MajorBindable.Value;
             set => MajorBindable.Value = value;
         }
 
-        public readonly Bindable<bool> MajorBindable = new BindableBool();
-
-        public override Judgement CreateJudgement() => new IgnoreJudgement();
+        public override Judgement CreateJudgement()
+        {
+            return new IgnoreJudgement();
+        }
     }
 }

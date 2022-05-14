@@ -15,13 +15,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
 {
     public abstract class SelectLyricButton : OsuButton
     {
-        private IBindable<bool> selecting;
+        public Func<Dictionary<Lyric, string>> StartSelecting { get; set; }
 
         protected virtual string StandardText => "Select lyric";
 
         protected virtual string SelectingText => "Cancel selecting";
-
-        public Func<Dictionary<Lyric, string>> StartSelecting { get; set; }
+        private IBindable<bool> selecting;
 
         [Resolved]
         private ILyricSelectionState lyricSelectionState { get; set; }
@@ -30,6 +29,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
         {
             RelativeSizeAxes = Axes.X;
             Content.CornerRadius = 15;
+        }
+
+        protected virtual void StartSelectingLyrics()
+        {
+            // update disabled lyrics list.
+            var disableLyrics = StartSelecting?.Invoke();
+            lyricSelectionState.UpdateDisableLyricList(disableLyrics);
+
+            // then start selecting.
+            lyricSelectionState.StartSelecting();
+        }
+
+        protected virtual void EndSelectingLyrics()
+        {
+            lyricSelectionState.EndSelecting(LyricEditorSelectingAction.Cancel);
         }
 
         [BackgroundDependencyLoader]
@@ -46,29 +60,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
             Action = () =>
             {
                 if (!selecting.Value)
-                {
                     StartSelectingLyrics();
-                }
                 else
-                {
                     EndSelectingLyrics();
-                }
             };
-        }
-
-        protected virtual void StartSelectingLyrics()
-        {
-            // update disabled lyrics list.
-            var disableLyrics = StartSelecting?.Invoke();
-            lyricSelectionState.UpdateDisableLyricList(disableLyrics);
-
-            // then start selecting.
-            lyricSelectionState.StartSelecting();
-        }
-
-        protected virtual void EndSelectingLyrics()
-        {
-            lyricSelectionState.EndSelecting(LyricEditorSelectingAction.Cancel);
         }
     }
 }

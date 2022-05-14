@@ -44,7 +44,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                 Name = "Testing layout",
                 Alignment = Anchor.TopLeft,
                 HorizontalMargin = 10,
-                VerticalMargin = 20,
+                VerticalMargin = 20
             };
 
             const string expected = "{\"$type\":1,\"id\":1,\"name\":\"Testing layout\",\"alignment\":9,\"horizontal_margin\":10,\"vertical_margin\":20}";
@@ -63,7 +63,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                 Name = "Testing layout",
                 Alignment = Anchor.TopLeft,
                 HorizontalMargin = 10,
-                VerticalMargin = 20,
+                VerticalMargin = 20
             };
             var actual = JsonConvert.DeserializeObject<IKaraokeSkinElement>(json, CreateSettings()) as LyricLayout;
             Assert.IsNotNull(actual);

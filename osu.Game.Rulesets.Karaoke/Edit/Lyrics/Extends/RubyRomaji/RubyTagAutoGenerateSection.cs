@@ -29,35 +29,45 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
             private ILyricRubyTagsChangeHandler rubyTagsChangeHandler { get; set; }
 
             protected override Dictionary<Lyric, string> GetDisableSelectingLyrics(IEnumerable<Lyric> lyrics)
-                => lyrics.Where(x => x.Language == null)
-                         .ToDictionary(k => k, _ => "Before generate ruby-tag, need to assign language first.");
+            {
+                return lyrics.Where(x => x.Language == null)
+                             .ToDictionary(k => k, _ => "Before generate ruby-tag, need to assign language first.");
+            }
 
             protected override void Apply()
-                => rubyTagsChangeHandler.AutoGenerate();
+            {
+                rubyTagsChangeHandler.AutoGenerate();
+            }
 
             protected override ConfigButton CreateConfigButton()
-                => new RubyTagAutoGenerateConfigButton();
+            {
+                return new RubyTagAutoGenerateConfigButton();
+            }
 
             protected class RubyTagAutoGenerateConfigButton : MultiConfigButton
             {
                 protected override IEnumerable<KaraokeRulesetEditGeneratorSetting> AvailableSettings => new[]
                 {
-                    KaraokeRulesetEditGeneratorSetting.JaRubyTagGeneratorConfig,
+                    KaraokeRulesetEditGeneratorSetting.JaRubyTagGeneratorConfig
                 };
 
-                protected override string GetDisplayName(KaraokeRulesetEditGeneratorSetting setting) =>
-                    setting switch
+                protected override string GetDisplayName(KaraokeRulesetEditGeneratorSetting setting)
+                {
+                    return setting switch
                     {
                         KaraokeRulesetEditGeneratorSetting.JaRubyTagGeneratorConfig => "Japanese",
                         _ => throw new ArgumentOutOfRangeException(nameof(setting))
                     };
+                }
 
-                protected override Popover GetPopoverBySettingType(KaraokeRulesetEditGeneratorSetting setting) =>
-                    setting switch
+                protected override Popover GetPopoverBySettingType(KaraokeRulesetEditGeneratorSetting setting)
+                {
+                    return setting switch
                     {
                         KaraokeRulesetEditGeneratorSetting.JaRubyTagGeneratorConfig => new JaRubyTagGeneratorConfigPopover(),
                         _ => throw new ArgumentOutOfRangeException(nameof(setting))
                     };
+                }
             }
         }
     }

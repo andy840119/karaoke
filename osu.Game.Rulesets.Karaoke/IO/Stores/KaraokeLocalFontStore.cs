@@ -17,11 +17,14 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
         private readonly FontManager fontManager;
 
         /// <summary>
-        /// Construct a font store to be added to a parent font store via <see cref="AddFont"/>.
+        ///     Construct a font store to be added to a parent font store via <see cref="AddFont" />.
         /// </summary>
         /// <param name="fontManager">font manager.</param>
         /// <param name="store">The texture source.</param>
-        /// <param name="scaleAdjust">The raw pixel height of the font. Can be used to apply a global scale or metric to font usages.</param>
+        /// <param name="scaleAdjust">
+        ///     The raw pixel height of the font. Can be used to apply a global scale or metric to font
+        ///     usages.
+        /// </param>
         public KaraokeLocalFontStore(FontManager fontManager, IResourceStore<TextureUpload> store = null, float scaleAdjust = 100)
             : base(store, scaleAdjust)
         {
@@ -37,6 +40,11 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
 
             var fontInfo = FontUsageUtils.ToFontInfo(fontUsage, fontFormat.Value);
             addFont(fontInfo);
+        }
+
+        public void ClearFont()
+        {
+            foreach (var (fontInfo, _) in fontInfos) removeFont(fontInfo);
         }
 
         private void addFont(FontInfo fontInfo)
@@ -60,14 +68,6 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
 
             RemoveStore(glyphStore);
             fontInfos.Remove(fontInfo);
-        }
-
-        public void ClearFont()
-        {
-            foreach (var (fontInfo, _) in fontInfos)
-            {
-                removeFont(fontInfo);
-            }
         }
     }
 }

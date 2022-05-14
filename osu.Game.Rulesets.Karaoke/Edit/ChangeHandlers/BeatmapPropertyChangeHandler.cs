@@ -15,47 +15,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers
 {
     public abstract class BeatmapPropertyChangeHandler<TItem> : Component
     {
-        [Resolved]
-        private EditorBeatmap beatmap { get; set; }
-
-        private KaraokeBeatmap karaokeBeatmap => beatmap.PlayableBeatmap as KaraokeBeatmap;
-
         protected IEnumerable<Lyric> Lyrics => karaokeBeatmap.HitObjects.OfType<Lyric>();
 
         // todo: should be interface.
         protected BindableList<TItem> Items = new();
 
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-            Items.AddRange(GetItemsFromBeatmap(karaokeBeatmap));
+        private KaraokeBeatmap karaokeBeatmap => beatmap.PlayableBeatmap as KaraokeBeatmap;
 
-            // todo: find a better way to handle only beatmap property changed.
-            beatmap.TransactionEnded += syncItemsFromBeatmap;
-
-            syncItemsFromBeatmap();
-
-            void syncItemsFromBeatmap()
-            {
-                var items = GetItemsFromBeatmap(karaokeBeatmap);
-
-                if (Items.SequenceEqual(items))
-                    return;
-
-                Items.AddRange(items.Except(Items));
-                Items.RemoveAll(x => !items.Contains(x));
-            }
-        }
-
-        protected void PerformObjectChanged(TItem item, Action<TItem> action)
-        {
-            // should call change from editor beatmap because there's only way to trigger transaction ended.
-            beatmap?.BeginChange();
-            action?.Invoke(item);
-            beatmap?.EndChange();
-        }
-
-        protected abstract List<TItem> GetItemsFromBeatmap(KaraokeBeatmap beatmap);
+        [Resolved]
+        private EditorBeatmap beatmap { get; set; }
 
         public void Add(TItem item)
         {
@@ -83,8 +51,40 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers
             });
         }
 
+        protected void PerformObjectChanged(TItem item, Action<TItem> action)
+        {
+            // should call change from editor beatmap because there's only way to trigger transaction ended.
+            beatmap?.BeginChange();
+            action?.Invoke(item);
+            beatmap?.EndChange();
+        }
+
+        protected abstract List<TItem> GetItemsFromBeatmap(KaraokeBeatmap beatmap);
+
         protected abstract void OnItemAdded(TItem item);
 
         protected abstract void OnItemRemoved(TItem item);
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            Items.AddRange(GetItemsFromBeatmap(karaokeBeatmap));
+
+            // todo: find a better way to handle only beatmap property changed.
+            beatmap.TransactionEnded += syncItemsFromBeatmap;
+
+            syncItemsFromBeatmap();
+
+            void syncItemsFromBeatmap()
+            {
+                var items = GetItemsFromBeatmap(karaokeBeatmap);
+
+                if (Items.SequenceEqual(items))
+                    return;
+
+                Items.AddRange(items.Except(Items));
+                Items.RemoveAll(x => !items.Contains(x));
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
     [Cached]
     public class SingerLyricEditor : EditorScrollContainer
     {
+        public readonly Singer Singer;
         private const float timeline_height = 38;
 
         [Resolved]
@@ -24,8 +25,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
 
         [Resolved]
         private EditorBeatmap beatmap { get; set; }
-
-        public readonly Singer Singer;
 
         public SingerLyricEditor(Singer singer)
         {
@@ -36,39 +35,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
             ZoomDuration = 200;
             ZoomEasing = Easing.OutQuint;
             ScrollbarVisible = false;
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(ISingerScreenScrollingInfoProvider scrollingInfoProvider, OsuColour colour)
-        {
-            AddInternal(new Box
-            {
-                Name = "Background",
-                Depth = 1,
-                RelativeSizeAxes = Axes.X,
-                Height = timeline_height,
-                Anchor = Anchor.CentreLeft,
-                Origin = Anchor.CentreLeft,
-                Colour = colour.Gray3,
-            });
-            AddRange(new Drawable[]
-            {
-                new Container
-                {
-                    RelativeSizeAxes = Axes.X,
-                    Height = timeline_height,
-                    Anchor = Anchor.CentreLeft,
-                    Origin = Anchor.CentreLeft,
-                    Depth = float.MaxValue,
-                    Children = new Drawable[]
-                    {
-                        new LyricBlueprintContainer(),
-                    }
-                },
-            });
-
-            BindableZoom.BindTo(scrollingInfoProvider.BindableZoom);
-            BindableCurrent.BindTo(scrollingInfoProvider.BindableCurrent);
         }
 
         protected override void LoadComplete()
@@ -85,7 +51,42 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows.Components
             ScrollTo(position, false);
         }
 
+        [BackgroundDependencyLoader]
+        private void load(ISingerScreenScrollingInfoProvider scrollingInfoProvider, OsuColour colour)
+        {
+            AddInternal(new Box
+            {
+                Name = "Background",
+                Depth = 1,
+                RelativeSizeAxes = Axes.X,
+                Height = timeline_height,
+                Anchor = Anchor.CentreLeft,
+                Origin = Anchor.CentreLeft,
+                Colour = colour.Gray3
+            });
+            AddRange(new Drawable[]
+            {
+                new Container
+                {
+                    RelativeSizeAxes = Axes.X,
+                    Height = timeline_height,
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreLeft,
+                    Depth = float.MaxValue,
+                    Children = new Drawable[]
+                    {
+                        new LyricBlueprintContainer()
+                    }
+                }
+            });
+
+            BindableZoom.BindTo(scrollingInfoProvider.BindableZoom);
+            BindableCurrent.BindTo(scrollingInfoProvider.BindableCurrent);
+        }
+
         private float getPositionFromTime(double time)
-            => (float)(time / editorClock.TrackLength) * Content.DrawWidth;
+        {
+            return (float)(time / editorClock.TrackLength) * Content.DrawWidth;
+        }
     }
 }

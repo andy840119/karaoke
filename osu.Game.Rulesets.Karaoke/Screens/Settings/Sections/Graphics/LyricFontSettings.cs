@@ -16,7 +16,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Graphics
     {
         protected override LocalisableString Header => "Lyric font";
 
-        public override SettingsSubsectionPreview CreatePreview() => new LyricPreview();
+        public override SettingsSubsectionPreview CreatePreview()
+        {
+            return new LyricPreview();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -44,7 +47,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Graphics
                 {
                     LabelText = "Ruby margin",
                     Current = Config.GetBindable<int>(KaraokeRulesetSetting.RubyMargin),
-                    KeyboardStep = 1,
+                    KeyboardStep = 1
                 },
                 new SettingsFont
                 {
@@ -55,7 +58,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Graphics
                 {
                     LabelText = "Romaji margin",
                     Current = Config.GetBindable<int>(KaraokeRulesetSetting.RomajiMargin),
-                    KeyboardStep = 1,
+                    KeyboardStep = 1
                 },
                 new SettingsCheckbox
                 {

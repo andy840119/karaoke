@@ -14,12 +14,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
     {
         private RubyTagGeneratorSelector selector;
 
-        [BackgroundDependencyLoader]
-        private void load(KaraokeRulesetEditGeneratorConfigManager config)
-        {
-            selector = new RubyTagGeneratorSelector(config);
-        }
-
         public void AutoGenerate()
         {
             PerformOnSelection(lyric =>
@@ -30,15 +24,29 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
         }
 
         public bool CanGenerate()
-            => HitObjects.Any(lyric => selector.CanGenerate(lyric));
+        {
+            return HitObjects.Any(lyric => selector.CanGenerate(lyric));
+        }
 
         protected override bool ContainsInLyric(Lyric lyric, RubyTag textTag)
-            => lyric.RubyTags.Contains(textTag);
+        {
+            return lyric.RubyTags.Contains(textTag);
+        }
 
         protected override void AddToLyric(Lyric lyric, RubyTag textTag)
-            => lyric.RubyTags.Add(textTag);
+        {
+            lyric.RubyTags.Add(textTag);
+        }
 
         protected override void RemoveFromLyric(Lyric lyric, RubyTag textTag)
-            => lyric.RubyTags.Remove(textTag);
+        {
+            lyric.RubyTags.Remove(textTag);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(KaraokeRulesetEditGeneratorConfigManager config)
+        {
+            selector = new RubyTagGeneratorSelector(config);
+        }
     }
 }

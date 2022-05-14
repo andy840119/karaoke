@@ -14,19 +14,13 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
 {
     public class ShaderConvertorTest : BaseSingleConverterTest<ShaderConvertor>
     {
-        protected override JsonConverter[] CreateExtraConverts()
-            => new JsonConverter[]
-            {
-                new ColourConvertor(),
-            };
-
         [Test]
         public void TestSerializer()
         {
             var shader = new ShadowShader
             {
                 ShadowOffset = new Vector2(3),
-                ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f),
+                ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f)
             };
 
             const string expected = "{\"$type\":\"ShadowShader\",\"shadow_colour\":\"#7F7F7F7F\",\"shadow_offset\":{\"x\":3.0,\"y\":3.0}}";
@@ -42,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
             var expected = new ShadowShader
             {
                 ShadowOffset = new Vector2(3),
-                ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f),
+                ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f)
             };
             var actual = JsonConvert.DeserializeObject<ICustomizedShader>(json, CreateSettings()) as ShadowShader;
             Assert.IsNotNull(actual);
@@ -61,7 +55,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                     new ShadowShader
                     {
                         ShadowOffset = new Vector2(3),
-                        ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f),
+                        ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f)
                     }
                 }
             };
@@ -86,7 +80,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
                     new ShadowShader
                     {
                         ShadowOffset = new Vector2(3),
-                        ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f),
+                        ShadowColour = new Color4(0.5f, 0.5f, 0.5f, 0.5f)
                     }
                 }
             };
@@ -103,6 +97,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.IO.Serialization.Converters
             Assert.IsNotNull(actualShadowShader);
             Assert.AreEqual(expectedShadowShader.ShadowOffset, actualShadowShader.ShadowOffset);
             Assert.AreEqual(expectedShadowShader.ShadowColour.ToHex(), actualShadowShader.ShadowColour.ToHex());
+        }
+
+        protected override JsonConverter[] CreateExtraConverts()
+        {
+            return new JsonConverter[]
+            {
+                new ColourConvertor()
+            };
         }
     }
 }

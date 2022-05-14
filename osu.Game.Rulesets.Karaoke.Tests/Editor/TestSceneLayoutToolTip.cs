@@ -16,23 +16,39 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
     [TestFixture]
     public class TestSceneLayoutToolTip : OsuTestScene
     {
+        [SetUp]
+        public void SetUp()
+        {
+            Schedule(() =>
+            {
+                Child = new SkinProvidingContainer(skin)
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Child = toolTip = new LayoutToolTip
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre
+                    }
+                };
+                toolTip.Show();
+            });
+        }
+
         private readonly ISkin skin = new DefaultKaraokeSkin(null);
         private LayoutToolTip toolTip;
 
-        [SetUp]
-        public void SetUp() => Schedule(() =>
+        private void setTooltip(string testName, Action<Lyric> callBack)
         {
-            Child = new SkinProvidingContainer(skin)
+            AddStep(testName, () =>
             {
-                RelativeSizeAxes = Axes.Both,
-                Child = toolTip = new LayoutToolTip
+                var singer = new Lyric
                 {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre
-                }
-            };
-            toolTip.Show();
-        });
+                    Text = "karaoke!"
+                };
+                callBack?.Invoke(singer);
+                toolTip.SetContent(singer);
+            });
+        }
 
         [Test]
         public void TestDisplayToolTip()
@@ -48,19 +64,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                     // todo: should change mapping group id from the lyric.
                 });
             }
-        }
-
-        private void setTooltip(string testName, Action<Lyric> callBack)
-        {
-            AddStep(testName, () =>
-            {
-                var singer = new Lyric
-                {
-                    Text = "karaoke!"
-                };
-                callBack?.Invoke(singer);
-                toolTip.SetContent(singer);
-            });
         }
     }
 }

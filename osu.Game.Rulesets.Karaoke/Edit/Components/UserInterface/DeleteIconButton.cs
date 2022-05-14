@@ -12,10 +12,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.UserInterface
 {
     public class DeleteIconButton : IconButton
     {
+        public Action<bool> Hover;
+
         [Resolved]
         protected OsuColour Colours { get; private set; }
-
-        public Action<bool> Hover;
 
         public DeleteIconButton()
         {

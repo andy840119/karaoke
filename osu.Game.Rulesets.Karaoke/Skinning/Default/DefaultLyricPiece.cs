@@ -8,7 +8,7 @@ using osu.Game.Rulesets.Karaoke.Objects;
 namespace osu.Game.Rulesets.Karaoke.Skinning.Default
 {
     /// <summary>
-    /// This component is focusing on display ruby and romaji.
+    ///     This component is focusing on display ruby and romaji.
     /// </summary>
     public class DefaultLyricPiece : DrawableKaraokeSpriteText<LyricSpriteText>
     {

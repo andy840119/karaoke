@@ -12,18 +12,21 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
     [TestFixture]
     public class TestSceneMessageContainer : OsuTestScene
     {
-        private MessageContainer messageContainer;
-
         [SetUp]
-        public void SetUp() => Schedule(() =>
+        public void SetUp()
         {
-            Child = messageContainer = new MessageContainer
+            Schedule(() =>
             {
-                Width = 300,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre
-            };
-        });
+                Child = messageContainer = new MessageContainer
+                {
+                    Width = 300,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre
+                };
+            });
+        }
+
+        private MessageContainer messageContainer;
 
         [Test]
         public void TestDisplayMessage()
@@ -45,18 +48,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
         }
 
         [Test]
-        public void TestDisplayMultiMessage()
-        {
-            AddStep("Display multi message", () =>
-            {
-                messageContainer.AddSuccessParagraph("Success message");
-                messageContainer.AddWarningParagraph("Warning message");
-                messageContainer.AddAlertParagraph("Alert message");
-                messageContainer.AddHighlightText("I'm highlighting.");
-            });
-        }
-
-        [Test]
         public void TestDisplayMessageWithPostfix()
         {
             AddStep("Display multi message", () =>
@@ -67,6 +58,18 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
                 messageContainer.AddText(" with postfix", s => s.Colour = Color4.Yellow);
                 messageContainer.AddAlertParagraph("Alert message");
                 messageContainer.AddText(" with postfix", s => s.Colour = Color4.Red);
+            });
+        }
+
+        [Test]
+        public void TestDisplayMultiMessage()
+        {
+            AddStep("Display multi message", () =>
+            {
+                messageContainer.AddSuccessParagraph("Success message");
+                messageContainer.AddWarningParagraph("Warning message");
+                messageContainer.AddAlertParagraph("Alert message");
+                messageContainer.AddHighlightText("I'm highlighting.");
             });
         }
     }

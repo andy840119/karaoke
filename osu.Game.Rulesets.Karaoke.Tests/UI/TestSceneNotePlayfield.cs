@@ -37,7 +37,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.UI
 
         private readonly List<NotePlayfield> notePlayfields = new();
 
-        protected override Ruleset CreateRuleset() => new KaraokeRuleset();
+        protected override Ruleset CreateRuleset()
+        {
+            return new KaraokeRuleset();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -54,7 +57,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.UI
                 {
                     new[]
                     {
-                        createColumn(ScrollingDirection.Left, COLUMNS),
+                        createColumn(ScrollingDirection.Left, COLUMNS)
                     },
                     new[]
                     {
@@ -159,7 +162,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.UI
             var playfield = new NotePlayfield(column)
             {
                 Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
+                Origin = Anchor.Centre
             };
 
             notePlayfields.Add(playfield);

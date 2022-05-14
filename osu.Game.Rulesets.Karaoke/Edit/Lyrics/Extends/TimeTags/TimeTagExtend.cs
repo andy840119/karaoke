@@ -45,7 +45,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.TimeTags
                         {
                             new TimeTagEditModeSection(),
                             new TimeTagAdjustConfigSection(),
-                            new TimeTagIssueSection(),
+                            new TimeTagIssueSection()
                         };
                         break;
 

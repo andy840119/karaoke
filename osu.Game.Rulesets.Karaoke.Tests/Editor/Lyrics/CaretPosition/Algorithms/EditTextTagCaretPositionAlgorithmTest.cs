@@ -125,9 +125,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
         protected override void AssertEqual(EditTextTagCaretPosition expected, EditTextTagCaretPosition actual)
         {
             if (expected == null)
-            {
                 Assert.IsNull(actual);
-            }
             else
             {
                 Assert.AreEqual(expected.Lyric, actual.Lyric);
@@ -146,8 +144,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
             var ruby = lyric?.RubyTags.ElementAtOrDefault(timeTagIndex);
             return new EditTextTagCaretPosition(lyric, ruby);
         }
-
-        #region source
 
         private static Lyric[] singleLyric => new[]
         {
@@ -187,7 +183,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
                 RubyTags = TestCaseTagHelper.ParseRubyTags(new[]
                 {
                     "[0,1]:だい",
-                    "[1,2]:す",
+                    "[1,2]:す"
                 }),
                 Text = "大好き"
             }
@@ -212,12 +208,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Lyrics.CaretPosition.Algorithms
                 RubyTags = TestCaseTagHelper.ParseRubyTags(new[]
                 {
                     "[0,1]:だい",
-                    "[1,2]:す",
+                    "[1,2]:す"
                 }),
                 Text = "大好き"
             }
         };
-
-        #endregion
     }
 }

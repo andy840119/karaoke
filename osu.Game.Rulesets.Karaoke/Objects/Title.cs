@@ -8,13 +8,12 @@ namespace osu.Game.Rulesets.Karaoke.Objects
 {
     public class Title : KaraokeHitObject, IHasDuration
     {
+        public double EndTime => StartTime + Duration;
         public string Name { get; set; }
 
         public int KaraokeLayoutIndex { get; set; }
 
         public double Duration { get; set; }
-
-        public double EndTime => StartTime + Duration;
 
         public int LineInterval { get; set; }
 

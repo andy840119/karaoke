@@ -12,12 +12,11 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
 {
     internal class LyricFontSection : StyleSection
     {
+        protected override string Title => "Font";
         private LabelledEnumDropdown<Font> fontDropdown;
         private LabelledSwitchButton boldSwitchButton;
         private LabelledRealTimeSliderBar<float> fontSizeSliderBar;
         private LabelledRealTimeSliderBar<int> borderSliderBar;
-
-        protected override string Title => "Font";
 
         [BackgroundDependencyLoader]
         private void load(SkinManager manager)
@@ -27,12 +26,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 fontDropdown = new LabelledEnumDropdown<Font>
                 {
                     Label = "Font",
-                    Description = "Select display font.",
+                    Description = "Select display font."
                 },
                 boldSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Bold",
-                    Description = "Select bold or not.",
+                    Description = "Select bold or not."
                 },
                 fontSizeSliderBar = new LabelledRealTimeSliderBar<float>
                 {

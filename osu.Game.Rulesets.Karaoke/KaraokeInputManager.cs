@@ -26,62 +26,13 @@ namespace osu.Game.Rulesets.Karaoke
 {
     public class KaraokeInputManager : RulesetInputManager<KaraokeSaitenAction>
     {
+        private IBeatmap beatmap;
+
         public KaraokeInputManager(RulesetInfo ruleset)
             : base(ruleset, 0, SimultaneousBindingMode.All)
         {
             UseParentInput = false;
         }
-
-        private IBeatmap beatmap;
-
-        [BackgroundDependencyLoader(true)]
-        private void load(KaraokeRulesetConfigManager config, IBindable<IReadOnlyList<Mod>> mods, IBindable<WorkingBeatmap> beatmap, KaraokeSessionStatics session, EditorBeatmap editorBeatmap)
-        {
-            if (editorBeatmap != null)
-            {
-                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.Edit);
-                return;
-            }
-
-            this.beatmap = beatmap.Value.Beatmap;
-
-            bool disableMicrophoneDeviceByMod = mods.Value.OfType<IApplicableToMicrophone>().Any(x => !x.MicrophoneEnabled);
-
-            if (disableMicrophoneDeviceByMod)
-            {
-                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.AutoPlay);
-                return;
-            }
-
-            bool beatmapSaitenable = beatmap.Value.Beatmap.IsScorable();
-
-            if (!beatmapSaitenable)
-            {
-                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.NotSaitening);
-                return;
-            }
-
-            try
-            {
-                string selectedDevice = config.Get<string>(KaraokeRulesetSetting.MicrophoneDevice);
-                var microphoneList = new MicrophoneManager().MicrophoneDeviceNames.ToList();
-
-                // Find index by selection id
-                int deviceIndex = microphoneList.IndexOf(selectedDevice);
-                AddHandler(new MicrophoneHandler(deviceIndex));
-
-                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.Saitening);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "Microphone initialize error.");
-                // todo : set real error by exception
-                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.WindowsMicrophonePermissionDeclined);
-            }
-        }
-
-        protected override InputState CreateInitialState()
-            => new KaraokeRulesetInputManagerInputState<KaraokeSaitenAction>(base.CreateInitialState());
 
         public override void HandleInputStateChange(InputStateChangeEvent inputStateChange)
         {
@@ -138,6 +89,57 @@ namespace osu.Game.Rulesets.Karaoke
                     // Basically should not goes to here
                     base.HandleInputStateChange(inputStateChange);
                     break;
+            }
+        }
+
+        protected override InputState CreateInitialState()
+        {
+            return new KaraokeRulesetInputManagerInputState<KaraokeSaitenAction>(base.CreateInitialState());
+        }
+
+        [BackgroundDependencyLoader(true)]
+        private void load(KaraokeRulesetConfigManager config, IBindable<IReadOnlyList<Mod>> mods, IBindable<WorkingBeatmap> beatmap, KaraokeSessionStatics session, EditorBeatmap editorBeatmap)
+        {
+            if (editorBeatmap != null)
+            {
+                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.Edit);
+                return;
+            }
+
+            this.beatmap = beatmap.Value.Beatmap;
+
+            bool disableMicrophoneDeviceByMod = mods.Value.OfType<IApplicableToMicrophone>().Any(x => !x.MicrophoneEnabled);
+
+            if (disableMicrophoneDeviceByMod)
+            {
+                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.AutoPlay);
+                return;
+            }
+
+            bool beatmapSaitenable = beatmap.Value.Beatmap.IsScorable();
+
+            if (!beatmapSaitenable)
+            {
+                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.NotSaitening);
+                return;
+            }
+
+            try
+            {
+                string selectedDevice = config.Get<string>(KaraokeRulesetSetting.MicrophoneDevice);
+                var microphoneList = new MicrophoneManager().MicrophoneDeviceNames.ToList();
+
+                // Find index by selection id
+                int deviceIndex = microphoneList.IndexOf(selectedDevice);
+                AddHandler(new MicrophoneHandler(deviceIndex));
+
+                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.Saitening);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Microphone initialize error.");
+                // todo : set real error by exception
+                session.SetValue(KaraokeRulesetSession.SaitenStatus, SaitenStatusMode.WindowsMicrophonePermissionDeclined);
             }
         }
     }

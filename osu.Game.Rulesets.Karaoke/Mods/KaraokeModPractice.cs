@@ -25,7 +25,9 @@ namespace osu.Game.Rulesets.Karaoke.Mods
         public override ModType Type => ModType.Fun;
 
         public override ModReplayData CreateReplayData(IBeatmap beatmap, IReadOnlyList<Mod> mods)
-            => new(new KaraokeAutoGenerator(beatmap, mods).Generate(), new ModCreatedUser { Username = "practice master" });
+        {
+            return new(new KaraokeAutoGenerator(beatmap, mods).Generate(), new ModCreatedUser { Username = "practice master" });
+        }
 
         public void ApplyToDrawableRuleset(DrawableRuleset<KaraokeHitObject> drawableRuleset)
         {

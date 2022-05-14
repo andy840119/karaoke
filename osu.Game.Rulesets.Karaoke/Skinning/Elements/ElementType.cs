@@ -11,6 +11,6 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Elements
 
         LyricStyle,
 
-        NoteStyle,
+        NoteStyle
     }
 }

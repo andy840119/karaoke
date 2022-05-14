@@ -14,19 +14,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States.Modes
 {
     public class EditNoteModeState : Component, IEditNoteModeState
     {
-        private readonly Bindable<NoteEditMode> bindableEditMode = new();
-        private readonly BindableList<HitObject> selectedHitObjects = new();
-
         public IBindable<NoteEditMode> BindableEditMode => bindableEditMode;
-
-        public void ChangeEditMode(NoteEditMode mode)
-            => bindableEditMode.Value = mode;
 
         public BindableList<Note> SelectedItems { get; } = new();
 
         public Bindable<NoteEditModeSpecialAction> BindableSpecialAction { get; } = new();
 
         public Bindable<NoteEditPropertyMode> NoteEditPropertyMode { get; } = new();
+        private readonly Bindable<NoteEditMode> bindableEditMode = new();
+        private readonly BindableList<HitObject> selectedHitObjects = new();
+
+        public void ChangeEditMode(NoteEditMode mode)
+        {
+            bindableEditMode.Value = mode;
+        }
 
         [BackgroundDependencyLoader]
         private void load(EditorBeatmap editorBeatmap)

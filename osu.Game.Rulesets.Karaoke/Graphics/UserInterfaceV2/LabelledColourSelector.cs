@@ -26,19 +26,39 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
         }
 
         protected override ColourSelectorDisplay CreateComponent()
-            => new();
+        {
+            return new();
+        }
 
         public class ColourSelectorDisplay : CompositeDrawable, IHasCurrentValue<Colour4>, IHasPopover
         {
+            public Bindable<Colour4> Current
+            {
+                get => current.Current;
+                set => current.Current = value;
+            }
+
             private readonly BindableWithCurrent<Colour4> current = new();
 
             private Box fill;
             private OsuSpriteText colourHexCode;
 
-            public Bindable<Colour4> Current
+            public Popover GetPopover()
             {
-                get => current.Current;
-                set => current.Current = value;
+                return new OsuPopover(false)
+                {
+                    Child = new OsuColourPicker
+                    {
+                        Current = { BindTarget = Current }
+                    }
+                };
+            }
+
+            protected override void LoadComplete()
+            {
+                base.LoadComplete();
+
+                current.BindValueChanged(_ => updateColour(), true);
             }
 
             [BackgroundDependencyLoader]
@@ -77,16 +97,9 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                                 }
                             },
                             Action = this.ShowPopover
-                        },
+                        }
                     }
                 };
-            }
-
-            protected override void LoadComplete()
-            {
-                base.LoadComplete();
-
-                current.BindValueChanged(_ => updateColour(), true);
             }
 
             private void updateColour()
@@ -95,14 +108,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterfaceV2
                 colourHexCode.Text = current.Value.ToHex();
                 colourHexCode.Colour = OsuColour.ForegroundTextColourFor(current.Value);
             }
-
-            public Popover GetPopover() => new OsuPopover(false)
-            {
-                Child = new OsuColourPicker
-                {
-                    Current = { BindTarget = Current }
-                }
-            };
         }
     }
 }

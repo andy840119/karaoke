@@ -14,7 +14,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Gameplay
     {
         protected override LocalisableString Header => "Lyric";
 
-        public override SettingsSubsectionPreview CreatePreview() => new LyricPreview();
+        public override SettingsSubsectionPreview CreatePreview()
+        {
+            return new LyricPreview();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -30,7 +33,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Gameplay
                 {
                     LabelText = "Display romaji",
                     Current = Config.GetBindable<bool>(KaraokeRulesetSetting.DisplayRomaji)
-                },
+                }
             };
         }
     }

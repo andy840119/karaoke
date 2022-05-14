@@ -18,11 +18,16 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
 {
     public class GeneralSettingOverlay : SettingOverlay, IKeyBindingHandler<KaraokeAction>
     {
+        // should get key event even it's hide.
+        public override bool PropagateNonPositionalInputSubTree => true;
+
+        protected override OverlayColourScheme OverlayColourScheme => OverlayColourScheme.Blue;
+
+        // should be able to get the key event.
+        protected override bool BlockNonPositionalInput => false;
         private readonly BindableInt bindablePitch = new();
         private readonly BindableInt bindableVocalPitch = new();
         private readonly BindableInt bindableSaitenPitch = new();
-
-        protected override OverlayColourScheme OverlayColourScheme => OverlayColourScheme.Blue;
 
         public GeneralSettingOverlay()
         {
@@ -52,23 +57,11 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
             };
         }
 
-        protected override SettingButton CreateButton() => new()
-        {
-            Name = "Toggle setting button",
-            Text = "Settings",
-            TooltipText = "Open/Close setting",
-            Action = ToggleVisibility
-        };
-
-        // should be able to get the key event.
-        protected override bool BlockNonPositionalInput => false;
-
-        // should get key event even it's hide.
-        public override bool PropagateNonPositionalInputSubTree => true;
-
         // on press should return false to prevent handle the back key action.
         public override bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
-            => false;
+        {
+            return false;
+        }
 
         public virtual bool OnPressed(KeyBindingPressEvent<KaraokeAction> e)
         {
@@ -122,6 +115,17 @@ namespace osu.Game.Rulesets.Karaoke.UI.HUD
 
         public virtual void OnReleased(KeyBindingReleaseEvent<KaraokeAction> e)
         {
+        }
+
+        protected override SettingButton CreateButton()
+        {
+            return new()
+            {
+                Name = "Toggle setting button",
+                Text = "Settings",
+                TooltipText = "Open/Close setting",
+                Action = ToggleVisibility
+            };
         }
 
         [BackgroundDependencyLoader]

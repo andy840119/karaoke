@@ -16,7 +16,7 @@ using osuTK.Graphics;
 namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
 {
     /// <summary>
-    /// Implement most feature for searchable text container.
+    ///     Implement most feature for searchable text container.
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
     public class RearrangeableTextFlowListContainer<TModel> : OsuRearrangeableListContainer<TModel>
@@ -27,49 +27,71 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
 
         private SearchContainer<RearrangeableListItem<TModel>> searchContainer;
 
-        protected sealed override FillFlowContainer<RearrangeableListItem<TModel>> CreateListFillFlowContainer() => searchContainer = new SearchContainer<RearrangeableListItem<TModel>>
-        {
-            Spacing = new Vector2(0, 3),
-            LayoutDuration = 200,
-            LayoutEasing = Easing.OutQuint,
-        };
-
         public void Filter(string text)
         {
             searchContainer.SearchTerm = text;
         }
 
+        protected sealed override FillFlowContainer<RearrangeableListItem<TModel>> CreateListFillFlowContainer()
+        {
+            return searchContainer = new SearchContainer<RearrangeableListItem<TModel>>
+            {
+                Spacing = new Vector2(0, 3),
+                LayoutDuration = 200,
+                LayoutEasing = Easing.OutQuint
+            };
+        }
+
         protected sealed override OsuRearrangeableListItem<TModel> CreateOsuDrawable(TModel item)
-            => CreateDrawable(item).With(d =>
+        {
+            return CreateDrawable(item).With(d =>
             {
                 d.SelectedSet.BindTarget = SelectedSet;
                 d.RequestSelection = set => RequestSelection?.Invoke(set);
             });
+        }
 
         protected new virtual DrawableTextListItem CreateDrawable(TModel item)
-            => new(item);
+        {
+            return new(item);
+        }
 
         public class DrawableTextListItem : OsuRearrangeableListItem<TModel>, IFilterable
         {
             public readonly Bindable<TModel> SelectedSet = new();
 
+            public virtual IEnumerable<string> FilterTerms => new[]
+            {
+                Model.ToString()
+            };
+
             public Action<TModel> RequestSelection;
+
+            public bool MatchingFilter
+            {
+                get => matchingFilter;
+                set
+                {
+                    if (matchingFilter == value)
+                        return;
+
+                    matchingFilter = value;
+                    updateFilter();
+                }
+            }
+
+            public bool FilteringActive { get; set; }
 
             private TextFlowContainer text;
 
             private Color4 selectedColour;
 
+            private bool matchingFilter = true;
+
             public DrawableTextListItem(TModel item)
                 : base(item)
             {
                 Padding = new MarginPadding { Left = 5 };
-            }
-
-            [BackgroundDependencyLoader]
-            private void load(OsuColour colours)
-            {
-                selectedColour = colours.Yellow;
-                HandleColour = colours.Gray5;
             }
 
             protected override void LoadComplete()
@@ -87,11 +109,14 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 }, true);
             }
 
-            protected sealed override Drawable CreateContent() => text = new OsuTextFlowContainer
+            protected sealed override Drawable CreateContent()
             {
-                RelativeSizeAxes = Axes.X,
-                AutoSizeAxes = Axes.Y,
-            }.With(x => CreateDisplayContent(x, Model));
+                return text = new OsuTextFlowContainer
+                {
+                    RelativeSizeAxes = Axes.X,
+                    AutoSizeAxes = Axes.Y
+                }.With(x => CreateDisplayContent(x, Model));
+            }
 
             protected override bool OnClick(ClickEvent e)
             {
@@ -99,32 +124,22 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.UserInterface
                 return true;
             }
 
-            public virtual IEnumerable<string> FilterTerms => new[]
-            {
-                Model.ToString()
-            };
-
             protected virtual void CreateDisplayContent(OsuTextFlowContainer textFlowContainer, TModel model)
-                => textFlowContainer.AddText(model.ToString());
-
-            private bool matchingFilter = true;
-
-            public bool MatchingFilter
             {
-                get => matchingFilter;
-                set
-                {
-                    if (matchingFilter == value)
-                        return;
-
-                    matchingFilter = value;
-                    updateFilter();
-                }
+                textFlowContainer.AddText(model.ToString());
             }
 
-            private void updateFilter() => this.FadeTo(MatchingFilter ? 1 : 0, 200);
+            [BackgroundDependencyLoader]
+            private void load(OsuColour colours)
+            {
+                selectedColour = colours.Yellow;
+                HandleColour = colours.Gray5;
+            }
 
-            public bool FilteringActive { get; set; }
+            private void updateFilter()
+            {
+                this.FadeTo(MatchingFilter ? 1 : 0, 200);
+            }
         }
     }
 }

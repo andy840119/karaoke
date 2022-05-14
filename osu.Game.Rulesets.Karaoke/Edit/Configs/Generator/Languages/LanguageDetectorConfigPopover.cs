@@ -15,7 +15,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.Languages
         {
             return new GeneratorConfigSection[]
             {
-                new AcceptLanguagesSection(current),
+                new AcceptLanguagesSection(current)
             };
         }
     }

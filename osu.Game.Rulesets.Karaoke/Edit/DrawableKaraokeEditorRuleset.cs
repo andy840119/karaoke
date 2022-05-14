@@ -15,13 +15,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit
 {
     public class DrawableKaraokeEditorRuleset : DrawableKaraokeRuleset
     {
-        private readonly Bindable<bool> bindableDisplayRubyToggle = new();
-        private readonly Bindable<bool> bindableDisplayRomajiToggle = new();
-        private readonly Bindable<bool> bindableDisplayTranslateToggle = new();
-
         public new IScrollingInfo ScrollingInfo => base.ScrollingInfo;
 
         protected override bool DisplayNotePlayfield => true;
+        private readonly Bindable<bool> bindableDisplayRubyToggle = new();
+        private readonly Bindable<bool> bindableDisplayRomajiToggle = new();
+        private readonly Bindable<bool> bindableDisplayTranslateToggle = new();
 
         public DrawableKaraokeEditorRuleset(Ruleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods)
             : base(ruleset, beatmap, mods)
@@ -31,7 +30,16 @@ namespace osu.Game.Rulesets.Karaoke.Edit
             bindableDisplayTranslateToggle.BindValueChanged(x => { Session.SetValue(KaraokeRulesetSession.UseTranslate, x.NewValue); });
         }
 
-        protected override Playfield CreatePlayfield() => new KaraokeEditorPlayfield();
+        // todo: use default adjustment container because DrawableEditorRulesetWrapper will create it but contains no KaraokeRulesetConfigManager
+        public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer()
+        {
+            return new();
+        }
+
+        protected override Playfield CreatePlayfield()
+        {
+            return new KaraokeEditorPlayfield();
+        }
 
         [BackgroundDependencyLoader]
         private void load(KaraokeRulesetEditConfigManager editConfigManager)
@@ -40,8 +48,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit
             editConfigManager.BindWith(KaraokeRulesetEditSetting.DisplayRomaji, bindableDisplayRomajiToggle);
             editConfigManager.BindWith(KaraokeRulesetEditSetting.DisplayTranslate, bindableDisplayTranslateToggle);
         }
-
-        // todo: use default adjustment container because DrawableEditorRulesetWrapper will create it but contains no KaraokeRulesetConfigManager
-        public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer() => new();
     }
 }

@@ -21,7 +21,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
     {
         protected override Container<Drawable> Content { get; } = new Container { RelativeSizeAxes = Axes.Both };
 
-        protected override SingerScreen CreateEditorScreen() => new();
+        protected override SingerScreen CreateEditorScreen()
+        {
+            return new();
+        }
 
         protected override KaraokeBeatmap CreateBeatmap()
         {
@@ -37,7 +40,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                     RomajiName = "Hatsune Miku",
                     EnglishName = "Miku",
                     Description = "International superstar vocaloid Hatsune Miku.",
-                    Hue = 189 / 360f,
+                    Hue = 189 / 360f
                 },
                 new(2)
                 {
@@ -46,7 +49,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                     RomajiName = "haku",
                     EnglishName = "andy840119",
                     Description = "Creator of this ruleset.",
-                    Hue = 46 / 360f,
+                    Hue = 46 / 360f
                 },
                 new(3)
                 {
@@ -55,7 +58,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                     RomajiName = "gomi-pasokonn",
                     EnglishName = "garbage desktop",
                     Description = "My fucking slow desktop.",
-                    Hue = 290 / 360f,
+                    Hue = 290 / 360f
                 }
             };
 
@@ -76,7 +79,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                     Child = Content
                 },
                 dialogOverlay = new DialogOverlay(),
-                lyricsProvider = new LyricsProvider(),
+                lyricsProvider = new LyricsProvider()
             });
 
             var beatDivisor = new BindableBeatDivisor

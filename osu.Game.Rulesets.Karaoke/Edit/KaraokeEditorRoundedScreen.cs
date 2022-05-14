@@ -11,15 +11,15 @@ using osu.Game.Screens.Edit;
 namespace osu.Game.Rulesets.Karaoke.Edit
 {
     /// <summary>
-    /// Copied from <see cref="EditorRoundedScreen"/>
+    ///     Copied from <see cref="EditorRoundedScreen" />
     /// </summary>
     public class KaraokeEditorRoundedScreen : KaraokeEditorScreen
     {
         public const int HORIZONTAL_PADDING = 100;
 
-        private Container roundedContent;
-
         protected override Container<Drawable> Content => roundedContent;
+
+        private Container roundedContent;
 
         public KaraokeEditorRoundedScreen(KaraokeEditorScreenMode type)
             : base(type)
@@ -43,12 +43,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit
                         new Box
                         {
                             Colour = colourProvider.Background3,
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         },
                         roundedContent = new Container
                         {
-                            RelativeSizeAxes = Axes.Both,
-                        },
+                            RelativeSizeAxes = Axes.Both
+                        }
                     }
                 }
             });

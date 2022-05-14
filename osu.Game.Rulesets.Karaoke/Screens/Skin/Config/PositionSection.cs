@@ -11,9 +11,8 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
 {
     internal class PositionSection : LyricConfigSection
     {
-        private LabelledEnumDropdown<KaraokeTextSmartHorizon> smartHorizonDropdown;
-
         protected override string Title => "Position";
+        private LabelledEnumDropdown<KaraokeTextSmartHorizon> smartHorizonDropdown;
 
         [BackgroundDependencyLoader]
         private void load(LyricConfigManager manager)
@@ -23,7 +22,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
                 smartHorizonDropdown = new LabelledEnumDropdown<KaraokeTextSmartHorizon>
                 {
                     Label = "Smart horizon",
-                    Description = "Smart horizon section",
+                    Description = "Smart horizon section"
                 }
             };
 

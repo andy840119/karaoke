@@ -17,7 +17,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             {
                 lrcEncoder.Encode(output),
                 string.Join("\n", encodeNote(output)),
-                string.Join("\n", encodeTranslate(output)),
+                string.Join("\n", encodeTranslate(output))
             };
 
             return string.Join("\n\n", results.Where(x => !string.IsNullOrEmpty(x)));

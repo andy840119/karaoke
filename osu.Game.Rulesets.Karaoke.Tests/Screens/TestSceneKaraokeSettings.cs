@@ -9,6 +9,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Screens
     [TestFixture]
     public class TestSceneKaraokeSettings : ScreenTestScene<KaraokeSettings>
     {
-        protected override KaraokeSettings CreateScreen() => new();
+        protected override KaraokeSettings CreateScreen()
+        {
+            return new();
+        }
     }
 }

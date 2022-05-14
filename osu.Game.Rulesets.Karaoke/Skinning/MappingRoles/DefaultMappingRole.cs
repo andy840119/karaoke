@@ -23,6 +23,8 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.MappingRoles
         }
 
         private static IGroup getGroupById(KaraokeBeatmapSkin beatmapSkin, int groupId)
-            => beatmapSkin.Groups.FirstOrDefault(x => x.ID == groupId);
+        {
+            return beatmapSkin.Groups.FirstOrDefault(x => x.ID == groupId);
+        }
     }
 }

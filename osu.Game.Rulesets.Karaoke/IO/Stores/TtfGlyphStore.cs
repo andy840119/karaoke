@@ -25,25 +25,28 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
 {
     public class TtfGlyphStore : IResourceStore<TextureUpload>, IGlyphStore
     {
-        private const int dpi = 80;
-
-        protected readonly string AssetName;
-
         public string FontName { get; }
 
         public float? Baseline => fontInstance?.LineHeight;
 
-        protected readonly ResourceStore<byte[]> Store;
-
         [CanBeNull]
         public Font Font => completionSource.Task.Result;
+
+        protected readonly string AssetName;
+
+        protected readonly ResourceStore<byte[]> Store;
+
+        protected int LoadedGlyphCount;
+        private const int dpi = 80;
 
         private IFontInstance fontInstance => Font?.Instance;
 
         private readonly TaskCompletionSource<Font> completionSource = new();
 
+        private Task fontLoadTask;
+
         /// <summary>
-        /// Create a new glyph store.
+        ///     Create a new glyph store.
         /// </summary>
         /// <param name="store">The store to provide font resources.</param>
         /// <param name="assetName">The base name of thße font.</param>
@@ -58,30 +61,31 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
             FontName = assetName?.Split('/').Last();
         }
 
-        private Task fontLoadTask;
-
-        public Task LoadFontAsync() => fontLoadTask ??= Task.Factory.StartNew(() =>
+        public Task LoadFontAsync()
         {
-            try
+            return fontLoadTask ??= Task.Factory.StartNew(() =>
             {
-                Font font;
-
-                using (var s = Store.GetStream($@"{AssetName}"))
+                try
                 {
-                    var fonts = new FontCollection();
-                    var fontFamily = fonts.Install(s);
-                    font = new Font(fontFamily, 1);
-                }
+                    Font font;
 
-                completionSource.SetResult(font);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, $"Couldn't load font asset from {AssetName}.");
-                completionSource.SetResult(null);
-                throw;
-            }
-        }, TaskCreationOptions.PreferFairness);
+                    using (var s = Store.GetStream($@"{AssetName}"))
+                    {
+                        var fonts = new FontCollection();
+                        var fontFamily = fonts.Install(s);
+                        font = new Font(fontFamily, 1);
+                    }
+
+                    completionSource.SetResult(font);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, $"Couldn't load font asset from {AssetName}.");
+                    completionSource.SetResult(null);
+                    throw;
+                }
+            }, TaskCreationOptions.PreferFairness);
+        }
 
         public bool HasGlyph(char c)
         {
@@ -125,11 +129,6 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
             return (int)kerning;
         }
 
-        Task<CharacterGlyph> IResourceStore<CharacterGlyph>.GetAsync(string name, CancellationToken cancellationToken) =>
-            Task.Run(() => ((IGlyphStore)this).Get(name[0]), cancellationToken);
-
-        CharacterGlyph IResourceStore<CharacterGlyph>.Get(string name) => Get(name[0]);
-
         public TextureUpload Get(string name)
         {
             if (fontInstance == null) return null;
@@ -150,7 +149,15 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
             return LoadCharacter(name.Last());
         }
 
-        protected int LoadedGlyphCount;
+        public Stream GetStream(string name)
+        {
+            throw new NotSupportedException();
+        }
+
+        public IEnumerable<string> GetAvailableResources()
+        {
+            throw new NotSupportedException();
+        }
 
         protected virtual TextureUpload LoadCharacter(char c)
         {
@@ -167,7 +174,7 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
             var targetSize = new
             {
                 Width = (int)(bounds.Width * texture_scale),
-                Height = (int)(bounds.Height * texture_scale),
+                Height = (int)(bounds.Height * texture_scale)
             };
 
             // this is the important line, where we render the glyphs to a vector instead of directly to the image
@@ -192,9 +199,15 @@ namespace osu.Game.Rulesets.Karaoke.IO.Stores
             return new TextureUpload(img);
         }
 
-        public Stream GetStream(string name) => throw new NotSupportedException();
+        Task<CharacterGlyph> IResourceStore<CharacterGlyph>.GetAsync(string name, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => ((IGlyphStore)this).Get(name[0]), cancellationToken);
+        }
 
-        public IEnumerable<string> GetAvailableResources() => throw new NotSupportedException();
+        CharacterGlyph IResourceStore<CharacterGlyph>.Get(string name)
+        {
+            return Get(name[0]);
+        }
 
         #region IDisposable Support
 

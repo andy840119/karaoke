@@ -10,9 +10,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.RomajiTags.Ja
 {
     public class GenericSection : GeneratorConfigSection<JaRomajiTagGeneratorConfig>
     {
-        private readonly LabelledSwitchButton uppercaseSwitchButton;
-
         protected override string Title => "Generic";
+        private readonly LabelledSwitchButton uppercaseSwitchButton;
 
         public GenericSection(Bindable<JaRomajiTagGeneratorConfig> config)
             : base(config)
@@ -22,8 +21,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Configs.Generator.RomajiTags.Ja
                 uppercaseSwitchButton = new LabelledSwitchButton
                 {
                     Label = "Uppercase",
-                    Description = "Export romaji with uppercase.",
-                },
+                    Description = "Export romaji with uppercase."
+                }
             };
 
             RegisterConfig(uppercaseSwitchButton.Current, nameof(JaRomajiTagGeneratorConfig.Uppercase));

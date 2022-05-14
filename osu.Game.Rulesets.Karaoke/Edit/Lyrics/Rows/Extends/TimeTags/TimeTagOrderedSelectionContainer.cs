@@ -11,10 +11,12 @@ using osu.Game.Rulesets.Karaoke.Objects;
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
 {
     /// <summary>
-    /// A container for <see cref="SelectionBlueprint{T}"/> ordered by their <see cref="TimeTag"/> start times.
+    ///     A container for <see cref="SelectionBlueprint{T}" /> ordered by their <see cref="TimeTag" /> start times.
     /// </summary>
     public class TimeTagOrderedSelectionContainer : Container<SelectionBlueprint<TimeTag>>
     {
+        private readonly Dictionary<SelectionBlueprint<TimeTag>, IBindable> startTimeMap = new();
+
         public override void Add(SelectionBlueprint<TimeTag> drawable)
         {
             base.Add(drawable);
@@ -36,7 +38,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             unbindAllStartTimes();
         }
 
-        private readonly Dictionary<SelectionBlueprint<TimeTag>, IBindable> startTimeMap = new();
+        protected override int Compare(Drawable x, Drawable y)
+        {
+            var xObj = (SelectionBlueprint<TimeTag>)x;
+            var yObj = (SelectionBlueprint<TimeTag>)y;
+
+            // todo : have a better way to compare two object with nullable time.
+            // Put earlier blueprints towards the end of the list, so they handle input first
+            // int i = yObj.Item.Time.Value.CompareTo(xObj.Item.Time.Value);
+            // if (i != 0) return i;
+
+            return CompareReverseChildID(y, x);
+        }
 
         private void bindStartTime(SelectionBlueprint<TimeTag> blueprint)
         {
@@ -62,19 +75,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.TimeTags
             foreach (var kvp in startTimeMap)
                 kvp.Value.UnbindAll();
             startTimeMap.Clear();
-        }
-
-        protected override int Compare(Drawable x, Drawable y)
-        {
-            var xObj = (SelectionBlueprint<TimeTag>)x;
-            var yObj = (SelectionBlueprint<TimeTag>)y;
-
-            // todo : have a better way to compare two object with nullable time.
-            // Put earlier blueprints towards the end of the list, so they handle input first
-            // int i = yObj.Item.Time.Value.CompareTo(xObj.Item.Time.Value);
-            // if (i != 0) return i;
-
-            return CompareReverseChildID(y, x);
         }
     }
 }

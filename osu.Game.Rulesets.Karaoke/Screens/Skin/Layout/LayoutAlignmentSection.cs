@@ -11,11 +11,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
 {
     internal class LayoutAlignmentSection : LayoutSection
     {
+        protected override string Title => "Layout";
         private LabelledEnumDropdown<Anchor> alignmentDropdown;
         private LabelledRealTimeSliderBar<int> horizontalMarginSliderBar;
         private LabelledRealTimeSliderBar<int> verticalMarginSliderBar;
-
-        protected override string Title => "Layout";
 
         [BackgroundDependencyLoader]
         private void load(LayoutManager manager)
@@ -25,7 +24,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                 alignmentDropdown = new LabelledEnumDropdown<Anchor>
                 {
                     Label = "Anchor",
-                    Description = "Anchor section",
+                    Description = "Anchor section"
                 },
                 horizontalMarginSliderBar = new LabelledRealTimeSliderBar<int>
                 {
@@ -50,7 +49,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                         Value = 30,
                         Default = 30
                     }
-                },
+                }
             };
 
             manager.LoadedLayout.BindValueChanged(e =>

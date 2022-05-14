@@ -34,18 +34,24 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
         [Cached]
         public readonly Bindable<APIChangelogBuild> Current = new();
 
+        protected override Color4 BackgroundColour => ColourProvider.Background4;
+
         private readonly Container sidebarContainer;
         private readonly ChangelogSidebar sidebar;
         private readonly Container content;
-
-        private Sample sampleBack;
-
-        private List<APIChangelogBuild> builds;
 
         private readonly string organizationName;
         private readonly string branchName;
 
         private string projectName => $"{organizationName}.github.io";
+
+        private Sample sampleBack;
+
+        private List<APIChangelogBuild> builds;
+
+        private Task initialFetchTask;
+
+        private CancellationTokenSource loadContentCancellation;
 
         public KaraokeChangelogOverlay(string organization, string branch = "master")
             : base(OverlayColourScheme.Purple, false)
@@ -85,38 +91,6 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
             };
         }
 
-        [BackgroundDependencyLoader]
-        private void load(AudioManager audio)
-        {
-            Header.Build.BindTo(Current);
-
-            sampleBack = audio.Samples.Get(@"UI/generic-select-soft");
-
-            Current.BindValueChanged(e =>
-            {
-                if (e.NewValue != null)
-                    loadContent(new ChangelogSingleBuild(e.NewValue));
-                else
-                {
-                    loadContent(new ChangelogListing(builds));
-                }
-            });
-        }
-
-        protected override void UpdateAfterChildren()
-        {
-            base.UpdateAfterChildren();
-            sidebarContainer.Height = DrawHeight;
-            sidebarContainer.Y = Math.Clamp(ScrollFlow.Current - Header.DrawHeight, 0, Math.Max(ScrollFlow.ScrollContent.DrawHeight - DrawHeight - Header.DrawHeight, 0));
-        }
-
-        protected override ChangelogHeader CreateHeader() => new()
-        {
-            ListingSelected = ShowListing,
-        };
-
-        protected override Color4 BackgroundColour => ColourProvider.Background4;
-
         public void ShowListing()
         {
             Current.Value = null;
@@ -124,9 +98,9 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
         }
 
         /// <summary>
-        /// Fetches and shows a specific build from a specific update stream.
+        ///     Fetches and shows a specific build from a specific update stream.
         /// </summary>
-        /// <param name="build"> Singer <see cref="APIChangelogBuild"/>.</param>
+        /// <param name="build"> Singer <see cref="APIChangelogBuild" />.</param>
         public void ShowBuild([NotNull] APIChangelogBuild build)
         {
             if (build == null) throw new ArgumentNullException(nameof(build));
@@ -141,9 +115,7 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
             {
                 case GlobalAction.Back:
                     if (Current.Value == null)
-                    {
                         Hide();
-                    }
                     else
                     {
                         Current.Value = null;
@@ -155,6 +127,21 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
                 default:
                     return false;
             }
+        }
+
+        protected override void UpdateAfterChildren()
+        {
+            base.UpdateAfterChildren();
+            sidebarContainer.Height = DrawHeight;
+            sidebarContainer.Y = Math.Clamp(ScrollFlow.Current - Header.DrawHeight, 0, Math.Max(ScrollFlow.ScrollContent.DrawHeight - DrawHeight - Header.DrawHeight, 0));
+        }
+
+        protected override ChangelogHeader CreateHeader()
+        {
+            return new()
+            {
+                ListingSelected = ShowListing
+            };
         }
 
         protected override void PopIn()
@@ -179,10 +166,27 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
             }
         }
 
-        private Task initialFetchTask;
+        [BackgroundDependencyLoader]
+        private void load(AudioManager audio)
+        {
+            Header.Build.BindTo(Current);
 
-        private void performAfterFetch(Action action) => fetchListing()?.ContinueWith(_ =>
-            Schedule(action), TaskContinuationOptions.OnlyOnRanToCompletion);
+            sampleBack = audio.Samples.Get(@"UI/generic-select-soft");
+
+            Current.BindValueChanged(e =>
+            {
+                if (e.NewValue != null)
+                    loadContent(new ChangelogSingleBuild(e.NewValue));
+                else
+                    loadContent(new ChangelogListing(builds));
+            });
+        }
+
+        private void performAfterFetch(Action action)
+        {
+            fetchListing()?.ContinueWith(_ =>
+                Schedule(action), TaskContinuationOptions.OnlyOnRanToCompletion);
+        }
 
         private Task fetchListing()
         {
@@ -215,9 +219,7 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
                     tcs.SetResult(true);
                 }
                 else
-                {
                     tcs.SetResult(false);
-                }
 
                 await tcs.Task.ConfigureAwait(false);
             });
@@ -236,8 +238,6 @@ namespace osu.Game.Rulesets.Karaoke.Overlays
                 return new DateTimeOffset(new DateTime(year, month, day));
             }
         }
-
-        private CancellationTokenSource loadContentCancellation;
 
         private void loadContent(ChangelogContent newContent)
         {

@@ -9,8 +9,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Sprites
 {
     public class DrawableTextIndex : RightTriangle
     {
-        private TextIndex.IndexState state;
-
         public TextIndex.IndexState State
         {
             get => state;
@@ -26,5 +24,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Components.Sprites
                 };
             }
         }
+
+        private TextIndex.IndexState state;
     }
 }

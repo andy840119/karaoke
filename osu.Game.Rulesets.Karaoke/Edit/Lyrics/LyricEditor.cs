@@ -36,11 +36,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
     [Cached(typeof(ILyricEditorState))]
     public class LyricEditor : Container, ILyricEditorState, IKeyBindingHandler<KaraokeEditAction>
     {
-        [Resolved(canBeNull: true)]
-        private ILyricsChangeHandler lyricsChangeHandler { get; set; }
+        public IBindable<LyricEditorMode> BindableMode => bindableMode;
 
-        [Resolved]
-        private KaraokeRulesetLyricEditorConfigManager lyricEditorConfigManager { get; set; }
+        public LyricEditorMode Mode
+            => bindableMode.Value;
 
         [Cached]
         private readonly LyricEditorColourProvider colourProvider = new();
@@ -78,8 +77,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
         private readonly Bindable<LyricEditorMode> bindableMode = new();
         private IBindable<bool> bindableSelecting => lyricSelectionState.Selecting;
 
-        public IBindable<LyricEditorMode> BindableMode => bindableMode;
-
         private readonly Bindable<float> bindableFontSize = new();
 
         private readonly GridContainer gridContainer;
@@ -90,6 +87,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
         private readonly DrawableLyricEditList container;
 
         private const int spacing = 10;
+
+        [Resolved(canBeNull: true)]
+        private ILyricsChangeHandler lyricsChangeHandler { get; set; }
+
+        [Resolved]
+        private KaraokeRulesetLyricEditorConfigManager lyricEditorConfigManager { get; set; }
 
         public LyricEditor()
         {
@@ -114,7 +117,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                     {
                         leftSideExtendArea = new Container
                         {
-                            RelativeSizeAxes = Axes.Both,
+                            RelativeSizeAxes = Axes.Both
                         },
                         new Box(),
                         lyricEditorGridContainer = new GridContainer
@@ -129,22 +132,22 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                                         RelativeSizeAxes = Axes.Both,
                                         Child = container = new DrawableLyricEditList
                                         {
-                                            RelativeSizeAxes = Axes.Both,
+                                            RelativeSizeAxes = Axes.Both
                                         }
-                                    },
+                                    }
                                 },
                                 Array.Empty<Drawable>(),
                                 new Drawable[]
                                 {
-                                    new ApplySelectingArea(),
+                                    new ApplySelectingArea()
                                 }
                             }
                         },
                         new Box(),
                         rightSideExtendArea = new Container
                         {
-                            RelativeSizeAxes = Axes.Both,
-                        },
+                            RelativeSizeAxes = Axes.Both
+                        }
                     }
                 }
             });
@@ -181,6 +184,53 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             }, true);
         }
 
+        public virtual bool OnPressed(KeyBindingPressEvent<KaraokeEditAction> e)
+        {
+            return e.Action switch
+            {
+                KaraokeEditAction.Up => lyricCaretState.MoveCaret(MovingCaretAction.Up),
+                KaraokeEditAction.Down => lyricCaretState.MoveCaret(MovingCaretAction.Down),
+                KaraokeEditAction.Left => lyricCaretState.MoveCaret(MovingCaretAction.Left),
+                KaraokeEditAction.Right => lyricCaretState.MoveCaret(MovingCaretAction.Right),
+                KaraokeEditAction.First => lyricCaretState.MoveCaret(MovingCaretAction.First),
+                KaraokeEditAction.Last => lyricCaretState.MoveCaret(MovingCaretAction.Last),
+                _ => false
+            };
+        }
+
+        public void OnReleased(KeyBindingReleaseEvent<KaraokeEditAction> e)
+        {
+        }
+
+        public virtual void NavigateToFix(LyricEditorMode mode)
+        {
+            switch (mode)
+            {
+                case LyricEditorMode.Typing:
+                case LyricEditorMode.Language:
+                case LyricEditorMode.EditTimeTag:
+                    SwitchMode(mode);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode));
+            }
+        }
+
+        public void SwitchMode(LyricEditorMode mode)
+        {
+            bindableMode.Value = mode;
+        }
+
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
+        {
+            var baseDependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+
+            // Add shader manager as part of dependencies.
+            // it will call CreateResourceStore() in KaraokeRuleset and add the resource.
+            return new OsuScreenDependencies(false, new DrawableRulesetDependencies(baseDependencies.GetRuleset(), baseDependencies));
+        }
+
         private void updateAddLyricState()
         {
             // display add new lyric only with edit mode.
@@ -206,7 +256,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                 new Dimension(GridSizeMode.Absolute, direction == ExtendDirection.Left ? spacing : 0),
                 new Dimension(),
                 new Dimension(GridSizeMode.Absolute, direction == ExtendDirection.Right ? spacing : 0),
-                new Dimension(GridSizeMode.Absolute, direction == ExtendDirection.Right ? width : 0),
+                new Dimension(GridSizeMode.Absolute, direction == ExtendDirection.Right ? width : 0)
             };
 
             if (extendArea == null)
@@ -259,17 +309,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             {
                 new Dimension(),
                 new Dimension(GridSizeMode.Absolute, show ? spacing : 0),
-                new Dimension(GridSizeMode.AutoSize),
+                new Dimension(GridSizeMode.AutoSize)
             };
-        }
-
-        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
-        {
-            var baseDependencies = new DependencyContainer(base.CreateChildDependencies(parent));
-
-            // Add shader manager as part of dependencies.
-            // it will call CreateResourceStore() in KaraokeRuleset and add the resource.
-            return new OsuScreenDependencies(false, new DrawableRulesetDependencies(baseDependencies.GetRuleset(), baseDependencies));
         }
 
         [BackgroundDependencyLoader]
@@ -282,43 +323,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
 
             container.Items.BindTo(lyricsProvider.BindableLyrics);
         }
-
-        public virtual bool OnPressed(KeyBindingPressEvent<KaraokeEditAction> e) =>
-            e.Action switch
-            {
-                KaraokeEditAction.Up => lyricCaretState.MoveCaret(MovingCaretAction.Up),
-                KaraokeEditAction.Down => lyricCaretState.MoveCaret(MovingCaretAction.Down),
-                KaraokeEditAction.Left => lyricCaretState.MoveCaret(MovingCaretAction.Left),
-                KaraokeEditAction.Right => lyricCaretState.MoveCaret(MovingCaretAction.Right),
-                KaraokeEditAction.First => lyricCaretState.MoveCaret(MovingCaretAction.First),
-                KaraokeEditAction.Last => lyricCaretState.MoveCaret(MovingCaretAction.Last),
-                _ => false
-            };
-
-        public void OnReleased(KeyBindingReleaseEvent<KaraokeEditAction> e)
-        {
-        }
-
-        public virtual void NavigateToFix(LyricEditorMode mode)
-        {
-            switch (mode)
-            {
-                case LyricEditorMode.Typing:
-                case LyricEditorMode.Language:
-                case LyricEditorMode.EditTimeTag:
-                    SwitchMode(mode);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode));
-            }
-        }
-
-        public LyricEditorMode Mode
-            => bindableMode.Value;
-
-        public void SwitchMode(LyricEditorMode mode)
-            => bindableMode.Value = mode;
 
         private class LocalScrollingInfo : IScrollingInfo
         {

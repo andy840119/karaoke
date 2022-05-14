@@ -20,15 +20,15 @@ namespace osu.Game.Rulesets.Karaoke.UI
     {
         protected override LocalisableString Header => CommonStrings.RulesetName;
 
-        public KaraokeSettingsSubsection(Ruleset ruleset)
-            : base(ruleset)
-        {
-        }
-
         [Resolved]
         protected OsuGame Game { get; private set; }
 
         private KaraokeChangelogOverlay changelogOverlay;
+
+        public KaraokeSettingsSubsection(Ruleset ruleset)
+            : base(ruleset)
+        {
+        }
 
         [BackgroundDependencyLoader]
         private void load()

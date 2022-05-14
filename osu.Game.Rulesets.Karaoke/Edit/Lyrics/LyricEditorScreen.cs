@@ -78,15 +78,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                 Padding = new MarginPadding(10),
                 Child = lyricEditor = new FullScreenLyricEditor
                 {
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 }
             });
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(Bindable<LyricEditorMode> lyricEditorMode)
-        {
-            lyricEditor.BindableMode.BindTo(lyricEditorMode);
         }
 
         protected override void PopIn()
@@ -97,6 +91,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             lyricEditor.ResetSelectedHitObject();
         }
 
+        [BackgroundDependencyLoader]
+        private void load(Bindable<LyricEditorMode> lyricEditorMode)
+        {
+            lyricEditor.BindableMode.BindTo(lyricEditorMode);
+        }
+
         private class FullScreenLyricEditor : LyricEditor
         {
             private ILyricCaretState lyricCaretState { get; set; }
@@ -104,14 +104,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             [Resolved(canBeNull: true)]
             private OnScreenDisplay onScreenDisplay { get; set; }
 
-            protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
+            public void ResetSelectedHitObject()
             {
-                var dependencies = base.CreateChildDependencies(parent);
-                lyricCaretState = dependencies.Get<ILyricCaretState>();
-                return dependencies;
+                lyricCaretState.SyncSelectedHitObjectWithCaret();
             }
-
-            public void ResetSelectedHitObject() => lyricCaretState.SyncSelectedHitObjectWithCaret();
 
             public override bool OnPressed(KeyBindingPressEvent<KaraokeEditAction> e)
             {
@@ -131,6 +127,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                         return base.OnPressed(e);
                 }
             }
+
+            protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
+            {
+                var dependencies = base.CreateChildDependencies(parent);
+                lyricCaretState = dependencies.Get<ILyricCaretState>();
+                return dependencies;
+            }
         }
 
         public class LyricEditorEditModeToast : Toast
@@ -140,8 +143,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
             {
             }
 
-            private static LocalisableString getDescription(LyricEditorMode mode) =>
-                mode switch
+            private static LocalisableString getDescription(LyricEditorMode mode)
+            {
+                return mode switch
                 {
                     LyricEditorMode.View => "View the lyric",
                     LyricEditorMode.Manage => "Manage the lyric",
@@ -154,12 +158,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                     LyricEditorMode.Singer => "Assign the singer to lyric.",
                     _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
                 };
+            }
 
             private static LocalisableString getValue(LyricEditorMode mode)
-                => mode.GetDescription();
+            {
+                return mode.GetDescription();
+            }
 
             private static LocalisableString getShortcut()
-                => "Switch edit mode";
+            {
+                return "Switch edit mode";
+            }
         }
     }
 }

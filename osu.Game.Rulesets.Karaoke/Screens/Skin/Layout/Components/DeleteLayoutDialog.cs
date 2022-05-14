@@ -26,8 +26,8 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout.Components
                 },
                 new PopupDialogCancelButton
                 {
-                    Text = @"No! Abort mission!",
-                },
+                    Text = @"No! Abort mission!"
+                }
             };
         }
     }

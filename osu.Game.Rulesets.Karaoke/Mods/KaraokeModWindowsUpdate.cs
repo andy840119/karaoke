@@ -66,7 +66,7 @@ namespace osu.Game.Rulesets.Karaoke.Mods
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Colour = Color4.White,
-                        Y = -80,
+                        Y = -80
                     },
                     new OsuSpriteText
                     {
@@ -74,7 +74,7 @@ namespace osu.Game.Rulesets.Karaoke.Mods
                         Text = "Working on updates 87 % complete.",
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Scale = new Vector2(1.5f),
+                        Scale = new Vector2(1.5f)
                     },
                     new OsuSpriteText
                     {
@@ -83,7 +83,7 @@ namespace osu.Game.Rulesets.Karaoke.Mods
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Scale = new Vector2(1.5f),
-                        Y = -25,
+                        Y = -25
                     },
                     new OsuSpriteText
                     {
@@ -92,7 +92,7 @@ namespace osu.Game.Rulesets.Karaoke.Mods
                         Anchor = Anchor.BottomCentre,
                         Origin = Anchor.Centre,
                         Scale = new Vector2(1.3f),
-                        Y = -30,
+                        Y = -30
                     }
                 };
             }

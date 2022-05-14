@@ -12,11 +12,14 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
 {
     public class RealTimeSaitenVisualization : VoiceVisualization<KeyValuePair<double, KaraokeSaitenAction>>
     {
-        private readonly Cached addStateCache = new();
-
         protected override float PathRadius => 2.5f;
 
         protected override float Offset => DrawSize.X;
+        private readonly Cached addStateCache = new();
+
+        private bool createNew = true;
+
+        private double minAvailableTime;
 
         [Resolved]
         private INotePositionInfo notePositionInfo { get; set; }
@@ -25,14 +28,6 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
         {
             Masking = true;
         }
-
-        protected override double GetTime(KeyValuePair<double, KaraokeSaitenAction> frame) => frame.Key;
-
-        protected override float GetPosition(KeyValuePair<double, KaraokeSaitenAction> frame) => notePositionInfo.Calculator.YPositionAt(frame.Value);
-
-        private bool createNew = true;
-
-        private double minAvailableTime;
 
         public void AddAction(KaraokeSaitenAction action)
         {
@@ -48,9 +43,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
                 CreateNew(new KeyValuePair<double, KaraokeSaitenAction>(Time.Current, action));
             }
             else
-            {
                 Append(new KeyValuePair<double, KaraokeSaitenAction>(Time.Current, action));
-            }
 
             // Trigger update last frame
             addStateCache.Invalidate();
@@ -64,6 +57,16 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
             minAvailableTime = Time.Current;
 
             createNew = true;
+        }
+
+        protected override double GetTime(KeyValuePair<double, KaraokeSaitenAction> frame)
+        {
+            return frame.Key;
+        }
+
+        protected override float GetPosition(KeyValuePair<double, KaraokeSaitenAction> frame)
+        {
+            return notePositionInfo.Calculator.YPositionAt(frame.Value);
         }
 
         protected override void Update()

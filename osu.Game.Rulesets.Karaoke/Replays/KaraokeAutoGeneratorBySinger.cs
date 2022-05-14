@@ -23,8 +23,8 @@ namespace osu.Game.Rulesets.Karaoke.Replays
         private readonly Task<Dictionary<double, float?>> readTask;
 
         /// <summary>
-        /// Using audio's voice to generate replay frames
-        /// Logic is copied from <see cref="Waveform"/>
+        ///     Using audio's voice to generate replay frames
+        ///     Logic is copied from <see cref="Waveform" />
         /// </summary>
         /// <param name="beatmap"></param>
         /// <param name="data"></param>
@@ -39,9 +39,7 @@ namespace osu.Game.Rulesets.Karaoke.Replays
                 int decodeStream;
 
                 using (var fileCallbacks = new FileCallbacks(new DataStreamFileProcedures(data)))
-                {
                     decodeStream = Bass.CreateStream(StreamSystem.NoBuffer, BassFlags.Decode | BassFlags.Float, fileCallbacks.Callbacks, fileCallbacks.Handle);
-                }
 
                 Bass.ChannelGetInfo(decodeStream, out var info);
 

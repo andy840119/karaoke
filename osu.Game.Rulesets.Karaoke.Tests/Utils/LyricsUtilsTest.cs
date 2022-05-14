@@ -15,6 +15,25 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
 {
     public class LyricsUtilsTest
     {
+        #region Lock
+
+        [TestCase(new[] { LockState.Full, LockState.Partial, LockState.None }, 1)]
+        [TestCase(new LockState[] { }, 0)]
+        [TestCase(null, null)]
+        public void TestFindUnlockLyrics(LockState[] lockStates, int? expected)
+        {
+            var lyrics = lockStates?.Select(x => new Lyric
+            {
+                Text = "karaoke",
+                Lock = x
+            });
+
+            int? actual = LyricsUtils.FindUnlockLyrics(lyrics)?.Length;
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
         #region separate
 
         [TestCase("karaoke", 4, "kara", "oke")]
@@ -269,12 +288,12 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var lyric1 = new Lyric
             {
                 StartTime = firstLyricTime[0],
-                Duration = firstLyricTime[1],
+                Duration = firstLyricTime[1]
             };
             var lyric2 = new Lyric
             {
                 StartTime = secondLyricTime[0],
-                Duration = secondLyricTime[1],
+                Duration = secondLyricTime[1]
             };
 
             // use min time as start time, and use max end time - min star time as duration
@@ -314,25 +333,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
 
             var expected = expectedLcid != null ? new CultureInfo(expectedLcid.Value) : null;
             var actual = combineLyric.Language;
-            Assert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Lock
-
-        [TestCase(new[] { LockState.Full, LockState.Partial, LockState.None }, 1)]
-        [TestCase(new LockState[] { }, 0)]
-        [TestCase(null, null)]
-        public void TestFindUnlockLyrics(LockState[] lockStates, int? expected)
-        {
-            var lyrics = lockStates?.Select(x => new Lyric
-            {
-                Text = "karaoke",
-                Lock = x
-            });
-
-            int? actual = LyricsUtils.FindUnlockLyrics(lyrics)?.Length;
             Assert.AreEqual(expected, actual);
         }
 

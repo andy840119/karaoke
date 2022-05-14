@@ -15,9 +15,8 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning.Fonts
 {
     public class BitmapFontImageGeneratorTest
     {
-        private TestFntGlyphStore glyphStore;
-
         private BitmapFont font => glyphStore.BitmapFont;
+        private TestFntGlyphStore glyphStore;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -75,7 +74,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning.Fonts
 
             // should expose this image for testing.
             public new TextureUpload GetPageImage(int page)
-                => base.GetPageImage(page);
+            {
+                return base.GetPageImage(page);
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using osu.Game.Rulesets.Karaoke.Objects;
 namespace osu.Game.Rulesets.Karaoke.Beatmaps.Patterns
 {
     /// <summary>
-    /// Note: this class will be replaced by another lyric-time generator.
+    ///     Note: this class will be replaced by another lyric-time generator.
     /// </summary>
     public class LegacyLyricTimeGenerator : IPatternGenerator<Lyric>
     {

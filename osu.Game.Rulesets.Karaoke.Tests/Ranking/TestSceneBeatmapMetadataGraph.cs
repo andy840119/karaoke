@@ -21,35 +21,26 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
 {
     public class TestSceneBeatmapMetadataGraph : OsuTestScene
     {
-        [Test]
-        public void TestBeatmapMetadataGraph()
+        private void createTest(ScoreInfo score, IBeatmap beatmap)
         {
-            var ruleset = new KaraokeRuleset().RulesetInfo;
-            var originBeatmap = new TestKaraokeBeatmap(ruleset);
-            if (new KaraokeBeatmapConverter(originBeatmap, new KaraokeRuleset()).Convert() is not KaraokeBeatmap karaokeBeatmap)
-                throw new InvalidCastException(nameof(karaokeBeatmap));
-
-            karaokeBeatmap.Singers = createDefaultSinger();
-            createTest(new ScoreInfo(), karaokeBeatmap);
-        }
-
-        private void createTest(ScoreInfo score, IBeatmap beatmap) => AddStep("create test", () =>
-        {
-            Children = new Drawable[]
+            AddStep("create test", () =>
             {
-                new Box
+                Children = new Drawable[]
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Color4Extensions.FromHex("#333")
-                },
-                new BeatmapMetadataGraph(beatmap)
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(600, 200)
-                }
-            };
-        });
+                    new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = Color4Extensions.FromHex("#333")
+                    },
+                    new BeatmapMetadataGraph(beatmap)
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(600, 200)
+                    }
+                };
+            });
+        }
 
         private static List<Singer> createDefaultSinger()
         {
@@ -61,11 +52,23 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
                 {
                     Name = $"Singer{i}",
                     RomajiName = $"[Romaji]Singer{i}",
-                    EnglishName = $"[English]Singer{i}",
+                    EnglishName = $"[English]Singer{i}"
                 });
             }
 
             return metadata.ToList();
+        }
+
+        [Test]
+        public void TestBeatmapMetadataGraph()
+        {
+            var ruleset = new KaraokeRuleset().RulesetInfo;
+            var originBeatmap = new TestKaraokeBeatmap(ruleset);
+            if (new KaraokeBeatmapConverter(originBeatmap, new KaraokeRuleset()).Convert() is not KaraokeBeatmap karaokeBeatmap)
+                throw new InvalidCastException(nameof(karaokeBeatmap));
+
+            karaokeBeatmap.Singers = createDefaultSinger();
+            createTest(new ScoreInfo(), karaokeBeatmap);
         }
     }
 }

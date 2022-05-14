@@ -10,7 +10,9 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class TextTagUtils
     {
         public static Tuple<int, int> GetFixedIndex<T>(T textTag, string lyric) where T : ITextTag
-            => GetShiftingIndex(textTag, lyric, 0);
+        {
+            return GetShiftingIndex(textTag, lyric, 0);
+        }
 
         public static Tuple<int, int> GetShiftingIndex<T>(T textTag, string lyric, int offset) where T : ITextTag
         {
@@ -58,11 +60,11 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Display tag with position format
+        ///     Display tag with position format
         /// </summary>
         /// <example>
-        /// ka(-2~-1)
-        /// ra(4~6)
+        ///     ka(-2~-1)
+        ///     ra(4~6)
         /// </example>
         /// <typeparam name="T"></typeparam>
         /// <param name="textTag"></param>
@@ -83,6 +85,8 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         public static PositionText ToPositionText<T>(T textTag) where T : ITextTag
-            => new(textTag.Text, textTag.StartIndex, textTag.EndIndex);
+        {
+            return new(textTag.Text, textTag.StartIndex, textTag.EndIndex);
+        }
     }
 }

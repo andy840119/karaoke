@@ -28,6 +28,24 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin
             this.skin = skin;
         }
 
+        /// <summary>
+        ///     Create all sections with selectable options.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Section[] CreateSelectionContainer();
+
+        /// <summary>
+        ///     Create properties for the skin part.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Section[] CreatePropertiesContainer();
+
+        /// <summary>
+        ///     Create preview container.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Container CreatePreviewArea();
+
         [BackgroundDependencyLoader]
         private void load(OverlayColourProvider colourProvider)
         {
@@ -47,7 +65,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin
                             {
                                 Name = "Background",
                                 Colour = colourProvider.Background2,
-                                RelativeSizeAxes = Axes.Both,
+                                RelativeSizeAxes = Axes.Both
                             },
                             new OsuScrollContainer
                             {
@@ -58,7 +76,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin
                                 {
                                     RelativeSizeAxes = Axes.X,
                                     AutoSizeAxes = Axes.Y,
-                                    Children = CreateSelectionContainer(),
+                                    Children = CreateSelectionContainer()
                                 }
                             }
                         }
@@ -75,7 +93,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin
                             {
                                 Name = "Background",
                                 Colour = colourProvider.Background2,
-                                RelativeSizeAxes = Axes.Both,
+                                RelativeSizeAxes = Axes.Both
                             },
                             new OsuScrollContainer
                             {
@@ -86,7 +104,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin
                                 {
                                     RelativeSizeAxes = Axes.X,
                                     AutoSizeAxes = Axes.Y,
-                                    Children = CreatePropertiesContainer(),
+                                    Children = CreatePropertiesContainer()
                                 }
                             }
                         }
@@ -95,28 +113,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin
                     {
                         RelativeSizeAxes = Axes.Both,
                         Padding = new MarginPadding { Left = left_column_width, Right = right_column_width },
-                        Child = CreatePreviewArea(),
+                        Child = CreatePreviewArea()
                     }
                 }
             });
         }
-
-        /// <summary>
-        /// Create all sections with selectable options.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Section[] CreateSelectionContainer();
-
-        /// <summary>
-        /// Create properties for the skin part.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Section[] CreatePropertiesContainer();
-
-        /// <summary>
-        /// Create preview container.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Container CreatePreviewArea();
     }
 }

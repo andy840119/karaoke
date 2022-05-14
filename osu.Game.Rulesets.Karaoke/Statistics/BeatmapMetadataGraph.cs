@@ -38,7 +38,7 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                 {
                     Name = "Background",
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Color4.Black.Opacity(0.5f),
+                    Colour = Color4.Black.Opacity(0.5f)
                 },
                 new OsuScrollContainer
                 {
@@ -70,9 +70,9 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                             {
                                 Singers = karaokeBeatmap?.Singers.ToArray()
                             }
-                        },
-                    },
-                },
+                        }
+                    }
+                }
             };
         }
 
@@ -99,23 +99,16 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                             Child = new OsuSpriteText
                             {
                                 Text = title,
-                                Font = OsuFont.GetFont(weight: FontWeight.Bold, size: 14),
-                            },
-                        },
-                    },
+                                Font = OsuFont.GetFont(weight: FontWeight.Bold, size: 14)
+                            }
+                        }
+                    }
                 };
             }
         }
 
         private class TextMetadataSection : MetadataSection
         {
-            private TextFlowContainer textFlow;
-
-            public TextMetadataSection(string title)
-                : base(title)
-            {
-            }
-
             public string Text
             {
                 set
@@ -130,6 +123,13 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
 
                     setTextAsync(value);
                 }
+            }
+
+            private TextFlowContainer textFlow;
+
+            public TextMetadataSection(string title)
+                : base(title)
+            {
             }
 
             private void setTextAsync(string text)
@@ -147,13 +147,6 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
 
         private class SingerMetadataSection : MetadataSection
         {
-            private FillFlowContainer<SingerSpriteText> textFlow;
-
-            public SingerMetadataSection(string title)
-                : base(title)
-            {
-            }
-
             public Singer[] Singers
             {
                 set
@@ -170,6 +163,13 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                 }
             }
 
+            private FillFlowContainer<SingerSpriteText> textFlow;
+
+            public SingerMetadataSection(string title)
+                : base(title)
+            {
+            }
+
             private void setSingerAsync(IEnumerable<Singer> singers)
             {
                 textFlow?.Expire();
@@ -178,7 +178,7 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
                     Spacing = new Vector2(10),
-                    Colour = Color4.White.Opacity(0.75f),
+                    Colour = Color4.White.Opacity(0.75f)
                 });
 
                 foreach (var singer in singers)
@@ -192,8 +192,20 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
 
             private class SingerSpriteText : CompositeDrawable, IHasCustomTooltip<Singer>
             {
-                private Singer singer;
+                public Singer TooltipContent => Singer;
+
+                public Singer Singer
+                {
+                    get => singer;
+                    set
+                    {
+                        singer = value;
+                        osuSpriteText.Text = singer?.Name ?? "Known singer";
+                    }
+                }
+
                 private readonly OsuSpriteText osuSpriteText;
+                private Singer singer;
 
                 public SingerSpriteText()
                 {
@@ -207,19 +219,10 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                     };
                 }
 
-                public Singer Singer
+                public ITooltip<Singer> GetCustomTooltip()
                 {
-                    get => singer;
-                    set
-                    {
-                        singer = value;
-                        osuSpriteText.Text = singer?.Name ?? "Known singer";
-                    }
+                    return new SingerToolTip();
                 }
-
-                public ITooltip<Singer> GetCustomTooltip() => new SingerToolTip();
-
-                public Singer TooltipContent => Singer;
             }
         }
     }

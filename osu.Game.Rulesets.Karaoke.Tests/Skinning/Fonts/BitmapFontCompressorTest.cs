@@ -48,18 +48,12 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning.Fonts
             // should have page if have char.
             Assert.IsNotNull(result.Pages);
 
-            if (!string.IsNullOrEmpty(chars) && charAmount > 0)
-            {
-                Assert.NotZero(result.Pages.Count);
-            }
+            if (!string.IsNullOrEmpty(chars) && charAmount > 0) Assert.NotZero(result.Pages.Count);
 
             // should have chars if have char.
             Assert.IsNotNull(result.Characters);
 
-            if (!string.IsNullOrEmpty(chars))
-            {
-                Assert.AreEqual(result.Characters.Count, charAmount);
-            }
+            if (!string.IsNullOrEmpty(chars)) Assert.AreEqual(result.Characters.Count, charAmount);
 
             // kerning pairs amount might be zero but cannot be null.
             Assert.IsNotNull(result.KerningPairs);
@@ -134,7 +128,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning.Fonts
             var bitmapFontCommon = new BitmapFontCommon
             {
                 ScaleWidth = 0,
-                ScaleHeight = int.MaxValue,
+                ScaleHeight = int.MaxValue
             };
             int spacing = font.Info.SpacingVertical;
             int leftPadding = font.Info.PaddingUp;
@@ -167,7 +161,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Skinning.Fonts
             var bitmapFontCommon = new BitmapFontCommon
             {
                 ScaleWidth = 0,
-                ScaleHeight = 0,
+                ScaleHeight = 0
             };
             int page = 0;
             int topPadding = font.Info.PaddingUp;

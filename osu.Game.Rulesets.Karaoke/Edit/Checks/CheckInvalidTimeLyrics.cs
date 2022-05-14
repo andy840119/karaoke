@@ -14,15 +14,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
 {
     public class CheckInvalidTimeLyrics : ICheck
     {
-        private readonly LyricCheckerConfig config;
-
         public CheckMetadata Metadata => new(CheckCategory.HitObjects, "Lyrics with invalid time issue.");
 
         public IEnumerable<IssueTemplate> PossibleTemplates => new IssueTemplate[]
         {
             new IssueTemplateInvalidLyricTime(this),
-            new IssueTemplateInvalidTimeTag(this),
+            new IssueTemplateInvalidTimeTag(this)
         };
+
+        private readonly LyricCheckerConfig config;
 
         public CheckInvalidTimeLyrics(LyricCheckerConfig config)
         {
@@ -86,10 +86,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
         }
 
         private bool checkMissingStartTimeTag(Lyric lyric)
-            => !TimeTagsUtils.HasStartTimeTagInLyric(lyric.TimeTags, lyric.Text);
+        {
+            return !TimeTagsUtils.HasStartTimeTagInLyric(lyric.TimeTags, lyric.Text);
+        }
 
         private bool checkMissingEndTimeTag(Lyric lyric)
-            => !TimeTagsUtils.HasEndTimeTagInLyric(lyric.TimeTags, lyric.Text);
+        {
+            return !TimeTagsUtils.HasEndTimeTagInLyric(lyric.TimeTags, lyric.Text);
+        }
 
         public class IssueTemplateInvalidLyricTime : IssueTemplate
         {
@@ -99,7 +103,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Lyric lyric, TimeInvalid[] invalidTime)
-                => new LyricTimeIssue(lyric, this, invalidTime);
+            {
+                return new LyricTimeIssue(lyric, this, invalidTime);
+            }
         }
 
         public class IssueTemplateInvalidTimeTag : IssueTemplate
@@ -110,7 +116,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Checks
             }
 
             public Issue Create(Lyric lyric, Dictionary<TimeTagInvalid, TimeTag[]> invalidTimeTags, bool missingStartTimeTag, bool missingEndTimeTag)
-                => new TimeTagIssue(lyric, this, invalidTimeTags, missingStartTimeTag, missingEndTimeTag);
+            {
+                return new TimeTagIssue(lyric, this, invalidTimeTags, missingStartTimeTag, missingEndTimeTag);
+            }
         }
     }
 }

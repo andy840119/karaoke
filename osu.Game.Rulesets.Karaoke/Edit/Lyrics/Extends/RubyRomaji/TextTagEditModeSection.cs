@@ -13,15 +13,19 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
     public abstract class TextTagEditModeSection : EditModeSection<TextTagEditMode>
     {
         protected override OverlayColourScheme CreateColourScheme()
-            => OverlayColourScheme.Pink;
+        {
+            return OverlayColourScheme.Pink;
+        }
 
-        protected override Color4 GetColour(OsuColour colours, TextTagEditMode mode, bool active) =>
-            mode switch
+        protected override Color4 GetColour(OsuColour colours, TextTagEditMode mode, bool active)
+        {
+            return mode switch
             {
                 TextTagEditMode.Generate => active ? colours.Blue : colours.BlueDarker,
                 TextTagEditMode.Edit => active ? colours.Red : colours.RedDarker,
                 TextTagEditMode.Verify => active ? colours.Yellow : colours.YellowDarker,
                 _ => throw new ArgumentOutOfRangeException(nameof(mode))
             };
+        }
     }
 }

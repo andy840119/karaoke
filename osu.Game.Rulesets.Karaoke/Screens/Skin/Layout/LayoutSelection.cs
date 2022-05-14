@@ -21,18 +21,17 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
 {
     public class LayoutSelection : Section
     {
+        protected override string Title => "Layout";
         private const float layout_setting_horizontal_padding = 20;
 
         private const float layout_setting_vertical_spacing = 15;
-
-        protected override string Title => "Layout";
 
         public LayoutSelection()
         {
             Padding = new MarginPadding
             {
                 Horizontal = layout_setting_horizontal_padding,
-                Vertical = SECTION_PADDING,
+                Vertical = SECTION_PADDING
             };
 
             if (Content is not FillFlowContainer fillFlowContainer)
@@ -73,6 +72,19 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
 
         public class LayoutSelectionItem : FillFlowContainer
         {
+            public Lyric Lyric
+            {
+                get => drawableLayoutPreview.Lyric;
+                set
+                {
+                    if (drawableLayoutPreview.Lyric == value)
+                        return;
+
+                    // update lyric
+                    drawableLayoutPreview.Lyric = value;
+                }
+            }
+
             private const float selection_size = (240 - layout_setting_horizontal_padding * 2 - SECTION_SPACING) / 2;
 
             // todo: should changed into selected layout index
@@ -102,7 +114,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                         Child = drawableLayoutPreview = new DrawableLayoutPreview
                         {
                             Size = new Vector2(selection_size),
-                            Layout = layout,
+                            Layout = layout
                         }
                     },
                     new OsuSpriteText
@@ -118,29 +130,16 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Layout
                 }, true);
             }
 
-            [BackgroundDependencyLoader]
-            private void load(OsuColour colour)
-            {
-                cornerContainer.BorderColour = colour.Yellow;
-            }
-
-            public Lyric Lyric
-            {
-                get => drawableLayoutPreview.Lyric;
-                set
-                {
-                    if (drawableLayoutPreview.Lyric == value)
-                        return;
-
-                    // update lyric
-                    drawableLayoutPreview.Lyric = value;
-                }
-            }
-
             protected override bool OnClick(ClickEvent e)
             {
                 selectedLayoutIndex.Value = layout.ID;
                 return base.OnClick(e);
+            }
+
+            [BackgroundDependencyLoader]
+            private void load(OsuColour colour)
+            {
+                cornerContainer.BorderColour = colour.Yellow;
             }
         }
     }

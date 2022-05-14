@@ -9,11 +9,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config
 {
     internal class IntervalSection : LyricConfigSection
     {
+        protected override string Title => "Interval";
         private LabelledRealTimeSliderBar<int> lyricIntervalSliderBar;
         private LabelledRealTimeSliderBar<int> rubyIntervalSliderBar;
         private LabelledRealTimeSliderBar<int> romajiIntervalSliderBar;
-
-        protected override string Title => "Interval";
 
         [BackgroundDependencyLoader]
         private void load(LyricConfigManager manager)

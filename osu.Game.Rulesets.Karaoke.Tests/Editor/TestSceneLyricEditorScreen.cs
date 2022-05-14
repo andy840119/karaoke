@@ -27,7 +27,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
 
         protected override Container<Drawable> Content { get; } = new Container { RelativeSizeAxes = Axes.Both };
 
-        protected override LyricEditorScreen CreateEditorScreen() => new();
+        protected override LyricEditorScreen CreateEditorScreen()
+        {
+            return new();
+        }
 
         private DialogOverlay dialogOverlay;
         private LyricsProvider lyricsProvider;
@@ -41,7 +44,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                 Content,
                 dialogOverlay = new DialogOverlay(),
                 lyricsProvider = new LyricsProvider(),
-                lyricCheckManager = new LyricCheckerManager(),
+                lyricCheckManager = new LyricCheckerManager()
             });
 
             Dependencies.CacheAs<IDialogOverlay>(dialogOverlay);
@@ -49,65 +52,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
             Dependencies.Cache(lyricCheckManager);
             Dependencies.Cache(new KaraokeRulesetLyricEditorConfigManager());
             Dependencies.Cache(new KaraokeRulesetEditGeneratorConfigManager());
-        }
-
-        [Test]
-        public void TestViewMode()
-        {
-            switchToMode(LyricEditorMode.View);
-        }
-
-        [Test]
-        public void TestManageMode()
-        {
-            switchToMode(LyricEditorMode.Manage);
-        }
-
-        [Test]
-        public void TestTypingMode()
-        {
-            switchToMode(LyricEditorMode.Typing);
-        }
-
-        [Test]
-        public void TestLanguageMode()
-        {
-            switchToMode(LyricEditorMode.Language);
-            clickEditModeButtons<LanguageEditMode>();
-        }
-
-        [Test]
-        public void TestEditRubyMode()
-        {
-            switchToMode(LyricEditorMode.EditRuby);
-            clickEditModeButtons<TextTagEditMode>();
-        }
-
-        [Test]
-        public void TestEditRomajiMode()
-        {
-            switchToMode(LyricEditorMode.EditRomaji);
-            clickEditModeButtons<TextTagEditMode>();
-        }
-
-        [Test]
-        public void TestEditTimeTagMode()
-        {
-            switchToMode(LyricEditorMode.EditTimeTag);
-            clickEditModeButtons<TimeTagEditMode>();
-        }
-
-        [Test]
-        public void TestEditNoteMode()
-        {
-            switchToMode(LyricEditorMode.EditNote);
-            clickEditModeButtons<NoteEditMode>();
-        }
-
-        [Test]
-        public void TestSingerMode()
-        {
-            switchToMode(LyricEditorMode.Singer);
         }
 
         private void switchToMode(LyricEditorMode mode)
@@ -121,10 +65,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
 
         private void clickEditModeButtons<T>() where T : Enum
         {
-            foreach (var editMode in EnumUtils.GetValues<T>())
-            {
-                clickTargetEditModeButton(editMode);
-            }
+            foreach (var editMode in EnumUtils.GetValues<T>()) clickTargetEditModeButton(editMode);
         }
 
         private void clickTargetEditModeButton<T>(T editMode) where T : Enum
@@ -135,6 +76,65 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
                 editModeSection.UpdateEditMode(editMode);
             });
             AddWaitStep("wait for switch to new edit mode.", 1);
+        }
+
+        [Test]
+        public void TestEditNoteMode()
+        {
+            switchToMode(LyricEditorMode.EditNote);
+            clickEditModeButtons<NoteEditMode>();
+        }
+
+        [Test]
+        public void TestEditRomajiMode()
+        {
+            switchToMode(LyricEditorMode.EditRomaji);
+            clickEditModeButtons<TextTagEditMode>();
+        }
+
+        [Test]
+        public void TestEditRubyMode()
+        {
+            switchToMode(LyricEditorMode.EditRuby);
+            clickEditModeButtons<TextTagEditMode>();
+        }
+
+        [Test]
+        public void TestEditTimeTagMode()
+        {
+            switchToMode(LyricEditorMode.EditTimeTag);
+            clickEditModeButtons<TimeTagEditMode>();
+        }
+
+        [Test]
+        public void TestLanguageMode()
+        {
+            switchToMode(LyricEditorMode.Language);
+            clickEditModeButtons<LanguageEditMode>();
+        }
+
+        [Test]
+        public void TestManageMode()
+        {
+            switchToMode(LyricEditorMode.Manage);
+        }
+
+        [Test]
+        public void TestSingerMode()
+        {
+            switchToMode(LyricEditorMode.Singer);
+        }
+
+        [Test]
+        public void TestTypingMode()
+        {
+            switchToMode(LyricEditorMode.Typing);
+        }
+
+        [Test]
+        public void TestViewMode()
+        {
+            switchToMode(LyricEditorMode.View);
         }
     }
 }

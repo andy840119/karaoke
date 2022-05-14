@@ -44,13 +44,6 @@ namespace osu.Game.Rulesets.Karaoke
     [ExcludeFromDynamicCompile]
     public class KaraokeRuleset : Ruleset
     {
-        public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableKaraokeRuleset(this, beatmap, mods);
-        public override ScoreProcessor CreateScoreProcessor() => new KaraokeScoreProcessor();
-        public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new KaraokeBeatmapConverter(beatmap, this);
-        public override IBeatmapProcessor CreateBeatmapProcessor(IBeatmap beatmap) => new KaraokeBeatmapProcessor(beatmap);
-
-        public override PerformanceCalculator CreatePerformanceCalculator() => new KaraokePerformanceCalculator();
-
         public const string SHORT_NAME = "karaoke";
 
         public const int GAMEPLAY_INPUT_VARIANT = 1;
@@ -59,8 +52,50 @@ namespace osu.Game.Rulesets.Karaoke
 
         public override IEnumerable<int> AvailableVariants => new[] { GAMEPLAY_INPUT_VARIANT, EDIT_INPUT_VARIANT };
 
-        public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) =>
-            variant switch
+        public override string Description => "karaoke!";
+
+        public override string ShortName => "karaoke!";
+
+        public override string PlayingVerb => "Singing karaoke";
+
+        public KaraokeRuleset()
+        {
+            // It's a tricky way to let lazer to read karaoke testing beatmap
+            KaraokeLegacyBeatmapDecoder.Register();
+            KaraokeJsonBeatmapDecoder.Register();
+
+            // it's a tricky way for loading customized karaoke beatmap.
+            RulesetInfo.OnlineID = 111;
+        }
+
+        public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null)
+        {
+            return new DrawableKaraokeRuleset(this, beatmap, mods);
+        }
+
+        public override ScoreProcessor CreateScoreProcessor()
+        {
+            return new KaraokeScoreProcessor();
+        }
+
+        public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap)
+        {
+            return new KaraokeBeatmapConverter(beatmap, this);
+        }
+
+        public override IBeatmapProcessor CreateBeatmapProcessor(IBeatmap beatmap)
+        {
+            return new KaraokeBeatmapProcessor(beatmap);
+        }
+
+        public override PerformanceCalculator CreatePerformanceCalculator()
+        {
+            return new KaraokePerformanceCalculator();
+        }
+
+        public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0)
+        {
+            return variant switch
             {
                 0 =>
                     // Vocal
@@ -88,7 +123,7 @@ namespace osu.Game.Rulesets.Karaoke
                     new KeyBinding(InputKey.C, KaraokeAction.ResetVocalPitch),
                     new KeyBinding(InputKey.R, KaraokeAction.IncreaseSaitenPitch),
                     new KeyBinding(InputKey.F, KaraokeAction.DecreaseSaitenPitch),
-                    new KeyBinding(InputKey.V, KaraokeAction.ResetSaitenPitch),
+                    new KeyBinding(InputKey.V, KaraokeAction.ResetSaitenPitch)
                 },
                 EDIT_INPUT_VARIANT => new[]
                 {
@@ -117,66 +152,74 @@ namespace osu.Game.Rulesets.Karaoke
                     new KeyBinding(new[] { InputKey.A }, KaraokeEditAction.ShiftTheTimeTagStateLeft),
                     new KeyBinding(new[] { InputKey.S }, KaraokeEditAction.ShiftTheTimeTagStateRight),
                     new KeyBinding(InputKey.Enter, KaraokeEditAction.SetTime),
-                    new KeyBinding(InputKey.BackSpace, KaraokeEditAction.ClearTime),
+                    new KeyBinding(InputKey.BackSpace, KaraokeEditAction.ClearTime)
                 },
                 _ => Array.Empty<KeyBinding>()
             };
+        }
 
         public override string GetVariantName(int variant)
-            => variant switch
+        {
+            return variant switch
             {
                 GAMEPLAY_INPUT_VARIANT => "Gameplay",
                 EDIT_INPUT_VARIANT => "Composer",
-                _ => throw new ArgumentNullException(nameof(variant)),
+                _ => throw new ArgumentNullException(nameof(variant))
             };
+        }
 
-        public override IEnumerable<Mod> GetModsFor(ModType type) =>
-            type switch
+        public override IEnumerable<Mod> GetModsFor(ModType type)
+        {
+            return type switch
             {
                 ModType.DifficultyReduction => new Mod[]
                 {
-                    new KaraokeModNoFail(),
+                    new KaraokeModNoFail()
                 },
                 ModType.DifficultyIncrease => new Mod[]
                 {
                     new KaraokeModHiddenNote(),
                     new KaraokeModFlashlight(),
-                    new MultiMod(new KaraokeModSuddenDeath(), new KaraokeModPerfect(), new KaraokeModWindowsUpdate()),
+                    new MultiMod(new KaraokeModSuddenDeath(), new KaraokeModPerfect(), new KaraokeModWindowsUpdate())
                 },
                 ModType.Automation => new Mod[]
                 {
-                    new MultiMod(new KaraokeModAutoplay(), new KaraokeModAutoplayBySinger()),
+                    new MultiMod(new KaraokeModAutoplay(), new KaraokeModAutoplayBySinger())
                 },
                 ModType.Fun => new Mod[]
                 {
                     new KaraokeModPractice(),
                     new KaraokeModDisableNote(),
-                    new KaraokeModSnow(),
+                    new KaraokeModSnow()
                 },
                 _ => Array.Empty<Mod>()
             };
+        }
 
-        public override Drawable CreateIcon() => new Container
+        public override Drawable CreateIcon()
         {
-            AutoSizeAxes = Axes.Both,
-            Children = new Drawable[]
+            return new Container
             {
-                new Sprite
+                AutoSizeAxes = Axes.Both,
+                Children = new Drawable[]
                 {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Scale = new Vector2(0.9f),
-                    Texture = new TextureStore(new TextureLoaderStore(CreateResourceStore()), false).Get("Textures/logo"),
-                },
-                new SpriteIcon
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Scale = new Vector2(45f),
-                    Icon = FontAwesome.Regular.Circle,
-                },
-            }
-        };
+                    new Sprite
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Scale = new Vector2(0.9f),
+                        Texture = new TextureStore(new TextureLoaderStore(CreateResourceStore()), false).Get("Textures/logo")
+                    },
+                    new SpriteIcon
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Scale = new Vector2(45f),
+                        Icon = FontAwesome.Regular.Circle
+                    }
+                }
+            };
+        }
 
         public override IResourceStore<byte[]> CreateResourceStore()
         {
@@ -201,34 +244,39 @@ namespace osu.Game.Rulesets.Karaoke
             }
         }
 
-        public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new KaraokeDifficultyCalculator(RulesetInfo, beatmap);
-
-        public override HitObjectComposer CreateHitObjectComposer() => new KaraokeHitObjectComposer(this);
-
-        public override IBeatmapVerifier CreateBeatmapVerifier() => new KaraokeBeatmapVerifier();
-
-        public override string Description => "karaoke!";
-
-        public override string ShortName => "karaoke!";
-
-        public override string PlayingVerb => "Singing karaoke";
-
-        public override ISkin CreateLegacySkinProvider(ISkin skin, IBeatmap beatmap) => new KaraokeLegacySkinTransformer(skin, beatmap);
-
-        public override IConvertibleReplayFrame CreateConvertibleReplayFrame() => new KaraokeReplayFrame();
-
-        public override IRulesetConfigManager CreateConfig(SettingsStore settings) => new KaraokeRulesetConfigManager(settings, RulesetInfo);
-
-        public override RulesetSettingsSubsection CreateSettings() => new KaraokeSettingsSubsection(this);
-
-        protected override IEnumerable<HitResult> GetValidHitResults()
+        public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap)
         {
-            return new[]
-            {
-                HitResult.Great,
-                HitResult.Ok,
-                HitResult.Meh,
-            };
+            return new KaraokeDifficultyCalculator(RulesetInfo, beatmap);
+        }
+
+        public override HitObjectComposer CreateHitObjectComposer()
+        {
+            return new KaraokeHitObjectComposer(this);
+        }
+
+        public override IBeatmapVerifier CreateBeatmapVerifier()
+        {
+            return new KaraokeBeatmapVerifier();
+        }
+
+        public override ISkin CreateLegacySkinProvider(ISkin skin, IBeatmap beatmap)
+        {
+            return new KaraokeLegacySkinTransformer(skin, beatmap);
+        }
+
+        public override IConvertibleReplayFrame CreateConvertibleReplayFrame()
+        {
+            return new KaraokeReplayFrame();
+        }
+
+        public override IRulesetConfigManager CreateConfig(SettingsStore settings)
+        {
+            return new KaraokeRulesetConfigManager(settings, RulesetInfo);
+        }
+
+        public override RulesetSettingsSubsection CreateSettings()
+        {
+            return new KaraokeSettingsSubsection(this);
         }
 
         public override string GetDisplayNameForHitResult(HitResult result)
@@ -268,7 +316,7 @@ namespace osu.Game.Rulesets.Karaoke
                             Height = info_height
                         }, dimension: new Dimension())
                     }
-                },
+                }
             };
 
             // Set component to remain height
@@ -284,7 +332,7 @@ namespace osu.Game.Rulesets.Karaoke
                         {
                             RelativeSizeAxes = Axes.X,
                             Height = remain_height - text_size - spacing
-                        }),
+                        })
                     }
                 });
             }
@@ -306,16 +354,19 @@ namespace osu.Game.Rulesets.Karaoke
             return statistic.ToArray();
         }
 
-        public override RulesetSetupSection CreateEditorSetupSection() => new KaraokeSetupSection();
-
-        public KaraokeRuleset()
+        public override RulesetSetupSection CreateEditorSetupSection()
         {
-            // It's a tricky way to let lazer to read karaoke testing beatmap
-            KaraokeLegacyBeatmapDecoder.Register();
-            KaraokeJsonBeatmapDecoder.Register();
+            return new KaraokeSetupSection();
+        }
 
-            // it's a tricky way for loading customized karaoke beatmap.
-            RulesetInfo.OnlineID = 111;
+        protected override IEnumerable<HitResult> GetValidHitResults()
+        {
+            return new[]
+            {
+                HitResult.Great,
+                HitResult.Ok,
+                HitResult.Meh
+            };
         }
     }
 }

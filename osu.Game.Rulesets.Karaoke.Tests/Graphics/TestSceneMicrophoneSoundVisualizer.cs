@@ -12,20 +12,23 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Graphics
     [TestFixture]
     public class TestSceneMicrophoneSoundVisualizer : OsuTestScene
     {
-        private MicrophoneSoundVisualizer preview;
-
         [SetUp]
-        public void SetUp() => Schedule(() =>
+        public void SetUp()
         {
-            Child = new MicrophoneInputManager
+            Schedule(() =>
             {
-                Child = preview = new MicrophoneSoundVisualizer
+                Child = new MicrophoneInputManager
                 {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    DeviceName = "Super large microphone device name : )"
-                }
-            };
-        });
+                    Child = preview = new MicrophoneSoundVisualizer
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        DeviceName = "Super large microphone device name : )"
+                    }
+                };
+            });
+        }
+
+        private MicrophoneSoundVisualizer preview;
     }
 }

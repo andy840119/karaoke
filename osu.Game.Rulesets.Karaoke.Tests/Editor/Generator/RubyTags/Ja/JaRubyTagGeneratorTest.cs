@@ -38,8 +38,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.RubyTags.Ja
             runRubyCheckTest(text, expectedRubies, config);
         }
 
-        #region test helper
-
         private static void runRubyCheckTest(string text, IEnumerable<string> expectedRubies, JaRubyTagGeneratorConfig config)
         {
             var generator = new JaRubyTagGenerator(config);
@@ -70,7 +68,5 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.RubyTags.Ja
 
             return config;
         }
-
-        #endregion
     }
 }

@@ -30,21 +30,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateTimeTag
             AddInternal(lyricTimeTagsChangeHandler = new LyricTimeTagsChangeHandler());
         }
 
-        protected override TopNavigation CreateNavigation()
-            => new GenerateTimeTagNavigation(this);
-
-        protected override Drawable CreateContent()
-            => base.CreateContent().With(_ =>
-            {
-                SwitchLyricEditorMode(LyricEditorMode.EditTimeTag);
-            });
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            AskForAutoGenerateTimeTag();
-        }
-
         public override void Complete()
         {
             ScreenStack.Push(LyricImporterStep.Success);
@@ -72,6 +57,25 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateTimeTag
                     PrepareAutoGenerate();
                 }));
             }
+        }
+
+        protected override TopNavigation CreateNavigation()
+        {
+            return new GenerateTimeTagNavigation(this);
+        }
+
+        protected override Drawable CreateContent()
+        {
+            return base.CreateContent().With(_ =>
+            {
+                SwitchLyricEditorMode(LyricEditorMode.EditTimeTag);
+            });
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            AskForAutoGenerateTimeTag();
         }
     }
 }

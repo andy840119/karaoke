@@ -15,12 +15,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
     {
         protected const int INFO_SIZE = 178;
 
+        protected virtual float SingerInfoSize => INFO_SIZE;
+
         private readonly Singer singer;
 
         protected LyricPlacementColumn(Singer singer)
         {
             this.singer = singer;
         }
+
+        protected abstract Drawable CreateSingerInfo(Singer singer);
+
+        protected abstract Drawable CreateTimeLinePart(Singer singer);
 
         [BackgroundDependencyLoader(true)]
         private void load(OverlayColourProvider colourProvider, [CanBeNull] KaraokeHitObjectComposer composer)
@@ -31,7 +37,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                 {
                     RelativeSizeAxes = Axes.Both,
                     Alpha = 0.3f,
-                    Colour = colourProvider.Background1,
+                    Colour = colourProvider.Background1
                 },
                 new GridContainer
                 {
@@ -40,7 +46,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                     {
                         new Dimension(GridSizeMode.Absolute, SingerInfoSize),
                         new Dimension(GridSizeMode.Absolute, 5),
-                        new Dimension(),
+                        new Dimension()
                     },
                     Content = new[]
                     {
@@ -51,19 +57,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers.Rows
                             {
                                 Name = "Separator",
                                 RelativeSizeAxes = Axes.Both,
-                                Colour = colourProvider.Dark1,
+                                Colour = colourProvider.Dark1
                             },
-                            CreateTimeLinePart(singer).With(x => { x.RelativeSizeAxes = Axes.Both; }),
+                            CreateTimeLinePart(singer).With(x => { x.RelativeSizeAxes = Axes.Both; })
                         }
                     }
                 }
             };
         }
-
-        protected virtual float SingerInfoSize => INFO_SIZE;
-
-        protected abstract Drawable CreateSingerInfo(Singer singer);
-
-        protected abstract Drawable CreateTimeLinePart(Singer singer);
     }
 }

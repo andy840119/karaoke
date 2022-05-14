@@ -16,62 +16,12 @@ using osu.Game.Skinning;
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
 {
     /// <summary>
-    /// This karaoke skin is using in lyric editor only.
+    ///     This karaoke skin is using in lyric editor only.
     /// </summary>
     public class LyricEditorSkin : KaraokeSkin
     {
         public const int MIN_FONT_SIZE = 10;
         public const int MAX_FONT_SIZE = 45;
-
-        internal static readonly Guid DEFAULT_SKIN = new("FEC5A290-5709-11EC-9F10-0800200C9A66");
-
-        public static SkinInfo CreateInfo() => new()
-        {
-            ID = DEFAULT_SKIN,
-            Name = "karaoke! (default editor skin)",
-            Creator = "team karaoke!",
-            Protected = true,
-            InstantiationInfo = typeof(DefaultKaraokeSkin).GetInvariantInstantiationInfo(),
-        };
-
-        public LyricEditorSkin(IStorageResourceProvider resources)
-            : this(CreateInfo(), resources)
-        {
-        }
-
-        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature)]
-        public LyricEditorSkin(SkinInfo skin, IStorageResourceProvider resources)
-            : base(skin, resources)
-        {
-            DefaultElement[ElementType.LyricConfig] = LyricConfig.CreateDefault();
-            DefaultElement[ElementType.LyricStyle] = new LyricStyle
-            {
-                Name = "Default",
-                LeftLyricTextShaders = new List<ICustomizedShader>
-                {
-                    new OutlineShader
-                    {
-                        Radius = 2,
-                        Colour = Color4Extensions.FromHex("#3D2D6B"),
-                        OutlineColour = Color4Extensions.FromHex("#CCA532")
-                    },
-                },
-                RightLyricTextShaders = new List<ICustomizedShader>
-                {
-                    new OutlineShader
-                    {
-                        Radius = 2,
-                        OutlineColour = Color4Extensions.FromHex("#5932CC")
-                    },
-                }
-            };
-            DefaultElement[ElementType.NoteStyle] = NoteStyle.CreateDefault();
-
-            // todo: should use better way to handle overall size.
-            FontSize = 26;
-        }
-
-        protected LyricConfig LyricConfig => DefaultElement[ElementType.LyricConfig] as LyricConfig;
 
         public float FontSize
         {
@@ -94,6 +44,59 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                 static FontUsage multipleSize(FontUsage origin, float percentage)
                     => origin.With(size: origin.Size * percentage);
             }
+        }
+
+        internal static readonly Guid DEFAULT_SKIN = new("FEC5A290-5709-11EC-9F10-0800200C9A66");
+
+        protected LyricConfig LyricConfig => DefaultElement[ElementType.LyricConfig] as LyricConfig;
+
+        public LyricEditorSkin(IStorageResourceProvider resources)
+            : this(CreateInfo(), resources)
+        {
+        }
+
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature)]
+        public LyricEditorSkin(SkinInfo skin, IStorageResourceProvider resources)
+            : base(skin, resources)
+        {
+            DefaultElement[ElementType.LyricConfig] = LyricConfig.CreateDefault();
+            DefaultElement[ElementType.LyricStyle] = new LyricStyle
+            {
+                Name = "Default",
+                LeftLyricTextShaders = new List<ICustomizedShader>
+                {
+                    new OutlineShader
+                    {
+                        Radius = 2,
+                        Colour = Color4Extensions.FromHex("#3D2D6B"),
+                        OutlineColour = Color4Extensions.FromHex("#CCA532")
+                    }
+                },
+                RightLyricTextShaders = new List<ICustomizedShader>
+                {
+                    new OutlineShader
+                    {
+                        Radius = 2,
+                        OutlineColour = Color4Extensions.FromHex("#5932CC")
+                    }
+                }
+            };
+            DefaultElement[ElementType.NoteStyle] = NoteStyle.CreateDefault();
+
+            // todo: should use better way to handle overall size.
+            FontSize = 26;
+        }
+
+        public static SkinInfo CreateInfo()
+        {
+            return new()
+            {
+                ID = DEFAULT_SKIN,
+                Name = "karaoke! (default editor skin)",
+                Creator = "team karaoke!",
+                Protected = true,
+                InstantiationInfo = typeof(DefaultKaraokeSkin).GetInvariantInstantiationInfo()
+            };
         }
     }
 }

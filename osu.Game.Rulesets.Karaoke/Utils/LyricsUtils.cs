@@ -14,6 +14,24 @@ namespace osu.Game.Rulesets.Karaoke.Utils
 {
     public static class LyricsUtils
     {
+        #region Time tags
+
+        public static bool HasTimedTimeTags(IEnumerable<Lyric> lyrics)
+        {
+            return lyrics?.Any(LyricUtils.HasTimedTimeTags) ?? false;
+        }
+
+        #endregion
+
+        #region Lock
+
+        public static Lyric[] FindUnlockLyrics(IEnumerable<Lyric> lyrics)
+        {
+            return lyrics?.Where(x => x.Lock == LockState.None).ToArray();
+        }
+
+        #endregion
+
         #region processing
 
         public static Tuple<Lyric, Lyric> SplitLyric(Lyric lyric, int splitIndex)
@@ -65,7 +83,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
                 RomajiTags = lyric.RomajiTags?.Where(x => x.StartIndex < splitIndex && x.EndIndex <= splitIndex).ToArray(),
                 // todo : should implement time and duration
                 Singers = lyric.Singers,
-                Language = lyric.Language,
+                Language = lyric.Language
             };
 
             string secondLyricText = lyric.Text?[splitIndex..];
@@ -77,7 +95,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
                 RomajiTags = shiftingTextTag(lyric.RomajiTags?.Where(x => x.StartIndex >= splitIndex && x.EndIndex > splitIndex).ToArray(), secondLyricText, -splitIndex),
                 // todo : should implement time and duration
                 Singers = lyric.Singers,
-                Language = lyric.Language,
+                Language = lyric.Language
             };
 
             return new Tuple<Lyric, Lyric>(firstLyric, secondLyric);
@@ -125,15 +143,18 @@ namespace osu.Game.Rulesets.Karaoke.Utils
                 StartTime = startTime,
                 Duration = endTime - startTime,
                 Singers = singers.Distinct().ToArray(),
-                Language = language,
+                Language = language
             };
         }
 
         private static TimeTag[] shiftingTimeTag(IEnumerable<TimeTag> timeTags, int offset)
-            => timeTags?.Select(t => TimeTagUtils.ShiftingTimeTag(t, offset)).ToArray();
+        {
+            return timeTags?.Select(t => TimeTagUtils.ShiftingTimeTag(t, offset)).ToArray();
+        }
 
         private static T[] shiftingTextTag<T>(IEnumerable<T> textTags, string lyric, int offset) where T : ITextTag, new()
-            => textTags?.Select(t =>
+        {
+            return textTags?.Select(t =>
             {
                 (int startIndex, int endIndex) = TextTagUtils.GetShiftingIndex(t, lyric, offset);
                 return new T
@@ -143,20 +164,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
                     EndIndex = endIndex
                 };
             }).ToArray();
-
-        #endregion
-
-        #region Time tags
-
-        public static bool HasTimedTimeTags(IEnumerable<Lyric> lyrics)
-            => lyrics?.Any(LyricUtils.HasTimedTimeTags) ?? false;
-
-        #endregion
-
-        #region Lock
-
-        public static Lyric[] FindUnlockLyrics(IEnumerable<Lyric> lyrics)
-            => lyrics?.Where(x => x.Lock == LockState.None).ToArray();
+        }
 
         #endregion
     }

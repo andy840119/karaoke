@@ -14,10 +14,10 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
 {
     public class BeatmapInfoGraph : ClickableContainer
     {
+        private readonly IBeatmap beatmap;
+
         [Resolved(CanBeNull = true)]
         private OsuGame game { get; set; }
-
-        private readonly IBeatmap beatmap;
 
         public BeatmapInfoGraph(IBeatmap beatmap)
         {
@@ -44,6 +44,9 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
 
         public class BeatmapInfoWedge : WedgeInfoText
         {
+            protected FillFlowContainer InfoLabelContainer
+                => (Children.LastOrDefault() as FillFlowContainer)?.LastOrDefault() as FillFlowContainer;
+
             public BeatmapInfoWedge(WorkingBeatmap beatmap)
                 : base(beatmap, new KaraokeRuleset().RulesetInfo)
             {
@@ -65,9 +68,6 @@ namespace osu.Game.Rulesets.Karaoke.Statistics
                                                              .Where(x => x.TooltipText == "Note" || x.TooltipText == "This beatmap is not scorable.").ToList();
                 InfoLabelContainer.RemoveRange(shouldBeRemovedLabel);
             }
-
-            protected FillFlowContainer InfoLabelContainer
-                => (Children.LastOrDefault() as FillFlowContainer)?.LastOrDefault() as FillFlowContainer;
         }
     }
 }

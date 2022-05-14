@@ -19,7 +19,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Utils
             var note = new Note
             {
                 StartTime = time[0],
-                Duration = time[1],
+                Duration = time[1]
             };
 
             try

@@ -25,10 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers
 
             if (lyrics.Any())
             {
-                for (int i = 0; i < lyrics.Length; i++)
-                {
-                    lyrics[i].ID = i;
-                }
+                for (int i = 0; i < lyrics.Length; i++) lyrics[i].ID = i;
 
                 beatmap.AddRange(lyrics);
             }

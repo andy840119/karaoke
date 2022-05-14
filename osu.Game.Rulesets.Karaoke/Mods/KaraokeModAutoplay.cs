@@ -18,7 +18,9 @@ namespace osu.Game.Rulesets.Karaoke.Mods
         public bool MicrophoneEnabled => false;
 
         public override ModReplayData CreateReplayData(IBeatmap beatmap, IReadOnlyList<Mod> mods)
-            => new(new KaraokeAutoGenerator(beatmap, mods).Generate(), new ModCreatedUser { Username = "osu!7pupu" });
+        {
+            return new(new KaraokeAutoGenerator(beatmap, mods).Generate(), new ModCreatedUser { Username = "osu!7pupu" });
+        }
 
         public virtual void ApplyToDrawableRuleset(DrawableRuleset<KaraokeHitObject> drawableRuleset)
         {
@@ -38,10 +40,7 @@ namespace osu.Game.Rulesets.Karaoke.Mods
             // for safety purpose should clear reply to make sure not cause crash if apply to ruleset runs more then one times.
             notePlayfield?.ClearReplay();
 
-            foreach (var frame in frames)
-            {
-                notePlayfield?.AddReplay(frame);
-            }
+            foreach (var frame in frames) notePlayfield?.AddReplay(frame);
         }
     }
 }

@@ -71,9 +71,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Export
 
             using (var outputStream = exportStorage.GetStream(filename, FileAccess.Write, FileMode.Create))
             using (var sw = new StreamWriter(outputStream))
-            {
                 sw.WriteLine(generateJsonBeatmap());
-            }
 
             exportStorage.PresentFileExternally(filename);
         }
@@ -103,14 +101,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Export
                 BeatmapInfo = karaokeBeatmap.BeatmapInfo.Clone(),
                 ControlPointInfo = karaokeBeatmap.ControlPointInfo.DeepClone(),
                 Breaks = karaokeBeatmap.Breaks,
-                HitObjects = beatmap.HitObjects.ToList(),
+                HitObjects = beatmap.HitObjects.ToList()
             };
             encodeBeatmap.BeatmapInfo.BeatmapSet = new BeatmapSetInfo();
             encodeBeatmap.BeatmapInfo.Metadata = new BeatmapMetadata
             {
                 Title = "json beatmap",
                 AudioFile = karaokeBeatmap.Metadata.AudioFile,
-                BackgroundFile = karaokeBeatmap.Metadata.BackgroundFile,
+                BackgroundFile = karaokeBeatmap.Metadata.BackgroundFile
             };
 
             return encoder.Encode(encodeBeatmap);
@@ -131,7 +129,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Export
             public override void ExportModelTo(BeatmapSetInfo model, Stream outputStream)
             {
                 // base.ExportModelTo(model, outputStream);
-                using (ZipArchive zipArchive = ZipArchive.Create())
+                using (var zipArchive = ZipArchive.Create())
                 {
                     foreach (INamedFileUsage file in model.Files)
                     {

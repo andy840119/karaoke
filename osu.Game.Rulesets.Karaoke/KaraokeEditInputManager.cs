@@ -79,6 +79,6 @@ namespace osu.Game.Rulesets.Karaoke
         SetTime,
 
         [Description("Clear time")]
-        ClearTime,
+        ClearTime
     }
 }

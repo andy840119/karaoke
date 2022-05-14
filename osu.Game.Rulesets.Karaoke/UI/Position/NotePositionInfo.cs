@@ -11,11 +11,11 @@ namespace osu.Game.Rulesets.Karaoke.UI.Position
 {
     public class NotePositionInfo : SkinReloadableDrawable, INotePositionInfo
     {
+        public new IBindable<NotePositionCalculator> Position => position;
+        public NotePositionCalculator Calculator => Position.Value;
         private const int columns = 9;
 
         private readonly Bindable<NotePositionCalculator> position = new();
-        public new IBindable<NotePositionCalculator> Position => position;
-        public NotePositionCalculator Calculator => Position.Value;
 
         private readonly IBindable<int> bindableColumns = new Bindable<int>(columns);
         private readonly IBindable<float> bindableColumnHeight = new Bindable<float>(DefaultColumnBackground.COLUMN_HEIGHT);
@@ -49,6 +49,8 @@ namespace osu.Game.Rulesets.Karaoke.UI.Position
         }
 
         private void updatePositionCalculator()
-            => position.Value = new NotePositionCalculator(bindableColumns.Value, bindableColumnHeight.Value, bindableColumnSpacing.Value);
+        {
+            position.Value = new NotePositionCalculator(bindableColumns.Value, bindableColumnHeight.Value, bindableColumnSpacing.Value);
+        }
     }
 }

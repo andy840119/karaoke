@@ -6,14 +6,14 @@ namespace osu.Game.Rulesets.Karaoke.Objects.Types
     public interface ITextTag : IHasText
     {
         /// <summary>
-        /// Start index.
-        /// Notice that this index means gap index between characters.
+        ///     Start index.
+        ///     Notice that this index means gap index between characters.
         /// </summary>
         int StartIndex { get; set; }
 
         /// <summary>
-        /// End index
-        /// Notice this this index means gap index between characters.
+        ///     End index
+        ///     Notice this this index means gap index between characters.
         /// </summary>
         int EndIndex { get; set; }
     }

@@ -11,8 +11,8 @@ using osu.Game.Rulesets.Karaoke.Objects.Types;
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
 {
     /// <summary>
-    /// User select to edit
-    /// Preparing to double-click to edit text or delete.
+    ///     User select to edit
+    ///     Preparing to double-click to edit text or delete.
     /// </summary>
     public class EditTextTagCaretPositionAlgorithm : TextTagCaretPositionAlgorithm<EditTextTagCaretPosition>
     {
@@ -129,20 +129,28 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.CaretPosition.Algorithms
         }
 
         private ITextTag[] getRelatedTypeTextTag(Lyric lyric, EditTextTagCaretPosition sample)
-            => getRelatedTypeTextTag(lyric, sample.TextTag);
+        {
+            return getRelatedTypeTextTag(lyric, sample.TextTag);
+        }
 
-        private ITextTag[] getRelatedTypeTextTag(Lyric lyric, ITextTag sample) =>
-            sample switch
+        private ITextTag[] getRelatedTypeTextTag(Lyric lyric, ITextTag sample)
+        {
+            return sample switch
             {
                 RubyTag => lyric.RubyTags?.OfType<ITextTag>().ToArray(),
                 RomajiTag => lyric.RomajiTags?.OfType<ITextTag>().ToArray(),
                 _ => throw new InvalidCastException(nameof(sample))
             };
+        }
 
         private Lyric getPreviousLyricWithTextTag(Lyric current, ITextTag textTag)
-            => Lyrics.GetPreviousMatch(current, x => getRelatedTypeTextTag(x, textTag)?.Any() ?? false);
+        {
+            return Lyrics.GetPreviousMatch(current, x => getRelatedTypeTextTag(x, textTag)?.Any() ?? false);
+        }
 
         private Lyric getNextLyricWithTextTag(Lyric current, ITextTag textTag)
-            => Lyrics.GetNextMatch(current, x => getRelatedTypeTextTag(x, textTag)?.Any() ?? false);
+        {
+            return Lyrics.GetNextMatch(current, x => getRelatedTypeTextTag(x, textTag)?.Any() ?? false);
+        }
     }
 }

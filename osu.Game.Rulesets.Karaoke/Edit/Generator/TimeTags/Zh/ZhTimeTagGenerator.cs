@@ -21,10 +21,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.TimeTags.Zh
 
             for (int i = 1; i < text.Length; i++)
             {
-                if (CharUtils.IsChinese(text[i]))
-                {
-                    timeTags.Add(new TimeTag(new TextIndex(i)));
-                }
+                if (CharUtils.IsChinese(text[i])) timeTags.Add(new TimeTag(new TextIndex(i)));
             }
         }
     }

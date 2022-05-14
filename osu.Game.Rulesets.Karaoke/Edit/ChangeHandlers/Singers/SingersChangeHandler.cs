@@ -15,9 +15,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Singers
     {
         public BindableList<Singer> Singers => Items;
 
-        protected override List<Singer> GetItemsFromBeatmap(KaraokeBeatmap beatmap)
-            => beatmap.Singers;
-
         public void ChangeOrder(Singer singer, int newIndex)
         {
             PerformObjectChanged(singer, s =>
@@ -29,6 +26,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Singers
                     // todo : not really sure should call update?
                 });
             });
+        }
+
+        protected override List<Singer> GetItemsFromBeatmap(KaraokeBeatmap beatmap)
+        {
+            return beatmap.Singers;
         }
 
         protected override void OnItemAdded(Singer item)

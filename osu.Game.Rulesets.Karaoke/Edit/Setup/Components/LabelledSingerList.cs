@@ -9,11 +9,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
 {
     public class LabelledSingerList : LabelledDrawable<SingerList>
     {
-        public LabelledSingerList()
-            : base(true)
-        {
-        }
-
         public BindableList<Singer> Singers => Component.Singers;
 
         public string SingerNamePrefix
@@ -22,6 +17,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Setup.Components
             set => Component.SingerNamePrefix = value;
         }
 
-        protected override SingerList CreateComponent() => new();
+        public LabelledSingerList()
+            : base(true)
+        {
+        }
+
+        protected override SingerList CreateComponent()
+        {
+            return new();
+        }
     }
 }

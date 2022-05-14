@@ -18,7 +18,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateRubyRomaji
         }
 
         protected override NavigationTextContainer CreateTextContainer()
-            => new GenerateRubyTextFlowContainer(Screen);
+        {
+            return new GenerateRubyTextFlowContainer(Screen);
+        }
 
         protected override NavigationState GetState(Lyric[] lyrics)
         {
@@ -39,8 +41,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateRubyRomaji
                 => lyric.RubyTags != null && lyric.RubyTags.Any();
         }
 
-        protected override string GetNavigationText(NavigationState value) =>
-            value switch
+        protected override string GetNavigationText(NavigationState value)
+        {
+            return value switch
             {
                 NavigationState.Initial => $"Lazy to typing ruby? Press [{auto_generate_ruby}] or [{auto_generate_romaji}] to auto-generate ruby and romaji. It's very easy.",
                 NavigationState.Working => $"Go to next step to generate time-tag. Messing around? Press [{auto_generate_ruby}] or [{auto_generate_romaji}] again.",
@@ -48,9 +51,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.GenerateRubyRomaji
                 NavigationState.Error => "Oops, seems cause some error in here.",
                 _ => throw new ArgumentOutOfRangeException(nameof(value))
             };
+        }
 
         protected override bool AbleToNextStep(NavigationState value)
-            => value is NavigationState.Initial or NavigationState.Working or NavigationState.Done;
+        {
+            return value is NavigationState.Initial or NavigationState.Working or NavigationState.Done;
+        }
 
         private class GenerateRubyTextFlowContainer : NavigationTextContainer
         {

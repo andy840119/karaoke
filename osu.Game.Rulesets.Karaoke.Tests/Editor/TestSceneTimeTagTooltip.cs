@@ -13,26 +13,21 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
     [TestFixture]
     public class TestSceneTimeTagTooltip : OsuTestScene
     {
-        private TimeTagTooltip toolTip;
-
         [SetUp]
-        public void SetUp() => Schedule(() =>
+        public void SetUp()
         {
-            Child = toolTip = new TimeTagTooltip
+            Schedule(() =>
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre
-            };
-            toolTip.Show();
-        });
-
-        [Test]
-        public void TestDisplayToolTip()
-        {
-            setTooltip("Start time tag.", new TimeTag(new TextIndex(0), 1280));
-            setTooltip("End time tag.", new TimeTag(new TextIndex(0, TextIndex.IndexState.End), 1280));
-            setTooltip("Null time", new TimeTag(new TextIndex(0)));
+                Child = toolTip = new TimeTagTooltip
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre
+                };
+                toolTip.Show();
+            });
         }
+
+        private TimeTagTooltip toolTip;
 
         private void setTooltip(string testName, TimeTag timeTag)
         {
@@ -40,6 +35,14 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor
             {
                 toolTip.SetContent(timeTag);
             });
+        }
+
+        [Test]
+        public void TestDisplayToolTip()
+        {
+            setTooltip("Start time tag.", new TimeTag(new TextIndex(0), 1280));
+            setTooltip("End time tag.", new TimeTag(new TextIndex(0, TextIndex.IndexState.End), 1280));
+            setTooltip("Null time", new TimeTag(new TextIndex(0)));
         }
     }
 }

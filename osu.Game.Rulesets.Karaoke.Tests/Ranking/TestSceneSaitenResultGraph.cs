@@ -16,6 +16,27 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
 {
     public class TestSceneSaitenResultGraph : OsuTestScene
     {
+        private void createTest(ScoreInfo score, IBeatmap beatmap)
+        {
+            AddStep("create test", () =>
+            {
+                Children = new Drawable[]
+                {
+                    new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = Color4Extensions.FromHex("#333")
+                    },
+                    new SaitenResultGraph(score, beatmap)
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(600, 130)
+                    }
+                };
+            });
+        }
+
         [Test]
         public void TestManyDistributedEvents()
         {
@@ -23,23 +44,5 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Ranking
             var beatmap = new TestKaraokeBeatmap(ruleset);
             createTest(new ScoreInfo(), beatmap);
         }
-
-        private void createTest(ScoreInfo score, IBeatmap beatmap) => AddStep("create test", () =>
-        {
-            Children = new Drawable[]
-            {
-                new Box
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Color4Extensions.FromHex("#333")
-                },
-                new SaitenResultGraph(score, beatmap)
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(600, 130)
-                }
-            };
-        });
     }
 }

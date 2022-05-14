@@ -8,6 +8,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Screens
 {
     public class TestSceneConfigScreen : KaraokeSkinEditorScreenTestScene<ConfigScreen>
     {
-        protected override ConfigScreen CreateEditorScreen(KaraokeSkin karaokeSkin) => new(karaokeSkin);
+        protected override ConfigScreen CreateEditorScreen(KaraokeSkin karaokeSkin)
+        {
+            return new(karaokeSkin);
+        }
     }
 }

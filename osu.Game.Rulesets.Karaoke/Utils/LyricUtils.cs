@@ -15,6 +15,15 @@ namespace osu.Game.Rulesets.Karaoke.Utils
 {
     public static class LyricUtils
     {
+        #region Ruby/romaji tag
+
+        public static bool AbleToInsertTextTagAtIndex(Lyric lyric, int index)
+        {
+            return index >= 0 && index <= (lyric.Text?.Length ?? 0);
+        }
+
+        #endregion
+
         #region progessing
 
         public static void RemoveText(Lyric lyric, int position, int count = 1)
@@ -62,10 +71,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
                         tag.StartIndex = position;
                         tag.EndIndex -= count;
                     }
-                    else if (tag.EndIndex > position)
-                    {
-                        tag.EndIndex = Math.Max(position, tag.EndIndex - count);
-                    }
+                    else if (tag.EndIndex > position) tag.EndIndex = Math.Max(position, tag.EndIndex - count);
                 }
 
                 // if end index less or equal than start index, means this tag has been deleted.
@@ -222,13 +228,6 @@ namespace osu.Game.Rulesets.Karaoke.Utils
 
         #endregion
 
-        #region Ruby/romaji tag
-
-        public static bool AbleToInsertTextTagAtIndex(Lyric lyric, int index)
-            => index >= 0 && index <= (lyric.Text?.Length ?? 0);
-
-        #endregion
-
         #region Time display
 
         public static string LyricTimeFormattedString(Lyric lyric)
@@ -284,7 +283,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         #region Check
 
         /// <summary>
-        /// Check start time is larger than end time.
+        ///     Check start time is larger than end time.
         /// </summary>
         /// <param name="lyric"></param>
         /// <returns></returns>
@@ -294,7 +293,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// Start time should be smaller than any time-tag.
+        ///     Start time should be smaller than any time-tag.
         /// </summary>
         /// <param name="lyric"></param>
         /// <returns></returns>
@@ -307,7 +306,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         /// <summary>
-        /// End time should be larger than any time-tag.
+        ///     End time should be larger than any time-tag.
         /// </summary>
         /// <param name="lyric"></param>
         /// <returns></returns>

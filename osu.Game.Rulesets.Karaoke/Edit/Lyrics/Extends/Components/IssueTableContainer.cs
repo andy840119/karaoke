@@ -41,7 +41,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
 
         protected abstract TableColumn[] CreateHeaders();
 
-        protected override Drawable CreateHeader(int index, TableColumn column) => new HeaderText(column?.Header ?? string.Empty);
+        protected override Drawable CreateHeader(int index, TableColumn column)
+        {
+            return new HeaderText(column?.Header ?? string.Empty);
+        }
 
         public class HeaderText : OsuSpriteText
         {
@@ -58,6 +61,11 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
 
             private readonly Box hoveredBackground;
 
+            private Color4 colourHover;
+            private Color4 colourSelected;
+
+            private bool selected;
+
             public RowBackground()
             {
                 RelativeSizeAxes = Axes.X;
@@ -73,19 +81,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                     hoveredBackground = new Box
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Alpha = 0,
-                    },
+                        Alpha = 0
+                    }
                 };
-            }
-
-            private Color4 colourHover;
-            private Color4 colourSelected;
-
-            [BackgroundDependencyLoader]
-            private void load(LyricEditorColourProvider colourProvider, ILyricEditorState state)
-            {
-                hoveredBackground.Colour = colourHover = colourProvider.Background1(LyricEditorMode.EditTimeTag);
-                colourSelected = colourProvider.Colour3(LyricEditorMode.EditTimeTag);
             }
 
             protected override bool OnHover(HoverEvent e)
@@ -100,8 +98,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                 base.OnHoverLost(e);
             }
 
-            private bool selected;
-
             protected void UpdateState(bool selected)
             {
                 this.selected = selected;
@@ -111,6 +107,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                     hoveredBackground.FadeIn(fade_duration, Easing.OutQuint);
                 else
                     hoveredBackground.FadeOut(fade_duration, Easing.OutQuint);
+            }
+
+            [BackgroundDependencyLoader]
+            private void load(LyricEditorColourProvider colourProvider, ILyricEditorState state)
+            {
+                hoveredBackground.Colour = colourHover = colourProvider.Background1(LyricEditorMode.EditTimeTag);
+                colourSelected = colourProvider.Colour3(LyricEditorMode.EditTimeTag);
             }
         }
     }

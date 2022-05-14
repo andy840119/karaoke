@@ -18,17 +18,25 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
         private ILyricLanguageChangeHandler lyricLanguageChangeHandler { get; set; }
 
         protected override Dictionary<Lyric, string> GetDisableSelectingLyrics(IEnumerable<Lyric> lyrics)
-            => lyrics.Where(x => string.IsNullOrEmpty(x.Text))
-                     .ToDictionary(k => k, _ => "Should have text in lyric.");
+        {
+            return lyrics.Where(x => string.IsNullOrEmpty(x.Text))
+                         .ToDictionary(k => k, _ => "Should have text in lyric.");
+        }
 
         protected override void Apply()
-            => lyricLanguageChangeHandler.AutoGenerate();
+        {
+            lyricLanguageChangeHandler.AutoGenerate();
+        }
 
         protected override InvalidLyricAlertTextContainer CreateInvalidLyricAlertTextContainer()
-            => new InvalidLyricTextAlertTextContainer();
+        {
+            return new InvalidLyricTextAlertTextContainer();
+        }
 
         protected override ConfigButton CreateConfigButton()
-            => new LanguageAutoGenerateConfigButton();
+        {
+            return new LanguageAutoGenerateConfigButton();
+        }
 
         protected class InvalidLyricTextAlertTextContainer : InvalidLyricAlertTextContainer
         {
@@ -44,7 +52,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
         protected class LanguageAutoGenerateConfigButton : ConfigButton
         {
             public override Popover GetPopover()
-                => new LanguageDetectorConfigPopover();
+            {
+                return new LanguageDetectorConfigPopover();
+            }
         }
     }
 }

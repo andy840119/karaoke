@@ -20,10 +20,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Components
 {
     public abstract class TimeTagEditorScrollContainer : EditorScrollContainer
     {
-        private readonly IBindable<int> timeTagsVersion = new Bindable<int>();
-        private readonly IBindableList<TimeTag> timeTagsBindable = new BindableList<TimeTag>();
-
-        private readonly IBindable<WorkingBeatmap> beatmap = new Bindable<WorkingBeatmap>();
+        public readonly Lyric HitObject;
 
         protected readonly IBindable<bool> ShowWaveformGraph = new BindableBool();
         protected readonly IBindable<float> WaveformOpacity = new BindableFloat();
@@ -35,8 +32,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Components
         protected double EndTime { get; private set; }
 
         protected Track Track { get; private set; }
+        private readonly IBindable<int> timeTagsVersion = new Bindable<int>();
+        private readonly IBindableList<TimeTag> timeTagsBindable = new BindableList<TimeTag>();
 
-        public readonly Lyric HitObject;
+        private readonly IBindable<WorkingBeatmap> beatmap = new Bindable<WorkingBeatmap>();
+
+        private WaveformGraph waveform;
+
+        private TimelineTickDisplay ticks;
 
         protected TimeTagEditorScrollContainer(Lyric lyric)
         {
@@ -51,74 +54,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Components
 
             updateTimeRange();
         }
-
-        private void updateTimeRange()
-        {
-            var fistTimeTag = timeTagsBindable.FirstOrDefault();
-            var lastTimeTag = timeTagsBindable.LastOrDefault();
-
-            if (fistTimeTag != null && lastTimeTag != null)
-            {
-                StartTime = GetPreviewTime(fistTimeTag) - 500;
-                EndTime = GetPreviewTime(lastTimeTag) + 500;
-            }
-            else
-            {
-                StartTime = 0;
-                EndTime = 0;
-            }
-        }
-
-        private WaveformGraph waveform;
-
-        private TimelineTickDisplay ticks;
-
-        [BackgroundDependencyLoader]
-        private void load(OsuColour colours, IBindable<WorkingBeatmap> beatmap)
-        {
-            this.beatmap.BindTo(beatmap);
-
-            Container container;
-
-            Add(container = new Container
-            {
-                RelativeSizeAxes = Axes.X,
-                Depth = float.MaxValue,
-                Children = new Drawable[]
-                {
-                    waveform = new WaveformGraph
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        BaseColour = colours.Blue.Opacity(0.2f),
-                        LowColour = colours.BlueLighter,
-                        MidColour = colours.BlueDark,
-                        HighColour = colours.BlueDarker,
-                    },
-                    ticks = new TimelineTickDisplay(),
-                }
-            });
-
-            PostProcessContent(container);
-
-            this.beatmap.BindValueChanged(b =>
-            {
-                waveform.Waveform = b.NewValue.Waveform;
-                Track = b.NewValue.Track;
-            }, true);
-
-            ShowWaveformGraph.BindValueChanged(e => updateWaveformOpacity());
-            WaveformOpacity.BindValueChanged(e => updateWaveformOpacity());
-            ShowTick.BindValueChanged(e => updateTickOpacity());
-            TickOpacity.BindValueChanged(e => updateTickOpacity());
-        }
-
-        private void updateWaveformOpacity() =>
-            waveform.FadeTo(ShowWaveformGraph.Value ? WaveformOpacity.Value : 0, 200, Easing.OutQuint);
-
-        private void updateTickOpacity() =>
-            ticks.FadeTo(ShowTick.Value ? TickOpacity.Value : 0, 200, Easing.OutQuint);
-
-        protected abstract void PostProcessContent(Container content);
 
         public double GetPreviewTime(TimeTag timeTag)
         {
@@ -148,6 +83,74 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Extends.Components
 
             // will goes in here if all time-tag are no time.
             return index * preempt_time;
+        }
+
+        protected abstract void PostProcessContent(Container content);
+
+        private void updateTimeRange()
+        {
+            var fistTimeTag = timeTagsBindable.FirstOrDefault();
+            var lastTimeTag = timeTagsBindable.LastOrDefault();
+
+            if (fistTimeTag != null && lastTimeTag != null)
+            {
+                StartTime = GetPreviewTime(fistTimeTag) - 500;
+                EndTime = GetPreviewTime(lastTimeTag) + 500;
+            }
+            else
+            {
+                StartTime = 0;
+                EndTime = 0;
+            }
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(OsuColour colours, IBindable<WorkingBeatmap> beatmap)
+        {
+            this.beatmap.BindTo(beatmap);
+
+            Container container;
+
+            Add(container = new Container
+            {
+                RelativeSizeAxes = Axes.X,
+                Depth = float.MaxValue,
+                Children = new Drawable[]
+                {
+                    waveform = new WaveformGraph
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        BaseColour = colours.Blue.Opacity(0.2f),
+                        LowColour = colours.BlueLighter,
+                        MidColour = colours.BlueDark,
+                        HighColour = colours.BlueDarker
+                    },
+                    ticks = new TimelineTickDisplay()
+                }
+            });
+
+            PostProcessContent(container);
+
+            this.beatmap.BindValueChanged(b =>
+            {
+                waveform.Waveform = b.NewValue.Waveform;
+                Track = b.NewValue.Track;
+            }, true);
+
+            ShowWaveformGraph.BindValueChanged(e => updateWaveformOpacity());
+            WaveformOpacity.BindValueChanged(e => updateWaveformOpacity());
+            ShowTick.BindValueChanged(e => updateTickOpacity());
+            TickOpacity.BindValueChanged(e => updateTickOpacity());
+        }
+
+        private void updateWaveformOpacity()
+        {
+            waveform.FadeTo(ShowWaveformGraph.Value ? WaveformOpacity.Value : 0, 200, Easing.OutQuint);
+        }
+
+        private void updateTickOpacity()
+        {
+            ticks.FadeTo(ShowTick.Value ? TickOpacity.Value : 0, 200, Easing.OutQuint);
         }
     }
 }

@@ -40,13 +40,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
                 bool showCursor = e.NewValue;
 
                 if (showCursor)
-                {
                     cursor.FadeTo(1, 200);
-                }
                 else
-                {
                     cursor.FadeTo(0.5f, 200);
-                }
             }, true);
         }
 

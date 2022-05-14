@@ -22,9 +22,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
 {
     public abstract class TextTagIssueTable<TInvalid, TTextTag> : IssueTableContainer where TTextTag : ITextTag
     {
-        [Resolved]
-        private OsuColour colours { get; set; }
-
         public IEnumerable<Issue> Issues
         {
             set
@@ -49,48 +46,57 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji.Components
             }
         }
 
+        [Resolved]
+        private OsuColour colours { get; set; }
+
         protected abstract IEnumerable<Tuple<TTextTag, TInvalid>> GetInvalidByIssue(Issue issue);
 
-        protected override TableColumn[] CreateHeaders() => new[]
+        protected override TableColumn[] CreateHeaders()
         {
-            new TableColumn(string.Empty, Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 30)),
-            new TableColumn("Lyric", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 40)),
-            new TableColumn("Position", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 60)),
-            new TableColumn("Message", Anchor.CentreLeft),
-        };
-
-        private Drawable[] createContent(Lyric lyric, TTextTag textTag, TInvalid invalid) => new Drawable[]
-        {
-            new SpriteIcon
+            return new[]
             {
-                Origin = Anchor.Centre,
-                Size = new Vector2(10),
-                Colour = colours.Red,
-                Margin = new MarginPadding { Left = 10 },
-                Icon = FontAwesome.Solid.Tag,
-            },
-            new OsuSpriteText
-            {
-                Text = $"#{lyric.Order}",
-                Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
-                Margin = new MarginPadding { Right = 10 },
-            },
-            new OsuSpriteText
-            {
-                Text = TextTagUtils.PositionFormattedString(textTag),
-                Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
-                Margin = new MarginPadding { Right = 10 },
-            },
-            new OsuSpriteText
-            {
-                Text = GetInvalidMessage(invalid),
-                Truncate = true,
-                RelativeSizeAxes = Axes.X,
-                Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
-            },
-        };
+                new TableColumn(string.Empty, Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 30)),
+                new TableColumn("Lyric", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 40)),
+                new TableColumn("Position", Anchor.CentreLeft, new Dimension(GridSizeMode.AutoSize, minSize: 60)),
+                new TableColumn("Message", Anchor.CentreLeft)
+            };
+        }
 
         protected abstract string GetInvalidMessage(TInvalid invalid);
+
+        private Drawable[] createContent(Lyric lyric, TTextTag textTag, TInvalid invalid)
+        {
+            return new Drawable[]
+            {
+                new SpriteIcon
+                {
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(10),
+                    Colour = colours.Red,
+                    Margin = new MarginPadding { Left = 10 },
+                    Icon = FontAwesome.Solid.Tag
+                },
+                new OsuSpriteText
+                {
+                    Text = $"#{lyric.Order}",
+                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
+                    Margin = new MarginPadding { Right = 10 }
+                },
+                new OsuSpriteText
+                {
+                    Text = TextTagUtils.PositionFormattedString(textTag),
+                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Bold),
+                    Margin = new MarginPadding { Right = 10 }
+                },
+                new OsuSpriteText
+                {
+                    Text = GetInvalidMessage(invalid),
+                    Truncate = true,
+                    RelativeSizeAxes = Axes.X,
+                    Font = OsuFont.GetFont(size: TEXT_SIZE, weight: FontWeight.Medium)
+                }
+            };
+        }
 
         private class TextTagRowBackground : RowBackground
         {

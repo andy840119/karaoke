@@ -12,12 +12,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
         protected override string SwitchActionTitle => "Special actions";
         protected override string SwitchActionDescription => "Auto-generate, edit or clear the notes.";
 
-        [BackgroundDependencyLoader]
-        private void load(IEditNoteModeState editNoteModeState)
-        {
-            BindTo(editNoteModeState);
-        }
-
         protected override void UpdateActionArea(NoteEditModeSpecialAction action)
         {
             RemoveAll(x => x is NoteAutoGenerateSubsection or NoteClearSubsection);
@@ -39,6 +33,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Notes
                 default:
                     return;
             }
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(IEditNoteModeState editNoteModeState)
+        {
+            BindTo(editNoteModeState);
         }
     }
 }

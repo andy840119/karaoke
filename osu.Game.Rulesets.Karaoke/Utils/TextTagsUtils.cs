@@ -12,13 +12,15 @@ namespace osu.Game.Rulesets.Karaoke.Utils
 {
     public static class TextTagsUtils
     {
-        public static T[] Sort<T>(IEnumerable<T> textTags, Sorting sorting = Sorting.Asc) where T : ITextTag =>
-            sorting switch
+        public static T[] Sort<T>(IEnumerable<T> textTags, Sorting sorting = Sorting.Asc) where T : ITextTag
+        {
+            return sorting switch
             {
                 Sorting.Asc => textTags?.OrderBy(x => x.StartIndex).ThenBy(x => x.EndIndex).ToArray(),
                 Sorting.Desc => textTags?.OrderByDescending(x => x.EndIndex).ThenByDescending(x => x.StartIndex).ToArray(),
                 _ => throw new InvalidEnumArgumentException(nameof(sorting))
             };
+        }
 
         public static T[] FindOutOfRange<T>(IEnumerable<T> textTags, string lyric) where T : ITextTag
         {
@@ -103,12 +105,12 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         public enum Sorting
         {
             /// <summary>
-            /// Mark next time tag is error if conflict.
+            ///     Mark next time tag is error if conflict.
             /// </summary>
             Asc,
 
             /// <summary>
-            /// Mark previous tag is error if conflict.
+            ///     Mark previous tag is error if conflict.
             /// </summary>
             Desc
         }

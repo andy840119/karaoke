@@ -20,22 +20,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestAutoGenerateSupportedLyric()
-        {
-            PrepareHitObject(new Lyric
-            {
-                Text = "カラオケ"
-            });
-
-            TriggerHandlerChanged(c => c.AutoGenerate());
-
-            AssertSelectedHitObject(h =>
-            {
-                Assert.AreEqual(new CultureInfo("ja"), h.Language);
-            });
-        }
-
-        [Test]
         public void TestAutoGenerateNonSupportedLyric()
         {
             PrepareHitObject(new Lyric
@@ -48,6 +32,22 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
             AssertSelectedHitObject(h =>
             {
                 Assert.IsNull(h.Language);
+            });
+        }
+
+        [Test]
+        public void TestAutoGenerateSupportedLyric()
+        {
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ"
+            });
+
+            TriggerHandlerChanged(c => c.AutoGenerate());
+
+            AssertSelectedHitObject(h =>
+            {
+                Assert.AreEqual(new CultureInfo("ja"), h.Language);
             });
         }
 

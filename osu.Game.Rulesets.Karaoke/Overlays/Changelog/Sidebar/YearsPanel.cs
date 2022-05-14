@@ -22,6 +22,13 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog.Sidebar
 
         private FillFlowContainer yearsFlow;
 
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            metadata.BindValueChanged(_ => recreateDrawables(), true);
+        }
+
         [BackgroundDependencyLoader]
         private void load(OverlayColourProvider overlayColours, Bindable<APIChangelogSidebar> metadata)
         {
@@ -51,13 +58,6 @@ namespace osu.Game.Rulesets.Karaoke.Overlays.Changelog.Sidebar
                     }
                 }
             };
-        }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            metadata.BindValueChanged(_ => recreateDrawables(), true);
         }
 
         private void recreateDrawables()

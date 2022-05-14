@@ -10,15 +10,6 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
     {
         public const float COLUMN_HEIGHT = 20;
 
-        public DefaultColumnBackground(int index)
-        {
-            RelativeSizeAxes = Axes.X;
-            Height = COLUMN_HEIGHT;
-            Alpha = 0.15f;
-        }
-
-        private bool isSpecial;
-
         public bool IsSpecial
         {
             get => isSpecial;
@@ -29,6 +20,15 @@ namespace osu.Game.Rulesets.Karaoke.UI.Components
 
                 isSpecial = value;
             }
+        }
+
+        private bool isSpecial;
+
+        public DefaultColumnBackground(int index)
+        {
+            RelativeSizeAxes = Axes.X;
+            Height = COLUMN_HEIGHT;
+            Alpha = 0.15f;
         }
     }
 }

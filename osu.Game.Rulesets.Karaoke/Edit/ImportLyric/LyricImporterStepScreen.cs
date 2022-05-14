@@ -20,17 +20,17 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
         public const double APPEAR_DURATION = 800;
         public const double DISAPPEAR_DURATION = 500;
 
-        [Resolved]
-        protected LyricImporterSubScreenStack ScreenStack { get; private set; }
-
-        [Resolved]
-        protected IDialogOverlay DialogOverlay { get; private set; }
-
         public abstract string ShortTitle { get; }
 
         public abstract LyricImporterStep Step { get; }
 
         public abstract IconUsage Icon { get; }
+
+        [Resolved]
+        protected LyricImporterSubScreenStack ScreenStack { get; private set; }
+
+        [Resolved]
+        protected IDialogOverlay DialogOverlay { get; private set; }
 
         protected LyricImporterStepScreen()
         {
@@ -86,6 +86,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric
             }));
         }
 
-        public override string ToString() => Title;
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

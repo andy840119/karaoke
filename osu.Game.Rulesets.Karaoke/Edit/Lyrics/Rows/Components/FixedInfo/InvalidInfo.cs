@@ -20,15 +20,20 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.FixedInfo
         // todo : might able to have auto-fix option by right-click
         public MenuItem[] ContextMenuItems => null;
 
-        private readonly Lyric lyric;
+        public Issue[] TooltipContent { get; private set; }
 
-        private Issue[] report;
+        private readonly Lyric lyric;
 
         public InvalidInfo(Lyric lyric)
         {
             this.lyric = lyric;
 
             Size = new Vector2(12);
+        }
+
+        public ITooltip<Issue[]> GetCustomTooltip()
+        {
+            return new InvalidLyricToolTip();
         }
 
         [BackgroundDependencyLoader]
@@ -44,9 +49,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.FixedInfo
                 if (!dict.ContainsKey(lyric))
                     return;
 
-                report = dict[lyric];
+                TooltipContent = dict[lyric];
 
-                switch (report.Length)
+                switch (TooltipContent.Length)
                 {
                     case 0:
                         Icon = FontAwesome.Solid.CheckCircle;
@@ -60,10 +65,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.FixedInfo
                 }
             }, true);
         }
-
-        public ITooltip<Issue[]> GetCustomTooltip()
-            => new InvalidLyricToolTip();
-
-        public Issue[] TooltipContent => report;
     }
 }

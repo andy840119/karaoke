@@ -53,39 +53,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
             {
                 Horizontal = CONTENT_PADDING_HORIZONTAL,
                 Vertical = CONTENT_PADDING_VERTICAL,
-                Right = CONTENT_PADDING_HORIZONTAL + CONTENT_PADDING_HORIZONTAL,
+                Right = CONTENT_PADDING_HORIZONTAL + CONTENT_PADDING_HORIZONTAL
             };
         }
-
-        protected abstract string GetFieldValue(T item);
-
-        protected abstract void ApplyValue(T item, string value);
-
-        protected override OsuTextBox CreateTextBox() => new ObjectFieldTextBox
-        {
-            CommitOnFocusLost = true,
-            Anchor = Anchor.Centre,
-            Origin = Anchor.Centre,
-            RelativeSizeAxes = Axes.X,
-            CornerRadius = CORNER_RADIUS,
-            Selected = selected =>
-            {
-                if (selected)
-                {
-                    // not trigger again if already focus.
-                    if (SelectedItems.Contains(Item) && SelectedItems.Count == 1)
-                        return;
-
-                    // trigger selected.
-                    SelectedItems.Clear();
-                    SelectedItems.Add(Item);
-                }
-                else
-                {
-                    SelectedItems.Remove(Item);
-                }
-            }
-        };
 
         public void Focus()
         {
@@ -95,12 +65,54 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
             });
         }
 
+        protected abstract string GetFieldValue(T item);
+
+        protected abstract void ApplyValue(T item, string value);
+
+        protected override OsuTextBox CreateTextBox()
+        {
+            return new ObjectFieldTextBox
+            {
+                CommitOnFocusLost = true,
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                RelativeSizeAxes = Axes.X,
+                CornerRadius = CORNER_RADIUS,
+                Selected = selected =>
+                {
+                    if (selected)
+                    {
+                        // not trigger again if already focus.
+                        if (SelectedItems.Contains(Item) && SelectedItems.Count == 1)
+                            return;
+
+                        // trigger selected.
+                        SelectedItems.Clear();
+                        SelectedItems.Add(Item);
+                    }
+                    else
+                        SelectedItems.Remove(Item);
+                }
+            };
+        }
+
         protected class ObjectFieldTextBox : OsuTextBox
         {
+            public Action<bool> Selected;
+
+            public bool HighLight
+            {
+                set
+                {
+                    BorderColour = value ? colours.Yellow : standardBorderColour;
+                    BorderThickness = value ? 3 : 0;
+                }
+            }
+
+            private Color4 standardBorderColour;
+
             [Resolved]
             private OsuColour colours { get; set; }
-
-            public Action<bool> Selected;
 
             protected override void OnFocus(FocusEvent e)
             {
@@ -116,21 +128,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components
                 Selected?.Invoke(false);
             }
 
-            private Color4 standardBorderColour;
-
             [BackgroundDependencyLoader]
             private void load()
             {
                 standardBorderColour = BorderColour;
-            }
-
-            public bool HighLight
-            {
-                set
-                {
-                    BorderColour = value ? colours.Yellow : standardBorderColour;
-                    BorderThickness = value ? 3 : 0;
-                }
             }
         }
     }

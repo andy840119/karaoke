@@ -21,13 +21,13 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Default
         public readonly Bindable<Color4> AccentColour = new();
         public readonly Bindable<Color4> HitColour = new();
 
+        protected Drawable Background { get; private set; }
+        protected Drawable Foreground { get; private set; }
+
         private readonly LayoutValue subtractionCache = new(Invalidation.DrawSize);
         private readonly IBindable<bool> isHitting = new Bindable<bool>();
         private readonly IBindable<bool> display = new Bindable<bool>();
         private readonly IBindableList<int> singer = new BindableList<int>();
-
-        protected Drawable Background { get; private set; }
-        protected Drawable Foreground { get; private set; }
 
         public DefaultBodyPiece()
         {
@@ -64,7 +64,10 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Default
             display.BindValueChanged(_ => onAccentChanged(), true);
         }
 
-        private void onAccentChanged() => onAccentChanged(new ValueChangedEvent<Color4>(AccentColour.Value, AccentColour.Value));
+        private void onAccentChanged()
+        {
+            onAccentChanged(new ValueChangedEvent<Color4>(AccentColour.Value, AccentColour.Value));
+        }
 
         private void onAccentChanged(ValueChangedEvent<Color4> accent)
         {

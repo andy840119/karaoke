@@ -29,6 +29,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
             this.lyric = lyric;
         }
 
+        protected abstract Drawable CreateLyricInfo(Lyric lyric);
+
+        protected abstract Drawable CreateContent(Lyric lyric);
+
         [BackgroundDependencyLoader]
         private void load()
         {
@@ -55,10 +59,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
             };
         }
 
-        protected abstract Drawable CreateLyricInfo(Lyric lyric);
-
-        protected abstract Drawable CreateContent(Lyric lyric);
-
         public class SelectArea : CompositeDrawable
         {
             private readonly IBindable<LyricEditorMode> bindableMode = new Bindable<LyricEditorMode>();
@@ -81,12 +81,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                 {
                     background = new Box
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     },
                     selectedCheckbox = new CircleCheckbox
                     {
                         Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
+                        Origin = Anchor.Centre
                     }
                 };
             }
@@ -117,13 +117,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                 selecting.BindValueChanged(e =>
                 {
                     if (e.NewValue)
-                    {
                         Show();
-                    }
                     else
-                    {
                         Hide();
-                    }
                 }, true);
 
                 // get bindable and update bindable if check / uncheck.
@@ -147,13 +143,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                 selectedCheckbox.Current.BindValueChanged(e =>
                 {
                     if (e.NewValue)
-                    {
                         lyricSelectionState.Select(lyric);
-                    }
                     else
-                    {
                         lyricSelectionState.UnSelect(lyric);
-                    }
                 });
             }
         }

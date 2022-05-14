@@ -10,10 +10,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
 {
     internal class LyricColorSection : StyleSection
     {
+        protected override string Title => "Color";
         private LabelledEnumDropdown<ColorArea> colorAreaDropdown;
         private LabelledColourSelector colorPicker;
-
-        protected override string Title => "Color";
 
         [BackgroundDependencyLoader]
         private void load(StyleManager manager)
@@ -23,12 +22,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 colorAreaDropdown = new LabelledEnumDropdown<ColorArea>
                 {
                     Label = "Color area",
-                    Description = "Select the area you wish to adjust.",
+                    Description = "Select the area you wish to adjust."
                 },
                 colorPicker = new LabelledColourSelector
                 {
                     Label = "Color",
-                    Description = "Select color.",
+                    Description = "Select color."
                 }
             };
         }

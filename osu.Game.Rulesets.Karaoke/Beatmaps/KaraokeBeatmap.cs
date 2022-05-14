@@ -37,7 +37,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps
                     Name = @"Lyric",
                     Content = lyrics.ToString(),
                     CreateIcon = () => new SpriteIcon { Icon = FontAwesome.Solid.AlignLeft }
-                },
+                }
             };
 
             bool scorable = this.IsScorable();

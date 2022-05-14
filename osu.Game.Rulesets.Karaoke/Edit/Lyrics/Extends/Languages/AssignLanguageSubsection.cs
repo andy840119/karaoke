@@ -23,6 +23,23 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
 
         private readonly Bindable<CultureInfo> bindableLanguage = new();
 
+        public Popover GetPopover()
+        {
+            return new LanguageSelectorPopover(bindableLanguage);
+        }
+
+        protected override void StartSelectingLyrics()
+        {
+            // before start selecting, we should make sure that language has been assigned.
+            if (bindableLanguage.Value == null)
+            {
+                this.ShowPopover();
+                return;
+            }
+
+            base.StartSelectingLyrics();
+        }
+
         [BackgroundDependencyLoader]
         private void load(ILyricSelectionState lyricSelectionState, ILyricLanguageChangeHandler lyricLanguageChangeHandler)
         {
@@ -48,20 +65,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Languages
                 StartSelectingLyrics();
             });
         }
-
-        protected override void StartSelectingLyrics()
-        {
-            // before start selecting, we should make sure that language has been assigned.
-            if (bindableLanguage.Value == null)
-            {
-                this.ShowPopover();
-                return;
-            }
-
-            base.StartSelectingLyrics();
-        }
-
-        public Popover GetPopover()
-            => new LanguageSelectorPopover(bindableLanguage);
     }
 }

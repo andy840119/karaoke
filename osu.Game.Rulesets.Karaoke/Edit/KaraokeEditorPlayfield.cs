@@ -18,6 +18,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit
         }
 
         protected override ScrollingNotePlayfield CreateNotePlayfield(int columns)
-            => new EditorNotePlayfield(columns);
+        {
+            return new EditorNotePlayfield(columns);
+        }
     }
 }

@@ -17,7 +17,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Gameplay
     {
         protected override LocalisableString Header => "Note";
 
-        public override SettingsSubsectionPreview CreatePreview() => new NotePlayfieldPreview();
+        public override SettingsSubsectionPreview CreatePreview()
+        {
+            return new NotePlayfieldPreview();
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -38,7 +41,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Sections.Gameplay
                 {
                     LabelText = "Display ruby text",
                     Current = Config.GetBindable<bool>(KaraokeRulesetSetting.DisplayNoteRubyText)
-                },
+                }
             };
         }
 

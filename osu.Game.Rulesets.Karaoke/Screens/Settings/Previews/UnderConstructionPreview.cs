@@ -13,9 +13,8 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews
 {
     public class UnderConstructionPreview : SettingsSubsectionPreview
     {
-        private const double transition_time = 1000;
-
         public FillFlowContainer TextContainer { get; }
+        private const double transition_time = 1000;
 
         public UnderConstructionPreview()
         {
@@ -34,7 +33,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews
                         Icon = FontAwesome.Solid.UniversalAccess,
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Size = new Vector2(50),
+                        Size = new Vector2(50)
                     },
                     new OsuSpriteText
                     {
@@ -42,22 +41,22 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews
                         Origin = Anchor.TopCentre,
                         Text = "Oops",
                         Colour = ThemeColor.Lighten(0.8f),
-                        Font = OsuFont.GetFont(size: 36),
+                        Font = OsuFont.GetFont(size: 36)
                     },
                     new OsuSpriteText
                     {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
                         Text = "this preview is not yet ready for use!",
-                        Font = OsuFont.GetFont(size: 20),
+                        Font = OsuFont.GetFont(size: 20)
                     },
                     new OsuSpriteText
                     {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
                         Text = "please check back a bit later.",
-                        Font = OsuFont.GetFont(size: 14),
-                    },
+                        Font = OsuFont.GetFont(size: 14)
+                    }
                 }
             };
         }
@@ -68,10 +67,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews
 
             TextContainer.Position = new Vector2(DrawSize.X / 16, 0);
 
-            using (BeginDelayedSequence(100))
-            {
-                TextContainer.MoveTo(Vector2.Zero, transition_time, Easing.OutExpo);
-            }
+            using (BeginDelayedSequence(100)) TextContainer.MoveTo(Vector2.Zero, transition_time, Easing.OutExpo);
         }
     }
 }

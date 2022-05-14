@@ -13,6 +13,8 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Legacy
 
         // TODO : get current index
         protected override IBindable<T> GetKaraokeSkinConfig<T>(ISkin skin, LegacyKaraokeSkinConfigurationLookups lookup, int? index = null)
-            => base.GetKaraokeSkinConfig<T>(skin, lookup, index);
+        {
+            return base.GetKaraokeSkinConfig<T>(skin, lookup, index);
+        }
     }
 }

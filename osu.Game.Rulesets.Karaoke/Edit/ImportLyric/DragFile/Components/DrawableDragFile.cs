@@ -17,6 +17,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.DragFile.Components
 {
     public class DrawableDragFile : Container
     {
+        public Action<string> Import { get; set; }
         private const float button_height = 50;
         private const float button_vertical_margin = 15;
 
@@ -35,7 +36,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.DragFile.Components
                 new Box
                 {
                     Colour = colours.GreySeaFoamDark,
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both
                 },
                 fileSelector = new OsuFileSelector(validFileExtensions: ImportLyricManager.LyricFormatExtensions)
                 {
@@ -75,9 +76,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.DragFile.Components
                                 ScrollContent =
                                 {
                                     Anchor = Anchor.Centre,
-                                    Origin = Anchor.Centre,
+                                    Origin = Anchor.Centre
                                 }
-                            },
+                            }
                         },
                         importButton = new TriangleButton
                         {
@@ -109,7 +110,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ImportLyric.DragFile.Components
             // this should probably be done by the selector itself, but let's do it here for now.
             fileSelector.CurrentFile.Value = null;
         }
-
-        public Action<string> Import { get; set; }
     }
 }

@@ -12,36 +12,6 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Containers
 {
     public abstract class OrderRearrangeableListContainer<TModel> : OsuRearrangeableListContainer<TModel>
     {
-        public event Action<TModel, int> OnOrderChanged;
-
-        protected abstract Vector2 Spacing { get; }
-
-        protected OrderRearrangeableListContainer()
-        {
-            // this collection change event cannot directly register in parent bindable.
-            // So register in here.
-            Items.CollectionChanged += collectionChanged;
-        }
-
-        private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                // should get the event if user change the position.
-                case NotifyCollectionChangedAction.Move:
-                    var item = (TModel)e.NewItems[0];
-                    int newIndex = e.NewStartingIndex;
-                    OnOrderChanged?.Invoke(item, newIndex);
-                    break;
-            }
-        }
-
-        protected override FillFlowContainer<RearrangeableListItem<TModel>> CreateListFillFlowContainer()
-            => base.CreateListFillFlowContainer().With(x => x.Spacing = Spacing);
-
-        private bool displayBottomDrawable;
-        private Drawable bottomDrawable;
-
         public bool DisplayBottomDrawable
         {
             get => displayBottomDrawable;
@@ -76,6 +46,41 @@ namespace osu.Game.Rulesets.Karaoke.Graphics.Containers
             }
         }
 
-        protected virtual Drawable CreateBottomDrawable() => null;
+        protected abstract Vector2 Spacing { get; }
+
+        private bool displayBottomDrawable;
+        private Drawable bottomDrawable;
+
+        protected OrderRearrangeableListContainer()
+        {
+            // this collection change event cannot directly register in parent bindable.
+            // So register in here.
+            Items.CollectionChanged += collectionChanged;
+        }
+
+        protected override FillFlowContainer<RearrangeableListItem<TModel>> CreateListFillFlowContainer()
+        {
+            return base.CreateListFillFlowContainer().With(x => x.Spacing = Spacing);
+        }
+
+        protected virtual Drawable CreateBottomDrawable()
+        {
+            return null;
+        }
+
+        private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                // should get the event if user change the position.
+                case NotifyCollectionChangedAction.Move:
+                    var item = (TModel)e.NewItems[0];
+                    int newIndex = e.NewStartingIndex;
+                    OnOrderChanged?.Invoke(item, newIndex);
+                    break;
+            }
+        }
+
+        public event Action<TModel, int> OnOrderChanged;
     }
 }

@@ -25,7 +25,7 @@ using osu.Game.Overlays.Settings.Sections.Input;
 namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components.Description
 {
     /// <summary>
-    /// For showing the key and adjust the key binding.
+    ///     For showing the key and adjust the key binding.
     /// </summary>
     public class InputKeyText : OsuMarkdownLinkText, IHasPopover
     {
@@ -46,6 +46,45 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components.Description
             Masking = true;
         }
 
+        #region Disposal
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            if (keyCombinationProvider != null)
+                keyCombinationProvider.KeymapChanged -= updateDisplayText;
+        }
+
+        #endregion
+
+        public Popover GetPopover()
+        {
+            var popover = new OsuPopover
+            {
+                Child = new PopoverKeyBindingsSubsection(inputKey.AdjustableActions)
+                {
+                    Width = 300,
+                    RelativeSizeAxes = Axes.None
+                }
+            };
+
+            // because it's not possible to get the key change event, so at least update the key after popover closed.
+            popover.State.BindValueChanged(x =>
+            {
+                if (x.NewValue == Visibility.Hidden)
+                    updateDisplayText();
+            });
+
+            return popover;
+        }
+
+        protected override void OnLinkPressed()
+        {
+            // open the popover
+            this.ShowPopover();
+        }
+
         [BackgroundDependencyLoader]
         private void load(OverlayColourProvider colourProvider)
         {
@@ -54,7 +93,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components.Description
                 Name = "Background",
                 Depth = 1,
                 RelativeSizeAxes = Axes.Both,
-                Colour = colourProvider.Background6,
+                Colour = colourProvider.Background6
             });
 
             updateDisplayText();
@@ -90,41 +129,6 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.Components.Description
 
                 return keyCombinationProvider.GetReadableString(keyBinding.KeyCombination);
             }
-        }
-
-        protected override void OnLinkPressed()
-        {
-            // open the popover
-            this.ShowPopover();
-        }
-
-        public Popover GetPopover()
-        {
-            var popover = new OsuPopover
-            {
-                Child = new PopoverKeyBindingsSubsection(inputKey.AdjustableActions)
-                {
-                    Width = 300,
-                    RelativeSizeAxes = Axes.None,
-                }
-            };
-
-            // because it's not possible to get the key change event, so at least update the key after popover closed.
-            popover.State.BindValueChanged(x =>
-            {
-                if (x.NewValue == Visibility.Hidden)
-                    updateDisplayText();
-            });
-
-            return popover;
-        }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-
-            if (keyCombinationProvider != null)
-                keyCombinationProvider.KeymapChanged -= updateDisplayText;
         }
 
         private class PopoverKeyBindingsSubsection : VariantBindingsSubsection

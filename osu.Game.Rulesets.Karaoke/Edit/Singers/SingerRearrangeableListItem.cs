@@ -39,16 +39,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
                     },
                     new SingerLyricPlacementColumn(Model)
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.Both
                     }
                 }
             };
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(OsuColour colours)
-        {
-            dragAlert.Colour = colours.YellowDarker;
         }
 
         protected override bool OnDragStart(DragStartEvent e)
@@ -64,6 +58,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Singers
         {
             dragAlert.Hide();
             base.OnDragEnd(e);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(OsuColour colours)
+        {
+            dragAlert.Colour = colours.YellowDarker;
         }
     }
 }

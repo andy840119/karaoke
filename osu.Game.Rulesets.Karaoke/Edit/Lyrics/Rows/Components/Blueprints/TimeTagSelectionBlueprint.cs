@@ -11,6 +11,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Blueprints
 {
     public class TimeTagSelectionBlueprint : SelectionBlueprint<TimeTag>
     {
+        public override Vector2 ScreenSpaceSelectionPoint => ScreenSpaceDrawQuad.TopLeft;
         private const float time_tag_size = 10;
 
         [Resolved]
@@ -38,7 +39,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.Blueprints
             Width = time_tag_size;
             Height = time_tag_size;
         }
-
-        public override Vector2 ScreenSpaceSelectionPoint => ScreenSpaceDrawQuad.TopLeft;
     }
 }

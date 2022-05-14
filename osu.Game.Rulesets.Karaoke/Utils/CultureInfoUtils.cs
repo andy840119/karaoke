@@ -8,7 +8,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
     public static class CultureInfoUtils
     {
         /// <summary>
-        /// Get all the languages that are not related to the country
+        ///     Get all the languages that are not related to the country
         /// </summary>
         /// <returns></returns>
         public static CultureInfo[] GetAvailableLanguages()
@@ -18,9 +18,13 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         }
 
         public static bool IsLanguage(CultureInfo cultureInfo)
-            => (cultureInfo.CultureTypes & CultureTypes.NeutralCultures) != 0;
+        {
+            return (cultureInfo.CultureTypes & CultureTypes.NeutralCultures) != 0;
+        }
 
         public static string GetLanguageDisplayText(CultureInfo cultureInfo)
-            => cultureInfo?.NativeName ?? "None";
+        {
+            return cultureInfo?.NativeName ?? "None";
+        }
     }
 }

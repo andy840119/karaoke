@@ -10,10 +10,9 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
 {
     internal class NoteColorSection : StyleSection
     {
+        protected override string Title => "Color";
         private LabelledColourSelector noteColorPicker;
         private LabelledColourSelector blinkColorPicker;
-
-        protected override string Title => "Color";
 
         [BackgroundDependencyLoader]
         private void load(SkinManager manager)
@@ -23,12 +22,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Style
                 noteColorPicker = new LabelledColourSelector
                 {
                     Label = "Note color",
-                    Description = "Select color.",
+                    Description = "Select color."
                 },
                 blinkColorPicker = new LabelledColourSelector
                 {
                     Label = "Blink color",
-                    Description = "Select color.",
+                    Description = "Select color."
                 }
             };
         }

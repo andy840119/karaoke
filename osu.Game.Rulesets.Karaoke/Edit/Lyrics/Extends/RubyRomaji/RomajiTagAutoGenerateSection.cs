@@ -29,35 +29,45 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Extends.RubyRomaji
             private ILyricRomajiTagsChangeHandler romajiTagsChangeHandler { get; set; }
 
             protected override Dictionary<Lyric, string> GetDisableSelectingLyrics(IEnumerable<Lyric> lyrics)
-                => lyrics.Where(x => x.Language == null)
-                         .ToDictionary(k => k, _ => "Before generate romaji-tag, need to assign language first.");
+            {
+                return lyrics.Where(x => x.Language == null)
+                             .ToDictionary(k => k, _ => "Before generate romaji-tag, need to assign language first.");
+            }
 
             protected override void Apply()
-                => romajiTagsChangeHandler.AutoGenerate();
+            {
+                romajiTagsChangeHandler.AutoGenerate();
+            }
 
             protected override ConfigButton CreateConfigButton()
-                => new RomajiTagAutoGenerateConfigButton();
+            {
+                return new RomajiTagAutoGenerateConfigButton();
+            }
 
             protected class RomajiTagAutoGenerateConfigButton : MultiConfigButton
             {
                 protected override IEnumerable<KaraokeRulesetEditGeneratorSetting> AvailableSettings => new[]
                 {
-                    KaraokeRulesetEditGeneratorSetting.JaRomajiTagGeneratorConfig,
+                    KaraokeRulesetEditGeneratorSetting.JaRomajiTagGeneratorConfig
                 };
 
-                protected override string GetDisplayName(KaraokeRulesetEditGeneratorSetting setting) =>
-                    setting switch
+                protected override string GetDisplayName(KaraokeRulesetEditGeneratorSetting setting)
+                {
+                    return setting switch
                     {
                         KaraokeRulesetEditGeneratorSetting.JaRomajiTagGeneratorConfig => "Japanese",
                         _ => throw new ArgumentOutOfRangeException(nameof(setting))
                     };
+                }
 
-                protected override Popover GetPopoverBySettingType(KaraokeRulesetEditGeneratorSetting setting) =>
-                    setting switch
+                protected override Popover GetPopoverBySettingType(KaraokeRulesetEditGeneratorSetting setting)
+                {
+                    return setting switch
                     {
                         KaraokeRulesetEditGeneratorSetting.JaRomajiTagGeneratorConfig => new JaTimeTagGeneratorConfigPopover(),
                         _ => throw new ArgumentOutOfRangeException(nameof(setting))
                     };
+                }
             }
         }
     }

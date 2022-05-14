@@ -26,6 +26,18 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.SubInfo
             languageBindable = lyric.LanguageBindable.GetBoundCopy();
         }
 
+        public Popover GetPopover()
+        {
+            return new LanguageSelectorPopover(languageBindable);
+        }
+
+        protected override bool OnClick(ClickEvent e)
+        {
+            this.ShowPopover();
+
+            return base.OnClick(e);
+        }
+
         [BackgroundDependencyLoader]
         private void load(ILyricLanguageChangeHandler lyricLanguageChangeHandler, OsuColour colours)
         {
@@ -44,15 +56,5 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows.Components.SubInfo
             void updateBadgeText(CultureInfo language)
                 => BadgeText = CultureInfoUtils.GetLanguageDisplayText(language);
         }
-
-        protected override bool OnClick(ClickEvent e)
-        {
-            this.ShowPopover();
-
-            return base.OnClick(e);
-        }
-
-        public Popover GetPopover()
-            => new LanguageSelectorPopover(languageBindable);
     }
 }
