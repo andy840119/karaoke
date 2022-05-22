@@ -20,10 +20,6 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.TimeTags.Zh
             CheckCanGenerate(text, canGenerate, config);
         }
 
-        [TestCase(" 拉~", new[] { "[1,start]:", "[2,end]:" })] // should ignore the start spacing.
-        [TestCase("拉~ ", new[] { "[0,start]:", "[1,end]:" })] // should ignore the end spacing.
-        [TestCase("拉 拉", new[] { "[0,start]:", "[0,end]:", "[2,start]:", "[2,end]:" })]
-        [TestCase("拉~ 拉~", new[] { "[0,start]:", "[1,end]:", "[3,start]:", "[4,end]:" })]
         [TestCase("測試一些歌詞", new[] { "[0,start]:", "[1,start]:", "[2,start]:", "[3,start]:", "[4,start]:", "[5,start]:", "[5,end]:" })]
         [TestCase("拉拉拉~~~", new[] { "[0,start]:", "[1,start]:", "[2,start]:", "[5,end]:" })]
         [TestCase("拉~拉~拉~", new[] { "[0,start]:", "[2,start]:", "[4,start]:", "[5,end]:" })]
@@ -31,6 +27,31 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.TimeTags.Zh
         {
             var config = GeneratorConfig(nameof(ZhTimeTagGeneratorConfig.CheckLineEndKeyUp));
             CheckGenerateResult(lyric, expectedTimeTags, config);
+        }
+
+        [TestCase("     ", new[] { "[0,start]:", "[1,start]:", "[2,start]:", "[3,start]:", "[4,start]:" }, false)]
+        [TestCase("     ", new[] { "[0,start]:" }, true)]
+        public void TestLyricWithCheckWhiteSpace(string lyric, string[] expectedTimeTags, bool applyConfig)
+        {
+            var config = GeneratorConfig(applyConfig ? nameof(ZhTimeTagGeneratorConfig.CheckWhiteSpace) : null);
+            RunTimeTagCheckTest(lyric, expectedTimeTags, config);
+        }
+
+        /*
+        [TestCase("拉 拉", new[] { "[0,start]:", "[0,end]:", "[2,start]:", "[2,end]:" }, true)]
+        [TestCase("拉~ 拉~", new[] { "[0,start]:", "[1,end]:", "[3,start]:", "[4,end]:" }, true)]
+        public void TestLyricWithCheckWhiteSpace(string lyric, string[] expectedTimeTags, bool applyConfig)
+        {
+            var config = GeneratorConfig(applyConfig ? nameof(ZhTimeTagGeneratorConfig.CheckWhiteSpace) : null);
+            RunTimeTagCheckTest(lyric, expectedTimeTags, config);
+        }
+        */
+
+        [Ignore("This feature has not been implemented")]
+        public void TestLyricWithCheckWhiteSpaceKeyUp(string lyric, string[] expectedTimeTags, bool applyConfig)
+        {
+            var config = GeneratorConfig(applyConfig ? nameof(ZhTimeTagGeneratorConfig.CheckWhiteSpaceKeyUp) : null);
+            RunTimeTagCheckTest(lyric, expectedTimeTags, config);
         }
     }
 }

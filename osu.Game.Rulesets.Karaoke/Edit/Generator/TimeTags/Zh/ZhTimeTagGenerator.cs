@@ -22,17 +22,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Generator.TimeTags.Zh
             for (int i = 1; i < text.Length; i++)
             {
                 char c = text[i];
-                if (CharUtils.IsSpacing(c))
-                    continue;
 
                 if (CharUtils.IsChinese(c))
                 {
                     timeTags.Add(new TimeTag(new TextIndex(i)));
                 }
-
-                // should add end index if next char is space.
-                if (i + 1 < text.Length && CharUtils.IsSpacing(text[i + 1]))
-                    timeTags.Add(new TimeTag(new TextIndex(i, TextIndex.IndexState.End)));
+                else if (CharUtils.IsSpacing(c) && !Config.CheckWhiteSpace)
+                {
+                    timeTags.Add(new TimeTag(new TextIndex(i)));
+                }
             }
         }
     }
