@@ -20,6 +20,10 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.Generator.TimeTags.Zh
             CheckCanGenerate(text, canGenerate, config);
         }
 
+        [TestCase(" 拉~", new[] { "[1,start]:", "[2,end]:" })] // should ignore the start spacing.
+        [TestCase("拉~ ", new[] { "[0,start]:", "[1,end]:" })] // should ignore the end spacing.
+        [TestCase("拉 拉", new[] { "[0,start]:", "[0,end]:", "[2,start]:", "[2,end]:" })]
+        [TestCase("拉~ 拉~", new[] { "[0,start]:", "[1,end]:", "[3,start]:", "[4,end]:" })]
         [TestCase("測試一些歌詞", new[] { "[0,start]:", "[1,start]:", "[2,start]:", "[3,start]:", "[4,start]:", "[5,start]:", "[5,end]:" })]
         [TestCase("拉拉拉~~~", new[] { "[0,start]:", "[1,start]:", "[2,start]:", "[5,end]:" })]
         [TestCase("拉~拉~拉~", new[] { "[0,start]:", "[2,start]:", "[4,start]:", "[5,end]:" })]
