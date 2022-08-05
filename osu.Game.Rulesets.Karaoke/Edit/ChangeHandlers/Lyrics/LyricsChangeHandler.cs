@@ -3,15 +3,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using osu.Framework.Allocation;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Utils;
+using osu.Game.Screens.Edit;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
 {
     public class LyricsChangeHandler : HitObjectChangeHandler<Lyric>, ILyricsChangeHandler
     {
+        [Resolved, AllowNull]
+        private EditorBeatmap beatmap { get; set; }
+
         public void Split(int index)
         {
             CheckExactlySelectedOneHitObject();
@@ -126,6 +132,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
             });
         }
 
+        #region Add/remove hit objects
+
         protected override void Add<T>(T hitObject)
         {
             if (hitObject is Lyric lyric)
@@ -158,5 +166,21 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
 
         private int getId()
             => HitObjects.Any() ? HitObjects.Max(x => x.ID) + 1 : 1;
+
+        protected override void Remove<T>(T hitObject)
+        {
+            if (hitObject is Lyric lyric)
+            {
+                var matchedNotes = getMatchNotes(lyric);
+                RemoveRange(matchedNotes);
+            }
+
+            base.Remove(hitObject);
+        }
+
+        private IEnumerable<Note> getMatchNotes(Lyric lyric)
+            => beatmap.HitObjects.OfType<Note>().Where(x => x.ParentLyric == lyric);
+
+        #endregion
     }
 }

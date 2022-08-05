@@ -58,6 +58,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers
             }
         }
 
+        #region Add/remove hit objects
+
         protected void AddRange<T>(IEnumerable<T> hitObjects) where T : HitObject => hitObjects.ForEach(Add);
 
         protected virtual void Add<T>(T hitObject) where T : HitObject
@@ -78,8 +80,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers
             beatmap.Insert(index, hitObject);
         }
 
-        protected void Remove<T>(T hitObject) where T : HitObject => beatmap.Remove(hitObject);
+        protected void RemoveRange<T>(IEnumerable<T> hitObjects) where T : HitObject => hitObjects.ToArray().ForEach(Remove);
 
-        protected void RemoveRange<T>(IEnumerable<T> hitObjects) where T : HitObject => beatmap.RemoveRange(hitObjects);
+        protected virtual void Remove<T>(T hitObject) where T : HitObject => beatmap.Remove(hitObject);
+
+        #endregion
     }
 }
