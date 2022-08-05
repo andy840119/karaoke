@@ -2,6 +2,8 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using osu.Game.Rulesets.Karaoke.Objects;
 
 namespace osu.Game.Rulesets.Karaoke.Utils
@@ -43,6 +45,19 @@ namespace osu.Game.Rulesets.Karaoke.Utils
             double endTime = Math.Max(firstLyric.EndTime, secondLyric.EndTime);
 
             return NoteUtils.CopyByTime(firstLyric, startTime, endTime - startTime);
+        }
+
+        public static IEnumerable<Note> Sort(IEnumerable<Note> notes)
+            => notes.OrderBy(x => x.StartTime).ThenBy(x => x.EndIndex);
+
+        public static Tuple<IEnumerable<Note>, IEnumerable<Note>> SeparateNoteByTime(Note[] notes, double splitTime)
+        {
+            var sortedNotes = Sort(notes);
+            int splitIndex = sortedNotes.ToList().FindIndex(x => x.EndTime > splitTime);
+
+            return splitIndex == -1
+                ? new Tuple<IEnumerable<Note>, IEnumerable<Note>>(notes, new Note[] { })
+                : new Tuple<IEnumerable<Note>, IEnumerable<Note>>(notes[..splitIndex], notes[splitIndex..]);
         }
     }
 }
