@@ -104,6 +104,36 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
             });
         }
 
+        public void PasteBelowToSelection(Lyric copiedLyric)
+        {
+            PasteRangeBelowToSelection(new[] { copiedLyric });
+        }
+
+        public void PasteRangeBelowToSelection(IEnumerable<Lyric> copiedLyrics)
+        {
+            CheckExactlySelectedOneHitObject();
+
+            if (copiedLyrics.Any(x => !HitObjects.Contains(x)))
+                throw new InvalidOperationException("Copied lyric should in the beatmap");
+
+            PerformOnSelection(lyric =>
+            {
+                int order = lyric.Order;
+
+                // Shifting order that order is larger than current lyric.
+                OrderUtils.ShiftingOrder(HitObjects.Where(x => x.Order > order), copiedLyrics.Count());
+
+                foreach (var copiedLyric in copiedLyrics)
+                {
+                    var newlyric = copiedLyric.DeepClone();
+                    newlyric.Order = ++order;
+                    Add(newlyric);
+
+                    // todo: should copy the note also.
+                }
+            });
+        }
+
         public void Remove()
         {
             PerformOnSelection(lyric =>

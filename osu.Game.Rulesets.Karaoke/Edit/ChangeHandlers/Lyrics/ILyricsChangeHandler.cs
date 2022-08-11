@@ -20,6 +20,10 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
 
         void InsertRangeBelowToSelection(IEnumerable<Lyric> lyrics);
 
+        void PasteBelowToSelection(Lyric copiedLyric);
+
+        void PasteRangeBelowToSelection(IEnumerable<Lyric> copiedLyrics);
+
         void Remove();
 
         void ChangeOrder(int newOrder);

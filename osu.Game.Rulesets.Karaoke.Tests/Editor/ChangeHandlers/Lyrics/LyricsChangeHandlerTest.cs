@@ -242,6 +242,71 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
+        public void TestPasteBelowToSelection()
+        {
+            var copiedLyric = new Lyric
+            {
+                Text = "Copied lyric",
+                ID = 0,
+                Order = 1,
+            };
+
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                ID = 1,
+                Order = 2,
+            });
+            PrepareHitObject(copiedLyric, false);
+
+            TriggerHandlerChanged(c => c.PasteBelowToSelection(copiedLyric));
+
+            AssertHitObjects(hitObjects =>
+            {
+                var lyrics = hitObjects.ToArray();
+                Assert.AreEqual(3, lyrics.Length);
+
+                var addedLyric = lyrics.First(x => x.ID == 2);
+                Assert.AreEqual("Copied lyric", addedLyric.Text);
+                Assert.AreEqual(3, addedLyric.Order);
+            });
+        }
+
+        [Test]
+        public void TestPasteRangeBelowToSelection()
+        {
+            var copiedLyric = new Lyric
+            {
+                Text = "Copied lyric",
+                ID = 0,
+                Order = 1,
+            };
+
+            PrepareHitObject(new Lyric
+            {
+                Text = "カラオケ",
+                ID = 1,
+                Order = 2,
+            });
+            PrepareHitObject(copiedLyric, false);
+
+            TriggerHandlerChanged(c => c.PasteRangeBelowToSelection(new[]
+            {
+                copiedLyric
+            }));
+
+            AssertHitObjects(hitObjects =>
+            {
+                var lyrics = hitObjects.ToArray();
+                Assert.AreEqual(3, lyrics.Length);
+
+                var addedLyric = lyrics.First(x => x.ID == 2);
+                Assert.AreEqual("Copied lyric", addedLyric.Text);
+                Assert.AreEqual(3, addedLyric.Order);
+            });
+        }
+
+        [Test]
         public void TestRemove()
         {
             PrepareHitObject(new Lyric
