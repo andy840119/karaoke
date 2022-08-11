@@ -60,15 +60,15 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
             });
         }
 
-        public void CreateAtPosition()
+        public void InsertDefaultBelowToSelection()
         {
-            AddBelowToSelection(new Lyric
+            InsertBelowToSelection(new Lyric
             {
                 Text = "New lyric",
             });
         }
 
-        public void CreateAtLast()
+        public void InsertDefaultToLast()
         {
             int order = OrderUtils.GetMaxOrderNumber(HitObjects.ToArray());
 
@@ -80,12 +80,12 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
             });
         }
 
-        public void AddBelowToSelection(Lyric newLyric)
+        public void InsertBelowToSelection(Lyric newLyric)
         {
-            AddRangeBelowToSelection(new[] { newLyric });
+            InsertRangeBelowToSelection(new[] { newLyric });
         }
 
-        public void AddRangeBelowToSelection(IEnumerable<Lyric> newlyrics)
+        public void InsertRangeBelowToSelection(IEnumerable<Lyric> newlyrics)
         {
             CheckExactlySelectedOneHitObject();
 

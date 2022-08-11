@@ -12,13 +12,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics
 
         void Combine();
 
-        void CreateAtPosition();
+        void InsertDefaultBelowToSelection();
 
-        void CreateAtLast();
+        void InsertDefaultToLast();
 
-        void AddBelowToSelection(Lyric lyric);
+        void InsertBelowToSelection(Lyric lyric);
 
-        void AddRangeBelowToSelection(IEnumerable<Lyric> lyrics);
+        void InsertRangeBelowToSelection(IEnumerable<Lyric> lyrics);
 
         void Remove();
 

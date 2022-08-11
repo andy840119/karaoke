@@ -274,7 +274,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                     {
                         new OsuMenuItem("Create new lyric", MenuItemType.Standard, () =>
                         {
-                            lyricsChangeHandler.CreateAtPosition();
+                            lyricsChangeHandler.InsertDefaultBelowToSelection();
                         })
                     };
 

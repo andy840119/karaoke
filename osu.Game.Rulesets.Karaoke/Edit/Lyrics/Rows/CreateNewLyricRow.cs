@@ -38,7 +38,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Rows
                     TooltipText = "Click to add new lyric",
                     Action = () =>
                     {
-                        lyricsChangeHandler.CreateAtLast();
+                        lyricsChangeHandler.InsertDefaultToLast();
                     }
                 }
             };

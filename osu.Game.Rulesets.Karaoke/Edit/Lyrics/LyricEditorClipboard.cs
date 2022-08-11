@@ -316,7 +316,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                             if (lyricsChangeHandler == null)
                                 throw new NullDependencyException($"Missing {nameof(lyricsChangeHandler)}");
 
-                            lyricsChangeHandler.AddBelowToSelection(pasteLyric);
+                            lyricsChangeHandler.InsertBelowToSelection(pasteLyric);
                             return true;
 
                         default:

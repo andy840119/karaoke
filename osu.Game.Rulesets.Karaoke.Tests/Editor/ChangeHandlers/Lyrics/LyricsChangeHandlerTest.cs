@@ -81,7 +81,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestCreateAtPosition()
+        public void TestInsertDefaultBelowToSelection()
         {
             PrepareHitObject(new Lyric
             {
@@ -97,7 +97,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Order = 2,
             }, false);
 
-            TriggerHandlerChanged(c => c.CreateAtPosition());
+            TriggerHandlerChanged(c => c.InsertDefaultBelowToSelection());
 
             AssertHitObjects(hitObjects =>
             {
@@ -119,7 +119,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestCreateAtLast()
+        public void TestInsertDefaultToLast()
         {
             PrepareHitObject(new Lyric
             {
@@ -135,7 +135,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Order = 2,
             }, false);
 
-            TriggerHandlerChanged(c => c.CreateAtLast());
+            TriggerHandlerChanged(c => c.InsertDefaultToLast());
 
             AssertHitObjects(hitObjects =>
             {
@@ -157,9 +157,9 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestCreateAtLastWithEmptyBeatmap()
+        public void TestInsertDefaultToLastWithEmptyBeatmap()
         {
-            TriggerHandlerChanged(c => c.CreateAtLast());
+            TriggerHandlerChanged(c => c.InsertDefaultToLast());
 
             AssertHitObjects(hitObjects =>
             {
@@ -173,7 +173,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestAddBelowToSelection()
+        public void TestInsertBelowToSelection()
         {
             PrepareHitObject(new Lyric
             {
@@ -189,7 +189,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Order = 2,
             }, false);
 
-            TriggerHandlerChanged(c => c.AddBelowToSelection(new Lyric
+            TriggerHandlerChanged(c => c.InsertBelowToSelection(new Lyric
             {
                 Text = "New lyric"
             }));
@@ -206,7 +206,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
         }
 
         [Test]
-        public void TestAddRangeBelowToSelection()
+        public void TestInsertRangeBelowToSelection()
         {
             PrepareHitObject(new Lyric
             {
@@ -222,7 +222,7 @@ namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics
                 Order = 2,
             }, false);
 
-            TriggerHandlerChanged(c => c.AddRangeBelowToSelection(new[]
+            TriggerHandlerChanged(c => c.InsertRangeBelowToSelection(new[]
             {
                 new Lyric
                 {
