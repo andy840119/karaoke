@@ -237,7 +237,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                             return false;
 
                         case TextingEditMode.Split:
-                            saveObjectToTheClipboardContent(lyric);
+                            saveObjectToTheClipboardContent(lyric.ID);
                             copyObjectToClipboard(lyric.Text);
                             return true;
 
@@ -309,14 +309,14 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics
                             return false;
 
                         case TextingEditMode.Split:
-                            var pasteLyric = getObjectFromClipboardContent<Lyric>();
-                            if (pasteLyric == null)
+                            int? copiedLyricId = getObjectFromClipboardContent<int?>();
+                            if (copiedLyricId == null)
                                 return false;
 
                             if (lyricsChangeHandler == null)
                                 throw new NullDependencyException($"Missing {nameof(lyricsChangeHandler)}");
 
-                            lyricsChangeHandler.InsertBelowToSelection(pasteLyric);
+                            lyricsChangeHandler.InsertBelowToSelection(copiedLyricId);
                             return true;
 
                         default:
