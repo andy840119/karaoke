@@ -37,6 +37,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
         private readonly IBindable<ModeWithSubMode> bindableModeAndSubMode = new Bindable<ModeWithSubMode>();
 
         // it might be special for create time-tag mode.
+        private readonly IBindable<bool> bindablePressPreviousOrNextButtonToSwitchLyric = new Bindable<bool>();
         private readonly IBindable<CreateTimeTagEditMode> bindableCreateTimeTagEditMode = new Bindable<CreateTimeTagEditMode>();
         private readonly IBindable<MovingTimeTagCaretMode> bindableCreateMovingCaretMode = new Bindable<MovingTimeTagCaretMode>();
         private readonly IBindable<MovingTimeTagCaretMode> bindableRecordingMovingCaretMode = new Bindable<MovingTimeTagCaretMode>();
@@ -178,6 +179,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
 
             bindableModeAndSubMode.BindTo(state.BindableModeAndSubMode);
 
+            lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.PressPreviousOrNextButtonToSwitchLyric, bindablePressPreviousOrNextButtonToSwitchLyric);
             lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.CreateTimeTagEditMode, bindableCreateTimeTagEditMode);
             lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.CreateTimeTagMovingCaretMode, bindableCreateMovingCaretMode);
             lyricEditorConfigManager.BindWith(KaraokeRulesetLyricEditorSetting.RecordingTimeTagMovingCaretMode, bindableRecordingMovingCaretMode);
@@ -212,34 +214,34 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
                 _ => throw new InvalidEnumArgumentException(nameof(action))
             };
 
-            static ICaretPosition? performMoveToPreviousIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
+            ICaretPosition? performMoveToPreviousIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
                 performMoveCaret(algorithm, caretPosition,
                     (a, c) => a.MoveToPreviousIndex(c),
                     (a, c) => a.MoveToPreviousLyric(c),
                     (a, c) => a.MoveToLastIndex(c.Lyric));
 
-            static ICaretPosition? performMoveToNextIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
+            ICaretPosition? performMoveToNextIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
                 performMoveCaret(algorithm, caretPosition,
                     (a, c) => a.MoveToNextIndex(c),
                     (a, c) => a.MoveToNextLyric(c),
                     (a, c) => a.MoveToFirstIndex(c.Lyric));
 
-            static ICaretPosition? performMoveToFirstIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
+            ICaretPosition? performMoveToFirstIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
                 performMoveCaret(algorithm, caretPosition,
                     (a, c) => a.MoveToFirstIndex(c.Lyric),
                     (a, c) => a.MoveToPreviousLyric(c),
                     (a, c) => a.MoveToFirstIndex(c.Lyric));
 
-            static ICaretPosition? performMoveToLastIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
+            ICaretPosition? performMoveToLastIndex(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition) =>
                 performMoveCaret(algorithm, caretPosition,
                     (a, c) => a.MoveToLastIndex(c.Lyric),
                     (a, c) => a.MoveToNextLyric(c),
                     (a, c) => a.MoveToLastIndex(c.Lyric));
 
-            static ICaretPosition? performMoveCaret(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition,
-                                                    Func<IIndexCaretPositionAlgorithm, IIndexCaretPosition, ICaretPosition?> action,
-                                                    Func<IIndexCaretPositionAlgorithm, ICaretPosition, ICaretPosition?> switchLyricAction,
-                                                    Func<IIndexCaretPositionAlgorithm, ICaretPosition, ICaretPosition?> getNewCaretAction)
+            ICaretPosition? performMoveCaret(ICaretPositionAlgorithm algorithm, ICaretPosition caretPosition,
+                                             Func<IIndexCaretPositionAlgorithm, IIndexCaretPosition, ICaretPosition?> action,
+                                             Func<IIndexCaretPositionAlgorithm, ICaretPosition, ICaretPosition?> switchLyricAction,
+                                             Func<IIndexCaretPositionAlgorithm, ICaretPosition, ICaretPosition?> getNewCaretAction)
             {
                 if (algorithm is not IIndexCaretPositionAlgorithm indexCaretPositionAlgorithm)
                     return null;
@@ -254,6 +256,9 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
                 var movedCaretPosition = action(indexCaretPositionAlgorithm, indexCaretPosition);
                 if (movedCaretPosition != null && !EqualityComparer<ICaretPosition>.Default.Equals(movedCaretPosition, caretPosition))
                     return movedCaretPosition;
+
+                if (!bindablePressPreviousOrNextButtonToSwitchLyric.Value)
+                    return null;
 
                 // if the caret is not valid to go, then trying to find the valid caret position in the different lyric.
                 var newLyricCaretPosition = switchLyricAction(indexCaretPositionAlgorithm, caretPosition);
