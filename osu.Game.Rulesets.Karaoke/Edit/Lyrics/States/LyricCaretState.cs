@@ -128,7 +128,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
             return mode switch
             {
                 LyricEditorMode.View => null,
-                LyricEditorMode.Texting => subMode is TextingEditMode textingEditMode ? getTextingmodeAlgorithm(textingEditMode) : throw new InvalidCastException(),
+                LyricEditorMode.Texting => subMode is TextingEditMode textingEditMode ? getTextingModeAlgorithm(textingEditMode) : throw new InvalidCastException(),
                 LyricEditorMode.Reference => new NavigateCaretPositionAlgorithm(lyrics),
                 LyricEditorMode.Language => new ClickingCaretPositionAlgorithm(lyrics),
                 LyricEditorMode.EditRuby => new NavigateCaretPositionAlgorithm(lyrics),
@@ -139,7 +139,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States
                 _ => throw new InvalidOperationException(nameof(mode))
             };
 
-            ICaretPositionAlgorithm getTextingmodeAlgorithm(TextingEditMode textingEditMode)
+            ICaretPositionAlgorithm getTextingModeAlgorithm(TextingEditMode textingEditMode)
             {
                 return textingEditMode switch
                 {
