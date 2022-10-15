@@ -23,6 +23,7 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
             SetDefault(KaraokeRulesetLyricEditorSetting.AutoFocusToEditLyric, true);
             SetDefault(KaraokeRulesetLyricEditorSetting.AutoFocusToEditLyricSkipRows, 1, 0, 4);
             SetDefault(KaraokeRulesetLyricEditorSetting.ClickToLockLyricState, LockState.Partial);
+            SetDefault(KaraokeRulesetLyricEditorSetting.PressPreviousOrNextButtonToSwitchLyric, true);
 
             // Composer
             SetDefault(KaraokeRulesetLyricEditorSetting.ShowPropertyPanelInComposer, true);
@@ -63,6 +64,7 @@ namespace osu.Game.Rulesets.Karaoke.Configuration
         AutoFocusToEditLyric,
         AutoFocusToEditLyricSkipRows,
         ClickToLockLyricState,
+        PressPreviousOrNextButtonToSwitchLyric,
 
         // Composer
         ShowPropertyPanelInComposer,
