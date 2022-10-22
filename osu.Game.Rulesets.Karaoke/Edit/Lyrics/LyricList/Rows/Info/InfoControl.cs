@@ -191,7 +191,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.LyricList.Rows.Info
 
                     case LyricEditorMode.EditTimeTag:
                         if (subMode is not TimeTagEditMode timeTagEditMode)
-                            throw new NullReferenceException();
+                            throw new ArgumentNullException();
 
                         return createTimeTagModeSubInfo(timeTagEditMode, Lyric);
 

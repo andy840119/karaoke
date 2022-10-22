@@ -92,7 +92,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Settings.Reference
                         break;
 
                     default:
-                        throw new IndexOutOfRangeException();
+                        throw new ArgumentNullException();
                 }
             });
 
@@ -166,7 +166,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Settings.Reference
                     break;
 
                 default:
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentNullException();
             }
 
             isConfigChanging = false;
