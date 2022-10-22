@@ -3,6 +3,7 @@
 
 using System;
 using System.Reflection;
+using osu.Framework.Extensions.ObjectExtensions;
 using osu.Game.Rulesets.Karaoke.Skinning.MappingRoles;
 
 namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
@@ -13,7 +14,7 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
         {
             // only get name from font
             var assembly = Assembly.GetExecutingAssembly();
-            return assembly.GetType($"osu.Game.Rulesets.Karaoke.Skinning.MappingRoles.{name}");
+            return assembly.GetType($"osu.Game.Rulesets.Karaoke.Skinning.MappingRoles.{name}").AsNonNull();
         }
     }
 }

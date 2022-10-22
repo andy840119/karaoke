@@ -3,6 +3,7 @@
 
 using System.Linq;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.ObjectExtensions;
 
 namespace osu.Game.Rulesets.Karaoke.Utils
 {
@@ -34,7 +35,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
                 if (oldItems != null && oldItems.Count > 0)
                 {
                     // remove objects from second list if exist items has been removed.
-                    secondBindableList.RemoveAll(x => args.OldItems.Contains(x));
+                    secondBindableList.RemoveAll(x => args.OldItems.AsNonNull().Contains(x));
                 }
             };
         }

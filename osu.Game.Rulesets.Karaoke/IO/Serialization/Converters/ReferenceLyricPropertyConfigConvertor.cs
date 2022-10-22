@@ -3,6 +3,7 @@
 
 using System;
 using System.Reflection;
+using osu.Framework.Extensions.ObjectExtensions;
 using osu.Game.Rulesets.Karaoke.Objects.Properties;
 
 namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
@@ -12,7 +13,7 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
         protected override Type GetTypeByName(string name)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            return assembly.GetType($"osu.Game.Rulesets.Karaoke.Objects.Properties.{name}");
+            return assembly.GetType($"osu.Game.Rulesets.Karaoke.Objects.Properties.{name}").AsNonNull();
         }
     }
 }

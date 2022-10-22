@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.ObjectExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Karaoke.Edit.Lyrics.States;
@@ -82,13 +83,13 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.Compose.BottomEditor.Notes
                 switch (args.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (var obj in args.NewItems.OfType<Note>())
+                        foreach (var obj in args.NewItems.AsNonNull().OfType<Note>())
                             Playfield.Add(obj);
 
                         break;
 
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (var obj in args.OldItems.OfType<Note>())
+                        foreach (var obj in args.OldItems.AsNonNull().OfType<Note>())
                             Playfield.Remove(obj);
 
                         break;

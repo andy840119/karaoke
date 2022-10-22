@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.ObjectExtensions;
 using osu.Game.Rulesets.Karaoke.Objects.Properties;
 
 namespace osu.Game.Rulesets.Karaoke.Objects
@@ -20,13 +21,13 @@ namespace osu.Game.Rulesets.Karaoke.Objects
                 switch (args.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (var c in args.NewItems.Cast<TimeTag>())
+                        foreach (var c in args.NewItems.AsNonNull().Cast<TimeTag>())
                             c.Changed += invalidate;
                         break;
 
                     case NotifyCollectionChangedAction.Reset:
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (var c in args.OldItems.Cast<TimeTag>())
+                        foreach (var c in args.OldItems.AsNonNull().Cast<TimeTag>())
                             c.Changed -= invalidate;
                         break;
                 }
@@ -39,13 +40,13 @@ namespace osu.Game.Rulesets.Karaoke.Objects
                 switch (args.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (var c in args.NewItems.Cast<RubyTag>())
+                        foreach (var c in args.NewItems.AsNonNull().Cast<RubyTag>())
                             c.Changed += invalidate;
                         break;
 
                     case NotifyCollectionChangedAction.Reset:
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (var c in args.OldItems.Cast<RubyTag>())
+                        foreach (var c in args.OldItems.AsNonNull().Cast<RubyTag>())
                             c.Changed -= invalidate;
                         break;
                 }
@@ -58,13 +59,13 @@ namespace osu.Game.Rulesets.Karaoke.Objects
                 switch (args.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (var c in args.NewItems.Cast<RomajiTag>())
+                        foreach (var c in args.NewItems.AsNonNull().Cast<RomajiTag>())
                             c.Changed += invalidate;
                         break;
 
                     case NotifyCollectionChangedAction.Reset:
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (var c in args.OldItems.Cast<RomajiTag>())
+                        foreach (var c in args.OldItems.AsNonNull().Cast<RomajiTag>())
                             c.Changed -= invalidate;
                         break;
                 }

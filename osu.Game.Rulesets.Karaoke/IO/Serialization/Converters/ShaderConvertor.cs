@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using osu.Framework.Extensions.ObjectExtensions;
 using osu.Framework.Graphics.Shaders;
 using osu.Game.Rulesets.Karaoke.Utils;
 
@@ -36,7 +37,7 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
             // only get name from font
             var assembly = AssemblyUtils.GetAssemblyByName("osu.Framework.KaraokeFont");
             Debug.Assert(assembly != null);
-            return assembly.GetType($"osu.Framework.Graphics.Shaders.{name}");
+            return assembly.GetType($"osu.Framework.Graphics.Shaders.{name}").AsNonNull();
         }
     }
 }
