@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Reflection;
+using osu.Framework.Extensions.ObjectExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
@@ -24,7 +25,7 @@ namespace osu.Game.Rulesets.Karaoke.Extensions
             if (prop == null)
                 return null;
 
-            return (IReadOnlyList<Drawable>)prop.GetValue(compositeDrawable);
+            return (IReadOnlyList<Drawable>)prop.GetValue(compositeDrawable).AsNonNull();
         }
     }
 }

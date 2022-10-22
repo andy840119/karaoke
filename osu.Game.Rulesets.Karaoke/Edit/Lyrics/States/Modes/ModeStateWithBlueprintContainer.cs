@@ -64,7 +64,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.Lyrics.States.Modes
             {
                 case CaretGenerateType.Action:
                     if (SelectFirstProperty(lyric))
-                        SelectedItems.Add(SelectableProperties(lyric).FirstOrDefault());
+                        SelectedItems.Add(SelectableProperties(lyric).First());
                     break;
 
                 case CaretGenerateType.TargetLyric:

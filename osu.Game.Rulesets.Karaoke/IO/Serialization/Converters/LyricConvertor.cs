@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using osu.Framework.Extensions.ObjectExtensions;
 using osu.Game.Extensions;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Objects.Properties;
@@ -21,7 +22,7 @@ namespace osu.Game.Rulesets.Karaoke.IO.Serialization.Converters
 
             var newReader = jObject.CreateReader();
 
-            var instance = (Lyric)Activator.CreateInstance(objectType);
+            var instance = (Lyric)Activator.CreateInstance(objectType).AsNonNull();
             serializer.Populate(newReader, instance);
             return instance;
         }
