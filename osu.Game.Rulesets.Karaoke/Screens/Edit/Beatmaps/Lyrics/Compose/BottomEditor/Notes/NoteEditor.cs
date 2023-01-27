@@ -9,6 +9,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.Edit;
 using osu.Game.Rulesets.Karaoke.Edit.Utils;
 using osu.Game.Rulesets.Karaoke.Objects;
@@ -25,10 +26,8 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Beatmaps.Lyrics.Compose.BottomE
     [Cached]
     public partial class NoteEditor : Container
     {
-        private const int columns = 9;
-
         [Cached(typeof(INotePositionInfo))]
-        private readonly PreviewNotePositionInfo notePositionInfo = new();
+        private readonly PreviewNotePositionInfo notePositionInfo;
 
         [Resolved, AllowNull]
         private EditorBeatmap beatmap { get; set; }
@@ -43,6 +42,10 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Beatmaps.Lyrics.Compose.BottomE
 
         public NoteEditor()
         {
+            var karaokeBeatmap = EditorBeatmapUtils.GetPlayableBeatmap(beatmap);
+            var noteInfo = karaokeBeatmap.NoteInfo;
+            notePositionInfo = new PreviewNotePositionInfo(noteInfo);
+
             InternalChild = new Container
             {
                 Name = "Content",
@@ -50,7 +53,7 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Beatmaps.Lyrics.Compose.BottomE
                 Children = new Drawable[]
                 {
                     // layers below playfield
-                    Playfield = new EditorNotePlayfield(columns)
+                    Playfield = new EditorNotePlayfield(noteInfo)
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
@@ -143,7 +146,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Beatmaps.Lyrics.Compose.BottomE
 
         private class PreviewNotePositionInfo : INotePositionInfo
         {
-            public IBindable<NotePositionCalculator> Position { get; } = new Bindable<NotePositionCalculator>(new NotePositionCalculator(columns, 12, ScrollingNotePlayfield.COLUMN_SPACING));
+            public PreviewNotePositionInfo(NoteInfo noteInfo)
+            {
+                Position = new Bindable<NotePositionCalculator>(new NotePositionCalculator(noteInfo, 12, ScrollingNotePlayfield.COLUMN_SPACING));
+            }
+
+            public IBindable<NotePositionCalculator> Position { get; }
 
             public NotePositionCalculator Calculator => Position.Value;
         }

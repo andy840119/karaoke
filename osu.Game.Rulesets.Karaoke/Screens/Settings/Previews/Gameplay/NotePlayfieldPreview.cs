@@ -9,6 +9,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Lists;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.Configuration;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Scoring;
@@ -105,8 +106,12 @@ namespace osu.Game.Rulesets.Karaoke.Screens.Settings.Previews.Gameplay
 
         private class PreviewNotePositionInfo : INotePositionInfo
         {
-            public IBindable<NotePositionCalculator> Position { get; } =
-                new Bindable<NotePositionCalculator>(new NotePositionCalculator(columns, DefaultColumnBackground.COLUMN_HEIGHT, ScrollingNotePlayfield.COLUMN_SPACING));
+            public PreviewNotePositionInfo(NoteInfo noteInfo)
+            {
+                Position = new Bindable<NotePositionCalculator>(new NotePositionCalculator(noteInfo, DefaultColumnBackground.COLUMN_HEIGHT, ScrollingNotePlayfield.COLUMN_SPACING));
+            }
+
+            public IBindable<NotePositionCalculator> Position { get; }
 
             public NotePositionCalculator Calculator => Position.Value;
         }
