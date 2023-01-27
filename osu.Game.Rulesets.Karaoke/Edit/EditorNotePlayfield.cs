@@ -9,6 +9,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.UI.Components;
 using osu.Game.Rulesets.Karaoke.UI.Scrolling;
 using osuTK.Graphics;
@@ -19,8 +20,8 @@ namespace osu.Game.Rulesets.Karaoke.Edit
     {
         private readonly SingerVoiceVisualization singerVoiceVisualization;
 
-        public EditorNotePlayfield(int columns)
-            : base(columns)
+        public EditorNotePlayfield(NoteInfo noteInfo)
+            : base(noteInfo)
         {
             BackgroundLayer.AddRange(new Drawable[]
             {

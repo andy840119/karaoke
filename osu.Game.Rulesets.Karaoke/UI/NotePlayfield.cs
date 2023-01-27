@@ -13,6 +13,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Judgements;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.Configuration;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Objects.Drawables;
@@ -50,8 +51,8 @@ namespace osu.Game.Rulesets.Karaoke.UI
         [Resolved]
         private INotePositionInfo notePositionInfo { get; set; }
 
-        public NotePlayfield(int columns)
-            : base(columns)
+        public NotePlayfield(NoteInfo noteInfo)
+            : base(noteInfo)
         {
             if (InternalChildren.FirstOrDefault() is Container container)
             {

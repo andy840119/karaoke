@@ -10,6 +10,7 @@ using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Graphics;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Objects.Drawables;
 using osu.Game.Rulesets.Karaoke.Skinning;
@@ -33,11 +34,13 @@ namespace osu.Game.Rulesets.Karaoke.UI.Scrolling
 
         private readonly IBindable<NotePositionCalculator> calculator = new Bindable<NotePositionCalculator>();
 
-        public int Columns { get; }
+        public NoteInfo NoteInfo { get; }
 
-        protected ScrollingNotePlayfield(int columns)
+        private int columns => NoteInfo.Columns;
+
+        protected ScrollingNotePlayfield(NoteInfo noteInfo)
         {
-            Columns = columns;
+            NoteInfo = noteInfo;
 
             RelativeSizeAxes = Axes.X;
             AutoSizeAxes = Axes.Y;
@@ -134,7 +137,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Scrolling
             Direction.BindValueChanged(dir =>
             {
                 float judgementAreaPercentage = skin.GetConfig<KaraokeSkinConfigurationLookup, float>(
-                                                        new KaraokeSkinConfigurationLookup(Columns, LegacyKaraokeSkinConfigurationLookups.JudgementAresPercentage, 0))
+                                                        new KaraokeSkinConfigurationLookup(columns, LegacyKaraokeSkinConfigurationLookups.JudgementAresPercentage, 0))
                                                     ?.Value ?? 0.4f;
 
                 var newDirection = dir.NewValue;
@@ -159,7 +162,7 @@ namespace osu.Game.Rulesets.Karaoke.UI.Scrolling
             {
                 float columnHeight = e.NewValue.ColumnHeight;
 
-                for (int i = 0; i < Columns; i++)
+                for (int i = 0; i < columns; i++)
                 {
                     columnFlow[i].Height = columnHeight;
                 }
