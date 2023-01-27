@@ -47,7 +47,7 @@ public partial class EditableTimelineBlueprintContainer<TItem> : BlueprintContai
         SelectedItems.AddRange(Items);
     }
 
-    protected sealed override bool ApplySnapResult(SelectionBlueprint<TItem>[] blueprints, SnapResult result)
+    protected override bool ApplySnapResult(SelectionBlueprint<TItem>[] blueprints, SnapResult result)
     {
         if (!base.ApplySnapResult(blueprints, result))
             return false;

@@ -64,7 +64,7 @@ public partial class EditableTimeline : BindableScrollContainer, IPositionSnapPr
         return (float)(time / editorClock.TrackLength * Content.DrawWidth);
     }
 
-    public SnapResult FindSnappedPositionAndTime(Vector2 screenSpacePosition, SnapType snapType = SnapType.All)
+    public virtual SnapResult FindSnappedPositionAndTime(Vector2 screenSpacePosition, SnapType snapType = SnapType.All)
     {
         double time = TimeAtPosition(Content.ToLocalSpace(screenSpacePosition).X);
         return new SnapResult(screenSpacePosition, time);
