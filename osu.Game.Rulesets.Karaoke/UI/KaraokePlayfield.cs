@@ -10,6 +10,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Karaoke.Beatmaps;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.Configuration;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Objects.Drawables;
@@ -95,8 +96,8 @@ namespace osu.Game.Rulesets.Karaoke.UI
         protected virtual Playfield CreateLyricPlayfield()
             => new LyricPlayfield();
 
-        protected virtual ScrollingNotePlayfield CreateNotePlayfield(int columns)
-            => new NotePlayfield(columns);
+        protected virtual ScrollingNotePlayfield CreateNotePlayfield(NoteInfo noteInfo)
+            => new NotePlayfield(noteInfo);
 
         #region Pooling support
 

@@ -4,6 +4,7 @@
 #nullable disable
 
 using osu.Framework.Graphics;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.UI;
 using osu.Game.Rulesets.Karaoke.UI.Scrolling;
 using osuTK;
@@ -19,7 +20,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit
             LyricPlayfield.Scale = new Vector2(0.7f);
         }
 
-        protected override ScrollingNotePlayfield CreateNotePlayfield(int columns)
-            => new EditorNotePlayfield(columns);
+        protected override ScrollingNotePlayfield CreateNotePlayfield(NoteInfo noteInfo)
+            => new EditorNotePlayfield(noteInfo);
     }
 }
