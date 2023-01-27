@@ -4,6 +4,7 @@
 #nullable disable
 
 using System;
+using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Replays;
 
@@ -11,18 +12,18 @@ namespace osu.Game.Rulesets.Karaoke.UI.Position
 {
     public class NotePositionCalculator
     {
-        private readonly int columns;
+        private readonly NoteInfo noteInfo;
         private readonly float columnSpacing;
         private readonly Tone offset;
 
         public float ColumnHeight { get; }
 
-        public NotePositionCalculator(int columns, float columnHeight, float columnSpacing, Tone offset = new())
+        public NotePositionCalculator(NoteInfo noteInfo, float columnHeight, float columnSpacing, Tone offset = new())
         {
             ColumnHeight = columnHeight;
 
             // todo : not sure should column can be even.
-            this.columns = columns;
+            this.noteInfo = noteInfo;
             this.columnSpacing = columnSpacing;
             this.offset = offset;
         }
@@ -37,13 +38,9 @@ namespace osu.Game.Rulesets.Karaoke.UI.Position
 
         public float YPositionAt(float scale) => -(columnSpacing + ColumnHeight) * Math.Clamp(scale, toFloat(MinTone), toFloat(MaxTone));
 
-        public Tone MaxTone =>
-            new()
-            {
-                Scale = columns / 2
-            };
+        public Tone MaxTone => noteInfo.MaxTone;
 
-        public Tone MinTone => -MaxTone;
+        public Tone MinTone => noteInfo.MinTone;
 
         private float toFloat(Tone tone)
             => tone.Scale + (tone.Half ? 0.5f : 0);
