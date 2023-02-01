@@ -20,10 +20,10 @@ public partial class Lyric
     public double LyricStartTime { get; private set; }
 
     [JsonIgnore]
-    public double LyricEndTime { get; private set; }
+    public double LyricDuration { get; private set; }
 
     [JsonIgnore]
-    public double LyricDuration => LyricEndTime - LyricStartTime;
+    public double LyricEndTime => LyricStartTime + LyricDuration;
 
     /// <summary>
     /// Lyric's start time is created from <see cref="KaraokeBeatmapProcessor"/> and should not be saved.

@@ -119,7 +119,7 @@ namespace osu.Game.Rulesets.Karaoke.Objects
             {
                 // todo: should think about lyric time should be nullable?
                 LyricStartTime = TimeTagsUtils.GetStartTime(TimeTags) ?? StartTime;
-                LyricEndTime = TimeTagsUtils.GetEndTime(TimeTags) ?? EndTime;
+                LyricDuration = TimeTagsUtils.GetDuration(TimeTags) ?? Duration;
             }
         }
 
