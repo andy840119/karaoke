@@ -197,4 +197,17 @@ public class TimeTagsUtilsTest
         double? actual = TimeTagsUtils.GetEndTime(timeTags);
         Assert.AreEqual(expected, actual);
     }
+
+    [TestCase(new[] { "[0,start]:1100", "[0,end]:2000", "[1,start]:2100", "[1,end]:3000" }, 1900)]
+    [TestCase(new[] { "[1,end]:3000", "[1,start]:2100", "[0,end]:2000", "[0,start]:1100" }, 1900)]
+    [TestCase(new[] { "[0,start]:", "[0,start]:", "[0,end]:2000", "[0,start]:1100" }, 900)]
+    [TestCase(new[] { "[0,start]:" }, null)]
+    [TestCase(new string[] { }, null)]
+    public void TestGetDuration(string[] timeTagTexts, double? expected)
+    {
+        var timeTags = TestCaseTagHelper.ParseTimeTags(timeTagTexts);
+
+        double? actual = TimeTagsUtils.GetDuration(timeTags);
+        Assert.AreEqual(expected, actual);
+    }
 }

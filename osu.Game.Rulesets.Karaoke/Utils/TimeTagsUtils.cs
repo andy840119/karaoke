@@ -294,6 +294,16 @@ namespace osu.Game.Rulesets.Karaoke.Utils
         {
             return timeTags.MaxBy(x => x.Time)?.Time;
         }
+
+        /// <summary>
+        /// Get End time.
+        /// </summary>
+        /// <param name="timeTags">Time tags</param>
+        /// <returns>End time</returns>
+        public static double? GetDuration(IList<TimeTag> timeTags)
+        {
+            return GetEndTime(timeTags) - GetStartTime(timeTags);
+        }
     }
 
     public enum GroupCheck
