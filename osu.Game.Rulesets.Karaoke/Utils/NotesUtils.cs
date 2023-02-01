@@ -23,7 +23,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
             double secondNoteDuration = note.Duration * (1 - percentage);
 
             var firstNote = note.DeepClone();
-            firstNote.EndTimeOffset = note.EndTimeOffset - secondNoteDuration;
+            firstNote.DurationOffset = secondNoteDuration;
 
             var secondNote = note.DeepClone();
             secondNote.StartTimeOffset = note.StartTimeOffset + firstNoteDuration;
@@ -41,7 +41,7 @@ namespace osu.Game.Rulesets.Karaoke.Utils
 
             var combinedLyric = firstLyric.DeepClone();
             combinedLyric.StartTimeOffset = Math.Min(firstLyric.StartTimeOffset, secondLyric.StartTimeOffset);
-            combinedLyric.EndTimeOffset = Math.Max(firstLyric.EndTimeOffset, secondLyric.EndTimeOffset);
+            combinedLyric.DurationOffset = Math.Max(firstLyric.DurationOffset, secondLyric.DurationOffset);
 
             return combinedLyric;
         }

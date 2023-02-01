@@ -14,7 +14,7 @@ public partial class Note
     private void initInternalBindingEvent()
     {
         StartTimeOffsetBindable.ValueChanged += _ => syncStartTimeAndDurationFromTimeTag();
-        EndTimeOffsetBindable.ValueChanged += _ => syncStartTimeAndDurationFromTimeTag();
+        DurationOffsetBindable.ValueChanged += _ => syncStartTimeAndDurationFromTimeTag();
         ReferenceTimeTagIndexBindable.ValueChanged += _ => syncStartTimeAndDurationFromTimeTag();
     }
 
@@ -44,6 +44,6 @@ public partial class Note
         double duration = endTime - startTime;
 
         StartTimeBindable.Value = startTimeTag == null ? 0 : startTime + StartTimeOffset;
-        DurationBindable.Value = endTimeTag == null ? 0 : Math.Max(duration - StartTimeOffset + EndTimeOffset, 0);
+        DurationBindable.Value = endTimeTag == null ? 0 : duration + DurationOffset;
     }
 }

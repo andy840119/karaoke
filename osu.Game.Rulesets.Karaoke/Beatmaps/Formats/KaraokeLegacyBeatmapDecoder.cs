@@ -272,7 +272,7 @@ namespace osu.Game.Rulesets.Karaoke.Beatmaps.Formats
             // todo: there's no need to create the new note.
             var newNote = note.DeepClone();
             newNote.StartTimeOffset = note.StartTimeOffset + durationFromStartTime;
-            newNote.EndTimeOffset = note.EndTimeOffset - secondNoteDuration;
+            newNote.DurationOffset = secondNoteDuration;
 
             return newNote;
         }

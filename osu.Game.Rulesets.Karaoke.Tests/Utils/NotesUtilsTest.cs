@@ -86,28 +86,28 @@ public class NotesUtilsTest
 
     [TestCase(new double[] { 1000, -1000 }, new double[] { 2000, -4000 }, new double[] { 1000, -1000 })]
     [TestCase(new double[] { 1000, 0 }, new double[] { 1000, 0 }, new double[] { 1000, 0 })] // it's ok to combine if duration is 0.
-    public void TestCombineNoteTime(double[] firstOffset, double[] secondOffset, double[] expectedOffset)
+    public void TestCombineNoteTime(double[] startTimeOffsets, double[] durationOffsets, double[] expectedOffset)
     {
         var lyric = TestCaseNoteHelper.CreateLyricForNote("Lyric", 1000, 5000);
 
         var firstNote = new Note
         {
             ReferenceLyric = lyric,
-            StartTimeOffset = firstOffset[0],
-            EndTimeOffset = firstOffset[1],
+            StartTimeOffset = startTimeOffsets[0],
+            DurationOffset = startTimeOffsets[1],
             ReferenceTimeTagIndex = 0,
         };
 
         var secondNote = new Note
         {
             ReferenceLyric = lyric,
-            StartTimeOffset = secondOffset[0],
-            EndTimeOffset = secondOffset[1],
+            StartTimeOffset = durationOffsets[0],
+            DurationOffset = durationOffsets[1],
             ReferenceTimeTagIndex = 0,
         };
 
         var combineNote = NotesUtils.CombineNote(firstNote, secondNote);
         Assert.AreEqual(expectedOffset[0], combineNote.StartTimeOffset);
-        Assert.AreEqual(expectedOffset[1], combineNote.EndTimeOffset);
+        Assert.AreEqual(expectedOffset[1], combineNote.DurationOffset);
     }
 }

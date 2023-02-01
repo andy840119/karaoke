@@ -86,16 +86,16 @@ namespace osu.Game.Rulesets.Karaoke.Objects
         }
 
         [JsonIgnore]
-        public readonly Bindable<double> EndTimeOffsetBindable = new BindableDouble();
+        public readonly Bindable<double> DurationOffsetBindable = new BindableDouble();
 
         /// <summary>
         /// Offset time relative to the end time.
         /// Negative value means the adjusted time is smaller than actual.
         /// </summary>
-        public double EndTimeOffset
+        public double DurationOffset
         {
-            get => EndTimeOffsetBindable.Value;
-            set => EndTimeOffsetBindable.Value = value;
+            get => DurationOffsetBindable.Value;
+            set => DurationOffsetBindable.Value = value;
         }
 
         private int? referenceLyricId;

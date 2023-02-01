@@ -53,7 +53,7 @@ public partial class Note
     public double Duration
     {
         get => DurationBindable.Value;
-        set => throw new NotSupportedException($"The time will auto-sync via {nameof(ReferenceLyric)} and {nameof(ReferenceTimeTagIndex)}.");
+        set => throw new InvalidOperationException($"The time will auto-sync via {nameof(ReferenceLyric)} and {nameof(ReferenceTimeTagIndex)}.");
     }
 
     /// <summary>

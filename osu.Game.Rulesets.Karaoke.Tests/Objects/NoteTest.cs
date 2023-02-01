@@ -19,7 +19,7 @@ public class NoteTest
             RubyText = "Note",
             Display = true,
             StartTimeOffset = 100,
-            EndTimeOffset = -100,
+            DurationOffset = -100,
             ReferenceLyric = TestCaseNoteHelper.CreateLyricForNote("ノート", 1000, 1000),
             ReferenceTimeTagIndex = 0,
         };
@@ -50,7 +50,7 @@ public class NoteTest
 
         Assert.AreEqual(clonedNote.StartTimeOffset, note.StartTimeOffset);
 
-        Assert.AreEqual(clonedNote.EndTimeOffset, note.EndTimeOffset);
+        Assert.AreEqual(clonedNote.DurationOffset, note.DurationOffset);
 
         Assert.AreSame(clonedNote.ReferenceLyric, note.ReferenceLyric);
 
@@ -98,16 +98,16 @@ public class NoteTest
         Assert.AreEqual(0, note.Duration);
 
         const double note_start_offset_time = 500;
-        const double note_end_offset_time = 500;
+        const double note_duration_offset_time = 500;
         note.ReferenceTimeTagIndex = 0;
         note.StartTimeOffset = note_start_offset_time;
-        note.EndTimeOffset = note_end_offset_time;
+        note.DurationOffset = note_duration_offset_time;
 
         // start time and end time will apply the offset time.
         Assert.AreEqual(first_time_tag_time + time_tag_offset_time + note_start_offset_time, note.StartTime);
-        Assert.AreEqual(duration + time_tag_offset_time - note_end_offset_time, note.Duration);
+        Assert.AreEqual(duration + time_tag_offset_time - note_duration_offset_time, note.Duration);
 
-        note.EndTimeOffset = -100000;
+        note.DurationOffset = -100000;
 
         // duration should not be empty.
         Assert.AreEqual(first_time_tag_time + time_tag_offset_time + note_start_offset_time, note.StartTime);
