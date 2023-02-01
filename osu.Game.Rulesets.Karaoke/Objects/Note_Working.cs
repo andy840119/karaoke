@@ -39,7 +39,7 @@ public partial class Note
     public override double StartTime
     {
         get => base.StartTime;
-        set => throw new NotSupportedException($"The time will auto-sync via {nameof(ReferenceLyric)} and {nameof(ReferenceTimeTagIndex)}.");
+        set => throw new InvalidOperationException($"The time will auto-sync via {nameof(ReferenceLyric)} and {nameof(ReferenceTimeTagIndex)}.");
     }
 
     [JsonIgnore]
