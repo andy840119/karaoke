@@ -42,7 +42,7 @@ public partial class StageEditorVerifier : EditorVerifier<StageEditorEditCategor
                 return StageEditorEditCategory.Layout;
 
             default:
-                throw new NotSupportedException();
+                return base.ClassifyIssue(issue);
         }
     }
 
