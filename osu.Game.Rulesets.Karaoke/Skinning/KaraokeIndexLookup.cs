@@ -8,8 +8,6 @@ namespace osu.Game.Rulesets.Karaoke.Skinning;
 /// </summary>
 public enum KaraokeIndexLookup
 {
-    Layout,
-
     Style,
 
     Note,
