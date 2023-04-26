@@ -2,14 +2,12 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using osu.Framework.Allocation;
-using osu.Framework.Extensions.EnumExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Rulesets.Karaoke.Objects;
-using osu.Game.Rulesets.Karaoke.Skinning.Elements;
 using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.Components.Sprites;
@@ -48,21 +46,6 @@ public partial class DrawableLayoutPreview : CompositeDrawable
         notSupportText.Hide();
     }
 
-    private LyricLayout? layout;
-
-    public LyricLayout? Layout
-    {
-        get => layout;
-        set
-        {
-            if (layout == value)
-                return;
-
-            layout = value;
-            updateLayout();
-        }
-    }
-
     private Lyric? lyric;
 
     public Lyric? Lyric
@@ -74,48 +57,10 @@ public partial class DrawableLayoutPreview : CompositeDrawable
                 return;
 
             lyric = value;
-            updateLayout();
-        }
-    }
+            // todo: maybe should user the real lyric?
 
-    private void updateLayout()
-    {
-        // Display in content
-        if (Layout == null)
-        {
-            // mark layout as not supported, or skin is not loaded
-            notSupportText.Show();
-
-            if (skinSource == null)
-                notSupportText.Text = "Sorry, skin is not exist.";
-            else
-                notSupportText.Text = "Sorry, layout is not exist.";
-        }
-        else
-        {
-            // Display box preview position
-            previewLyric.Show();
-
-            // Set preview width
-            const float text_size = 20;
-            previewLyric.Width = (Lyric?.Text.Length ?? 10) * text_size * scale;
-            previewLyric.Height = text_size * 1.5f * scale;
-
-            // Set relative position
-            previewLyric.Anchor = Layout.Alignment;
-            previewLyric.Origin = Layout.Alignment;
-
-            // Set margin
-            const float padding = 30 * scale;
-            float horizontalMargin = Layout.HorizontalMargin * scale + padding;
-            float verticalMargin = Layout.VerticalMargin * scale + padding;
-            previewLyric.Margin = new MarginPadding
-            {
-                Left = Layout.Alignment.HasFlagFast(Anchor.x0) ? horizontalMargin : 0,
-                Right = Layout.Alignment.HasFlagFast(Anchor.x2) ? horizontalMargin : 0,
-                Top = Layout.Alignment.HasFlagFast(Anchor.y0) ? verticalMargin : 0,
-                Bottom = Layout.Alignment.HasFlagFast(Anchor.y2) ? verticalMargin : 0,
-            };
+            // or will it able to cast the transformer?
+            // lyric.EffectApplier.UpdateInitialTransforms(previewLyric);
         }
     }
 
