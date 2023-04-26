@@ -41,6 +41,7 @@ public partial class TestSceneLayoutToolTip : OsuTestScene
     [Test]
     public void TestDisplayToolTip()
     {
+        // todo: should show the layout by the lyric.
         var layouts = skin.GetConfig<KaraokeIndexLookup, IDictionary<int, string>>(KaraokeIndexLookup.Layout)?.Value;
         if (layouts == null)
             return;
