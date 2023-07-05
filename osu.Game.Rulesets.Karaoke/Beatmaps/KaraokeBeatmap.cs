@@ -13,7 +13,7 @@ using osu.Game.Rulesets.Karaoke.Stages;
 
 namespace osu.Game.Rulesets.Karaoke.Beatmaps;
 
-public class KaraokeBeatmap : Beatmap<KaraokeHitObject>
+public class KaraokeBeatmap : Beatmap<KaraokeHitObject>, IHasReferenceElement
 {
     public IList<CultureInfo> AvailableTranslates { get; set; } = new List<CultureInfo>();
 
