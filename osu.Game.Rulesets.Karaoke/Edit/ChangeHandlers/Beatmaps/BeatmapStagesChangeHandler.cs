@@ -25,6 +25,9 @@ public partial class BeatmapStagesChangeHandler : BeatmapPropertyChangeHandler, 
         return GetGeneratorNotSupportedMessage<TStageInfo>() == null;
     }
 
+    LocalisableString? IBeatmapPropertyTypeAutoGenerateChangeHandler<StageInfo>.GetGeneratorNotSupportedMessage<TStageInfo>()
+        => GetGeneratorNotSupportedMessage<TStageInfo>();
+
     public LocalisableString? GetGeneratorNotSupportedMessage<TStageInfo>() where TStageInfo : StageInfo
     {
         var stage = getStageInfo<TStageInfo>(KaraokeBeatmap);
