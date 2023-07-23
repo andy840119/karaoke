@@ -17,7 +17,7 @@ public partial class BeatmapStagesChangeHandler : BeatmapPropertyChangeHandler, 
     [Resolved]
     private KaraokeRulesetEditGeneratorConfigManager generatorConfigManager { get; set; } = null!;
 
-    bool IAutoGenerateChangeHandler<StageInfo>.CanGenerate<TStageInfo>()
+    bool ITypeAutoGenerateChangeHandler<StageInfo>.CanGenerate<TStageInfo>()
         => CanGenerate<TStageInfo>();
 
     public bool CanGenerate<TStageInfo>() where TStageInfo : StageInfo
@@ -35,7 +35,7 @@ public partial class BeatmapStagesChangeHandler : BeatmapPropertyChangeHandler, 
         return generator.GetInvalidMessage(KaraokeBeatmap);
     }
 
-    void IAutoGenerateChangeHandler<StageInfo>.AutoGenerate<TStageInfo>()
+    void ITypeAutoGenerateChangeHandler<StageInfo>.AutoGenerate<TStageInfo>()
         => AutoGenerate<TStageInfo>();
 
     public void AutoGenerate<TStageInfo>() where TStageInfo : StageInfo

@@ -6,7 +6,7 @@ using osu.Game.Rulesets.Karaoke.Beatmaps.Stages;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Beatmaps;
 
-public interface IBeatmapStagesChangeHandler : IAutoGenerateChangeHandler<StageInfo>
+public interface IBeatmapStagesChangeHandler : ITypeAutoGenerateChangeHandler<StageInfo>
 {
     LocalisableString? GetGeneratorNotSupportedMessage<TStageInfo>() where TStageInfo : StageInfo;
 
