@@ -17,16 +17,10 @@ public partial class BeatmapStagesChangeHandler : BeatmapPropertyChangeHandler, 
     [Resolved]
     private KaraokeRulesetEditGeneratorConfigManager generatorConfigManager { get; set; } = null!;
 
-    bool ITypeAutoGenerateChangeHandler<StageInfo>.CanGenerate<TStageInfo>()
-        => CanGenerate<TStageInfo>();
-
     public bool CanGenerate<TStageInfo>() where TStageInfo : StageInfo
     {
         return GetGeneratorNotSupportedMessage<TStageInfo>() == null;
     }
-
-    LocalisableString? IBeatmapPropertyTypeAutoGenerateChangeHandler<StageInfo>.GetGeneratorNotSupportedMessage<TStageInfo>()
-        => GetGeneratorNotSupportedMessage<TStageInfo>();
 
     public LocalisableString? GetGeneratorNotSupportedMessage<TStageInfo>() where TStageInfo : StageInfo
     {
@@ -37,9 +31,6 @@ public partial class BeatmapStagesChangeHandler : BeatmapPropertyChangeHandler, 
         var generator = new StageInfoGeneratorSelector<TStageInfo>(generatorConfigManager);
         return generator.GetInvalidMessage(KaraokeBeatmap);
     }
-
-    void ITypeAutoGenerateChangeHandler<StageInfo>.AutoGenerate<TStageInfo>()
-        => AutoGenerate<TStageInfo>();
 
     public void AutoGenerate<TStageInfo>() where TStageInfo : StageInfo
     {

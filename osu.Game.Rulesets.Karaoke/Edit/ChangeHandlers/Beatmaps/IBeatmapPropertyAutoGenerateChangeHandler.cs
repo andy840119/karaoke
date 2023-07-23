@@ -5,7 +5,7 @@ using osu.Framework.Localisation;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Beatmaps;
 
-public interface IBeatmapPropertyTypeAutoGenerateChangeHandler<in TType> : ITypeAutoGenerateChangeHandler<TType>
+public interface IBeatmapPropertyTypeAutoGenerateChangeHandler<in TType> : ITypeAutoGenerateChangeHandler<TType> where TType : notnull
 {
     LocalisableString? GetGeneratorNotSupportedMessage<T>() where T : TType;
 }

@@ -7,7 +7,7 @@ namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers;
 /// This interface is defined checking able to generate or detect the property, and make the change for the property.
 /// </summary>
 /// <typeparam name="TType"></typeparam>
-public interface ITypeAutoGenerateChangeHandler<in TType>
+public interface ITypeAutoGenerateChangeHandler<in TType> where TType : notnull
 {
     bool CanGenerate<T>() where T : TType;
 
