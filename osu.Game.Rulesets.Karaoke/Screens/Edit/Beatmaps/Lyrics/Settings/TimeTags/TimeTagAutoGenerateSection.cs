@@ -15,8 +15,13 @@ public partial class TimeTagAutoGenerateSection : AutoGenerateSection
     protected override AutoGenerateSubsection CreateAutoGenerateSubsection()
         => new TimeTageAutoGenerateSubsection();
 
-    private partial class TimeTageAutoGenerateSubsection : LyricEditorAutoGenerateSubsection<ILyricTimeTagsChangeHandler>
+    private partial class TimeTageAutoGenerateSubsection : LyricEditorAutoGenerateSubsection<ILyricTimeTagsChangeHandler, TimeTagGeneratorType>
     {
+        public TimeTageAutoGenerateSubsection()
+            : base(TimeTagGeneratorType.TimeTag)
+        {
+        }
+
         private const string language_mode = "LANGUAGE_MODE";
 
         protected override DescriptionFormat CreateInvalidDescriptionFormat()
