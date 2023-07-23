@@ -7,7 +7,7 @@ using osu.Game.Rulesets.Karaoke.Objects;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics;
 
-public interface ILyricTimeTagsChangeHandler : ILyricListPropertyChangeHandler<TimeTag>, ILyricPropertyAutoGenerateChangeHandler
+public interface ILyricTimeTagsChangeHandler : ILyricListPropertyChangeHandler<TimeTag>, ILyricPropertyEnumAutoGenerateChangeHandler<TimeTagGeneratorType>
 {
     void SetTimeTagTime(TimeTag timeTag, double time);
 
@@ -26,6 +26,13 @@ public interface ILyricTimeTagsChangeHandler : ILyricListPropertyChangeHandler<T
     void RemoveByPosition(TextIndex index);
 
     TimeTag Shifting(TimeTag timeTag, ShiftingDirection direction, ShiftingType type);
+}
+
+public enum TimeTagGeneratorType
+{
+    TimeTag,
+
+    Romaji,
 }
 
 public enum ShiftingDirection

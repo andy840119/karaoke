@@ -12,6 +12,7 @@ using osu.Game.Rulesets.Karaoke.Edit.ChangeHandlers.Lyrics;
 using osu.Game.Rulesets.Karaoke.Edit.Generator;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Objects.Properties;
+using osu.Game.Rulesets.Karaoke.Tests.Helper;
 using osu.Game.Screens.Edit;
 
 namespace osu.Game.Rulesets.Karaoke.Tests.Editor.ChangeHandlers.Lyrics;
@@ -31,11 +32,33 @@ public partial class LyricTimeTagsChangeHandlerTest : LyricPropertyChangeHandler
             Language = new CultureInfo(17),
         });
 
-        TriggerHandlerChanged(c => c.AutoGenerate());
+        TriggerHandlerChanged(c => c.AutoGenerate(TimeTagGeneratorType.TimeTag));
 
         AssertSelectedHitObject(h =>
         {
             Assert.AreEqual(5, h.TimeTags.Count);
+        });
+    }
+
+    [Test]
+    public void TestAutoGenerateRomajis()
+    {
+        PrepareHitObject(() => new Lyric
+        {
+            Text = "カラオケ",
+            Language = new CultureInfo(17),
+            TimeTags = TestCaseTagHelper.ParseTimeTags(new[] { "[0,start]:1000", "[1,start]:2000", "[2,start]:3000", "[3,start]:4000", "[3,end]:5000" }),
+        });
+
+        TriggerHandlerChanged(c => c.AutoGenerate(TimeTagGeneratorType.Romaji));
+
+        AssertSelectedHitObject(h =>
+        {
+            Assert.AreEqual("karaoke", h.TimeTags[0].RomajiText);
+            Assert.AreEqual(string.Empty, h.TimeTags[1].RomajiText);
+            Assert.AreEqual(string.Empty, h.TimeTags[2].RomajiText);
+            Assert.AreEqual(string.Empty, h.TimeTags[3].RomajiText);
+            Assert.AreEqual(string.Empty, h.TimeTags[3].RomajiText);
         });
     }
 
@@ -59,7 +82,21 @@ public partial class LyricTimeTagsChangeHandlerTest : LyricPropertyChangeHandler
             },
         });
 
-        TriggerHandlerChangedWithException<GeneratorNotSupportedException>(c => c.AutoGenerate());
+        TriggerHandlerChangedWithException<GeneratorNotSupportedException>(c => c.AutoGenerate(TimeTagGeneratorType.TimeTag));
+    }
+
+    [Test]
+    public void TestAutoGenerateRomajisWithNonSupportedLyric()
+    {
+        PrepareHitObjects(() => new[]
+        {
+            new Lyric
+            {
+                Text = "カラオケ",
+            },
+        });
+
+        TriggerHandlerChangedWithException<GeneratorNotSupportedException>(c => c.AutoGenerate(TimeTagGeneratorType.Romaji));
     }
 
     #endregion

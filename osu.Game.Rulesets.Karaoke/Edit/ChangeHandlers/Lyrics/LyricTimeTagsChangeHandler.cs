@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Localisation;
+using osu.Game.Rulesets.Karaoke.Edit.Generator.Lyrics.Romajies;
 using osu.Game.Rulesets.Karaoke.Edit.Generator.Lyrics.TimeTags;
 using osu.Game.Rulesets.Karaoke.Edit.Utils;
 using osu.Game.Rulesets.Karaoke.Objects;
@@ -17,26 +18,85 @@ public partial class LyricTimeTagsChangeHandler : LyricPropertyChangeHandler, IL
 {
     #region Auto-Generate
 
-    public bool CanGenerate()
+    public bool CanGenerate(TimeTagGeneratorType type)
     {
-        var generator = GetSelector<TimeTag[], TimeTagGeneratorConfig>();
-        return CanGenerate(generator);
-    }
-
-    public IDictionary<Lyric, LocalisableString> GetGeneratorNotSupportedLyrics()
-    {
-        var generator = GetSelector<TimeTag[], TimeTagGeneratorConfig>();
-        return GetInvalidMessageFromGenerator(generator);
-    }
-
-    public void AutoGenerate()
-    {
-        var generator = GetSelector<TimeTag[], TimeTagGeneratorConfig>();
-
-        PerformOnSelection(lyric =>
+        switch (type)
         {
-            lyric.TimeTags = generator.Generate(lyric);
-        });
+            case TimeTagGeneratorType.TimeTag:
+            {
+                var generator = GetSelector<TimeTag[], TimeTagGeneratorConfig>();
+                return CanGenerate(generator);
+            }
+
+            case TimeTagGeneratorType.Romaji:
+            {
+                var generator = GetSelector<IReadOnlyDictionary<TimeTag, RomajiGenerateResult>, RomajiGeneratorConfig>();
+                return CanGenerate(generator);
+            }
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+    }
+
+    public IDictionary<Lyric, LocalisableString> GetGeneratorNotSupportedLyrics(TimeTagGeneratorType type)
+    {
+        switch (type)
+        {
+            case TimeTagGeneratorType.TimeTag:
+            {
+                var generator = GetSelector<TimeTag[], TimeTagGeneratorConfig>();
+                return GetInvalidMessageFromGenerator(generator);
+            }
+
+            case TimeTagGeneratorType.Romaji:
+            {
+                var generator = GetSelector<IReadOnlyDictionary<TimeTag, RomajiGenerateResult>, RomajiGeneratorConfig>();
+                return GetInvalidMessageFromGenerator(generator);
+            }
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+    }
+
+    public void AutoGenerate(TimeTagGeneratorType type)
+    {
+        switch (type)
+        {
+            case TimeTagGeneratorType.TimeTag:
+            {
+                var generator = GetSelector<TimeTag[], TimeTagGeneratorConfig>();
+
+                PerformOnSelection(lyric =>
+                {
+                    lyric.TimeTags = generator.Generate(lyric);
+                });
+
+                break;
+            }
+
+            case TimeTagGeneratorType.Romaji:
+            {
+                var generator = GetSelector<IReadOnlyDictionary<TimeTag, RomajiGenerateResult>, RomajiGeneratorConfig>();
+
+                PerformOnSelection(lyric =>
+                {
+                    var result = generator.Generate(lyric);
+
+                    foreach (var timeTag in lyric.TimeTags)
+                    {
+                        timeTag.InitialRomaji = result[timeTag].InitialRomaji;
+                        timeTag.RomajiText = result[timeTag].RomajiText;
+                    }
+                });
+
+                break;
+            }
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
     }
 
     #endregion
