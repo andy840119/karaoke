@@ -41,18 +41,6 @@ public partial class Lyric : IHasWorkingProperty<LyricWorkingProperty>, IHasEffe
         {
             switch (flag)
             {
-                case LyricWorkingProperty.StartTime:
-                    StartTime = getStartTime(beatmap, this);
-                    break;
-
-                case LyricWorkingProperty.Duration:
-                    Duration = getDuration(beatmap, this);
-                    break;
-
-                case LyricWorkingProperty.Timing:
-                    // start time and duration should be set by other condition.
-                    break;
-
                 case LyricWorkingProperty.Singers:
                     Singers = getSingers(beatmap, SingerIds);
                     break;
@@ -64,34 +52,7 @@ public partial class Lyric : IHasWorkingProperty<LyricWorkingProperty>, IHasEffe
                 case LyricWorkingProperty.ReferenceLyric:
                     ReferenceLyric = findLyricById(beatmap, ReferenceLyricId);
                     break;
-
-                case LyricWorkingProperty.EffectApplier:
-                    EffectApplier = getStageEffectApplier(beatmap, this);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
-        }
-
-        static double getStartTime(KaraokeBeatmap beatmap, KaraokeHitObject lyric)
-        {
-            var stageInfo = beatmap.CurrentStageInfo;
-            if (stageInfo == null)
-                throw new InvalidCastException();
-
-            (double? startTime, double? _) = stageInfo.GetStartAndEndTime(lyric);
-            return startTime ?? 0;
-        }
-
-        static double getDuration(KaraokeBeatmap beatmap, KaraokeHitObject lyric)
-        {
-            var stageInfo = beatmap.CurrentStageInfo;
-            if (stageInfo == null)
-                throw new InvalidCastException();
-
-            (double? startTime, double? endTime) = stageInfo.GetStartAndEndTime(lyric);
-            return endTime - startTime ?? 0;
         }
 
         static IDictionary<Singer, SingerState[]> getSingers(KaraokeBeatmap beatmap, IEnumerable<ElementId> singerIds)
@@ -102,14 +63,42 @@ public partial class Lyric : IHasWorkingProperty<LyricWorkingProperty>, IHasEffe
 
         static Lyric? findLyricById(IBeatmap beatmap, ElementId? id) =>
             id == null ? null : beatmap.HitObjects.OfType<Lyric>().Single(x => x.ID == id);
+    }
 
-        static IStageEffectApplier getStageEffectApplier(KaraokeBeatmap beatmap, KaraokeHitObject lyric)
+    public void ValidateWorkingProperty(StageInfo stageInfo)
+    {
+        foreach (var flag in GetAllInvalidWorkingProperties())
         {
-            var stageInfo = beatmap.CurrentStageInfo;
-            if (stageInfo == null)
-                throw new InvalidCastException();
+            switch (flag)
+            {
+                case LyricWorkingProperty.StartTime:
+                    StartTime = getStartTime(stageInfo, this);
+                    break;
 
-            return stageInfo.GetStageAppliers(lyric);
+                case LyricWorkingProperty.Duration:
+                    Duration = getDuration(stageInfo, this);
+                    break;
+
+                case LyricWorkingProperty.Timing:
+                    // start time and duration should be set by other condition.
+                    break;
+
+                case LyricWorkingProperty.EffectApplier:
+                    EffectApplier = stageInfo.GetStageAppliers(this);
+                    break;
+            }
+        }
+
+        static double getStartTime(StageInfo stageInfo, KaraokeHitObject lyric)
+        {
+            (double? startTime, double? _) = stageInfo.GetStartAndEndTime(lyric);
+            return startTime ?? 0;
+        }
+
+        static double getDuration(StageInfo stageInfo, KaraokeHitObject lyric)
+        {
+            (double? startTime, double? endTime) = stageInfo.GetStartAndEndTime(lyric);
+            return endTime - startTime ?? 0;
         }
     }
 

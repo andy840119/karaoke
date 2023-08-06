@@ -3,6 +3,7 @@
 
 using System;
 using osu.Game.Rulesets.Karaoke.Beatmaps;
+using osu.Game.Rulesets.Karaoke.Stages;
 
 namespace osu.Game.Rulesets.Karaoke.Objects.Types;
 
@@ -17,4 +18,6 @@ public interface IHasWorkingProperty<TWorkingProperty> : IHasWorkingProperty
 public interface IHasWorkingProperty
 {
     void ValidateWorkingProperty(KaraokeBeatmap beatmap);
+
+    void ValidateWorkingProperty(StageInfo stageInfo);
 }

@@ -13,6 +13,7 @@ using osu.Game.Rulesets.Karaoke.Beatmaps.Metadatas;
 using osu.Game.Rulesets.Karaoke.Objects.Stages;
 using osu.Game.Rulesets.Karaoke.Objects.Types;
 using osu.Game.Rulesets.Karaoke.Objects.Workings;
+using osu.Game.Rulesets.Karaoke.Stages;
 
 namespace osu.Game.Rulesets.Karaoke.Objects;
 
@@ -48,10 +49,6 @@ public partial class Note : IHasWorkingProperty<NoteWorkingProperty>, IHasEffect
                     ReferenceLyric = findLyricById(beatmap, ReferenceLyricId);
                     break;
 
-                case NoteWorkingProperty.EffectApplier:
-                    EffectApplier = getStageEffectApplier(beatmap, this);
-                    break;
-
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -62,14 +59,18 @@ public partial class Note : IHasWorkingProperty<NoteWorkingProperty>, IHasEffect
 
         static Lyric? findLyricById(IBeatmap beatmap, ElementId? id) =>
             id == null ? null : beatmap.HitObjects.OfType<Lyric>().Single(x => x.ID == id);
+    }
 
-        static IStageEffectApplier getStageEffectApplier(KaraokeBeatmap beatmap, Note note)
+    public void ValidateWorkingProperty(StageInfo stageInfo)
+    {
+        foreach (var flag in GetAllInvalidWorkingProperties())
         {
-            var stageInfo = beatmap.CurrentStageInfo;
-            if (stageInfo == null)
-                throw new InvalidCastException();
-
-            return stageInfo.GetStageAppliers(note);
+            switch (flag)
+            {
+                case NoteWorkingProperty.EffectApplier:
+                    EffectApplier = stageInfo.GetStageAppliers(this);
+                    break;
+            }
         }
     }
 
