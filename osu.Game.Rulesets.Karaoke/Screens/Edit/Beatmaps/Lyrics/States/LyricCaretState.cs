@@ -386,9 +386,9 @@ public partial class LyricCaretState : Component, ILyricCaretState
         if (!CaretDraggable)
             throw new InvalidOperationException("Should not call this method if the caret is not draggable");
 
-        var rangeCaretPosition = bindableRangeCaretPosition.Value;
-        if (rangeCaretPosition == null)
-            throw new InvalidOperationException("Binding range caret position should not be null.");
+        var caretPosition = bindableCaretPosition.Value ?? bindableRangeCaretPosition.Value?.Start;
+        if (caretPosition is not IIndexCaretPosition startCaretPosition)
+            throw new InvalidOperationException($"Should call the {nameof(MoveCaretToTargetPosition)} first to assign the caret position");
 
         if (algorithm is not IIndexCaretPositionAlgorithm indexCaretPositionAlgorithm)
             throw new InvalidOperationException("Algorithm should be index caret position algorithm.");

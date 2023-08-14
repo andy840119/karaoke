@@ -34,6 +34,7 @@ public interface ILyricCaretState
     /// <summary>
     /// The caret position.
     /// Will have value when user click the lyric.
+    /// And will not have value when user drag to select the range of index in the lyric.
     /// </summary>
     IBindable<ICaretPosition?> BindableCaretPosition { get; }
 
@@ -116,6 +117,7 @@ public interface ILyricCaretState
 
     /// <summary>
     /// Will update the range of caret position by end index.
+    /// And notice that will clear the <see cref="BindableCaretPosition"/> after assigned the end caret index.
     /// </summary>
     /// <param name="index"></param>
     /// <typeparam name="TIndex"></typeparam>
