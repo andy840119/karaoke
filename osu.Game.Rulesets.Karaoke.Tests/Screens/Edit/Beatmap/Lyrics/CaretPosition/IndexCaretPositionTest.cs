@@ -2,10 +2,12 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Graphics.Sprites;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Screens.Edit.Beatmaps.Lyrics.CaretPosition;
+using osu.Game.Rulesets.Karaoke.Tests.Helper;
 
 namespace osu.Game.Rulesets.Karaoke.Tests.Screens.Edit.Beatmap.Lyrics.CaretPosition;
 
@@ -19,7 +21,7 @@ public class IndexCaretPositionTest<TIndexCaretPosition> where TIndexCaretPositi
     [Test]
     public void CompareWithLargerIndex()
     {
-        var lyric = new Lyric();
+        var lyric = createSampleLyric();
 
         var caretPosition = createSmallerCaretPosition(lyric);
         var comparedCaretPosition = createBiggerCaretPosition(lyric);
@@ -33,7 +35,7 @@ public class IndexCaretPositionTest<TIndexCaretPosition> where TIndexCaretPositi
     [Test]
     public void CompareEqualIndex()
     {
-        var lyric = new Lyric();
+        var lyric = createSampleLyric();
 
         var caretPosition = createSmallerCaretPosition(lyric);
         var comparedCaretPosition = createSmallerCaretPosition(lyric);
@@ -47,7 +49,7 @@ public class IndexCaretPositionTest<TIndexCaretPosition> where TIndexCaretPositi
     [Test]
     public void CompareWithSmallerIndex()
     {
-        var lyric = new Lyric();
+        var lyric = createSampleLyric();
 
         var caretPosition = createBiggerCaretPosition(lyric);
         var comparedCaretPosition = createSmallerCaretPosition(lyric);
@@ -61,8 +63,8 @@ public class IndexCaretPositionTest<TIndexCaretPosition> where TIndexCaretPositi
     [Test]
     public void CompareWithDifferentLyric()
     {
-        var lyric1 = new Lyric();
-        var lyric2 = new Lyric();
+        var lyric1 = createSampleLyric();
+        var lyric2 = createSampleLyric();
 
         var caretPosition = createBiggerCaretPosition(lyric1);
         var comparedCaretPosition = createSmallerCaretPosition(lyric2);
@@ -73,7 +75,7 @@ public class IndexCaretPositionTest<TIndexCaretPosition> where TIndexCaretPositi
     [Test]
     public void CompareDifferentType()
     {
-        var lyric = new Lyric();
+        var lyric = createSampleLyric();
 
         var caretPosition = createBiggerCaretPosition(lyric);
         var comparedCaretPosition = new FakeCaretPosition(lyric);
@@ -81,25 +83,55 @@ public class IndexCaretPositionTest<TIndexCaretPosition> where TIndexCaretPositi
         Assert.Throws<InvalidOperationException>(() => caretPosition.CompareTo(comparedCaretPosition));
     }
 
-    private IIndexCaretPosition createSmallerCaretPosition(Lyric lyric) =>
+    [Test]
+    public void CreateInvalidCaretPosition()
+    {
+        var lyric = createSampleLyric();
+
+        Assert.Throws<InvalidOperationException>(() => createInvalidCaretPosition(lyric));
+    }
+
+    private static Lyric createSampleLyric()
+    {
+        return new Lyric
+        {
+            Text = "カラオケ",
+            TimeTags = TestCaseTagHelper.ParseTimeTags(new[] { "[0,start]:1000", "[3,end]:4000" }),
+            RubyTags = TestCaseTagHelper.ParseRubyTags(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }),
+            RomajiTags = TestCaseTagHelper.ParseRomajiTags(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" }),
+        };
+    }
+
+    private static IIndexCaretPosition createSmallerCaretPosition(Lyric lyric) =>
         typeof(TIndexCaretPosition) switch
         {
             Type t when t == typeof(CreateRubyTagCaretPosition) => new CreateRubyTagCaretPosition(lyric, 0),
             Type t when t == typeof(CuttingCaretPosition) => new CuttingCaretPosition(lyric, 0),
-            Type t when t == typeof(TimeTagCaretPosition) => new TimeTagCaretPosition(lyric, new TimeTag(new TextIndex())),
+            Type t when t == typeof(TimeTagCaretPosition) => new TimeTagCaretPosition(lyric, lyric.TimeTags.First()),
             Type t when t == typeof(TimeTagIndexCaretPosition) => new TimeTagIndexCaretPosition(lyric, 0),
             Type t when t == typeof(TypingCaretPosition) => new TypingCaretPosition(lyric, 0),
             _ => throw new NotSupportedException(),
         };
 
-    private IIndexCaretPosition createBiggerCaretPosition(Lyric lyric) =>
+    private static IIndexCaretPosition createBiggerCaretPosition(Lyric lyric) =>
         typeof(TIndexCaretPosition) switch
         {
-            Type t when t == typeof(CreateRubyTagCaretPosition) => new CreateRubyTagCaretPosition(lyric, 1),
-            Type t when t == typeof(CuttingCaretPosition) => new CuttingCaretPosition(lyric, 1),
-            Type t when t == typeof(TimeTagCaretPosition) => new TimeTagCaretPosition(lyric, new TimeTag(new TextIndex(1))),
-            Type t when t == typeof(TimeTagIndexCaretPosition) => new TimeTagIndexCaretPosition(lyric, 1),
-            Type t when t == typeof(TypingCaretPosition) => new TypingCaretPosition(lyric, 1),
+            Type t when t == typeof(CreateRubyTagCaretPosition) => new CreateRubyTagCaretPosition(lyric, 3),
+            Type t when t == typeof(CuttingCaretPosition) => new CuttingCaretPosition(lyric, 4),
+            Type t when t == typeof(TimeTagCaretPosition) => new TimeTagCaretPosition(lyric, lyric.TimeTags.Last()),
+            Type t when t == typeof(TimeTagIndexCaretPosition) => new TimeTagIndexCaretPosition(lyric, 3),
+            Type t when t == typeof(TypingCaretPosition) => new TypingCaretPosition(lyric, 4),
+            _ => throw new NotSupportedException(),
+        };
+
+    private static IIndexCaretPosition createInvalidCaretPosition(Lyric lyric) =>
+        typeof(TIndexCaretPosition) switch
+        {
+            Type t when t == typeof(CreateRubyTagCaretPosition) => new CreateRubyTagCaretPosition(lyric, -1),
+            Type t when t == typeof(CuttingCaretPosition) => new CuttingCaretPosition(lyric, -1),
+            Type t when t == typeof(TimeTagCaretPosition) => new TimeTagCaretPosition(lyric, new TimeTag(new TextIndex())),
+            Type t when t == typeof(TimeTagIndexCaretPosition) => new TimeTagIndexCaretPosition(lyric, -1),
+            Type t when t == typeof(TypingCaretPosition) => new TypingCaretPosition(lyric, -1),
             _ => throw new NotSupportedException(),
         };
 

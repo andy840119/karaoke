@@ -3,6 +3,7 @@
 
 using System;
 using osu.Game.Rulesets.Karaoke.Objects;
+using osu.Game.Rulesets.Karaoke.Utils;
 
 namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Beatmaps.Lyrics.CaretPosition;
 
@@ -10,6 +11,9 @@ public readonly struct CreateRubyTagCaretPosition : ICharIndexCaretPosition, ICo
 {
     public CreateRubyTagCaretPosition(Lyric lyric, int charIndex)
     {
+        if (!StringUtils.IsCharIndexInRange(lyric.Text, charIndex))
+            throw new InvalidOperationException();
+
         Lyric = lyric;
         CharIndex = charIndex;
     }

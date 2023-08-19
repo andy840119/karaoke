@@ -3,6 +3,7 @@
 
 using System;
 using osu.Game.Rulesets.Karaoke.Objects;
+using osu.Game.Rulesets.Karaoke.Utils;
 
 namespace osu.Game.Rulesets.Karaoke.Screens.Edit.Beatmaps.Lyrics.CaretPosition;
 
@@ -10,6 +11,9 @@ public readonly struct TypingCaretPosition : ICharGapCaretPosition, IComparable<
 {
     public TypingCaretPosition(Lyric lyric, int charGap)
     {
+        if (!StringUtils.IsCharGapInRange(lyric.Text, charGap))
+            throw new InvalidOperationException();
+
         Lyric = lyric;
         CharGap = charGap;
     }

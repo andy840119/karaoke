@@ -10,6 +10,9 @@ public readonly struct TimeTagCaretPosition : IIndexCaretPosition, IComparable<T
 {
     public TimeTagCaretPosition(Lyric lyric, TimeTag timeTag)
     {
+        if (!lyric.TimeTags.Contains(timeTag))
+            throw new InvalidOperationException();
+
         Lyric = lyric;
         TimeTag = timeTag;
     }
