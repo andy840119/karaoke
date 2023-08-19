@@ -37,4 +37,9 @@ public readonly struct CreateRubyTagCaretPosition : ICharIndexCaretPosition, ICo
 
         return CompareTo(createRubyTagCaretPosition);
     }
+
+    public static bool IndexInRange(Lyric lyric, int charIndex)
+    {
+        return StringUtils.IsCharIndexInRange(lyric.Text, charIndex);
+    }
 }
