@@ -15,7 +15,7 @@ public partial class DrawableLyricSpriteText : LyricSpriteText
     private readonly IBindable<int> rubyTagsVersion = new Bindable<int>();
     private readonly IBindableList<RubyTag> rubyTagsBindable = new BindableList<RubyTag>();
     private readonly IBindable<int> romajiTagsVersion = new Bindable<int>();
-    private readonly IBindableList<RomajiTag> romajiTagsBindable = new BindableList<RomajiTag>();
+    private readonly IBindableList<TimeTag> timeTagsBindable = new BindableList<TimeTag>();
 
     public DrawableLyricSpriteText(Lyric lyric)
     {
@@ -23,13 +23,13 @@ public partial class DrawableLyricSpriteText : LyricSpriteText
         rubyTagsVersion.BindValueChanged(_ => updateRubies());
         rubyTagsBindable.BindCollectionChanged((_, _) => updateRubies());
         romajiTagsVersion.BindValueChanged(_ => updateRubies());
-        romajiTagsBindable.BindCollectionChanged((_, _) => updateRomajies());
+        timeTagsBindable.BindCollectionChanged((_, _) => updateRomajies());
 
         textBindable.BindTo(lyric.TextBindable);
         rubyTagsVersion.BindTo(lyric.RubyTagsVersion);
         rubyTagsBindable.BindTo(lyric.RubyTagsBindable);
         romajiTagsVersion.BindTo(lyric.RomajiTagsVersion);
-        romajiTagsBindable.BindTo(lyric.RomajiTagsBindable);
+        timeTagsBindable.BindTo(lyric.TimeTagsBindable);
     }
 
     private void updateRubies()
@@ -39,6 +39,6 @@ public partial class DrawableLyricSpriteText : LyricSpriteText
 
     private void updateRomajies()
     {
-        Romajies = romajiTagsBindable.Select(TextTagUtils.ToPositionText).ToArray();
+        Romajies = TimeTagsUtils.ToPositionTexts(timeTagsBindable).ToArray();
     }
 }

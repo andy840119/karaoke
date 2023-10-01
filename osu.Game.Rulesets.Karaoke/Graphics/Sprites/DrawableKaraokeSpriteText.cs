@@ -20,7 +20,6 @@ public partial class DrawableKaraokeSpriteText<TSpriteText> : KaraokeSpriteText<
     private readonly IBindable<int> rubyTagsVersion = new Bindable<int>();
     private readonly IBindableList<RubyTag> rubyTagsBindable = new BindableList<RubyTag>();
     private readonly IBindable<int> romajiTagsVersion = new Bindable<int>();
-    private readonly IBindableList<RomajiTag> romajiTagsBindable = new BindableList<RomajiTag>();
 
     private readonly int chunkIndex;
 
@@ -30,11 +29,14 @@ public partial class DrawableKaraokeSpriteText<TSpriteText> : KaraokeSpriteText<
 
         textBindable.BindValueChanged(_ => UpdateText(), true);
         timeTagsTimingVersion.BindValueChanged(_ => UpdateTimeTags());
-        timeTagsBindable.BindCollectionChanged((_, _) => UpdateTimeTags());
+        timeTagsBindable.BindCollectionChanged((_, _) =>
+        {
+            UpdateTimeTags();
+            UpdateRomajies();
+        });
         rubyTagsVersion.BindValueChanged(_ => UpdateRubies());
         rubyTagsBindable.BindCollectionChanged((_, _) => UpdateRubies());
         romajiTagsVersion.BindValueChanged(_ => UpdateRomajies());
-        romajiTagsBindable.BindCollectionChanged((_, _) => UpdateRomajies());
 
         textBindable.BindTo(lyric.TextBindable);
         timeTagsTimingVersion.BindTo(lyric.TimeTagsTimingVersion);
@@ -42,7 +44,6 @@ public partial class DrawableKaraokeSpriteText<TSpriteText> : KaraokeSpriteText<
         rubyTagsVersion.BindTo(lyric.RubyTagsVersion);
         rubyTagsBindable.BindTo(lyric.RubyTagsBindable);
         romajiTagsVersion.BindTo(lyric.RomajiTagsVersion);
-        romajiTagsBindable.BindTo(lyric.RomajiTagsBindable);
     }
 
     protected virtual void UpdateText()
@@ -85,7 +86,7 @@ public partial class DrawableKaraokeSpriteText<TSpriteText> : KaraokeSpriteText<
     {
         if (chunkIndex == whole_chunk_index)
         {
-            Romajies = DisplayRomaji ? romajiTagsBindable.Select(TextTagUtils.ToPositionText).ToArray() : Array.Empty<PositionText>();
+            Romajies = DisplayRomaji ? TimeTagsUtils.ToPositionTexts(timeTagsBindable).ToArray() : Array.Empty<PositionText>();
         }
         else
         {
