@@ -113,29 +113,6 @@ public partial class Lyric
             void invalidate() => rubyTagsVersion.Value++;
         };
 
-        RomajiTagsBindable.CollectionChanged += (_, args) =>
-        {
-            switch (args.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    Debug.Assert(args.NewItems != null);
-
-                    foreach (var c in args.NewItems.Cast<RomajiTag>())
-                        c.Changed += invalidate;
-                    break;
-
-                case NotifyCollectionChangedAction.Reset:
-                case NotifyCollectionChangedAction.Remove:
-                    Debug.Assert(args.OldItems != null);
-
-                    foreach (var c in args.OldItems.Cast<RomajiTag>())
-                        c.Changed -= invalidate;
-                    break;
-            }
-
-            void invalidate() => romajiTagsVersion.Value++;
-        };
-
         SingerIdsBindable.CollectionChanged += (_, _) =>
         {
             updateStateByDataProperty(LyricWorkingProperty.Singers);
