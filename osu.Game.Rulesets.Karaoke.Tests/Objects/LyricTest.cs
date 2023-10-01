@@ -65,7 +65,6 @@ public class LyricTest
         TextTagAssert.ArePropertyEqual(clonedLyric.RubyTags, lyric.RubyTags);
 
         Assert.AreNotSame(clonedLyric.RomajiTagsVersion, lyric.RomajiTagsVersion);
-        Assert.AreNotSame(clonedLyric.RomajiTagsBindable, lyric.RomajiTagsBindable);
         TextTagAssert.ArePropertyEqual(clonedLyric.RomajiTags, lyric.RomajiTags);
 
         Assert.AreNotSame(clonedLyric.StartTimeBindable, lyric.StartTimeBindable);
