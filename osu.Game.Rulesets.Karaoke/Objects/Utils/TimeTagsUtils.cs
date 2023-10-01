@@ -294,6 +294,11 @@ public static class TimeTagsUtils
     {
         return timeTags.MaxBy(x => x.Time)?.Time;
     }
+
+    public static IEnumerable<PositionText> ToPositionTexts(IReadOnlyList<TimeTag> timeTag)
+    {
+        return Array.Empty<PositionText>();
+    }
 }
 
 public enum GroupCheck
