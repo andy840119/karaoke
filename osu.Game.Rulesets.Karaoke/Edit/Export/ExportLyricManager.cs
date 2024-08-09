@@ -8,6 +8,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Platform;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Karaoke.Beatmaps.Formats;
+using osu.Game.Rulesets.Karaoke.Integration.Formats;
 using osu.Game.Screens.Edit;
 
 namespace osu.Game.Rulesets.Karaoke.Edit.Export;
@@ -28,7 +29,7 @@ public partial class ExportLyricManager : Component
         using (var outputStream = exportStorage.GetStream(filename, FileAccess.Write, FileMode.Create))
         using (var sw = new StreamWriter(outputStream))
         {
-            var encoder = new LrcEncoder();
+            var encoder = new KarEncoder();
             sw.WriteLine(encoder.Encode(new Beatmap
             {
                 HitObjects = beatmap.HitObjects.ToList(),

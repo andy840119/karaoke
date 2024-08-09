@@ -1,6 +1,7 @@
 ﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the GPL Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using System.IO;
 using System.Linq;
 using osu.Framework.Allocation;
@@ -8,7 +9,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Game.Beatmaps;
 using osu.Game.IO;
-using osu.Game.Rulesets.Karaoke.Beatmaps.Formats;
+using osu.Game.Rulesets.Karaoke.Integration.Formats;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Screens.Edit;
 using FileInfo = System.IO.FileInfo;
@@ -19,7 +20,7 @@ public partial class ImportLyricManager : Component
 {
     public static string[] LyricFormatExtensions { get; } = { ".lrc", ".kar", ".txt" };
 
-    private const string backup_lrc_name = "backup.lrc";
+    private const string backup_lrc_name = "backup";
 
     [Resolved]
     private EditorBeatmap editorBeatmap { get; set; } = null!;
@@ -27,7 +28,7 @@ public partial class ImportLyricManager : Component
     [Resolved]
     private IBindable<WorkingBeatmap> beatmap { get; set; } = null!;
 
-    public void ImportLrcFile(FileInfo info)
+    public void ImportFile(FileInfo info)
     {
         if (!info.Exists)
             throw new FileNotFoundException("Lyric file does not found!");
@@ -51,16 +52,27 @@ public partial class ImportLyricManager : Component
 
         // Import and replace all the file.
         using var reader = new LineBufferedReader(stream);
-
-        var decoder = new LrcDecoder();
-        var lrcBeatmap = decoder.Decode(reader);
+        string content = reader.ReadToEnd();
+        var lyrics = decodeLyrics(content, info.Extension);
 
         // remove all hit objects (note and lyric) from beatmap
         editorBeatmap.Clear();
 
         // then re-add the lyric.
-        var lyrics = lrcBeatmap.HitObjects.OfType<Lyric>();
         editorBeatmap.AddRange(lyrics);
+    }
+
+    private static Lyric[] decodeLyrics(string content, string extension)
+    {
+        IDecoder<Lyric[]> decoder = extension switch
+        {
+            ".lrc" => new LrcDecoder(),
+            ".kar" => new KarDecoder(),
+            ".txt" => new KarDecoder(),
+            _ => throw new NotSupportedException("Unsupported lyric file format"),
+        };
+
+        return decoder.Decode(content);
     }
 
     public void AbortImport()
