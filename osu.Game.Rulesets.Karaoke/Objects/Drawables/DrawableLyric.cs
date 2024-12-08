@@ -28,13 +28,6 @@ public partial class DrawableLyric : DrawableKaraokeHitObject
     private readonly BindableBool useTranslationBindable = new();
     private readonly Bindable<CultureInfo> preferLanguageBindable = new();
 
-    private readonly Bindable<FontUsage> mainFontUsageBindable = new();
-    private readonly Bindable<FontUsage> rubyFontUsageBindable = new();
-    private readonly Bindable<int> rubyMarginBindable = new();
-    private readonly Bindable<FontUsage> romanisationFontUsageBindable = new();
-    private readonly Bindable<int> romanisationMarginBindable = new();
-    private readonly Bindable<FontUsage> translationFontUsageBindable = new();
-
     private readonly IBindableDictionary<Singer, SingerState[]> singersBindable = new BindableDictionary<Singer, SingerState[]>();
     private readonly BindableDictionary<CultureInfo, string> translationTextBindable = new();
 
@@ -51,11 +44,6 @@ public partial class DrawableLyric : DrawableKaraokeHitObject
     public DrawableLyric(Lyric? hitObject)
         : base(hitObject)
     {
-    }
-
-    [BackgroundDependencyLoader(true)]
-    private void load(KaraokeRulesetConfigManager? config)
-    {
         AutoSizeAxes = Axes.Both;
 
         AddInternal(lyricPieces = new Container<DrawableKaraokeSpriteText>
@@ -70,23 +58,6 @@ public partial class DrawableLyric : DrawableKaraokeHitObject
 
         useTranslationBindable.BindValueChanged(_ => applyTranslation(), true);
         preferLanguageBindable.BindValueChanged(_ => applyTranslation(), true);
-
-        if (config != null)
-        {
-            config.BindWith(KaraokeRulesetSetting.MainFont, mainFontUsageBindable);
-            config.BindWith(KaraokeRulesetSetting.RubyFont, rubyFontUsageBindable);
-            config.BindWith(KaraokeRulesetSetting.RubyMargin, rubyMarginBindable);
-            config.BindWith(KaraokeRulesetSetting.RomanisationFont, romanisationFontUsageBindable);
-            config.BindWith(KaraokeRulesetSetting.RomanisationMargin, romanisationMarginBindable);
-            config.BindWith(KaraokeRulesetSetting.TranslationFont, translationFontUsageBindable);
-        }
-
-        mainFontUsageBindable.BindValueChanged(_ => updateLyricFontInfo());
-        rubyFontUsageBindable.BindValueChanged(_ => updateLyricFontInfo());
-        rubyMarginBindable.BindValueChanged(_ => updateLyricFontInfo());
-        romanisationFontUsageBindable.BindValueChanged(_ => updateLyricFontInfo());
-        romanisationMarginBindable.BindValueChanged(_ => updateLyricFontInfo());
-        translationFontUsageBindable.BindValueChanged(_ => updateLyricFontInfo());
 
         // property in hitobject.
         singersBindable.BindCollectionChanged((_, _) => { updateFontStyle(); });
@@ -138,7 +109,6 @@ public partial class DrawableLyric : DrawableKaraokeHitObject
         base.ApplySkin(skin, allowFallback);
 
         updateFontStyle();
-        updateLyricFontInfo();
     }
 
     private void updateFontStyle()
@@ -151,18 +121,6 @@ public partial class DrawableLyric : DrawableKaraokeHitObject
 
         var lyricStyle = CurrentSkin.GetConfig<Lyric, LyricStyle>(HitObject)?.Value;
         lyricStyle?.ApplyTo(this);
-    }
-
-    private void updateLyricFontInfo()
-    {
-        if (CurrentSkin == null)
-            return;
-
-        if (HitObject.IsNull())
-            return;
-
-        var lyricFontInfo = CurrentSkin.GetConfig<Lyric, LyricFontInfo>(HitObject)?.Value;
-        lyricFontInfo?.ApplyTo(this);
     }
 
     private void applyTranslation()
