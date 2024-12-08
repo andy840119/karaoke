@@ -2,12 +2,10 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Game.Rulesets.Karaoke.Skinning;
-using osu.Game.Rulesets.Karaoke.Skinning.Elements;
+using osu.Game.Rulesets.Karaoke.Stages.Infos.Shared;
 using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config;
@@ -26,15 +24,6 @@ public partial class LyricFontInfoManager : Component
     [BackgroundDependencyLoader]
     private void load()
     {
-        var lookup = new KaraokeSkinLookup(ElementType.LyricFontInfo);
-        var lyricFontInfo = source.GetConfig<KaraokeSkinLookup, LyricFontInfo>(lookup)?.Value;
-        if (lyricFontInfo == null)
-            return;
-
-        Configs.Add(lyricFontInfo);
-
-        LoadedLyricFontInfo.Value = Configs.First();
-        EditLyricFontInfo.Value = Configs.First();
     }
 
     public void ApplyCurrentLyricFontInfoChange(Action<LyricFontInfo> action)
