@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
@@ -12,8 +13,8 @@ using osu.Framework.Graphics.Sprites;
 using osu.Game.Rulesets.Karaoke.Graphics.Sprites;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Objects.Utils;
-using osu.Game.Rulesets.Karaoke.Skinning.Elements;
 using osu.Game.Rulesets.Karaoke.Skinning.Tools;
+using osu.Game.Rulesets.Karaoke.Stages.Infos.Shared;
 using osu.Game.Rulesets.Karaoke.Utils;
 using osu.Game.Skinning;
 using osuTK;
@@ -29,6 +30,9 @@ public partial class PreviewKaraokeSpriteText : DrawableKaraokeSpriteText<Previe
     public Action<Vector2>? SizeChanged;
 
     private readonly EditorLyricSpriteText spriteText;
+
+    // use tricky way to update the font info.
+    public Bindable<LyricFontInfo> FontInfo = new();
 
     public PreviewKaraokeSpriteText(Lyric lyric)
         : base(lyric)
@@ -229,7 +233,7 @@ public partial class PreviewKaraokeSpriteText : DrawableKaraokeSpriteText<Previe
             triggerSizeChangedEvent();
         }, true);
 
-        skin.GetConfig<Lyric, LyricFontInfo>(HitObject)?.BindValueChanged(e =>
+        FontInfo.BindValueChanged(e =>
         {
             var newConfig = e.NewValue;
             if (newConfig == null)
@@ -248,7 +252,7 @@ public partial class PreviewKaraokeSpriteText : DrawableKaraokeSpriteText<Previe
 
             static FontUsage getFont(float? charSize = null)
                 => FontUsage.Default.With(size: charSize * 2);
-        }, true);
+        });
     }
 
     public override bool RemoveCompletedTransforms => false;
