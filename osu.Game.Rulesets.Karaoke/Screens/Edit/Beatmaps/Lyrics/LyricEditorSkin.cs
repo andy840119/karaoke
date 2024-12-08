@@ -3,7 +3,6 @@
 
 using System;
 using JetBrains.Annotations;
-using osu.Framework.Graphics.Sprites;
 using osu.Game.IO;
 using osu.Game.Rulesets.Karaoke.Extensions;
 using osu.Game.Rulesets.Karaoke.Skinning;
@@ -47,28 +46,9 @@ public class LyricEditorSkin : KaraokeSkin
         FontSize = 26;
     }
 
-    protected LyricFontInfo LyricFontInfo => (LyricFontInfo)DefaultElement[ElementType.LyricFontInfo];
-
     public float FontSize
     {
-        get => LyricFontInfo.MainTextFont.Size;
-        set
-        {
-            float textSize = Math.Clamp(value, MIN_FONT_SIZE, MAX_FONT_SIZE);
-            float changePercentage = textSize / FontSize;
-
-            LyricFontInfo.MainTextFont
-                = multipleSize(LyricFontInfo.MainTextFont, changePercentage);
-            LyricFontInfo.RubyTextFont
-                = multipleSize(LyricFontInfo.RubyTextFont, changePercentage);
-            LyricFontInfo.RomanisationTextFont
-                = multipleSize(LyricFontInfo.RomanisationTextFont, changePercentage);
-
-            // todo: change size might not working now.
-            // DefaultElement[ElementType.LyricConfig].TriggerChange();
-
-            static FontUsage multipleSize(FontUsage origin, float percentage)
-                => origin.With(size: origin.Size * percentage);
-        }
+        get;
+        set;
     }
 }
