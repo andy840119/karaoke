@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using osu.Game.Rulesets.Karaoke.Objects;
+using osu.Game.Rulesets.Karaoke.Stages.Infos.Shared;
 
 namespace osu.Game.Rulesets.Karaoke.Stages.Infos.Preview;
 
@@ -10,7 +11,7 @@ public class PreviewStyle : StageElement
     /// <summary>
     /// <see cref="Lyric"/>'s skin lookup index.
     /// </summary>
-    public int? LyricStyleIndex { get; set; }
+    public LyricFontInfo? LyricFontInfo { get; set; }
 
     /// <summary>
     /// <see cref="Note"/>'s skin lookup index.
