@@ -36,7 +36,6 @@ public readonly struct KaraokeSkinLookup
         switch (type)
         {
             case ElementType.LyricStyle:
-            case ElementType.LyricFontInfo:
             case ElementType.NoteStyle:
                 return;
 

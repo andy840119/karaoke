@@ -43,7 +43,6 @@ public class LyricEditorSkin : KaraokeSkin
     public LyricEditorSkin(SkinInfo skin, IStorageResourceProvider? resources)
         : base(skin, resources)
     {
-        DefaultElement[ElementType.LyricFontInfo] = LyricFontInfo.CreateDefault();
         DefaultElement[ElementType.LyricStyle] = new LyricStyle
         {
             Name = "Default",
