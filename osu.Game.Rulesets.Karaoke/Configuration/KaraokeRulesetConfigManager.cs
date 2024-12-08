@@ -153,9 +153,15 @@ public enum KaraokeRulesetSetting
     RubyMargin,
     RomanisationFont,
     RomanisationMargin,
+
+    // todo: change into mod.
     ForceUseDefaultFont,
+
+    // todo: will be removed once it can by individual layer.
     TranslationFont,
     ForceUseDefaultTranslationFont,
+
+    // todo: change into mod.
     NoteFont,
     ForceUseDefaultNoteFont,
 }
