@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Sprites;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Skinning.Tools;
+using osuTK;
 
 namespace osu.Game.Rulesets.Karaoke.Graphics.Sprites;
 
@@ -83,5 +84,27 @@ public abstract partial class DrawableKaraokeSpriteText<TSpriteText> : KaraokeSp
             LeftLyricTextShaders = SkinConverterTool.ConvertLeftSideShader(shaderManager, style);
             RightLyricTextShaders = SkinConverterTool.ConvertRightSideShader(shaderManager, style);
         });
+    }
+
+    public void UpdateFont(LyricFontInfo fontInfo)
+    {
+        // Apply text font info
+        Font = fontInfo.MainTextFont;
+        TopTextFont = fontInfo.RubyTextFont;
+        BottomTextFont = fontInfo.RomanisationTextFont;
+
+        // Layout to text
+        KaraokeTextSmartHorizon = fontInfo.SmartHorizon;
+        Spacing = new Vector2(fontInfo.LyricsInterval, Spacing.Y);
+
+        // Top text
+        TopTextSpacing = new Vector2(fontInfo.RubyInterval, TopTextSpacing.Y);
+        TopTextAlignment = fontInfo.RubyAlignment;
+        TopTextMargin = fontInfo.RubyMargin;
+
+        // Bottom text
+        BottomTextSpacing = new Vector2(fontInfo.RomanisationInterval, BottomTextSpacing.Y);
+        BottomTextAlignment = fontInfo.RomanisationAlignment;
+        BottomTextMargin = fontInfo.RomanisationMargin;
     }
 }
