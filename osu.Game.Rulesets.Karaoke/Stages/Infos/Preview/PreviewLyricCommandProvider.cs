@@ -4,8 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Framework.Graphics;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Stages.Commands;
+using osu.Game.Rulesets.Karaoke.Stages.Commands.Lyrics;
 using osu.Game.Rulesets.Objects.Drawables;
 
 namespace osu.Game.Rulesets.Karaoke.Stages.Infos.Preview;
@@ -34,7 +36,7 @@ public class PreviewLyricCommandProvider : HitObjectCommandProvider<PreviewStage
         return elements.Select(e => e switch
         {
             PreviewLyricLayout previewLyricLayout => updateInitialTransforms(previewLyricLayout),
-            PreviewStyle => Array.Empty<IStageCommand>(), // todo: implement.
+            PreviewStyle style => updateInitialTransforms(style),
             _ => throw new NotSupportedException(),
         }).SelectMany(x => x);
     }
@@ -92,6 +94,14 @@ public class PreviewLyricCommandProvider : HitObjectCommandProvider<PreviewStage
         static bool isFirstLyricInView(PreviewLyricLayout layout) => !layout.Timings.Any();
 
         static bool isLastLyricInView(PreviewLyricLayout layout) => layout.StartTime != 0;
+    }
+
+    private IEnumerable<IStageCommand> updateInitialTransforms(PreviewStyle style)
+    {
+        if (style.LyricFontInfo != null)
+        {
+            yield return new LyricFontInfoCommand(Easing.None, 0, 0, style.LyricFontInfo, style.LyricFontInfo);
+        }
     }
 
     protected override IEnumerable<IStageCommand> GetStartTimeStateCommands(Lyric hitObject)
