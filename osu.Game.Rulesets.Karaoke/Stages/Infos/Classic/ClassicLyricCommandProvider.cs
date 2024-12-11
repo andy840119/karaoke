@@ -123,6 +123,11 @@ public class ClassicLyricCommandProvider : HitObjectCommandProvider<ClassicStage
         {
             yield return new LyricStyleCommand(Easing.None, 0, 0, style.LyricStyle, style.LyricStyle);
         }
+
+        if (style.LyricFontInfo != null)
+        {
+            yield return new LyricFontInfoCommand(Easing.None, 0, 0, style.LyricFontInfo, style.LyricFontInfo);
+        }
     }
 
     protected override IEnumerable<IStageCommand> GetStartTimeStateCommands(Lyric hitObject)
