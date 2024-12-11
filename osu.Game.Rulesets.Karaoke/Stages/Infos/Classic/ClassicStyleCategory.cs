@@ -12,5 +12,6 @@ public class ClassicStyleCategory : StageElementCategory<ClassicStyle, Lyric>
         => new()
         {
             LyricStyle = LyricStyle.CreateDefault(),
+            LyricFontInfo = LyricFontInfo.CreateDefault(),
         };
 }

@@ -17,6 +17,11 @@ public class ClassicStyle : StageElement
     /// </summary>
     public LyricStyle? LyricStyle { get; set; }
 
+    /// <summary>
+    /// <see cref="Lyric"/>'s font info.
+    /// </summary>
+    public LyricFontInfo? LyricFontInfo { get; set; }
+
     [JsonIgnore]
     public readonly Bindable<int?> NoteStyleIndexBindable = new();
 

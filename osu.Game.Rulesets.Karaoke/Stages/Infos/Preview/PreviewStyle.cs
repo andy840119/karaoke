@@ -14,6 +14,11 @@ public class PreviewStyle : StageElement
     public LyricStyle? LyricStyle { get; set; }
 
     /// <summary>
+    /// <see cref="Lyric"/>'s font info.
+    /// </summary>
+    public LyricFontInfo? LyricFontInfo { get; set; }
+
+    /// <summary>
     /// <see cref="Note"/>'s skin lookup index.
     /// </summary>
     public int? NoteStyleIndex { get; set; }
