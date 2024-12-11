@@ -12,5 +12,6 @@ public class PreviewStyleCategory : StageElementCategory<PreviewStyle, Lyric>
         => new()
         {
             LyricStyle = LyricStyle.CreateDefault(),
+            LyricFontInfo = LyricFontInfo.CreateDefault(),
         };
 }
