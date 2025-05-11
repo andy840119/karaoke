@@ -1,25 +1,4 @@
 {
-  "lyric_font_info": {
-    "$type": 0,
-    "name": "Default lyric config",
-    "smart_horizon": 2,
-    "lyrics_interval": 4,
-    "ruby_interval": 2,
-    "ruby_margin": 4,
-    "main_text_font": {
-      "family": "Torus",
-      "weight": "Bold",
-      "size": 48.0
-    },
-    "ruby_text_font": {
-      "family": "Torus",
-      "weight": "Bold"
-    },
-    "romanisation_text_font": {
-      "family": "Torus",
-      "weight": "Bold"
-    }
-  },
   "lyric_style": {
     "$type": 2,
     "name": "Default lyric style",
