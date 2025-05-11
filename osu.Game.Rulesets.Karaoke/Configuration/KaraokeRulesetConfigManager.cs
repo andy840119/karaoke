@@ -53,7 +53,6 @@ public class KaraokeRulesetConfigManager : RulesetConfigManager<KaraokeRulesetSe
         SetDefault(KaraokeRulesetSetting.RubyMargin, 5, 0, 20);
         SetDefault(KaraokeRulesetSetting.RomanisationFont, new FontUsage("Torus", 20, "Bold"), 8f, 48f);
         SetDefault(KaraokeRulesetSetting.RomanisationMargin, 0, 0, 20);
-        SetDefault(KaraokeRulesetSetting.ForceUseDefaultFont, false);
         SetDefault(KaraokeRulesetSetting.TranslationFont, new FontUsage("Torus", 18, "Bold"), 10f, 48f);
         SetDefault(KaraokeRulesetSetting.ForceUseDefaultTranslationFont, false);
         SetDefault(KaraokeRulesetSetting.NoteFont, new FontUsage("Torus", 12, "Bold"), 10f, 32f);
@@ -135,14 +134,9 @@ public enum KaraokeRulesetSetting
     RomanisationFont,
     RomanisationMargin,
 
-    // todo: change into mod.
-    ForceUseDefaultFont,
-
-    // todo: will be removed once it can by individual layer.
     TranslationFont,
     ForceUseDefaultTranslationFont,
 
-    // todo: change into mod.
     NoteFont,
     ForceUseDefaultNoteFont,
 }
