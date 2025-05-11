@@ -60,7 +60,6 @@ public class KaraokeBeatmapSkin : KaraokeSkin
             static string getFileNameByType(ElementType elementType)
                 => elementType switch
                 {
-                    ElementType.LyricFontInfo => "lyric-font-infos",
                     ElementType.NoteStyle => "note-styles",
                     _ => throw new InvalidEnumArgumentException(nameof(elementType)),
                 };

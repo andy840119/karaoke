@@ -42,7 +42,6 @@ public class LyricEditorSkin : KaraokeSkin
     public LyricEditorSkin(SkinInfo skin, IStorageResourceProvider? resources)
         : base(skin, resources)
     {
-        DefaultElement[ElementType.LyricFontInfo] = LyricFontInfo.CreateDefault();
         DefaultElement[ElementType.NoteStyle] = NoteStyle.CreateDefault();
 
         // todo: should use better way to handle overall size.

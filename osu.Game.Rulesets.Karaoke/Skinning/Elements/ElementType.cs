@@ -5,7 +5,5 @@ namespace osu.Game.Rulesets.Karaoke.Skinning.Elements;
 
 public enum ElementType
 {
-    LyricFontInfo,
-
     NoteStyle,
 }

@@ -66,7 +66,6 @@ public partial class TestSceneKaraokeSkinEditor : ScreenTestScene<KaraokeSkinEdi
         public TestingSkin(SkinInfo skin, IStorageResourceProvider? resources)
             : base(skin, resources)
         {
-            DefaultElement[ElementType.LyricFontInfo] = LyricFontInfo.CreateDefault();
             DefaultElement[ElementType.NoteStyle] = NoteStyle.CreateDefault();
         }
     }
