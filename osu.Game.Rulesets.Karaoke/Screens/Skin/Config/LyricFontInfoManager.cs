@@ -5,8 +5,7 @@ using System;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Game.Rulesets.Karaoke.Stages.Infos.Shared;
-using osu.Game.Skinning;
+using osu.Game.Rulesets.Karaoke.Graphics.Sprites;
 
 namespace osu.Game.Rulesets.Karaoke.Screens.Skin.Config;
 
@@ -18,9 +17,7 @@ public partial class LyricFontInfoManager : Component
 
     public readonly Bindable<LyricFontInfo> EditLyricFontInfo = new();
 
-    [Resolved]
-    private ISkinSource source { get; set; } = null!;
-
+    // todo: should get the skin from the stage info.
     [BackgroundDependencyLoader]
     private void load()
     {
