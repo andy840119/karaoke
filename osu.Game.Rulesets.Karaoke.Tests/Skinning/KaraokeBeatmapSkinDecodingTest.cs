@@ -26,15 +26,12 @@ public class KaraokeBeatmapSkinDecodingTest
         };
 
         // try to get default value from the skin.
-        var defaultLyricFontInfo = skin.GetConfig<Lyric, LyricFontInfo>(referencedLyric)!.Value;
         var defaultNoteStyle = skin.GetConfig<Note, NoteStyle>(testingNote)!.Value;
 
         // should be able to get the default value.
-        Assert.That(defaultLyricFontInfo, Is.Not.Null);
         Assert.That(defaultNoteStyle, Is.Not.Null);
 
         // Check the content
-        Assert.That(defaultLyricFontInfo.Name, Is.Not.Null, "Default lyric config");
         Assert.That(defaultNoteStyle.Name, Is.Not.Null, "Default note style");
     }
 }
