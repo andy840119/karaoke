@@ -7,17 +7,18 @@ using osu.Game.Rulesets.Karaoke.Configuration;
 using osu.Game.Rulesets.Karaoke.Objects;
 using osu.Game.Rulesets.Karaoke.Stages.Commands;
 using osu.Game.Rulesets.Karaoke.Stages.Infos;
+using osu.Game.Rulesets.Mods;
 
 namespace osu.Game.Rulesets.Karaoke.Mods;
 
-
-public class KaraokeModUseDefaultFont: ModStageHitObjectCommand<Lyric>
+// public class KaraokeModUseDefaultFont: ModStageHitObjectCommand<Lyric>
+public class KaraokeModUseDefaultFont: Mod, IApplicableToStageInfo
 {
-    public override string Name { get; } = "";
+    public override string Name => "Override font";
 
-    public override LocalisableString Description { get; }
+    public override LocalisableString Description => "Use the font from the ruleset configuration.";
 
-    public override string Acronym { get; } = "";
+    public override string Acronym => "OF";
 
     public override bool CanApply(StageInfo stageInfo)
     {
@@ -26,12 +27,12 @@ public class KaraokeModUseDefaultFont: ModStageHitObjectCommand<Lyric>
 
     public void GetConfigiration(KaraokeRulesetConfigManager configManager)
     {
-        config.BindWith(KaraokeRulesetSetting.MainFont, mainFontUsageBindable);
-        config.BindWith(KaraokeRulesetSetting.RubyFont, rubyFontUsageBindable);
-        config.BindWith(KaraokeRulesetSetting.RubyMargin, rubyMarginBindable);
-        config.BindWith(KaraokeRulesetSetting.RomanisationFont, romanisationFontUsageBindable);
-        config.BindWith(KaraokeRulesetSetting.RomanisationMargin, romanisationMarginBindable);
-        config.BindWith(KaraokeRulesetSetting.TranslationFont, translationFontUsageBindable);
+        configManager.BindWith(KaraokeRulesetSetting.MainFont, mainFontUsageBindable);
+        configManager.BindWith(KaraokeRulesetSetting.RubyFont, rubyFontUsageBindable);
+        configManager.BindWith(KaraokeRulesetSetting.RubyMargin, rubyMarginBindable);
+        configManager.BindWith(KaraokeRulesetSetting.RomanisationFont, romanisationFontUsageBindable);
+        configManager.BindWith(KaraokeRulesetSetting.RomanisationMargin, romanisationMarginBindable);
+        configManager.BindWith(KaraokeRulesetSetting.TranslationFont, translationFontUsageBindable);
     }
 
     protected override IEnumerable<IStageCommand> PostProcessInitialCommands(IEnumerable<IStageCommand> commands)
